@@ -91,7 +91,7 @@ class Application;
 class WEFactory : public Eris::Factory
 {
   public:
-    typedef std::map<std::string, RenderFactory *> RendererMap;
+    typedef std::map<Eris::TypeInfo *, RenderFactory *> RendererMap;
   private:
     static Eris::TypeInfo * autonomousType;
     static Eris::TypeInfo * terrainType;
