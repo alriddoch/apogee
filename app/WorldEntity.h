@@ -22,6 +22,7 @@ class RenderableEntity : public Eris::Entity
     EntityRenderer * m_drawer;
 
     RenderableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+    virtual void constrainChild(Point3D & pos);
 };
 
 class MovableEntity : public RenderableEntity
@@ -49,6 +50,7 @@ class TerrainEntity : public RenderableEntity
   public:
     TerrainEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
+    virtual void constrainChild(Point3D & pos);
 };
 
 class TreeEntity : public RenderableEntity

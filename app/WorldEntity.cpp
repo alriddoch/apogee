@@ -24,6 +24,10 @@ RenderableEntity::RenderableEntity(const GameEntity &ge,
 {
 }
 
+void RenderableEntity::constrainChild(Point3D & pos)
+{
+}
+
 MovableEntity::MovableEntity(const GameEntity &ge,
                              Eris::World * w) : RenderableEntity(ge, w)
 {
@@ -44,6 +48,21 @@ AutonomousEntity::AutonomousEntity(const GameEntity &ge,
 TerrainEntity::TerrainEntity(const GameEntity &ge,
                              Eris::World * w) : RenderableEntity(ge, w)
 {
+}
+
+void TerrainEntity::constrainChild(Point3D & pos)
+{
+    if (m_drawer == 0) {
+        std::cout << "Constraint, but no drawer" << std::endl << std::flush;
+        return;
+    }
+    TerrainRenderer * tr = dynamic_cast<TerrainRenderer *>(m_drawer);
+    if (tr == 0) {
+        std::cout << "Drawer is not terrain" << std::endl << std::flush;
+        return;
+    }
+    WFMath::Vector<3> n;
+    tr->m_terrain.getHeightAndNormal(pos.x(), pos.y(), pos.z(), n);
 }
 
 TreeEntity::TreeEntity(const GameEntity &ge,

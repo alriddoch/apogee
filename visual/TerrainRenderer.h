@@ -13,11 +13,13 @@
 
 class TerrainRenderer : public EntityRenderer
 {
-  protected:
+  public:
     typedef std::map<int, GLuint> DisplayListColumn;
     typedef std::map<int, DisplayListColumn> DisplayListStore;
 
     Mercator::Terrain m_terrain;
+
+  protected:
     DisplayListStore m_displayLists;
     int m_numLineIndeces;
     unsigned short * const m_lineIndeces;

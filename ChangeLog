@@ -1,5 +1,19 @@
 2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.h: Expose terrain.
+
+	* app/WorldEntity.h, app/WorldEntity.cpp: Add constrainChild()
+	  method to entity classes which adjusts a position to
+	  take account of the nature of the entity as a parent. Implement
+	  this method to adjust height to the terrain level on terrain
+	  entities.
+
+	* app/GameClient.cpp, visual/Renderer.cpp: Make use of
+	  constrainChild() to make characters track the terrain, and
+	  ensure that the camera tracks the character as it does so.
+
+2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/GL.h: Improved handling of extensions.
 
 	* visual/TerrainRenderer.cpp: Add placeholder code for using

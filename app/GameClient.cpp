@@ -357,9 +357,14 @@ const Point3D GameClient::getAbsCharPos()
     Point3D pos = m_character->getPosition();
     pos = pos + m_character->getVelocity() * (double)((now - m_character->getTime())/1000.0f);
     Eris::Entity * root = m_world->getRootEntity();
-    for(Eris::Entity * ref = m_character->getContainer();
-        ref != NULL && ref != root;
-        ref = ref->getContainer()) {
+    Eris::Entity * ref = m_character->getContainer();
+    if (ref != 0) {
+        RenderableEntity * re = dynamic_cast<RenderableEntity *>(ref);
+        if (re != 0) {
+            re->constrainChild(pos);;
+        }
+    }
+    for(; ref != NULL && ref != root; ref = ref->getContainer()) {
         pos = pos + ref->getPosition();
     }
     return pos;
