@@ -35,7 +35,7 @@ void Isometric::viewPoint()
 
     glTranslatef(-x_offset,-y_offset,-z_offset);
 
-    static const GLfloat lightPos[] = {0.f, 1.f, 1.f, 0.f};
+    static const GLfloat lightPos[] = {1.f, 0.f, 1.f, 0.f};
     glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
 }
 
