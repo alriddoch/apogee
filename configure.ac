@@ -76,7 +76,10 @@ AM_PATH_LIB3DS(1.2.0, , AC_MSG_ERROR(Couldn't find lib3ds))
 CPPFLAGS="$CPPFLAGS $LIB3DS_CFLAGS"
 LIBS="$LIBS $LIB3DS_LIBS"
 
-AC_CHECK_LIB(cal3d,main)
+AC_CHECK_LIB(cal3d, main,
+[
+    LIBS="$LIBS -lcal3d"
+], AC_MSG_ERROR(Could not find cal3d library))
 
 dnl Generate files
 AC_OUTPUT([
