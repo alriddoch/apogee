@@ -107,7 +107,7 @@ GLuint Texture::getDefault()
                  texture_default_texture_format, GL_UNSIGNED_BYTE,
                  texture_default_texture_pixels);
     if (glGetError() != 0) {
-        std::cerr << "ERROR: Failed to load font texture" << std::endl << std::flush;
+        std::cerr << "ERROR: Failed to load default texture" << std::endl << std::flush;
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
