@@ -214,18 +214,26 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
          upYBound = lrintf(camPos[1] / segSize) + 10;
 #endif
 
-    enableRendererState();
-
     const Terrain::Segmentstore & segs = t.getTerrain();
 
     Terrain::Segmentstore::const_iterator I = segs.lower_bound(lowXBound);
     Terrain::Segmentstore::const_iterator K = segs.upper_bound(upXBound);
+
+    if (I == segs.end()) {
+        return;
+    }
+
+    enableRendererState();
+
     for (; I != K; ++I) {
         const Terrain::Segmentcolumn & col = I->second;
         TerrainRenderer::DisplayListStore::iterator M = m_displayLists.find(I->first);
 
         Terrain::Segmentcolumn::const_iterator J = col.lower_bound(lowYBound);
         Terrain::Segmentcolumn::const_iterator L = col.upper_bound(upYBound);
+        if (J == col.end()) {
+            continue;
+        }
         for (; J != L; ++J) {
             DisplayListColumn & dcol = (M == m_displayLists.end()) ? 
                                            m_displayLists[I->first] :

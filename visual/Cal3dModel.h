@@ -77,6 +77,10 @@ public:
     return m_calCoreModel;
   }
 
+  CalModel & getCalModel() {
+    return m_calModel;
+  }
+
   const std::set<int> & enabledMeshes() const {
     return m_enabledMeshes;
   }

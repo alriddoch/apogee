@@ -295,10 +295,6 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
         if (pe != 0) {
             pe->constrainChild(*me, pos);;
         }
-    } else {
-        debug(std::cout << "Eris::Entity \"" << ent->getId()
-                        << "\" is not a MovableEntity"
-                        << std::endl << std::flush;);
     }
 
     PosType camPos = cp.toLocalCoords(pos, orientation);

@@ -1,5 +1,15 @@
 2005-02-07  Al Riddoch  <alriddoch@zepler.org>
 
+	* visual/Renderer.cpp: Remove some excess debug output.
+
+	* visual/TerrainRenderer.cpp: Prevent a crash if the terrain
+	  is completely out of visual range.
+
+	* visual/Model.h: Add CalModel accessor to facilitate experimentation
+	  with attachments.
+
+2005-02-07  Al Riddoch  <alriddoch@zepler.org>
+
 	* visual/Model.h, visual/Model.cpp: Add support for turning meshes
 	  of a cal3d model on and off.
 
