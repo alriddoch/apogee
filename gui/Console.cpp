@@ -14,9 +14,9 @@ static const int charSize = 16;
 
 Console::Console(Gui & g, int x, int y) : Widget(g, x, y), numLines(lines)
 {
-    lineContents.push_back("Test line one");
-    lineContents.push_back("Test line two");
-    lineContents.push_back("Test line three");
+    // lineContents.push_back("Test line one");
+    // lineContents.push_back("Test line two");
+    // lineContents.push_back("Test line three");
 }
 
 Console::~Console()

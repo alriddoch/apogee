@@ -548,7 +548,7 @@ void TerrainRenderer::render(Renderer & r, const PosType & camPos)
     }
     drawMap(m_terrain, camPos);
     drawSea(r, m_terrain);
-    drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), .5f);
+    // drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), .5f);
 }
 
 void TerrainRenderer::select(Renderer &, const PosType & camPos)
