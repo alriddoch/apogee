@@ -18,7 +18,7 @@
 	* visual/Model.h, visual/Model.cpp: Add accessors and signals
 	  for instrumenting loading a cal3d model.
 
-2005-02-02  Al Riddoch  <alriddoch@zepler.org>
+2005-02-03  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Model.h, visual/Model.cpp: Make some tweaks to model handling
 	  to keep up to date with the version of this class provided with
