@@ -46,7 +46,8 @@ void ForestRenderer::render(Renderer & r, const PosType & camPos)
         return;
     }
 
-    if (!m_forest.getArea().isValid()) {
+    const WFMath::Polygon<2> & area = m_forest.getArea();
+    if (!area.isValid() || area.numCorners() == 0) {
         m_forest.setVolume(m_ent.getBBox());
     }
 
