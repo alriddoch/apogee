@@ -208,10 +208,6 @@ bool Cal3dModel::onInit(const std::string& strFilename)
   std::cout << "Got directory path \"" << strPath << "\" from filename \""
             << strFilename << "\"" << std::endl << std::flush;
 
-  // initialize the animation count
-  int animationCount;
-  animationCount = 0;
-
   // parse all lines from the model configuration file
   int line;
   for(line = 1; ; line++)
@@ -292,9 +288,9 @@ bool Cal3dModel::onInit(const std::string& strFilename)
         CalError::printLastError();
         return false;
       }
-      m_animationId[animationCount] = animationId;
+      m_animationId[m_animationCount] = animationId;
       animationLoaded.emit(strData, animationId);
-      animationCount++;
+      ++m_animationCount;
     }
     else if(strKey == "animation_action")
     {
@@ -425,10 +421,11 @@ bool Cal3dModel::onInit(const std::string& strFilename)
   m_calModel.setMaterialSet(0);
 
   // set initial animation state
-  m_state = STATE_MOTION;
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION], m_motionBlend[0], 0.0f);
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 1], m_motionBlend[1], 0.0f);
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 2], m_motionBlend[2], 0.0f);
+  int animationId;
+  for(animationId = 0; animationId < m_animationCount; animationId++)
+  {
+    m_calModel.getMixer()->blendCycle(m_animationId[animationId], 0.f, 0.f);
+  }
 
   return true;
 }

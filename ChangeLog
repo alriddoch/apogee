@@ -1,3 +1,8 @@
+2005-02-10  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Model.cpp: Clean up the way animations are loaded, and
+	  turn them all off by default.
+
 2005-02-07  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Renderer.cpp: Remove some excess debug output.
