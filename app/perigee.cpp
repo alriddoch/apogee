@@ -21,7 +21,7 @@ int main(int argc, char ** argv)
 {
     loadConfig(argc, argv);
 
-    Eris::Connection & con = * new Eris::Connection("perigee", true, 0);
+    Eris::Connection & con = * new Eris::Connection("perigee", true);
 
     IxClient * app = new IxClient(con);
 
@@ -77,12 +77,11 @@ int main(int argc, char ** argv)
         try {
             Eris::PollDefault::poll();
         } catch (Eris::BaseException b) {
-            std::cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
-        } catch (Atlas::Objects::NoSuchAttrException n) {
-            std::cout << "ATLAS EXCEPTION: " << n.getName()
+            std::cout << "ERIS EXCEPTION: " << b._msg
                       << std::endl << std::flush;
-        } catch (Atlas::Message::WrongTypeException w) {
-            std::cout << "ATLAS MESSAGE EXCEPTION" << std::endl << std::flush;
+        } catch (Atlas::Exception n) {
+            std::cout << "ATLAS EXCEPTION: " << n.getDescription()
+                      << std::endl << std::flush;
         } catch (...) {
             std::cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
         }

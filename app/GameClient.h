@@ -86,7 +86,7 @@ class GameClient : public Application {
     // void roomLeave(Eris::Room *r, std::string id);
 
     void worldEntityCreate(Eris::Entity *r);
-    void worldEnter(Eris::Entity *r);
+    void worldEnter(Eris::Avatar *r);
 
     void charMoved(Eris::Entity *);
     void entitySay(const std::string &, Eris::Entity * e);

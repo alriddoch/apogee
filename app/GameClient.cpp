@@ -169,6 +169,11 @@ void GameClient::loginComplete()
     o->buttonTwoSignal.connect(SigC::slot(*this, &GameClient::charCreator));
     gui->addWidget(o);
 #endif
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
+    d->addField("name", "Apogee Bomble");
+    d->addField("type", "settler");
+    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::createCharacter));
+    gui->addWidget(d);
     charListSync();
 }
 
@@ -216,9 +221,7 @@ void GameClient::connectWorldSignals()
     // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-#warning FIXME We need World::Entered replacement
-    // m_view->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_avatar->InGame.connect(SigC::slot(*this,&GameClient::worldEnter));
     Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
                                            renderer));
 }
@@ -233,7 +236,6 @@ void GameClient::createCharacter(const std::string & name,
     chrcter->setAttr("description", "a perigee person");
     chrcter->setAttr("sex", "female");
     m_avatar = m_player->createCharacter(chrcter);
-    m_view = m_avatar->getView();
 
     connectWorldSignals();
 }
@@ -318,10 +320,13 @@ void GameClient::worldEntityCreate(Eris::Entity *e)
     e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
 }
 
-void GameClient::worldEnter(Eris::Entity * chr)
+void GameClient::worldEnter(Eris::Avatar * av)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
+    m_view = m_avatar->getView();
+    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    Eris::Entity * chr = m_avatar->getEntity();
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
     m_character = dynamic_cast<AutonomousEntity*>(chr);
 

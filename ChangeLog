@@ -1,3 +1,11 @@
+2004-05-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/perigee.cpp: Change to match fixed Eris::Connection API.
+
+	* app/GameClient.h, app/GameClient.cpp: Use new InGame signal
+	  in place of World::Entered. Get View later once it has been
+	  created.
+
 2004-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Tag for transition to Eris 1.3, Atlas-C++ 0.6
