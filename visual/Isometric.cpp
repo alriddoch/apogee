@@ -80,7 +80,6 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
     Lib3dsMesh *mesh;
     for (mesh=node->meshes; mesh!=0; mesh=mesh->next) {
       std::cout << "Mesh no. " << ++num_meshes << std::endl << std::flush;
-    // mesh = node->meshes; {
 
       treemodel_list=glGenLists(1);
       glNewList(treemodel_list, GL_COMPILE);
@@ -97,7 +96,8 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
         }
         lib3ds_mesh_calculate_normals(mesh, normalL);
 
-        for (p=0; p<mesh->faces; ++p) {
+        std::cout << "COMPILING MODEL WITH " << mesh->faces << " faces and " << mesh->texels << " texels" << std::endl << std::flush;
+        for (p = 0; p < mesh->faces; ++p) {
           Lib3dsFace *f=&mesh->faceL[p];
           Lib3dsMaterial *mat=0;
           GLint texture = -1;
@@ -143,7 +143,7 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
               for (i=0; i<3; ++i) {
                 glNormal3fv(normalL[3*p+i]);
                 if (texture != -1) {
-                    glTexCoord2fv(mesh->pointL[f->points[i]].pos);
+                    glTexCoord2fv(mesh->texelL[f->points[i]]);
                 }
                 glVertex3fv(mesh->pointL[f->points[i]].pos);
               }

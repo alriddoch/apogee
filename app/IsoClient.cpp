@@ -109,26 +109,26 @@ bool IsoClient::event(SDL_Event & event)
             if (event.motion.state & SDL_BUTTON(2)) {
                 //int w = renderer.getWidth();
                 //int h = renderer.getHeight();
-                const int x = event.motion.x;
-                const int y = event.motion.y;
-                float newRot = ((x - oldx) * 360.0) / renderer.getWidth();
+                const float x = event.motion.x;
+                const float y = event.motion.y;
+                float newRot = ((x - oldx) * 360.0f) / renderer.getWidth();
                 if (oldy > renderer.getHeight()/2) {
                     newRot = oldRot + newRot;
                 } else {
                     newRot = oldRot - newRot;
                 }
-                while (newRot >= 360) { newRot -= 360; };
-                float newElv = ((y - oldy) * 90.0) / renderer.getHeight();
+                while (newRot >= 360.0f) { newRot -= 360.0f; };
+                float newElv = ((y - oldy) * 90.0f) / renderer.getHeight();
                 newElv = oldElv + newElv;
-                if (newElv < 0) { newElv = 0; }
-                if (newElv > 90) { newElv = 90; }
+                if (newElv < 0) { newElv = 0.0f; }
+                if (newElv > 90) { newElv = 90.0f; }
                 renderer.setRotation(newRot);
                 renderer.setElevation(newElv);
                 return true;
             } else if (event.motion.state & SDL_BUTTON(3)) {
-                const int y = event.motion.y;
-                const int h = renderer.getHeight();
-                float newScl = ((float)(h + y - oldy) / h) * oldScl;
+                const float y = event.motion.y;
+                const float h = renderer.getHeight();
+                float newScl = ((h + y - oldy) / h) * oldScl;
                 renderer.setScale(newScl);
                 return true;
             }
@@ -145,8 +145,8 @@ bool IsoClient::event(SDL_Event & event)
                     oldScl = renderer.getScale();
                 }
                 if (event.button.button == SDL_BUTTON_LEFT) {
-                    const int x = event.motion.x;
-                    const int y = renderer.getHeight() - event.motion.y;
+                    const float x = event.motion.x;
+                    const float y = renderer.getHeight() - event.motion.y;
                     renderer.origin();
                     const float z = renderer.getZ(x, y);
                     // Check that the point clicked on is not in the far

@@ -78,8 +78,8 @@ void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 void GameClient::charCreator()
 {
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
-    d->addField("name", "Apogee Dubneal");
-    d->addField("type", "farmer");
+    d->addField("name", "Apogee Bomble");
+    d->addField("type", "settler");
     d->oButtonSignal.connect(SigC::slot(this, &GameClient::createCharacter));
     gui->addWidget(d);
 }

@@ -97,7 +97,11 @@ int Texture::loadTexture(SDL_Surface * image)
         return -1;
     }
 
-    format = (bpp == 24) ? GL_RGB : GL_RGBA;
+    if (image->format->Rshift > image->format->Bshift) {
+        format = (bpp == 24) ? GL_BGR : GL_BGRA;
+    } else {
+        format = (bpp == 24) ? GL_RGB : GL_RGBA;
+    }
     fmt = (bpp == 24) ? 3 : 4;
 
     /* load the texture into OGL */
