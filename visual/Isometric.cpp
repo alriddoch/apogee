@@ -50,8 +50,8 @@ Isometric::Isometric(Application & app, int wdth, int hght) :
                                            tilemap(NULL), charType(NULL),
                                            treemodel(NULL), treemodel_list(0),
                                            m_numLineIndeces(0),
-                       m_lineIndeces(new unsigned int[segSize * segSize * 2]),
-                       m_texCoords(new float[segSize * segSize * 3])
+                       m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
+                       m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3])
 
 {
     init();
@@ -113,22 +113,22 @@ void Isometric::init()
     }
 
     int idx = -1;
-    for (int i = 0; i < segSize - 1; ++i) {
-        for (int j = 0; j < segSize; ++j) {
-            m_lineIndeces[++idx] = j * segSize + i;
-            m_lineIndeces[++idx] = j * segSize + i + 1;
+    for (int i = 0; i < (segSize + 1) - 1; ++i) {
+        for (int j = 0; j < (segSize + 1); ++j) {
+            m_lineIndeces[++idx] = j * (segSize + 1) + i;
+            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
         }
-        if (++i >= segSize - 1) { break; }
-        for (int j = segSize - 1; j >= 0; --j) {
-            m_lineIndeces[++idx] = j * segSize + i + 1;
-            m_lineIndeces[++idx] = j * segSize + i;
+        if (++i >= (segSize + 1) - 1) { break; }
+        for (int j = (segSize + 1) - 1; j >= 0; --j) {
+            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
+            m_lineIndeces[++idx] = j * (segSize + 1) + i;
         }
     }
     m_numLineIndeces = ++idx;
 
     int tidx = -1;
-    for(int j = 0; j < segSize; ++j) {
-        for(int i = 0; i < segSize; ++i) {
+    for(int j = 0; j < (segSize + 1); ++j) {
+        for(int i = 0; i < (segSize + 1); ++i) {
             m_texCoords[++tidx] = ((float)i)/8;
             std::cout << m_texCoords[tidx] << ":";
             m_texCoords[++tidx] = ((float)j)/8;
@@ -536,10 +536,10 @@ void Isometric::drawRegion(Mercator::Segment * map)
 {
     GLint texture = -1;
     texture = Texture::get("rabbithill_grass_hh.png");
-    float * harray = new float[segSize * segSize * 3];
+    float * harray = new float[(segSize + 1) * (segSize + 1) * 3];
     int idx = -1, cdx = -1;
-    for(int j = 0; j < segSize; ++j) {
-        for(int i = 0; i < segSize; ++i) {
+    for(int j = 0; j < (segSize + 1); ++j) {
+        for(int i = 0; i < (segSize + 1); ++i) {
             float h = map->get(i,j);
             harray[++idx] = i;
             harray[++idx] = j;
@@ -555,7 +555,7 @@ void Isometric::drawRegion(Mercator::Segment * map)
     }
     glVertexPointer(3, GL_FLOAT, 0, harray);
     // if (have_GL_EXT_compiled_vertex_array) {
-        // glLockArraysEXT(0, segSize * segSize);
+        // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
     // }
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
