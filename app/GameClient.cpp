@@ -328,7 +328,7 @@ const PosType GameClient::getAbsCharPos()
     if (ref != 0) {
         RenderableEntity * re = dynamic_cast<RenderableEntity *>(ref);
         if (re != 0) {
-            re->constrainChild(pos);;
+            re->constrainChild(*m_character, pos);;
         }
     }
     for(; ref != NULL && ref != root; ref = ref->getContainer()) {
