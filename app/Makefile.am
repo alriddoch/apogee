@@ -5,6 +5,7 @@ INCLUDES = $(GNOME_XML_CFLAGS)
 apogee_SOURCES = \
                  Application.cpp Application.h \
                  GameClient.cpp GameClient.h \
+		 WorldEntity.cpp WorldEntity.h \
                  IsoClient.cpp IsoClient.h \
                  apogee.cpp
 
@@ -13,6 +14,7 @@ apogee_LDADD = ../visual/libvisual.a ../gui/libgui.a
 perigee_SOURCES = \
                  Application.cpp Application.h \
                  GameClient.cpp GameClient.h \
+		 WorldEntity.cpp WorldEntity.h \
                  IxClient.cpp IxClient.h \
                  perigee.cpp
 

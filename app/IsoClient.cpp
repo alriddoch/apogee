@@ -7,7 +7,7 @@
 #include <visual/Renderer.h>
 #include <visual/Sprite.h>
 #include <visual/Model.h>
-#include <visual/widgets.h>
+// #include <visual/widgets.h>
 
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
@@ -36,17 +36,17 @@ using Atlas::Message::Object;
 
 void IsoClient::grid()
 {
-    widgets::grid(renderer);
+    // widgets::grid(renderer);
 }
 
 void IsoClient::compass()
 {
-    widgets::compass(renderer);
+    // widgets::compass(renderer);
 }
 
 void IsoClient::axis()
 {
-    widgets::axis(renderer);
+    // widgets::axis(renderer);
 }
 
 bool IsoClient::setup()
@@ -79,6 +79,21 @@ bool IsoClient::setup()
     return 0;
 }
 
+#if 0
+void IsoClient::doEntity(Eris::Entity * ent)
+{
+    int numEnts = ent->getNumMembers();
+    cout << numEnts << " emts" << endl << flush;
+    for (int i = 0; i < numEnts; i++) {
+        Eris::Entity * e = ent->getMember(i);
+        std::cout << ":" << e->getID() << e->getPosition() << ":"
+                  << e->getBBox() << std::endl << std::flush;
+        renderer.draw3DBox(e->getPosition(), e->getBBox());
+        doEntity(e);
+    }
+}
+#endif
+
 void IsoClient::doWorld()
 {
     if ((world == NULL) || (!inGame)) {
@@ -90,14 +105,7 @@ void IsoClient::doWorld()
         cout << "No root" << endl << flush;
         return;
     }
-    int numEnts = root->getNumMembers();
-    cout << numEnts << " root" << endl << flush;
-    for (int i = 0; i < numEnts; i++) {
-        Eris::Entity * ent = root->getMember(i);
-        std::cout << ":" << ent->getID() << ent->getPosition() << ":"
-                  << ent->getBBox() << std::endl << std::flush;
-        renderer.draw3DBox(ent->getPosition(), ent->getBBox());
-    }
+    renderer.drawWorld(root);
 #if 0
     const World::edict & ents = world.getWorld();
 
@@ -116,15 +124,15 @@ void IsoClient::doWorld()
 bool IsoClient::update()
 {
     renderer.clear();
-    grid();
+    // grid();
     renderer.lightOn();
     renderer.drawMap(map_database);
     renderer.origin();
     model->onUpdate(0.1);
     renderer.drawCal3DModel(model, 0, 0);
     doWorld();
-    compass();
-    axis();
+    // compass();
+    // axis();
 
     compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();

@@ -5,6 +5,8 @@
 #include <coal/database.h>
 #include <coal/region.h>
 
+#include <Eris/Entity.h>
+
 #include <iostream>
 
 #include <SDL_image.h>
@@ -38,14 +40,18 @@ void Isometric::init()
 
 inline void Isometric::viewScale(float scale_factor)
 {
+#if 1
+    glScalef(scale_factor, scale_factor, scale_factor);
+#else
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float xscale = width * scale * scale_factor / meterSize();
     float yscale = height * scale * scale_factor / meterSize();
     glOrtho(-xscale/2.0f, xscale/2.0f,
             -yscale/2.0f, yscale/2.0f,
-            -20.0f * scale_factor, 20.0f * scale_factor );
+            -2000.0f * scale_factor, 2000.0f * scale_factor );
     glMatrixMode(GL_MODELVIEW);
+#endif
 }
 
 inline void Isometric::viewPoint()
@@ -57,7 +63,7 @@ inline void Isometric::viewPoint()
     // this puts us into orthographic perspective
     float xscale = width * scale / meterSize();
     float yscale = height * scale / meterSize();
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
+    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -2000.0, 2000.0 );
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     // GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
@@ -240,20 +246,23 @@ void Isometric::draw3Dentity()
 
 void Isometric::drawCal3DModel(Model * m,float,float)
 {
-    viewScale(40);
+    glPushMatrix();
+    viewScale(0.025f);
     m->onRender();
-    viewScale(1);
+    glPopMatrix();
+    //viewScale(1);
 }
 
 void Isometric::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
-                         const Vector3D & bmedian)
+                          const Vector3D & bmedian)
 {
-    Vector3D def(0.2,0.2,0.2);
+    Vector3D def(0.2, 0.2, 0.2);
     const Vector3D & box = bbox ? bbox : def;
     const Vector3D & median = bmedian ? bmedian : box;
     lightOff();
 
-    origin();
+    glPushMatrix();
+    // origin();
     glTranslatef(coords.X()+median.X(),
                  coords.Y()+median.Y(),
                  coords.Z()+median.Z());
@@ -319,6 +328,35 @@ void Isometric::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
     glEnd();
 
     lightOn();
+    glPopMatrix();
+}
+
+void Isometric::draw3DArea(const Vector3D & coords, const Vector3D & bbox,
+                         const Vector3D & bmedian)
+{
+}
+
+void Isometric::drawEntity(Eris::Entity * ent)
+{
+    glPushMatrix();
+    const Eris::Coord & pos = ent->getPosition();
+    glTranslatef(pos.x, pos.y, pos.z);
+    int numEnts = ent->getNumMembers();
+    cout << ent->getID() << " " << numEnts << " emts" << endl << flush;
+    for (int i = 0; i < numEnts; i++) {
+        Eris::Entity * e = ent->getMember(i);
+        std::cout << ":" << e->getID() << e->getPosition() << ":"
+                  << e->getBBox() << std::endl << std::flush;
+        draw3DBox(e->getPosition(), e->getBBox());
+        //draw3DBox(e->getPosition(), Vector3D(1,1,1));
+        drawEntity(e);
+    }
+    glPopMatrix();
+}
+
+void Isometric::drawWorld(Eris::Entity * wrld)
+{
+    drawEntity(wrld);
 }
 
 void Isometric::drawMapRegion(CoalRegion & map_region)

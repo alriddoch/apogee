@@ -15,8 +15,7 @@
 
 Renderer * Renderer::instance = NULL;
 
-Renderer::Renderer(int wdth, int hght) : screen(NULL), character(NULL),
-                                         button(NULL),
+Renderer::Renderer(int wdth, int hght) : screen(NULL),
                                          width(wdth), height(hght),
                                          elevation(30), rotation(45),
                                          scale(1), x_offset(0), y_offset(0)

@@ -13,6 +13,7 @@ namespace Eris {
   class World;
   class Room;
   class Entity;
+  class Coord;
 }
 
 namespace Atlas {
@@ -28,11 +29,12 @@ class GameClient : public Application {
     bool inGame;
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
-               Application(rend, con), inGame(false), player(NULL), lobby(NULL),
-                                       world(NULL) { }
+               Application(rend, con), inGame(false), player(NULL),
+               lobby(NULL), world(NULL) { }
     Eris::Player * player;
     Eris::Lobby * lobby;
     Eris::World * world;
+    Eris::Entity * character;
 
     void netConnected();
     void netFailure(std::string msg);
@@ -51,6 +53,8 @@ class GameClient : public Application {
 
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
+
+    void charMoved(Eris::Entity *, Eris::Coord);
 };
 
 #endif // APOGEE_GAMECLIENT_H

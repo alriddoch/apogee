@@ -22,6 +22,10 @@ class RendererException { };
 
 class RendererSDLinit : public RendererException { };
 
+namespace Eris {
+  class Entity;
+}
+
 class Renderer {
   protected:
     Renderer() { throw RendererException(); }
@@ -32,11 +36,10 @@ class Renderer {
     static Renderer * instance;
 
     struct SDL_Surface * screen;
-    struct SDL_Surface * character;
-    struct SDL_Surface * button;
     int width, height;
     int elevation, rotation;
     float scale, x_offset, y_offset;
+    Eris::Entity * focus;
   public:
     //static Renderer * Instance(int width = 640, int height = 480) {
         //if (instance == NULL) {
@@ -84,6 +87,11 @@ class Renderer {
     virtual void draw3DBox(const Vector3D & coords,
                            const Vector3D & bbox = Vector3D(),
                            const Vector3D & bmedian = Vector3D()) = 0;
+    virtual void draw3DArea(const Vector3D & coords,
+                            const Vector3D & bbox = Vector3D(),
+                            const Vector3D & bmedian = Vector3D()) = 0;
+    virtual void drawEntity(Eris::Entity * ent) = 0;
+    virtual void drawWorld(Eris::Entity * wrld) = 0;
     virtual void drawCharacter(Sprite *, float, float) = 0;
     virtual void drawMapRegion(CoalRegion &) = 0;
     virtual void drawMapObject(CoalObject &) = 0;

@@ -1,3 +1,22 @@
+2001-11-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp, app/GameClient.h: Added new local Entity class
+	  which inherits from Eris::Entity, and tell Eris to use it.
+
+	* app/IsoClient.cpp: Remove old gui widgets, which are not clienty.
+
+	* app/IsoClient.cpp: Switch to rendering world in the renderer
+	  instead of in the app.
+
+	* common/Vector3D.h: Add more operators.
+
+	* visual/Renderer.h, visual/DemeterScene.h, visual/Isometric.h,
+	  visual/Isometric.cpp:
+	  Add code to render hierarchy of Atlas entities as the world.
+
+	* visual/Isometric.cpp: Fix scaling code so it now uses propper
+	  OpenGL scale function.
+
 2001-10-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/GameClient.h, app/IsoClient.cpp:

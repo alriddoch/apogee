@@ -3,6 +3,7 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include "GameClient.h"
+#include "WorldEntity.h"
 
 #include <visual/Renderer.h>
 #include <gui/Gui.h>
@@ -53,6 +54,7 @@ void GameClient::createCharacter(const std::string & name,
 
     world->EntityCreate.connect(SigC::slot(this,&GameClient::worldEntityCreate));
     world->Entered.connect(SigC::slot(this,&GameClient::worldEnter));
+    world->registerFactory(new WEFactory());
 }
 
 void GameClient::roomEnter(Eris::Room *r)
@@ -106,8 +108,14 @@ void GameClient::worldEntityCreate(Eris::Entity *r)
     std::cout << "Created character" << std::endl << std::flush;
 }
 
-void GameClient::worldEnter(Eris::Entity *r)
+void GameClient::worldEnter(Eris::Entity * chr)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
+    chr->Moved.connect(SigC::slot(this, &GameClient::charMoved));
+    character = chr;
+}
+
+void GameClient::charMoved(Eris::Entity*, Eris::Coord)
+{
 }

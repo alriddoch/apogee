@@ -41,6 +41,11 @@ class DemeterScene : public Renderer {
     virtual void draw3DBox(const Vector3D & coords,
                            const Vector3D & bbox = Vector3D(),
                            const Vector3D & bmedian = Vector3D());
+    virtual void draw3DArea(const Vector3D & coords,
+                            const Vector3D & bbox = Vector3D(),
+                            const Vector3D & bmedian = Vector3D()) { }
+    virtual void drawEntity(Eris::Entity * ent) { }
+    virtual void drawWorld(Eris::Entity * wrld) { }
     virtual void drawCharacter(Sprite *, float, float);
     virtual void drawMapRegion(CoalRegion &);
     virtual void drawMapObject(CoalObject &);
