@@ -1,3 +1,8 @@
+2004-01-19  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/WorldEntity.cpp: Add Atlas include no longer pulled in by Eris
+	  headers.
+
 2004-01-15  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/DemeterScene.cpp, visual/Isometric.cpp, visual/Renderer.cpp:
