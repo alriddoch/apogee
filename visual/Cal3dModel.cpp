@@ -205,7 +205,7 @@ bool Cal3dModel::onInit(const std::string& strFilename)
   if (pos != std::string::npos) {
     strPath = strFilename.substr(0, pos + 1);
   }
-  std::cout << "Got filename \"" << strPath << "\" from filename \""
+  std::cout << "Got directory path \"" << strPath << "\" from filename \""
             << strFilename << "\"" << std::endl << std::flush;
 
   // initialize the animation count
@@ -468,6 +468,8 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
   // get the renderer of the model
   CalRenderer *pCalRenderer;
   pCalRenderer = m_calModel.getRenderer();
+
+  if(pCalRenderer == 0) return;
 
   // begin the rendering loop
   if(!pCalRenderer->beginRendering()) return;

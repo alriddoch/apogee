@@ -11,6 +11,9 @@
 
 #include <sigc++/object_slot.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 Cal3dModel * Cal3dRenderer::m_default = 0;
 
 void Cal3dRenderer::drawCal3dModel(Cal3dModel * m)
@@ -65,7 +68,14 @@ Cal3dRenderer::~Cal3dRenderer()
 void Cal3dRenderer::load(const std::string & file)
 {
     Cal3dModel * model = new Cal3dModel();
-    if (!model->onInit(getMediaPath() + "/" + file)) {
+    std::string path(getMediaPath() + "/" + file);
+    struct stat sbuf;
+    if (stat(path.c_str(), &sbuf)) {
+        std::cerr << "Loading cal3d model " << file << " does not exist"
+                  << std::endl << std::flush;
+        return;
+    }
+    if (!model->onInit(path)) {
         std::cerr << "Loading cal3d model " << file << " failed"
                   << std::endl << std::flush;
         return;

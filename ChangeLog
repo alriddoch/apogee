@@ -1,3 +1,11 @@
+2005-02-02  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Model.cpp: Fail cleanly if we try to render a cal3d model
+	  with nothing loaded.
+
+	* visual/Cal3dRenderer.cpp: Check for a files existance before
+	  loading it.
+
 2005-02-01  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Texture.cpp: Make default texture a mipmap.
