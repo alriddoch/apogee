@@ -354,6 +354,58 @@ void Renderer::drawCal3DModel(Model * m, const Point3D & coords,
     glPopMatrix();
 }
 
+/*
+ * This is the vertex layout used by the 2 3Dbox functions.
+ *
+ *
+ *                                   6
+ *
+ *
+ *                         7                    5
+ *
+ *
+ *                                   4
+ *
+ *
+ *
+ *                                   2
+ *
+ *
+ *                         3                    1
+ *
+ *
+ *                                   0
+ */
+
+void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
+{
+    GLfloat vertices[] = {
+        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
+        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
+        bbox.highCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
+        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
+        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
+        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
+        bbox.highCorner().x(), bbox.highCorner().y(), bbox.highCorner().z(),
+        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.highCorner().z() 
+    };
+    static const GLuint indices[] = { 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6,
+                                      3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
+    glPushMatrix();
+    glTranslatef(coords.x(), coords.y(), coords.z());
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    if (have_GL_EXT_compiled_vertex_array) {
+        glLockArraysEXT(0, 8);
+    }
+    glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, indices);
+    if (have_GL_EXT_compiled_vertex_array) {
+        glUnlockArraysEXT();
+    }
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    glPopMatrix();
+}
 
 void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
 {
@@ -534,7 +586,7 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
             // selectCal3DModel(model, pos, e->getOrientation());
         // } else {
             if (e->hasBBox()) {
-                draw3DBox(pos, e->getBBox());
+                select3DBox(pos, e->getBBox());
             }
             selectEntity(e, name, next);
         // }
@@ -555,7 +607,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
     glLoadIdentity();
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT,viewport);
-    gluPickMatrix(x, getHeight() - y, 5, 5, viewport);
+    gluPickMatrix(x, getHeight() - y, 1, 1, viewport);
 
     projection();
     viewPoint();
@@ -583,9 +635,31 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
         return 0;
     }
 
-    // Analyze the results
-
-    return 0;
+    GLuint * ptr = &selectBuf[0];
+    GLuint minDepth = UINT_MAX, noNames = 0;
+    GLuint * namePtr;
+    for (int i = 0; i < hits; ++i) {
+        int names = *(ptr++);
+        std::cout << "{" << *ptr << "}";
+        if (*ptr < minDepth) {
+            noNames = names;
+            minDepth = *ptr;
+            namePtr = ptr + 2;
+        }
+        ptr += (names + 2);
+    }
+    std::cout << "The closest hit has " << noNames << " names: " << std::endl << std::flush;
+    if (noNames > 1) {
+        std::cerr << "WARNING: Got world hit with more than 1 name"
+                  << std::endl << std::flush;
+    }
+    SelectMap::const_iterator I = nameMap.find(*namePtr);
+    if (I == nameMap.end()) {
+        std::cerr << "ERROR: Got invalid hit" << std::endl << std::flush;
+        return 0;
+    }
+    std::cout << "CLICKED on " << I->second->getID() << std::endl << std::flush;
+    return I->second;
 }
 
 void Renderer::resize(int wdth, int hght)

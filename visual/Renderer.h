@@ -111,6 +111,8 @@ class Renderer {
     void drawMap(Mercator::Terrain &);
     void drawGui();
 
+    void select3DBox(const Point3D & coords,
+                     const WFMath::AxisBox<3> & bbox);
     void selectCal3DModel(Model *, const Point3D & coords,
                                 const WFMath::Quaternion &);
     void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);

@@ -1,5 +1,11 @@
 2003-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.cpp, visual/Renderer.h: Add function for
+	  rendering bboxes as cuboids for selection. Implemnt results
+	  for select, and returnt the entity that has been clicked on.
+
+2003-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.h, visual/Renderer.cpp, visual/Isometric.h,
 	  visual/Isometric.cpp, visual/DemeterScene.h,
 	  visual/DemeterScene.cpp: Break down setting the projection
