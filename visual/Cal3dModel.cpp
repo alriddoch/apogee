@@ -311,6 +311,7 @@ bool Cal3dModel::onInit(const std::string& strFilename)
         CalError::printLastError();
         return false;
       }
+      m_enabledMeshes.insert(meshId);
       meshLoaded.emit(strData, meshId);
     }
     else if(strKey == "material")
@@ -582,9 +583,14 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
   meshCount = pCalRenderer->getMeshCount();
 
   // render all meshes of the model
+  std::set<int>::const_iterator Iend = m_enabledMeshes.end();
   int meshId;
   for(meshId = 0; meshId < meshCount; meshId++)
   {
+    if(m_enabledMeshes.find(meshId) == Iend)
+    {
+      continue;
+    }
     // get the number of submeshes
     int submeshCount;
     submeshCount = pCalRenderer->getSubmeshCount(meshId);

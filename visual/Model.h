@@ -22,6 +22,8 @@
 
 #include <sigc++/signal.h>
 
+#include <set>
+
 //----------------------------------------------------------------------------//
 // Class declaration                                                          //
 //----------------------------------------------------------------------------//
@@ -48,6 +50,7 @@ protected:
   float m_motionBlend[3];
   float m_renderScale;
   float m_lodLevel;
+  std::set<int> m_enabledMeshes;
 
 // constructors/destructor
 public:
@@ -72,6 +75,14 @@ public:
 
   CalCoreModel & getCoreModel() {
     return m_calCoreModel;
+  }
+
+  const std::set<int> & enabledMeshes() const {
+    return m_enabledMeshes;
+  }
+
+  std::set<int> & enabledMeshes() {
+    return m_enabledMeshes;
   }
 
   SigC::Signal1<void, const std::string &> skeletonLoaded;

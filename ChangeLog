@@ -1,3 +1,8 @@
+2005-02-07  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Model.h, visual/Model.cpp: Add support for turning meshes
+	  of a cal3d model on and off.
+
 2005-02-06  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Model.h, visual/Model.cpp: Add accessors and signals
