@@ -76,8 +76,8 @@ bool Gui::setup()
         std::cerr << "Failed to load font texture" << std::endl << std::flush;
         return false;
     }
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     textBase = glGenLists(256);
     for(int loop=0; loop<256; loop++) {
         float cx=(float)(loop%16)/16.0f;             // X Position Of Current Character
@@ -284,6 +284,7 @@ void Gui::addWidget(Widget * w)
 
 int Gui::keyToAscii(int key, int mod)
 {
+    // FIXME Handle shift correctly on non alphabet keys.
     if ((mod & (KMOD_LCTRL | KMOD_RCTRL | KMOD_LALT | KMOD_RALT)) != 0) {
         std::cout << "ctrl or alt pressed" << std::endl << std::flush;
         return -1;

@@ -22,6 +22,7 @@
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 #include <Eris/ServerInfo.h>
+#include <Eris/TypeInfo.h>
 
 #include <wfmath/atlasconv.h>
 
@@ -29,6 +30,7 @@
 #include <Atlas/Objects/Operation/Move.h>
 
 #include <sigc++/object_slot.h>
+#include <sigc++/bind.h>
 
 #include <cassert>
 
@@ -82,7 +84,8 @@ bool GameClient::setup()
 
     // gui->addWidget(new Pie(*gui, 80, 170));
 
-    gui->addWidget(new Console(*gui, 4, 4));
+    consoleWidget = new Console(*gui, 4, 4);
+    gui->addWidget(consoleWidget);
 
     return true;
 }
@@ -306,9 +309,10 @@ void GameClient::netDisconnected()
                                   "Disconnected from server"));
 }
 
-void GameClient::worldEntityCreate(Eris::Entity *r)
+void GameClient::worldEntityCreate(Eris::Entity *e)
 {
     // std::cout << "Created character" << std::endl << std::flush;
+    e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
 }
 
 void GameClient::worldEnter(Eris::Entity * chr)
@@ -318,11 +322,27 @@ void GameClient::worldEnter(Eris::Entity * chr)
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
     m_character = dynamic_cast<AutonomousEntity*>(chr);
 
+    consoleWidget->lineEntered.connect(SigC::slot(*m_avatar,&Eris::Avatar::say));
+
 }
 
 void GameClient::charMoved(const PosType &)
 {
     std::cout << "Char moved" << std::endl << std::flush;
+}
+
+void GameClient::entitySay(const std::string & s, Eris::Entity * e)
+{
+    std::cout << "Sound Talk" << std::endl << std::flush;
+    std::string out(e->getName());
+    if (out.empty()) {
+        out += "[";
+        out += e->getType()->getName();
+        out += "]";
+    }
+    out += ": ";
+    out += s;
+    consoleWidget->pushLine(out);
 }
 
 void GameClient::moveCharacter(const PosType & pos)

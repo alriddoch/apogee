@@ -34,11 +34,13 @@ namespace Atlas {
 }
 
 class Compass;
+class Console;
 
 class GameClient : public Application {
   protected:
     bool inGame;
     Compass * compassWidget;
+    Console * consoleWidget;
     bool clickDown;
     Uint32 clickDownTime;
     Uint16 clickDownX;
@@ -93,6 +95,7 @@ class GameClient : public Application {
     void worldEnter(Eris::Entity *r);
 
     void charMoved(const PosType &);
+    void entitySay(const std::string &, Eris::Entity * e);
 
     void moveCharacter(const PosType & pos);
     const PosType getAbsCharPos();

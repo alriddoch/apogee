@@ -8,7 +8,7 @@
 #include <sigc++/object_slot.h>
 
 static const int lines = 10;
-static const int columns = 20;
+static const int columns = 40;
 
 static const int charSize = 16;
 
@@ -31,6 +31,7 @@ void Console::draw()
 {
     glEnable(GL_BLEND);
     glColor4f(0.8f, 0.8f, 0.8f, 0.5f);
+    glScalef(0.75f, 0.75f, 0.75f);
     float width = columns * 16 + 8;
     float height = numLines * 16 + 8;
     static const float cvertices[] = { 0.f, 0.f,
@@ -56,6 +57,7 @@ void Console::draw()
 
 void Console::select()
 {
+    glScalef(0.75f, 0.75f, 0.75f);
     float width = columns * 16 + 8;
     float height = numLines * 16 + 8;
     float vertices[] = { 0.f, 0.f, width, 0.f, width, height, 0.f, height };
