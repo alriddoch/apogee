@@ -10,6 +10,7 @@ libvisual_a_SOURCES = \
                       Cal3dRenderer.cpp Cal3dRenderer.h \
                       TerrainRenderer.cpp TerrainRenderer.h \
                       3dsRenderer.cpp 3dsRenderer.h \
+                      ForestRenderer.cpp ForestRenderer.h \
                       Isometric.cpp Isometric.h \
                       DemeterScene.cpp DemeterScene.h \
                       Model.cpp Model.h \
