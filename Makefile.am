@@ -1,4 +1,4 @@
 SUBDIRS = common visual gui app
 
-apogee:
+apogee: all
 	cd app && $(MAKE) apogee

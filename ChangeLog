@@ -1,3 +1,7 @@
+2003-09-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* Update apogee rule to work more sanely.
+
 2003-09-15  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Isometric.cpp: Add fog so that terrain works.
