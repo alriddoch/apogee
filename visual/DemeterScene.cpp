@@ -123,7 +123,7 @@ void DemeterScene::drawSky()
 
         glVertexPointer(3, GL_FLOAT, 0, vertices);
         glEnable(GL_TEXTURE_2D);
-        glEnable(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
         glTexCoordPointer(2, GL_FLOAT, 0, fb_tcoords);
         glBindTexture(GL_TEXTURE_2D, t_front);
@@ -141,7 +141,7 @@ void DemeterScene::drawSky()
         glBindTexture(GL_TEXTURE_2D, t_up);
         glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, up);
 
-        glDisable(GL_TEXTURE_COORD_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);
  
         glDepthMask(GL_TRUE);
