@@ -107,6 +107,7 @@ void Renderer::init()
     shapeView();
 
     glDepthFunc(GL_LEQUAL);
+    glShadeModel(GL_SMOOTH);
     glEnableClientState(GL_VERTEX_ARRAY);
 
     std::string extensions = (char *)glGetString(GL_EXTENSIONS);
@@ -204,11 +205,13 @@ const Point3D Renderer::getWorldCoord(int x, int y, float z)
 
 void Renderer::lightOn()
 {
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glEnable(GL_LIGHTING);
 }
 
 void Renderer::lightOff()
 {
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glDisable(GL_LIGHTING);
 }
 

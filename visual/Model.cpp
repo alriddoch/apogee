@@ -440,8 +440,8 @@ void Model::renderMesh(bool bWireframe, bool bLight)
   // set the lighting mode if necessary
   if(bLight)
   {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    // glEnable(GL_LIGHTING);
+    // glEnable(GL_LIGHT0);
   }
 
   // we will use vertex arrays, so enable them
@@ -574,8 +574,8 @@ glEnd();
   // reset the lighting mode
   if(bLight)
   {
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
+    // glDisable(GL_LIGHTING);
+    // glDisable(GL_LIGHT0);
   }
 
   // reset the global OpenGL states
@@ -672,7 +672,7 @@ void Model::onRender()
   //if(!theMenu.isSkeleton() || theMenu.isWireframe())
   //{
     //renderMesh(theMenu.isWireframe(), theMenu.isLight());
-    renderMesh(false, false);
+    renderMesh(false, true);
   //}
 
   // clear global OpenGL states

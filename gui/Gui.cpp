@@ -66,7 +66,6 @@ bool Gui::setup()
         std::cerr << "Failed to load font texture" << std::endl << std::flush;
         return false;
     }
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     textBase = glGenLists(256);

@@ -18,6 +18,7 @@ static const int segSize = 64;
 
 void TerrainRenderer::drawRegion(Mercator::Segment * map)
 {
+    glNormal3f(0.f, 0.f, 1.f);
     static float * harray = 0;
     static float * carray = 0;
     static int allocated_segSize = 0;

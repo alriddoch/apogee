@@ -1,4 +1,19 @@
-2003-06-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2003-06-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Gui.cpp, visual/Texture.cpp: Remove some calls which screw up
+	  texture lighting.
+
+	* visual/TerrainRenderer.cpp: Set a default normal on the terrain so it
+	  shows up.
+
+	* visual/Renderer.cpp: Toggle texture mode between lit and unlit modes.
+
+	* visual/Model.cpp: Don't fiddle with the lighting.
+
+	* visual/DemeterScene.cpp: Get the light setup code in the right
+	  place.
+
+2003-06-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Texture.cpp: Use CLAMP_TO_EDGE for non-wrapping
 	  textures.

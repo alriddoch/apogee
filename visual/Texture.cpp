@@ -104,7 +104,6 @@ unsigned int Texture::getDefault()
     if (glGetError() != 0) {
         std::cerr << "ERROR: Failed to load font texture" << std::endl << std::flush;
     }
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     defaultTextureLoaded = true;
@@ -144,7 +143,6 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap)
     if (glGetError() != 0) {
         std::cerr << "BANFG" << std::endl << std::flush;
     }
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
