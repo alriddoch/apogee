@@ -9,6 +9,8 @@
 #include <visual/Model.h>
 #include <visual/widgets.h>
 
+#include <gui/Gui.h>
+
 #include <Atlas/Objects/Entity/GameEntity.h>
 
 #include <Eris/Player.h>
@@ -56,6 +58,10 @@ bool IxClient::setup()
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
+
+    gui = new Gui(renderer);
+    gui->setup();
+    
     return 0;
 }
 
@@ -104,9 +110,8 @@ bool IxClient::update()
     doWorld();
     renderer.lightOff();
     renderer.drawGui();
-    // compass();
-    // axis();
-    // renderer.draw2Dtest();
+    glTranslatef(200.0f, 0.0f,10.0f);
+    gui->draw();
     renderer.flip();
     return false;
 }

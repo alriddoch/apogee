@@ -1,3 +1,12 @@
+2001-09-21  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/IxClient.cpp: Switched perigee to using Gui class.
+
+	* visual/DemeterScene.cpp: Enable blending for gui textures.
+	  Temporarily turn off grabbing mouse cursor for debugging.
+
+	* gui/Gui.cpp: Removed unrequired call to set up OpenGL names.
+
 2001-09-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/IxClient.h, app/IxClient.cpp, app/perigee.cpp:

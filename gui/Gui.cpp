@@ -18,8 +18,6 @@ Gui::Gui(Renderer & r) : bag(NULL), renderer(r)
 
 bool Gui::setup()
 {
-    glInitNames();
-
     bag = new Sprite();
     bag->load("bag.png");
     return true;

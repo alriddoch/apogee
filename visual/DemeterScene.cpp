@@ -42,8 +42,10 @@ void DemeterScene::init()
     SDL_EnableUNICODE(1);
     SDL_WM_SetCaption("perigee", "demeter");
 
-    SDL_WM_GrabInput(SDL_GRAB_ON);
-    SDL_ShowCursor(0);
+    // These should be turned on when running in production mode, but they
+    // make using a debugger really hard.
+    //SDL_WM_GrabInput(SDL_GRAB_ON);
+    //SDL_ShowCursor(0);
 
     settings = Demeter::Settings::GetInstance();
     settings->SetMediaPath("maps/");
@@ -106,7 +108,8 @@ void DemeterScene::shapeView()
     glClearDepth(1.0);
     glDepthFunc(GL_LESS);
     glDisable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
+    glEnable(GL_BLEND);
+    //glShadeModel(GL_SMOOTH);
     float fogColor[4];
     fogColor[0] = FOG_RED;
     fogColor[1] = FOG_GREEN;
