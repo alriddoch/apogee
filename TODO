@@ -10,13 +10,6 @@ provide a normal cache though.
 
 Sort out freeing up Mercator resources once we are done with them.
 
-Try replacing color based alpha code for terrain with alpha textures.
-
-Use the vertex data as the texcoord data because its basically the same,
-making using of the texture coord transform matrix to scale up.
-
-Stick mipmaps on the terrain.
-
 Move in near clipping plane to avoid loss of Z resolution.
 
 Try re-working terrain so that there is a display list per-pass, with
