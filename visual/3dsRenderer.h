@@ -18,6 +18,8 @@ class m3dsRenderer : public EntityRenderer
     unsigned long m_model_list;
 
     void draw3dsModel();
+    void draw3dsFile();
+    void draw3dsNode(Lib3dsNode *);
   public:
     m3dsRenderer(Renderer &, Eris::Entity & e);
     virtual ~m3dsRenderer();
