@@ -40,7 +40,7 @@ public:
 protected:
   int m_state;
   CalCoreModel m_calCoreModel;
-  CalModel m_calModel;
+  CalModel * m_calModel;
   int m_animationId[16];
   int m_animationCount;
   int m_meshId[32];
@@ -78,7 +78,7 @@ public:
   }
 
   CalModel & getCalModel() {
-    return m_calModel;
+    return *m_calModel;
   }
 
   const std::set<int> & enabledMeshes() const {

@@ -1,3 +1,10 @@
+2005-02-18  Al Riddoch  <alriddoch@zepler.org>
+
+	* configure.ac, visual/Model.cpp, visual/Model.h: Update for
+	  cal3d 0.10.
+
+	* acinclude.m4: Add missing lib3ds macro.
+
 2005-02-10  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Model.cpp: Clean up the way animations are loaded, and

@@ -33,7 +33,7 @@ const int Cal3dModel::STATE_MOTION = 2;
 // Constructors                                                               //
 //----------------------------------------------------------------------------//
 
-Cal3dModel::Cal3dModel()
+Cal3dModel::Cal3dModel() : m_calCoreModel("dummy")
 {
   m_state = STATE_IDLE;
   m_motionBlend[0] = 0.6f;
@@ -62,10 +62,10 @@ void Cal3dModel::executeAction(int action)
   switch(action)
   {
     case 0:
-      m_calModel.getMixer()->executeAction(m_animationId[5], 0.3f, 0.3f);
+      m_calModel->getMixer()->executeAction(m_animationId[5], 0.3f, 0.3f);
       break;
     case 1:
-      m_calModel.getMixer()->executeAction(m_animationId[6], 0.3f, 0.3f);
+      m_calModel->getMixer()->executeAction(m_animationId[6], 0.3f, 0.3f);
       break;
   }
 }
@@ -189,13 +189,6 @@ bool Cal3dModel::onInit(const std::string& strFilename)
   if(!file)
   {
     std::cerr << "Failed to open model configuration file '" << strFilename << "'." << std::endl;
-    return false;
-  }
-
-  // create a core model instance
-  if(!m_calCoreModel.create("dummy"))
-  {
-    CalError::printLastError();
     return false;
   }
 
@@ -401,30 +394,26 @@ bool Cal3dModel::onInit(const std::string& strFilename)
 
   // Calculate Bounding Boxes
 
-  m_calCoreModel.getCoreSkeleton()->calculateBoundingBox(&m_calCoreModel);
+  m_calCoreModel.getCoreSkeleton()->calculateBoundingBoxes(&m_calCoreModel);
 
   // create the model instance from the loaded core model
-  if(!m_calModel.create(&m_calCoreModel))
-  {
-    CalError::printLastError();
-    return false;
-  }
+  m_calModel = new CalModel(&m_calCoreModel);
 
   // attach all meshes to the model
   int meshId;
   for(meshId = 0; meshId < m_calCoreModel.getCoreMeshCount(); meshId++)
   {
-    m_calModel.attachMesh(meshId);
+    m_calModel->attachMesh(meshId);
   }
 
   // set the material set of the whole model
-  m_calModel.setMaterialSet(0);
+  m_calModel->setMaterialSet(0);
 
   // set initial animation state
   int animationId;
   for(animationId = 0; animationId < m_animationCount; animationId++)
   {
-    m_calModel.getMixer()->blendCycle(m_animationId[animationId], 0.f, 0.f);
+    m_calModel->getMixer()->blendCycle(m_animationId[animationId], 0.f, 0.f);
   }
 
   return true;
@@ -439,8 +428,8 @@ void Cal3dModel::renderSkeleton()
   // draw the bone lines
   float lines[1024][2][3];
   int nrLines;
-  nrLines =  m_calModel.getSkeleton()->getBoneLines(&lines[0][0][0]);
-//  nrLines = m_calModel.getSkeleton()->getBoneLinesStatic(&lines[0][0][0]);
+  nrLines =  m_calModel->getSkeleton()->getBoneLines(&lines[0][0][0]);
+//  nrLines = m_calModel->getSkeleton()->getBoneLinesStatic(&lines[0][0][0]);
 
   glLineWidth(3.0f);
   glColor3f(1.0f, 1.0f, 1.0f);
@@ -457,8 +446,8 @@ void Cal3dModel::renderSkeleton()
   // draw the bone points
   float points[1024][3];
   int nrPoints;
-  nrPoints =  m_calModel.getSkeleton()->getBonePoints(&points[0][0]);
-//  nrPoints = m_calModel.getSkeleton()->getBonePointsStatic(&points[0][0]);
+  nrPoints =  m_calModel->getSkeleton()->getBonePoints(&points[0][0]);
+//  nrPoints = m_calModel->getSkeleton()->getBonePointsStatic(&points[0][0]);
 
   glPointSize(4.0f);
   glBegin(GL_POINTS);
@@ -479,9 +468,9 @@ void Cal3dModel::renderSkeleton()
 void Cal3dModel::renderBoundingBox()
 {  
 
-   CalSkeleton *pCalSkeleton = m_calModel.getSkeleton();
+   CalSkeleton *pCalSkeleton = m_calModel->getSkeleton();
 
-   pCalSkeleton->calculateBoundingBox();
+   pCalSkeleton->calculateBoundingBoxes();
 
    std::vector<CalBone*> &vectorCoreBone = pCalSkeleton->getVectorBone();
 
@@ -547,7 +536,7 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
 {
   // get the renderer of the model
   CalRenderer *pCalRenderer;
-  pCalRenderer = m_calModel.getRenderer();
+  pCalRenderer = m_calModel->getRenderer();
 
   if(pCalRenderer == 0) return;
 
@@ -727,7 +716,7 @@ void Cal3dModel::selectMesh()
 {
   // get the renderer of the model
   CalRenderer *pCalRenderer;
-  pCalRenderer = m_calModel.getRenderer();
+  pCalRenderer = m_calModel->getRenderer();
 
   // begin the rendering loop
   if(!pCalRenderer->beginRendering()) return;
@@ -816,7 +805,7 @@ void Cal3dModel::onSelect()
 void Cal3dModel::onUpdate(float elapsedSeconds)
 {
   // update the model
-  m_calModel.update(elapsedSeconds);
+  m_calModel->update(elapsedSeconds);
 }
 
 //----------------------------------------------------------------------------//
@@ -826,10 +815,9 @@ void Cal3dModel::onUpdate(float elapsedSeconds)
 void Cal3dModel::onShutdown()
 {
   // destroy the model instance
-  m_calModel.destroy();
+  delete m_calModel;
 
-  // destroy the core model instance
-  m_calCoreModel.destroy();
+  // core model instance is destroyed implicitly in the destructor
 }
 
 //----------------------------------------------------------------------------//
@@ -841,7 +829,7 @@ void Cal3dModel::setLodLevel(float lodLevel)
   m_lodLevel = lodLevel;
 
   // set the new lod level in the cal model renderer
-  m_calModel.setLodLevel(m_lodLevel);
+  m_calModel->setLodLevel(m_lodLevel);
 }
 
 //----------------------------------------------------------------------------//
@@ -854,11 +842,11 @@ void Cal3dModel::setMotionBlend(float *pMotionBlend, float delay)
   m_motionBlend[1] = pMotionBlend[1];
   m_motionBlend[2] = pMotionBlend[2];
 
-  m_calModel.getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
-  m_calModel.getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION], m_motionBlend[0], delay);
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 1], m_motionBlend[1], delay);
-  m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 2], m_motionBlend[2], delay);
+  m_calModel->getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
+  m_calModel->getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
+  m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION], m_motionBlend[0], delay);
+  m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION + 1], m_motionBlend[1], delay);
+  m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION + 2], m_motionBlend[2], delay);
 
   m_state = STATE_MOTION;
 }
@@ -874,29 +862,29 @@ void Cal3dModel::setState(int state, float delay)
   {
     if(state == STATE_IDLE)
     {
-      m_calModel.getMixer()->blendCycle(m_animationId[STATE_IDLE], 1.0f, delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION + 1], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION + 2], delay);
+      m_calModel->getMixer()->blendCycle(m_animationId[STATE_IDLE], 1.0f, delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION + 1], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION + 2], delay);
       m_state = STATE_IDLE;
     }
     else if(state == STATE_FANCY)
     {
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
-      m_calModel.getMixer()->blendCycle(m_animationId[STATE_FANCY], 1.0f, delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION + 1], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_MOTION + 2], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
+      m_calModel->getMixer()->blendCycle(m_animationId[STATE_FANCY], 1.0f, delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION + 1], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_MOTION + 2], delay);
       m_state = STATE_FANCY;
     }
     else if(state == STATE_MOTION)
     {
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
-      m_calModel.getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
-      m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION], m_motionBlend[0], delay);
-      m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 1], m_motionBlend[1], delay);
-      m_calModel.getMixer()->blendCycle(m_animationId[STATE_MOTION + 2], m_motionBlend[2], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_IDLE], delay);
+      m_calModel->getMixer()->clearCycle(m_animationId[STATE_FANCY], delay);
+      m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION], m_motionBlend[0], delay);
+      m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION + 1], m_motionBlend[1], delay);
+      m_calModel->getMixer()->blendCycle(m_animationId[STATE_MOTION + 2], m_motionBlend[2], delay);
       m_state = STATE_MOTION;
     }
   }

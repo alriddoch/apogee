@@ -53,17 +53,26 @@ PKG_CHECK_MODULES(WF, eris-1.3 mercator-0.2 varconf-1.0 sage ,
         LIBS="$LIBS $WF_LIBS"
     ],
     [
-        AC_MSG_ERROR(Couldn't find WF libs.)
+        AC_MSG_ERROR(Couldn't find WorldForge libs.)
     ])
 
 AM_PATH_LIB3DS(1.2.0, , AC_MSG_ERROR(Couldn't find lib3ds))
 CPPFLAGS="$CPPFLAGS $LIB3DS_CFLAGS"
 LIBS="$LIBS $LIB3DS_LIBS"
 
-AC_CHECK_LIB(cal3d, main,
-[
-    LIBS="$LIBS -lcal3d"
-], AC_MSG_ERROR(Could not find cal3d library))
+PKG_CHECK_MODULES(CAL3D, cal3d,
+    [
+        CPPFLAGS="$CPPFLAGS $CAL3D_CFLAGS"
+        LIBS="$LIBS $CAL3D_LIBS"
+    ],
+    [
+        AC_MSG_ERROR(Could not find cal3d library)
+    ])
+
+dnl AC_CHECK_LIB(cal3d, main,
+dnl [
+    dnl LIBS="$LIBS -lcal3d"
+dnl ], AC_MSG_ERROR(Could not find cal3d library))
 
 dnl add SDL flags at the end to avoid SDL_main problems
 CXXFLAGS="$CXXFLAGS $WF_SDL_IMAGE_CFLAGS"
