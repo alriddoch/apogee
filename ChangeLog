@@ -1,9 +1,18 @@
-2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2003-04-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/Application.h, app/IsoClient.h, app/IxClient.cpp,
+	  app/IxClient.h: Return a bool indicating whether the mouse movement
+	  should be recentered.
+
+	* app/perigee.cpp: Finally sort out the mouse controlled view
+	  correctly.
+
+2003-04-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/IxClient.cpp, app/perigee.cpp: Update perigee to use the same
 	  event model as apogee.
 
-2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2003-04-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Rework the way events are handled so they only pass to the next layer
 	  they have not yet been used. gui first, then game, then wrapper.

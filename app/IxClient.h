@@ -15,7 +15,7 @@ class IxClient : public GameClient {
     virtual ~IxClient();
 
     bool event(SDL_Event &);
-    void mouse(int x, int y);
+    bool mouse(int x, int y);
 };
 
 #endif // APOGEE_IXCLIENT_H

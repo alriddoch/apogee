@@ -38,6 +38,8 @@ int main(int argc, char ** argv)
     int newWidth;
     int newHeight;
     int elapsed_time = SDL_GetTicks();
+    int mx = app->renderer.getWidth() / 2.f,
+        my = app->renderer.getHeight() / 2.f;
 
     while (!done) {
         while (SDL_PollEvent(&event) && !done) {
@@ -70,9 +72,15 @@ int main(int argc, char ** argv)
             }
         }
         int dx, dy;
-        SDL_GetRelativeMouseState(&dx, &dy);
-        if ((dx != 0) && (dy != 0)) {
-            app->mouse(dx, dy);
+        SDL_GetMouseState(&dx, &dy);
+        dx -= mx; dy -= my;
+        if ((dx != 0) || (dy != 0)) {
+            std::cout << dx << " : " << dy << std::endl << std::flush;
+            if (app->mouse(dx, dy)) {
+                mx = app->renderer.getWidth() / 2.f;
+                my = app->renderer.getHeight() / 2.f;
+                SDL_WarpMouse(mx, my);
+            }
         }
 
         try {

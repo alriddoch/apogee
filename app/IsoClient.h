@@ -13,7 +13,7 @@ class IsoClient : public GameClient {
     virtual ~IsoClient();
 
     bool event(SDL_Event &);
-    void mouse(int,int) { }
+    bool mouse(int,int) { return false; }
 };
 
 #endif // APOGEE_ISOCLIENT_H

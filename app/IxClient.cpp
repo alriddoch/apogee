@@ -111,15 +111,16 @@ bool IxClient::event(SDL_Event & event)
     return false;
 }
 
-void IxClient::mouse(int dx, int dy)
+bool IxClient::mouse(int dx, int dy)
 {
-    if (m_use_mouse) { return; }
-    float newRot = renderer.getRotation() + dx;
+    if (m_use_mouse) { return false; }
+    float newRot = renderer.getRotation() + (dx / 4.f);
     while (newRot >= 360) { newRot -= 360; };
     renderer.setRotation(newRot);
 
-    float newElv = renderer.getElevation() + dy;
+    float newElv = renderer.getElevation() + (dy / 4.f);
     if (newElv < -90) { newElv = -90; }
     if (newElv > 90) { newElv = 90; }
     renderer.setElevation(newElv);
+    return true;
 }
