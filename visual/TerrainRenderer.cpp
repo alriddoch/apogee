@@ -24,6 +24,9 @@ using Atlas::Message::Element;
 static const bool debug_flag = false;
 static const int segSize = 64;
 
+static GLfloat sx[] = {0.125f, 0.f, 0.f, 0.f};
+static GLfloat ty[] = {0.f, 0.125f, 0.f, 0.f};
+
 void TerrainRenderer::enableRendererState()
 {
     glEnable(GL_TEXTURE_2D);
@@ -31,25 +34,33 @@ void TerrainRenderer::enableRendererState()
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glColor4f(1.f, 1.f, 1.f, 1.f);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    // glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     // glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
     glEnable(GL_BLEND);
-    glMatrixMode(GL_TEXTURE);
-    glPushMatrix();
-    glScalef(0.125f, 0.125f, 0.125f);
-    glMatrixMode(GL_MODELVIEW);
+    // glMatrixMode(GL_TEXTURE);
+    // glPushMatrix();
+    // glScalef(0.125f, 0.125f, 0.125f);
+    // glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGenfv(GL_S, GL_OBJECT_PLANE, sx);
+    glTexGenfv(GL_T, GL_OBJECT_PLANE, ty);
 }
 
 void TerrainRenderer::disableRendererState()
 {
-    glMatrixMode(GL_TEXTURE);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
+    // glMatrixMode(GL_TEXTURE);
+    // glPopMatrix();
+    // glMatrixMode(GL_MODELVIEW);
     // Can we do this using the state stack
     glDisable(GL_BLEND);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    // glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisable(GL_COLOR_MATERIAL);
@@ -83,7 +94,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    glTexCoordPointer(2, GL_FLOAT, 12, harray);
+    // glTexCoordPointer(2, GL_FLOAT, 12, harray);
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
