@@ -104,7 +104,7 @@ void TerrainRenderer::generateAlphaTextures(Mercator::Segment * map)
         }
 
         glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
-        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_ALPHA, 65, 65, GL_ALPHA,
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_ALPHA4, 65, 65, GL_ALPHA,
                           GL_UNSIGNED_BYTE, (*I)->getData());
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -23,21 +23,21 @@ void Compass::setup()
     if (!Compass::compass_case.loaded()) {
         std::string ccase;
         if (global_conf->findItem(m_g.getSkinName(), "compass_case")) {
-            ccase = global_conf->getItem(m_g.getSkinName(), "compass_case");
+            ccase = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_case");
         }
         compass_case.load(getMediaPath() + "/" + ccase);
     }
     if (!Compass::compass_needle.loaded()) {
         std::string needle;
         if (global_conf->findItem(m_g.getSkinName(), "compass_needle")) {
-            needle = global_conf->getItem(m_g.getSkinName(), "compass_needle");
+            needle = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_needle");
         }
         compass_needle.load(getMediaPath() + "/" + needle);
     }
     if (!Compass::needle_shadow.loaded()) {
         std::string shadow;
         if (global_conf->findItem(m_g.getSkinName(), "compass_shadow")) {
-            shadow = global_conf->getItem(m_g.getSkinName(), "compass_shadow");
+            shadow = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_shadow");
         }
         needle_shadow.load(getMediaPath() + "/" + shadow);
     }

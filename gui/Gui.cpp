@@ -47,7 +47,7 @@ bool Gui::setup()
     // widgets[newName()] = w;
 
     if (global_conf->findItem("apogee", "skin")) {
-        skinName = global_conf->getItem("apogee", "skin");
+        skinName = (std::string)global_conf->getItem("apogee", "skin");
         std::cout << "Got skin " << skinName << std::endl << std::flush;
     } else {
         std::cout << "No skin" << std::endl << std::flush;
