@@ -55,7 +55,7 @@ bool IxClient::setup()
 
 void IxClient::doWorld()
 {
-    if (world == NULL) {
+    if ((world == NULL) || (!inGame)) {
         std::cout << "No world" << std::endl << std::flush;
         return;
     }

@@ -130,7 +130,16 @@ void GameClient::createCharacter(const std::string & name,
 
 void GameClient::takeCharacter(const std::string & chrcter)
 {
+    std::cout << "takeCharacter" << std::endl << std::flush;
     world = player->takeCharacter(chrcter);
+    std::cout << "Character taken, world = " << world << std::endl << std::flush;
+
+    lobby->Talk.connect(SigC::slot(this,&GameClient::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(this,&GameClient::roomEnter));
+
+    world->EntityCreate.connect(SigC::slot(this,&GameClient::worldEntityCreate));
+    world->Entered.connect(SigC::slot(this,&GameClient::worldEnter));
+    world->registerFactory(new WEFactory());
 }
 
 void GameClient::roomEnter(Eris::Room *r)
