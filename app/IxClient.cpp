@@ -34,6 +34,13 @@ bool IxClient::event(SDL_Event & event)
 {
     static int oldy = 0;
     static float oldScl = 0;
+
+    bool eaten = gui->event(event);
+
+    if (eaten) {
+        return true;
+    }
+
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if (event.motion.state & SDL_BUTTON(3)) {
@@ -66,7 +73,7 @@ bool IxClient::event(SDL_Event & event)
                         moveCharacter(renderer.getWorldCoord(x, y, z));
                     }
                 }
-                // return false;
+                return true;
             }
             break;
         case SDL_KEYDOWN:
@@ -101,7 +108,7 @@ bool IxClient::event(SDL_Event & event)
             }
             break;
     }
-    return gui->event(event);
+    return false;
 }
 
 void IxClient::mouse(int dx, int dy)

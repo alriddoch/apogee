@@ -37,13 +37,14 @@ int main(int argc, char ** argv)
     SDL_Event event;
     int newWidth;
     int newHeight;
-    bool updated;
     int elapsed_time = SDL_GetTicks();
 
     while (!done) {
-        updated = false;
         while (SDL_PollEvent(&event) && !done) {
-            updated = app->event(event) || updated;
+            if (app->event(event)) {
+                // Event has been eaten
+                continue;
+            }
             switch (event.type) {
                 case SDL_QUIT:
                     done = true;
@@ -63,7 +64,6 @@ int main(int argc, char ** argv)
                         newHeight = MIN_HEIGHT;
                     }
                     app->renderer.resize(newWidth, newHeight);
-                    updated = true;
                     break;
                 default:
                     break;
@@ -73,10 +73,8 @@ int main(int argc, char ** argv)
         SDL_GetRelativeMouseState(&dx, &dy);
         if ((dx != 0) && (dy != 0)) {
             app->mouse(dx, dy);
-            updated = true;
         }
 
-        // updated = con.poll() || updated;
         try {
             Eris::PollDefault::poll();
         } catch (Eris::BaseException b) {
