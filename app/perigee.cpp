@@ -11,16 +11,10 @@
 #include <Eris/Connection.h>
 #include <Eris/PollDefault.h>
 
-#include <sigc++/object_slot.h>
-
 #include <iostream>
-
-#include <unistd.h>
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
-
-using Atlas::Message::Element;
 
 int main(int argc, char ** argv)
 {
@@ -29,6 +23,8 @@ int main(int argc, char ** argv)
     Eris::Connection & con = * new Eris::Connection("perigee", true);
 
     IxClient * app = new IxClient(con);
+
+    Eris::setLogLevel(Eris::LOG_DEBUG);
 
     if (!app->setup()) {
         std::cerr << "Couldn't open display" << std::endl << std::flush;

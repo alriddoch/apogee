@@ -5,28 +5,12 @@
 #include "IsoClient.h"
 
 #include <visual/Isometric.h>
-#include <visual/Sprite.h>
 
 #include <gui/Gui.h>
-#include <gui/Dialogue.h>
-#include <gui/Compass.h>
 
-#include <Atlas/Objects/Entity/GameEntity.h>
-
-#include <Eris/Player.h>
-#include <Eris/Lobby.h>
 #include <Eris/World.h>
 #include <Eris/Entity.h>
-
-#include <sigc++/object_slot.h>
-
-#include <iostream>
-
-#include <cmath>
-
-using Atlas::Objects::Entity::GameEntity;
-
-using Atlas::Message::Element;
+#include <Eris/Avatar.h>
 
 IsoClient::IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
 {
@@ -105,7 +89,7 @@ bool IsoClient::event(SDL_Event & event)
                             moveCharacter(renderer.getWorldCoord(x, y, z));
                         }
                     } else {
-                        // We clicked on something other than the world.
+                        m_avatar->touch(e);
                     }
                 }
                 return true;
@@ -116,22 +100,6 @@ bool IsoClient::event(SDL_Event & event)
                 case SDLK_0:
                     renderer.setElevation(30.0);
                     renderer.setRotation(45.0);
-                    return true;
-                    break;
-                case SDLK_UP:
-                    renderer.setYoffset(renderer.getYoffset() + 1);
-                    return true;
-                    break;
-                case SDLK_DOWN:
-                    renderer.setYoffset(renderer.getYoffset() - 1);
-                    return true;
-                    break;
-                case SDLK_LEFT:
-                    renderer.setXoffset(renderer.getXoffset() - 1);
-                    return true;
-                    break;
-                case SDLK_RIGHT:
-                    renderer.setXoffset(renderer.getXoffset() + 1);
                     return true;
                     break;
                 case SDLK_RETURN:

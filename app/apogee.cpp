@@ -11,19 +11,10 @@
 #include <Eris/Connection.h>
 #include <Eris/PollDefault.h>
 
-#include <Atlas/Objects/Entity/GameEntity.h>
-
-#include <sigc++/object_slot.h>
-
 #include <iostream>
-
-#include <unistd.h>
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
-
-using Atlas::Message::Element;
-using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {

@@ -1,5 +1,13 @@
 2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/perigee.cpp, app/apogee.cpp: Remove redundant includes.
+
+	* app/IxClient.cpp, app/IsoClient.cpp: Remove redundant code
+	  for adjusting view position, obsolete includes, and add
+	  touch functionality to apogee.
+
+2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.cpp, app/GameClient.h: Store pointer to avatar
 	  object so we can use its functionality.
 

@@ -5,21 +5,12 @@
 #include "IxClient.h"
 
 #include <visual/DemeterScene.h>
-#include <visual/Model.h>
 
 #include <gui/Gui.h>
-#include <gui/Dialogue.h>
-#include <gui/Compass.h>
 
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
-
-#include <coal/isoloader.h>
-
-#include <sigc++/object_slot.h>
-
-using Atlas::Message::Element;
 
 IxClient::IxClient(Eris::Connection & con)
                    : GameClient(* new DemeterScene(*this), con),
@@ -94,22 +85,6 @@ bool IxClient::event(SDL_Event & event)
                 case SDLK_0:
                     renderer.setElevation(0.0);
                     renderer.setRotation(45.0);
-                    return true;
-                    break;
-                case SDLK_UP:
-                    renderer.setYoffset(renderer.getYoffset() + 1);
-                    return true;
-                    break;
-                case SDLK_DOWN:
-                    renderer.setYoffset(renderer.getYoffset() - 1);
-                    return true;
-                    break;
-                case SDLK_LEFT:
-                    renderer.setXoffset(renderer.getXoffset() - 1);
-                    return true;
-                    break;
-                case SDLK_RIGHT:
-                    renderer.setXoffset(renderer.getXoffset() + 1);
                     return true;
                     break;
                 case SDLK_q:
