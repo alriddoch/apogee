@@ -303,6 +303,9 @@ void Renderer::update(float secs)
 
 void Renderer::origin()
 {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    projection();
     viewPoint();
     orient();
     translate();
@@ -548,11 +551,16 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
     glSelectBuffer(512,selectBuf);
     glRenderMode(GL_SELECT);
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT,viewport);
     gluPickMatrix(x, getHeight() - y, 5, 5, viewport);
 
-    origin();
+    projection();
+    viewPoint();
+    orient();
+    translate();
 
     glInitNames();
     

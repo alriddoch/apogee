@@ -118,6 +118,7 @@ class Renderer {
 
     void resize(int,int);
     void clear();
+    virtual void projection() = 0;
     virtual void viewPoint() = 0;
     virtual void reorient() = 0;
     virtual void orient() = 0;

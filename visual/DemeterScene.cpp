@@ -53,16 +53,11 @@ void DemeterScene::shapeView()
     glFogf(GL_FOG_START,100.0f);
     glFogf(GL_FOG_END,maxViewDistance - 100.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
-
-    viewPoint();
 }
 
-void DemeterScene::viewPoint()
+void DemeterScene::projection()
 {
     const float maxViewDistance = 4500.0f;
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
     // Not sure how to use this one to get a decent projection no matter
     // what the aspect ratio. Keep it here for reference.
     //gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
@@ -73,7 +68,10 @@ void DemeterScene::viewPoint()
     float s = ((float)width / (float)height) * 3.0f / 8.0f;
     glViewport(0,0,width,height);
     glFrustum(-s,s,-0.375f,0.375f,0.65f,maxViewDistance);
+}
 
+void DemeterScene::viewPoint()
+{
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glEnable(GL_DEPTH_TEST);

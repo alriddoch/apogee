@@ -13,6 +13,7 @@ class DemeterScene : public Renderer {
   public:
     explicit DemeterScene(Application & app, int wdth = 640, int hght = 480);
 
+    void projection();
     void viewPoint();
     void reorient();
     void orient();

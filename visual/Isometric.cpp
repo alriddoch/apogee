@@ -23,16 +23,16 @@ Isometric::Isometric(Application & app, int wdth, int hght) :
     init();
 }
 
-void Isometric::viewPoint()
+void Isometric::projection()
 {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    // this puts us in perpective projection
-    //gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
     // this puts us into orthographic projection
     float xscale = width * scale / meterSize();
     float yscale = height * scale / meterSize();
     glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -2000.0, 2000.0 );
+}
+
+void Isometric::viewPoint()
+{
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glTranslatef(0.0f, -1.0f, 0.0f);      // Aim to centre the character
@@ -83,5 +83,4 @@ void Isometric::shapeView()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     // glShadeModel(GL_SMOOTH);
-    viewPoint();
 }
