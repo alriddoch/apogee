@@ -43,6 +43,7 @@ class Texture {
     static GLuint get(const std::string & filename, bool wrap = true,
                       GLint filter = GL_LINEAR);
     static GLuint getDefault();
+    static bool checkReload();
 
     static unsigned int getDefaultWidth() { return defaultTextureWidth; }
     static unsigned int getDefaultHeight() { return defaultTextureHeight; }

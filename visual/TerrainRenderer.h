@@ -53,6 +53,7 @@ class TerrainRenderer : public EntityRenderer
     virtual ~TerrainRenderer();
 
     void load(const std::string &) { }
+    void flush();
 
     virtual void render(Renderer &, const PosType & camPos);
     virtual void select(Renderer &, const PosType & camPos);

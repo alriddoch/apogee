@@ -1,3 +1,18 @@
+2004-03-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Texture.h, visual/Texture.cpp: Add code which checks the
+	  default Texture, and flushes texture code if its invalid.
+
+	* visual/Renderer.cpp: Use the texture reload code to tell when
+	  we need to signal to other subsystems that a texture and display
+	  list reload is required.
+
+	* gui/Gui.cpp: Remove test of display list, and alays reload textures
+	  and lists when renderer issues a restart signal.
+
+	* visual/TerrainRenderer.cpp: Flush display lists in response to
+	  signal from renderer.
+
 2004-03-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Sprite.cpp, visual/Sprite.h: Store filename, and reload

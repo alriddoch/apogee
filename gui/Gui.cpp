@@ -71,23 +71,13 @@ bool Gui::setup()
 
     initFont();
 
-    renderer.Restart.connect(SigC::slot(*this, &Gui::checkSetup));
+    renderer.Restart.connect(SigC::slot(*this, &Gui::initFont));
 
     return true;
 }
 
 void Gui::checkSetup()
 {
-    if (!glIsList(textBase)) {
-        std::cout << "Font list has gone" << std::endl << std::flush;
-        if (glIsTexture(textTexture)) {
-            std::cout << "But texture is still around"
-                      << std::endl << std::flush;
-            glDeleteTextures(1, &textTexture);
-        }
-        initFont();
-    }
-    // FIXME Check the font display lists and stuff
 }
 
 void Gui::draw()

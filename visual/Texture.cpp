@@ -15,8 +15,8 @@
 Texture::TextureStore * Texture::textureStore = NULL;
 GLuint Texture::defaultTexture;
 bool Texture::defaultTextureLoaded;
-unsigned int Texture::defaultTextureWidth;
-unsigned int Texture::defaultTextureHeight;
+GLuint Texture::defaultTextureWidth;
+GLuint Texture::defaultTextureHeight;
 
 Texture::Texture()
 {
@@ -67,7 +67,7 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 }
 
 
-unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
+GLuint Texture::get(const std::string & filename, bool wrap, GLint filter)
 {
     TextureStore::const_iterator I = textures().find(filename);
     if (I != textures().end()) {
@@ -88,14 +88,14 @@ unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
         return getDefault();
     }
 
-    unsigned int tex_id = loadTexture(image, wrap, filter);
+    GLuint tex_id = loadTexture(image, wrap, filter);
     SDL_FreeSurface(image);
 
     textures()[filename].glHandle = tex_id;
     return tex_id;
 }
 
-unsigned int Texture::getDefault()
+GLuint Texture::getDefault()
 {
     if (defaultTextureLoaded) {
         return defaultTexture;
@@ -116,10 +116,21 @@ unsigned int Texture::getDefault()
     defaultTextureHeight = texture_default_texture_height;
     return defaultTexture;
 }
-    
-unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
+
+bool Texture::checkReload()
 {
-    unsigned int tex_id;
+    if (glIsTexture(defaultTexture)) {
+        return false;
+    }
+    defaultTextureLoaded = false;
+    textures().clear();
+    getDefault();
+    return true;
+}
+    
+GLuint Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
+{
+    GLuint tex_id;
     int format, fmt;
     int bpp = image->format->BitsPerPixel;
 

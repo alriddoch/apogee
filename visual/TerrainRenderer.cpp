@@ -522,13 +522,20 @@ TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
 
     m_terrain.addShader(new Mercator::FillShader());
     m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f)); // Sandy beach
-    m_terrain.addShader(new Mercator::GrassShader(1.f, 27.f, .5f, 1.f)); // Grass
+    m_terrain.addShader(new Mercator::GrassShader(1.f, 27.f, .5f, 1.f)); //Grass
     m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f)); // Underwater
     m_terrain.addShader(new Mercator::HighShader(35.f)); // Snow
+
+    r.Restart.connect(SigC::slot(*this, &TerrainRenderer::flush));
 }
 
 TerrainRenderer::~TerrainRenderer()
 {
+}
+
+void TerrainRenderer::flush()
+{
+    m_displayLists.clear();
 }
 
 void TerrainRenderer::render(Renderer & r, const PosType & camPos)

@@ -86,6 +86,8 @@ bool Renderer::init()
 
     shapeView();
 
+    Texture::getDefault();
+
     std::string extensions = (char *)glGetString(GL_EXTENSIONS);
 
     std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
@@ -456,10 +458,13 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
 
 void Renderer::resize(int wdth, int hght)
 {
+    std::cout << "We are resizing" << std::endl << std::flush;
     width = wdth;
     height = hght;
     shapeView();
-    Restart.emit();
+    if (Texture::checkReload()) {
+        Restart.emit();
+    }
 }
 
 void Renderer::clear()
