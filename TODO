@@ -1,3 +1,5 @@
+Try replacing color based alpha code for terrain with alpha textures.
+
 Use the vertex data as the texcoord data because its basically the same,
 making using of the texture coord transform matrix to scale up.
 

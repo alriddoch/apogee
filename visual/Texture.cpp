@@ -73,7 +73,6 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 
 unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
 {
-    printf("Texture::get filter is 0x%x\n", filter);
     std::map<std::string, unsigned int>::const_iterator I = textures().find(filename);
     if (I != textures().end()) {
         return I->second;
@@ -160,11 +159,8 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
 
     if ((filter == GL_LINEAR_MIPMAP_NEAREST) ||
         (filter == GL_LINEAR_MIPMAP_LINEAR)) {
-        std::cout << "BUILDING MIPMAPS" << std::endl << std::flush;
         gluBuild2DMipmaps(GL_TEXTURE_2D, fmt, image->w, image->h, format,
                           GL_UNSIGNED_BYTE, image->pixels);
-    } else {
-        printf("NOT BUILDING MIPMAPS cos filter is 0x%x\n", filter);
     }
 
     return tex_id;

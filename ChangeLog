@@ -1,5 +1,12 @@
 2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Texture.cpp: Remove mipmap debugging output.
+
+	* visual/TerrainRenderer.cpp: Add in placer holder multi-texturing
+	  code written as part of a failed experiment.
+
+2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Eliminate non-unit texture transform
 	  in favor of using texture coordinate generation with the scale
 	  factor implicit. This means we can disable the texture coord

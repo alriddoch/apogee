@@ -24,12 +24,14 @@ using Atlas::Message::Element;
 static const bool debug_flag = false;
 static const int segSize = 64;
 
-static GLfloat sx[] = {0.125f, 0.f, 0.f, 0.f};
-static GLfloat ty[] = {0.f, 0.125f, 0.f, 0.f};
+static GLfloat sx0[] = {0.125f, 0.f, 0.f, 0.f};
+static GLfloat ty0[] = {0.f, 0.125f, 0.f, 0.f};
+
+static GLfloat sx1[] = {0.109375, 0.f, 0.f, 0.f};
+static GLfloat ty1[] = {0.f, 0.109375, 0.f, 0.f};
 
 void TerrainRenderer::enableRendererState()
 {
-    glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
@@ -43,18 +45,38 @@ void TerrainRenderer::enableRendererState()
     // glPushMatrix();
     // glScalef(0.125f, 0.125f, 0.125f);
     // glMatrixMode(GL_MODELVIEW);
+
+    // glActiveTexture(GL_TEXTURE0);
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    glTexGenfv(GL_S, GL_OBJECT_PLANE, sx);
-    glTexGenfv(GL_T, GL_OBJECT_PLANE, ty);
+    glTexGenfv(GL_S, GL_OBJECT_PLANE, sx0);
+    glTexGenfv(GL_T, GL_OBJECT_PLANE, ty0);
+
+    // glActiveTexture(GL_TEXTURE1);
+    // glEnable(GL_TEXTURE_2D);
+    // glEnable(GL_TEXTURE_GEN_S);
+    // glEnable(GL_TEXTURE_GEN_T);
+    // glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    // glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    // glTexGenfv(GL_S, GL_OBJECT_PLANE, sx1);
+    // glTexGenfv(GL_T, GL_OBJECT_PLANE, ty1);
 }
 
 void TerrainRenderer::disableRendererState()
 {
+    // glActiveTexture(GL_TEXTURE1);
+    // glDisable(GL_TEXTURE_2D);
+    // glDisable(GL_TEXTURE_GEN_S);
+    // glDisable(GL_TEXTURE_GEN_T);
+
+    // glActiveTexture(GL_TEXTURE0);
+    glDisable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
+
     // glMatrixMode(GL_TEXTURE);
     // glPopMatrix();
     // glMatrixMode(GL_MODELVIEW);
@@ -65,7 +87,6 @@ void TerrainRenderer::disableRendererState()
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_NORMALIZE);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void TerrainRenderer::drawRegion(Mercator::Segment * map)
@@ -104,7 +125,10 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
             continue;
         }
         glColorPointer(4, GL_UNSIGNED_BYTE, 0, (*I)->getData());
+        // glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
+        // glActiveTexture(GL_TEXTURE1);
+        // glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
         // if (have_GL_EXT_compiled_vertex_array) {
             // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
         // }
