@@ -36,6 +36,7 @@ void Item::release()
 {
 }
 
-void Item::key(int,int)
+bool Item::key(int,int)
 {
+    return false;
 }

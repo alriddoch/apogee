@@ -137,15 +137,16 @@ void Dialogue::release()
     }
 }
 
-void Dialogue::key(int sym,int mod)
+bool Dialogue::key(int sym,int mod)
 {
     //int k = Gui::keyToAscii(sym,mod);
     //if (k != -1) { cout << "[" << k << "]" << endl << flush; }
     if (focus == 1) {
-        field1.key(sym, mod);
+        return field1.key(sym, mod);
     } else if (focus == 2) {
-        field2.key(sym, mod);
+        return field2.key(sym, mod);
     }
+    return false;
 }
 
 void Dialogue::addField(const std::string & name, const std::string & contents)

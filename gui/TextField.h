@@ -25,7 +25,7 @@ class TextField : public Widget {
     virtual void select();
     virtual void click();
     virtual void release();
-    virtual void key(int,int);
+    virtual bool key(int,int);
 
     void key();
 

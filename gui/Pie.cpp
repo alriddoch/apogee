@@ -93,8 +93,9 @@ void Pie::release()
 {
 }
 
-void Pie::key(int, int)
+bool Pie::key(int, int)
 {
+    return false;
 }
 
 void Pie::addSlice(const std::string & name, const std::string & graphic)

@@ -125,8 +125,9 @@ void CharSelector::release()
     }
 }
 
-void CharSelector::key(int sym, int mod)
+bool CharSelector::key(int sym, int mod)
 {
+    return false;
 }
 
 void CharSelector::addCharacters(const std::set<std::pair<std::string, std::string> > & cl)

@@ -180,7 +180,7 @@ GLint Gui::select(int x, int y)
 
 bool Gui::event(SDL_Event & event)
 {
-    bool update = false;
+    bool eaten = false;
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if ((event.motion.state & SDL_BUTTON(1)) && (inMotion != -1)) {
@@ -193,7 +193,7 @@ bool Gui::event(SDL_Event & event)
                 if (I != widgets.end()) {
                     std::cout << "moving " << dx << " " << dy << std::endl << std::flush;
                     I->second->move(dx,dy);
-                    update = true;
+                    eaten = true;
                 }
             }
             break;
@@ -210,7 +210,7 @@ bool Gui::event(SDL_Event & event)
                     widgmap::const_iterator I = widgets.find(inMotion);
                     if (I != widgets.end()) {
                         I->second->click();
-                        update = true;
+                        eaten = true;
                     }
                 }
             }
@@ -223,7 +223,7 @@ bool Gui::event(SDL_Event & event)
                     widgmap::const_iterator I = widgets.find(inMotion);
                     if (I != widgets.end()) {
                         I->second->release();
-                        update = true;
+                        eaten = true;
                     }
                 }
                 inMotion = -1;
@@ -234,13 +234,12 @@ bool Gui::event(SDL_Event & event)
             if (widg != -1) {
                 widgmap::const_iterator I = widgets.find(widg);
                 if (I != widgets.end()) {
-                    I->second->key(event.key.keysym.sym, event.key.keysym.mod);
-                    update = true;
+                    eaten = I->second->key(event.key.keysym.sym, event.key.keysym.mod);
                 }
             }
             break;
     }
-    return update;
+    return eaten;
 }
 
 void Gui::print(const char * str)

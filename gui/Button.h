@@ -32,7 +32,7 @@ class Button : public Widget {
     virtual void select();
     virtual void click();
     virtual void release();
-    virtual void key(int, int);
+    virtual bool key(int, int);
 
     void press() { pressed = true; }
     void unpress() { pressed = false; }

@@ -92,6 +92,7 @@ void Option::release()
     }
 }
 
-void Option::key(int sym, int mod)
+bool Option::key(int sym, int mod)
 {
+    return false;
 }

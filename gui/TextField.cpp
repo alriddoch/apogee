@@ -42,21 +42,23 @@ void TextField::release()
 {
 }
 
-void TextField::key(int sym,int mod)
+bool TextField::key(int sym,int mod)
 {
     int k = Gui::keyToAscii(sym,mod);
     if (k != -1) {
         m_contents.push_back(k);
-        return;
+        return true;
     }
     switch (sym) {
         case SDLK_BACKSPACE:
             if (m_contents.size() != 0) {
                 m_contents.erase(m_contents.end() - 1);
             }
+            return true;
             break;
         default:
             std::cout << "WEIRD keypress" << std::endl << std::flush;
             break;
     };
+    return false;
 }

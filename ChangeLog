@@ -1,5 +1,10 @@
 2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* Rework the way events are handled so they only pass to the next layer
+	  they have not yet been used. gui first, then game, then wrapper.
+
+2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/Pie.cpp, gui/Pie.h: Add functionality necessary to
 	  make menus work.
 

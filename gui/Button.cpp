@@ -105,8 +105,9 @@ void Button::release()
 {
 }
 
-void Button::key(int,int)
+bool Button::key(int,int)
 {
+    return false;
 }
 
 int Button::width()

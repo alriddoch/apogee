@@ -33,7 +33,7 @@ class Widget {
     virtual void select() = 0;
     virtual void click() = 0;
     virtual void release() = 0;
-    virtual void key(int sym,int mod) = 0;
+    virtual bool key(int sym,int mod) = 0;
 
 };
 

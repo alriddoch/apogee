@@ -47,6 +47,13 @@ bool IsoClient::event(SDL_Event & event)
     static float oldRot = 0;
     static float oldElv = 0;
     static float oldScl = 0;
+
+    bool eaten = gui->event(event);
+    
+    if (eaten) {
+        return true;
+    }
+    
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if (event.motion.state & SDL_BUTTON(2)) {
@@ -98,7 +105,7 @@ bool IsoClient::event(SDL_Event & event)
                         moveCharacter(renderer.getWorldCoord(x, y, z));
                     }
                 }
-                //return false;
+                return true;
             }
             break;
         case SDL_KEYDOWN:
@@ -129,5 +136,5 @@ bool IsoClient::event(SDL_Event & event)
             }
             break;
     }
-    return gui->event(event);
+    return false;
 }
