@@ -36,15 +36,9 @@ void TerrainRenderer::enableRendererState()
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glColor4f(1.f, 1.f, 1.f, 1.f);
-    // glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
-    // glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
     glEnable(GL_BLEND);
-    // glMatrixMode(GL_TEXTURE);
-    // glPushMatrix();
-    // glScalef(0.125f, 0.125f, 0.125f);
-    // glMatrixMode(GL_MODELVIEW);
 
     // glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
@@ -67,6 +61,8 @@ void TerrainRenderer::enableRendererState()
 
 void TerrainRenderer::disableRendererState()
 {
+    // Can we do this using the state stack
+
     // glActiveTexture(GL_TEXTURE1);
     // glDisable(GL_TEXTURE_2D);
     // glDisable(GL_TEXTURE_GEN_S);
@@ -77,12 +73,7 @@ void TerrainRenderer::disableRendererState()
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
 
-    // glMatrixMode(GL_TEXTURE);
-    // glPopMatrix();
-    // glMatrixMode(GL_MODELVIEW);
-    // Can we do this using the state stack
     glDisable(GL_BLEND);
-    // glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisable(GL_COLOR_MATERIAL);
@@ -115,7 +106,6 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    // glTexCoordPointer(2, GL_FLOAT, 12, harray);
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
@@ -129,14 +119,8 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
         // glActiveTexture(GL_TEXTURE1);
         // glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
-        // if (have_GL_EXT_compiled_vertex_array) {
-            // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
-        // }
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
-        // if (have_GL_EXT_compiled_vertex_array) {
-            // glUnlockArraysEXT();
-        // }
 
         if (texNo == 0) {
             glDepthMask(GL_FALSE);
@@ -152,9 +136,6 @@ using Mercator::Terrain;
 void TerrainRenderer::drawMap(Mercator::Terrain & t,
                               const WFMath::Point<3> & camPos)
 {
-    // m_landscapeList = glGenLists(1);
-    // glNewList(m_landscapeList, GL_COMPILE);
-
     long lowXBound = lrintf(camPos[0] / segSize) - 2,
          upXBound = lrintf(camPos[0] / segSize) + 2,
          lowYBound = lrintf(camPos[1] / segSize) - 2,
@@ -164,14 +145,12 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
 
     const Terrain::Segmentstore & segs = t.getTerrain();
 
-    // Terrain::Segmentstore::const_iterator I = segs.begin();
     Terrain::Segmentstore::const_iterator I = segs.lower_bound(lowXBound);
     Terrain::Segmentstore::const_iterator K = segs.upper_bound(upXBound);
     for (; I != K; ++I) {
         const Terrain::Segmentcolumn & col = I->second;
         TerrainRenderer::DisplayListStore::iterator M = m_displayLists.find(I->first);
 
-        // Terrain::Segmentcolumn::const_iterator J = col.begin();
         Terrain::Segmentcolumn::const_iterator J = col.lower_bound(lowYBound);
         Terrain::Segmentcolumn::const_iterator L = col.upper_bound(upYBound);
         for (; J != L; ++J) {
@@ -211,7 +190,6 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
     }
     disableRendererState();
 
-    // glEndList();
 }
 
 void TerrainRenderer::drawSea(Mercator::Terrain & t)
@@ -287,12 +265,10 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     EntityRenderer(r, e), m_terrain(Terrain::SHADED),
     m_numLineIndeces(0),
     m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
-    m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
     m_landscapeList(0), m_haveTerrain(false)
 
 {
     m_textures[0] = Texture::get("granite.png", true, GL_LINEAR_MIPMAP_NEAREST);
-    // m_textures[1] = Texture::get("media/media_new/scratchpad/pato/textures/finished/ground_sand_256x256_00.png");
     m_textures[1] = Texture::get("sand.png", true, GL_LINEAR_MIPMAP_NEAREST);
     m_textures[2] = Texture::get("rabbithill_grass_hh.png", true, GL_LINEAR_MIPMAP_NEAREST);
     m_textures[3] = Texture::get("dark.png", true, GL_LINEAR_MIPMAP_NEAREST);
@@ -311,14 +287,6 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
         }
     }
     m_numLineIndeces = ++idx;
-
-    int tidx = -1;
-    for(int j = 0; j < (segSize + 1); ++j) {
-        for(int i = 0; i < (segSize + 1); ++i) {
-            m_texCoords[++tidx] = ((float)i)/8;
-            m_texCoords[++tidx] = ((float)j)/8;
-        }
-    }
 
     m_terrain.addShader(new Mercator::FillShader());
     m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f)); // Sandy beach
