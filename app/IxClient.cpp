@@ -41,7 +41,7 @@ bool IxClient::setup()
     gui->setup();
 
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
-    d->addField("host", "carom");
+    d->addField("host", "localhost");
     d->addField("port", "6767");
     d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
     gui->addWidget(d);
@@ -123,27 +123,31 @@ bool IxClient::event(SDL_Event & event)
                     break;
                 case SDLK_UP:
                     renderer.setYoffset(renderer.getYoffset() + 1);
+                    return true;
                     break;
                 case SDLK_DOWN:
                     renderer.setYoffset(renderer.getYoffset() - 1);
+                    return true;
                     break;
                 case SDLK_LEFT:
                     renderer.setXoffset(renderer.getXoffset() - 1);
+                    return true;
                     break;
                 case SDLK_RIGHT:
                     renderer.setXoffset(renderer.getXoffset() + 1);
+                    return true;
                     break;
                 case SDLK_q:
                     terrain_detail = terrain_detail ? false : true;
+                    return true;
                     break;
                 case SDLK_w:
                     terrain_over = terrain_over ? false : true;
+                    return true;
                     break;
                 default:
-                    return false;
                     break;
             }
-            return true;
             break;
     }
     return gui->event(event);

@@ -1,5 +1,10 @@
 2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/IxClient.cpp: Fix event code so keypress events get to
+	  the gui.
+
+2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/IsoClient.cpp, app/IxClient.cpp, app/apogee.cpp,
 	  visual/Isometric.cpp, visual/Renderer.cpp,
 	  visual/DemeterScene.cpp, visual/DemeterScene.h:
