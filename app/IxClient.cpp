@@ -80,6 +80,14 @@ bool IxClient::event(SDL_Event & event)
                 return true;
             }
             break;
+        case SDL_MOUSEBUTTONUP:
+            if (event.button.button == SDL_BUTTON_LEFT) {
+                if (!m_use_mouse) {
+                    int mx = renderer.getWidth() / 2,
+                        my = renderer.getHeight() / 2;
+                    SDL_WarpMouse(mx, my);
+                }
+            }
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
                 case SDLK_0:
@@ -105,6 +113,11 @@ bool IxClient::event(SDL_Event & event)
                     break;
                 case SDLK_q:
                     m_use_mouse = m_use_mouse ? false : true;
+                    if (!m_use_mouse) {
+                        int mx = renderer.getWidth() / 2,
+                            my = renderer.getHeight() / 2;
+                        SDL_WarpMouse(mx, my);
+                    }
                     return true;
                     break;
                 case SDLK_RETURN:
@@ -121,9 +134,16 @@ bool IxClient::event(SDL_Event & event)
     return false;
 }
 
-bool IxClient::mouse(int dx, int dy)
+void IxClient::mouse(int x, int y, Uint8 buttons)
 {
-    if (m_use_mouse) { return false; }
+    if (m_use_mouse) { return; }
+    if (buttons & SDL_BUTTON(1)) { return; }
+    int mx = renderer.getWidth() / 2,
+        my = renderer.getHeight() / 2;
+    int dx = x - mx,
+        dy = y - my;
+    if ((dx == 0) && (dy == 0)) { return; }
+    
     float newRot = renderer.getRotation() + (dx / 4.f);
     while (newRot >= 360) { newRot -= 360; };
     renderer.setRotation(newRot);
@@ -132,5 +152,7 @@ bool IxClient::mouse(int dx, int dy)
     if (newElv < -90) { newElv = -90; }
     if (newElv > 90) { newElv = 90; }
     renderer.setElevation(newElv);
-    return true;
+
+    SDL_WarpMouse(mx, my);
+    return;
 }

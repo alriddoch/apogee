@@ -9,8 +9,6 @@
 #include <visual/Renderer.h>
 
 #include <Eris/Connection.h>
-#include <Eris/Player.h>
-#include <Eris/Lobby.h>
 #include <Eris/PollDefault.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
@@ -80,6 +78,10 @@ int main(int argc, char ** argv)
                     break;
             }
         }
+        int dx, dy;
+        Uint8 buttons = SDL_GetMouseState(&dx, &dy);
+        app->mouse(dx, dy, buttons);
+
         try {
             Eris::PollDefault::poll();
         } catch (Eris::BaseException b) {
