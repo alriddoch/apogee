@@ -68,7 +68,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     glNormalPointer(GL_FLOAT, 0, normals);
 
     Lib3dsMaterial *mat=0;
-    GLuint texture = 0;
+    bool textureEnabled = true;
     unsigned begin = 0;
 
     for (unsigned p = 0; p < mesh->faces; ++p) {
@@ -78,17 +78,20 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
                                                           f->material);
         if (m != 0) {
           if (m != mat) {
+            if (begin != p) {
+                std::cout << "DRAW triangles " << begin << " - "
+                          << p << std::endl << std::flush;
+                glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
+                               &indices[begin * 3]);
+                begin = p;
+            }
             std::cout << "Material " << m << " : \"" << f->material << "\""
                       << std::endl << std::flush;
             mat = m;
-            std::cout << "DRAW " << p << ": " << begin << std::endl << std::flush;
-            glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
-                           &indices[begin * 3]);
-            begin = p;
             glMaterialfv(GL_FRONT, GL_AMBIENT, mat->ambient);
             glMaterialfv(GL_FRONT, GL_DIFFUSE, mat->diffuse);
             glMaterialfv(GL_FRONT, GL_SPECULAR, mat->specular);
-            float s = pow(2, 10.0*mat->shininess);
+            float s = pow(2, 10.0 * mat->shininess);
             if (s>128.0) {
               s=128.0;
             }
@@ -96,34 +99,53 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
             if (mat->texture1_map.name[0]) {
               std::cout << "TEXTURE NAME: " << mat->texture1_map.name
                         << std::endl << std::flush;
-              texture = Texture::get(mat->texture1_map.name, false, GL_LINEAR_MIPMAP_NEAREST);
-              glEnable(GL_TEXTURE_2D);
+              GLuint texture = Texture::get(mat->texture1_map.name, false, GL_LINEAR);
+              if (!textureEnabled) {
+                  textureEnabled = true;
+                  std::cout << "Turning on textur2d" << std::endl << std::flush;
+                  glEnable(GL_TEXTURE_2D);
+              }
               glBindTexture(GL_TEXTURE_2D, texture);
             } else {
-              glDisable(GL_TEXTURE_2D);
+              if (textureEnabled) {
+                  textureEnabled = false;
+                  std::cout << "Turning off textur2d" << std::endl << std::flush;
+                  glDisable(GL_TEXTURE_2D);
+              }
             }
           }
         } else {
-          mat = 0;
-          std::cout << "NDRAW " << p << ": " << begin << std::endl << std::flush;
-          glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
+          if (begin != p) {
+              std::cout << "NDRAW triangles " << begin << " - " << p
+                        << std::endl << std::flush;
+              glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
                          &indices[begin * 3]);
-          begin = p;
+              begin = p;
+          }
           static const Lib3dsRgba a = {0.2f, 0.2f, 0.2f, 1.0f};
           static const Lib3dsRgba d = {0.8f, 0.8f, 0.8f, 1.0f};
           static const Lib3dsRgba s = {0.0f, 0.0f, 0.0f, 1.0f};
           glMaterialfv(GL_FRONT, GL_AMBIENT, a);
           glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
           glMaterialfv(GL_FRONT, GL_SPECULAR, s);
-          glDisable(GL_TEXTURE_2D);
+          if (textureEnabled) {
+              textureEnabled = false;
+              std::cout << "Turning off textur2d" << std::endl << std::flush;
+              glDisable(GL_TEXTURE_2D);
+          }
         }
       }
 
     }
-    glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3, GL_UNSIGNED_SHORT,
-                         &indices[begin * 3]);
-    std::cout << "FDRAW " << mesh->faces << ": " << begin << std::endl << std::flush;
-    glDisable(GL_TEXTURE_2D);
+    glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3,
+                   GL_UNSIGNED_SHORT, &indices[begin * 3]);
+    std::cout << "Final DRAW triangles " << begin << " - " << mesh->faces
+              << std::endl << std::flush;
+
+    if (!textureEnabled) {
+        std::cout << "Turning on textur2d" << std::endl << std::flush;
+        glEnable(GL_TEXTURE_2D);
+    }
 
     delete [] points;
     delete [] normals;
@@ -236,7 +258,7 @@ void m3dsRenderer::draw3dsNode(Renderer & r, Lib3dsNode * node)
     glPopMatrix();
 }
 
-m3dsRenderer::m3dsRenderer(Renderer & r, RenderableEntity & e) : EntityRenderer(r, e)
+m3dsRenderer::m3dsRenderer(Renderer & r, RenderableEntity & e) : EntityRenderer(r, e), m_model(0)
 {
 }
 
@@ -265,6 +287,7 @@ void m3dsRenderer::render(Renderer & r, const PosType &)
         // second with alpha enabled, depth write disabled, and GL_LESS
         // Alpha test turned on.
         // glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_2D);
         glEnable(GL_ALPHA_TEST);
         glEnable(GL_NORMALIZE);
         glAlphaFunc(GL_GREATER, 0.2f);
@@ -272,6 +295,7 @@ void m3dsRenderer::render(Renderer & r, const PosType &)
         draw3dsFile(r);
         glDisable(GL_NORMALIZE);
         glDisable(GL_ALPHA_TEST);
+        glDisable(GL_TEXTURE_2D);
         // glDisable(GL_BLEND);
         glPopMatrix();
     }

@@ -38,6 +38,7 @@ void ForestRenderer::drawTree(Renderer & r, float height)
 
 void ForestRenderer::render(Renderer & r, const PosType & camPos)
 {
+    glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
     glEnable(GL_NORMALIZE);
     glAlphaFunc(GL_GREATER, 0.2f);
@@ -82,6 +83,7 @@ void ForestRenderer::render(Renderer & r, const PosType & camPos)
 
     glDisable(GL_NORMALIZE);
     glDisable(GL_ALPHA_TEST);
+    glDisable(GL_TEXTURE_2D);
 }
 
 void ForestRenderer::select(Renderer & r, const PosType & camPos)
