@@ -16,9 +16,13 @@
 #include <Eris/Entity.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
+#include <Atlas/Objects/Operation/Move.h>
 
 #include <sigc++/object_slot.h>
 
+using Atlas::Message::Object;
+
+using Atlas::Objects::Operation::Move;
 using Atlas::Objects::Entity::GameEntity;
 
 void GameClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
@@ -114,8 +118,44 @@ void GameClient::worldEnter(Eris::Entity * chr)
     inGame = true;
     chr->Moved.connect(SigC::slot(this, &GameClient::charMoved));
     character = chr;
+
 }
 
 void GameClient::charMoved(Eris::Entity*, Eris::Coord)
 {
+    std::cout << "Char moved" << std::endl << std::flush;
+}
+
+void GameClient::moveCharacter(const Vector3D & pos)
+{
+    if (character == NULL) {
+        return;
+    }
+    
+    Move m(Move::Instantiate());
+
+    Atlas::Message::Object::MapType marg;
+    marg["id"] = character->getID();
+    marg["loc"] = character->getContainer()->getID();
+    marg["pos"] = pos.asObject();
+    m.SetArgs(Atlas::Message::Object::ListType(1, marg));
+    m.SetFrom(character->getID());
+
+    connection.send(m);
+    
+}
+
+const Vector3D GameClient::getAbsCharPos()
+{
+    if (!inGame) {
+        return Vector3D();
+    }
+    Vector3D pos = character->getPosition();
+    Eris::Entity * root = world->getRootEntity();
+    for(Eris::Entity * ref = character->getContainer();
+        ref != NULL && ref != root;
+        ref = ref->getContainer()) {
+        pos = pos + Vector3D(ref->getPosition());
+    }
+    return pos;
 }

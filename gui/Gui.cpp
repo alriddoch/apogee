@@ -70,6 +70,7 @@ void Gui::draw()
             break;
         }
     }
+    glTranslatef(0.0f,0.0f,10.0f);
     I = widgets.begin();
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
@@ -87,7 +88,7 @@ GLint Gui::select(int x, int y)
     glRenderMode(GL_SELECT);
 
     glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
+    // glPushMatrix();
     glLoadIdentity();
 
     GLint viewport[4];
@@ -96,6 +97,7 @@ GLint Gui::select(int x, int y)
     glOrtho(0, renderer.getWidth(), 0, renderer.getHeight(), -20.0f, 20.0f);
 
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     glInitNames();
 
     widgmap::const_iterator I = widgets.begin();

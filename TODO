@@ -5,3 +5,6 @@ Thoroughly test eris ingame code.
 Thoroughly test eris outofgame code.
 
 Once Eris is up and running, add code to handle other characters.
+
+Add code to application which calcs character coord relative to root,
+and sets renderer offset accordingly

@@ -9,6 +9,8 @@
 
 class Isometric : public Renderer {
   private:
+    Model * model;
+
     Isometric() { throw RendererException(); }
     Isometric(int wdth, int hght);
 
@@ -23,10 +25,9 @@ class Isometric : public Renderer {
     }
 
     virtual void draw3Dentity();
-    virtual void drawCal3DModel(Model *,float,float);
+    virtual void drawCal3DModel(Model *, const Vector3D & coords);
     virtual void draw3DBox(const Vector3D & coords,
-                           const Vector3D & bbox = Vector3D(),
-                           const Vector3D & bmedian = Vector3D());
+                           const Eris::BBox & bbox);
     virtual void draw3DArea(const Vector3D & coords,
                             const Vector3D & bbox = Vector3D(),
                             const Vector3D & bmedian = Vector3D());

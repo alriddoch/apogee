@@ -252,93 +252,113 @@ void DemeterScene::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void DemeterScene::drawCal3DModel(Model * m, float x, float y)
+void DemeterScene::drawCal3DModel(Model * m, const Vector3D & coords)
 {
     origin();
-    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + x, terrain->GetHeight() / 2.0f + y) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
+    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.X(), terrain->GetHeight() / 2.0f + coords.Y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
     std::cout << "Transl " << characterElevation << std::endl << std::flush;
-    glTranslatef(x,y,characterElevation);
+    glTranslatef(coords.X(),coords.Y(),characterElevation);
     viewScale(0.025f);
     m->onRender();
     //viewScale(1.0f);
 }
 
 void DemeterScene::draw3DBox(const Vector3D & coords,
-                             const Vector3D & bbox,
-                             const Vector3D & bmedian)
+                             const Eris::BBox & bbox)
 {
-    Vector3D def(0.2,0.2,0.2);
-    const Vector3D & box = bbox ? bbox : def;
-    const Vector3D & median = bmedian ? bmedian : box;
     lightOff();
 
-    origin();
-    glTranslatef(coords.X()+median.X(),
-                 coords.Y()+median.Y(),
-                 coords.Z()+median.Z());
+    glPushMatrix();
+    // origin();
+    glTranslatef(coords.X(), coords.Y(), coords.Z());
+
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),-box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),box.Y(),box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),box.Z());
-    glVertex3f(box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
+    //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(-box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),-box.Z());
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(box.X(),-box.Y(),-box.Z());
+    //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),-box.Z());
-    glVertex3f(-box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
+    //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(box.X(),box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(-box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(-box.X(),-box.Y(),-box.Z());
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(box.X(),-box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),box.Z());
-    glVertex3f(-box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
+    //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(box.X(),-box.Y(),box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     lightOn();
+    glPopMatrix();
 }
+
 
 void DemeterScene::drawMapRegion(CoalRegion & map_region)
 {

@@ -1,3 +1,23 @@
+2001-12-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp, app/GameClient.h:
+	  Added support for moving the character, and getting the
+	  coords of the character relative to the current top level entity.
+
+	* app/IsoClient.cpp, app/IsoClient.h:
+	  Remove support for models. Set renderer offset according to
+	  character position. Move character to position when user clicks
+	  on terrain.
+
+	* gui/Gui.cpp: Correct initialisation of modelview, and move
+	  gui closer to the user.
+
+	* visual/DemeterScene.cpp, visual/DemeterScene.h,
+	  visual/Isometric.cpp, visual/Isometric.h, visual/Renderer.cpp,
+	  visual/Renderer.h: Switch to using new Eris bouding box, and use
+	  depth buffer when drawing Isometric terrain, so that coords of
+	  click point can be found.
+
 2001-11-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/IxClient.cpp, visual/Isometric.cpp:

@@ -12,7 +12,6 @@
 #include "GameClient.h"
 
 class Sprite;
-class Model;
 class Compass;
 
 class IsoClient : public GameClient {
@@ -23,12 +22,10 @@ class IsoClient : public GameClient {
     void axis();
 
     CoalDatabase map_database;
-    Sprite * character;
-    Model * model;
     Compass * compassWidget;
   public:
-    IsoClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con),
-                                                      character(NULL) { }
+    IsoClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con)
+                                                       { }
     virtual ~IsoClient() { }
 
     bool setup();

@@ -13,6 +13,8 @@
 #include "Sprite.h"
 #include "Model.h"
 
+#include <GL/glu.h>
+
 Renderer * Renderer::instance = NULL;
 
 Renderer::Renderer(int wdth, int hght) : screen(NULL),
@@ -20,4 +22,31 @@ Renderer::Renderer(int wdth, int hght) : screen(NULL),
                                          elevation(30), rotation(45),
                                          scale(1), x_offset(0), y_offset(0)
 {
+}
+
+float Renderer::getZ(int x, int y)
+{
+    float z = 0;
+    glReadPixels (x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+    return z;
+}
+
+const Vector3D Renderer::getWorldCoord(int x, int y, float z)
+{
+    GLint viewport[4];
+
+    GLdouble mvmatrix[16], projmatrix[16];
+
+    GLint realy;  /*  OpenGL y coordinate position  */
+
+    GLdouble wx, wy, wz;  /*  returned world x, y, z coords  */
+
+    glGetIntegerv (GL_VIEWPORT, viewport);
+    glGetDoublev (GL_MODELVIEW_MATRIX, mvmatrix);
+    glGetDoublev (GL_PROJECTION_MATRIX, projmatrix);
+
+    gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
+
+    cout << "{" << wx << ";" << wy << ";" << wz << endl << flush;
+    return Vector3D(wx, wy, wz);
 }

@@ -6,8 +6,6 @@
 
 #include <visual/Renderer.h>
 #include <visual/Sprite.h>
-#include <visual/Model.h>
-// #include <visual/widgets.h>
 
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
@@ -55,15 +53,14 @@ bool IsoClient::setup()
     loader.LoadMap ("blade2.xml");
     CoalDebug debug;
     // debug.Dump (map_database);
-    character = new Sprite();
-    character->load("swinesherd_female_1_us_E_0.png"); //,renderer);
 
     gui = new Gui(renderer);
     gui->setup();
     // bag = new Sprite();
     // bag->load("bag.png");
 
-    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,
+                                     renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
     d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
@@ -72,10 +69,6 @@ bool IsoClient::setup()
     compassWidget = new Compass(*gui, 42, 10);
     gui->addWidget(compassWidget);
 
-    model = new Model();
-    if (!model->onInit(Datapath() + "paladin.cfg")) {
-        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
-    }
     return 0;
 }
 
@@ -123,16 +116,17 @@ void IsoClient::doWorld()
 
 bool IsoClient::update()
 {
+    Vector3D offset = getAbsCharPos();
+    if (offset) {
+        renderer.setXoffset(offset.X());
+        renderer.setYoffset(offset.Y());
+    }
     renderer.clear();
-    // grid();
     renderer.lightOn();
     renderer.drawMap(map_database);
     renderer.origin();
-    model->onUpdate(0.1);
-    renderer.drawCal3DModel(model, 0, 0);
+
     doWorld();
-    // compass();
-    // axis();
 
     compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();
@@ -181,14 +175,26 @@ bool IsoClient::event(SDL_Event & event)
             break;
         case SDL_MOUSEBUTTONDOWN:
             if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
-                ((event.button.button & SDL_BUTTON_MIDDLE) ||
-                 (event.button.button & SDL_BUTTON_RIGHT)) &&
                 (event.button.state & SDL_PRESSED)) {
-                oldx = event.button.x;
-                oldy = event.button.y;
-                oldRot = renderer.getRotation();
-                oldElv = renderer.getElevation();
-                oldScl = renderer.getScale();
+                if ((event.button.button & SDL_BUTTON(SDL_BUTTON_MIDDLE)) ||
+                    (event.button.button & SDL_BUTTON(SDL_BUTTON_RIGHT))) {
+                    oldx = event.button.x;
+                    oldy = event.button.y;
+                    oldRot = renderer.getRotation();
+                    oldElv = renderer.getElevation();
+                    oldScl = renderer.getScale();
+                }
+                if (event.button.button & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+                    const int x = event.motion.x;
+                    const int y = renderer.getHeight() - event.motion.y;
+                    renderer.origin();
+                    const float z = renderer.getZ(x, y);
+                    // Check that the point clicked on is not in the far
+                    // distance
+                    if (z < 0.9) {
+                        moveCharacter(renderer.getWorldCoord(x, y, z));
+                    }
+                }
                 //return false;
             }
             break;

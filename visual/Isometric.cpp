@@ -36,6 +36,12 @@ void Isometric::init()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     this->shapeView();
+
+    model = new Model();
+    if (!model->onInit(Datapath() + "paladin.cfg")) {
+        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+    }
+
 }
 
 inline void Isometric::viewScale(float scale_factor)
@@ -244,87 +250,105 @@ void Isometric::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void Isometric::drawCal3DModel(Model * m,float,float)
+void Isometric::drawCal3DModel(Model * m, const Vector3D & coords)
 {
     glPushMatrix();
+    glTranslatef(coords.X(), coords.Y(), coords.Z());
     viewScale(0.025f);
     m->onRender();
     glPopMatrix();
     //viewScale(1);
 }
 
-void Isometric::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
-                          const Vector3D & bmedian)
+void Isometric::draw3DBox(const Vector3D & coords, const Eris::BBox & bbox)
 {
-    Vector3D def(0.2, 0.2, 0.2);
-    const Vector3D & box = bbox ? bbox : def;
-    const Vector3D & median = bmedian ? bmedian : box;
     lightOff();
 
     glPushMatrix();
     // origin();
-    glTranslatef(coords.X()+median.X(),
-                 coords.Y()+median.Y(),
-                 coords.Z()+median.Z());
+    glTranslatef(coords.X(), coords.Y(), coords.Z());
+
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),-box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),box.Y(),box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),box.Z());
-    glVertex3f(box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
+    //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(-box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),-box.Z());
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),-box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    //glVertex3f(box.X(),-box.Y(),-box.Z());
+    //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),box.Y(),-box.Z());
-    glVertex3f(-box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
+    //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(box.X(),box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),-box.Z());
-    glVertex3f(-box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(-box.X(),-box.Y(),-box.Z());
+    //glVertex3f(-box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),-box.Z());
-    glVertex3f(box.X(),box.Y(),-box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    //glVertex3f(box.X(),-box.Y(),-box.Z());
+    //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(-box.X(),-box.Y(),box.Z());
-    glVertex3f(-box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(-box.X(),-box.Y(),box.Z());
+    //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(box.X(),-box.Y(),box.Z());
-    glVertex3f(box.X(),box.Y(),box.Z());
+    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    //glVertex3f(box.X(),-box.Y(),box.Z());
+    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     lightOn();
@@ -346,16 +370,22 @@ void Isometric::drawEntity(Eris::Entity * ent)
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
         std::cout << ":" << e->getID() << e->getPosition() << ":"
-                  << e->getBBox().u << std::endl << std::flush;
-        draw3DBox(e->getPosition(), e->getBBox().u);
-        //draw3DBox(e->getPosition(), Vector3D(1,1,1));
-        drawEntity(e);
+                  << e->getBBox().u << e->getBBox().v
+                  << std::endl << std::flush;
+        if (!e->isVisible()) { continue; }
+        if ((*e->getInherits().begin()) == "farmer") {
+            drawCal3DModel(model, e->getPosition());
+        } else {
+            draw3DBox(e->getPosition(), e->getBBox());
+            drawEntity(e);
+        }
     }
     glPopMatrix();
 }
 
 void Isometric::drawWorld(Eris::Entity * wrld)
 {
+    model->onUpdate(0.1);
     drawEntity(wrld);
 }
 
@@ -408,7 +438,7 @@ void Isometric::drawMap(CoalDatabase & map_base)
     origin();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDepthMask(GL_FALSE);
+    // glDepthMask(GL_FALSE);
     int count = map_base.GetRegionCount();
     for (int i = 0; i < count; i++) {
         CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
@@ -416,7 +446,7 @@ void Isometric::drawMap(CoalDatabase & map_base)
             drawMapRegion(*region);
         }
     }
-    glDepthMask(GL_TRUE);
+    // glDepthMask(GL_TRUE);
 
     count = map_base.GetObjectCount();
     for (int i = 0; i < count; i++) {
@@ -435,7 +465,7 @@ void Isometric::drawGui()
     glOrtho(0, width, 0, height, -20.0f, 20.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    glClear(GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_DEPTH_BUFFER_BIT);
 
 }
 

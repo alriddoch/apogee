@@ -24,6 +24,7 @@ class RendererSDLinit : public RendererException { };
 
 namespace Eris {
   class Entity;
+  class BBox;
 }
 
 class Renderer {
@@ -80,13 +81,15 @@ class Renderer {
     float setYoffset(float yoff) {float tmp=y_offset; y_offset = yoff; return tmp; }
     float getYoffset() { return y_offset; }
 
+    float getZ(int, int);
+    const Vector3D getWorldCoord(int, int, float);
+
     //virtual void draw3Dtest() = 0;
     //virtual void draw2Dtest() = 0;
     virtual void draw3Dentity() = 0;
-    virtual void drawCal3DModel(Model *,float,float) = 0;
+    virtual void drawCal3DModel(Model *, const Vector3D & coords) = 0;
     virtual void draw3DBox(const Vector3D & coords,
-                           const Vector3D & bbox = Vector3D(),
-                           const Vector3D & bmedian = Vector3D()) = 0;
+                           const Eris::BBox & bbox) = 0;
     virtual void draw3DArea(const Vector3D & coords,
                             const Vector3D & bbox = Vector3D(),
                             const Vector3D & bmedian = Vector3D()) = 0;

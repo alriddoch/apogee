@@ -9,6 +9,8 @@
 
 #include <Eris/Connection.h>
 
+class Vector3D;
+
 namespace Eris {
   class Player;
   class Lobby;
@@ -32,7 +34,7 @@ class GameClient : public Application {
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false), player(NULL),
-               lobby(NULL), world(NULL) { }
+               lobby(NULL), world(NULL), character(NULL) { }
     Eris::Player * player;
     Eris::Lobby * lobby;
     Eris::World * world;
@@ -57,6 +59,9 @@ class GameClient : public Application {
     void worldEnter(Eris::Entity *r);
 
     void charMoved(Eris::Entity *, Eris::Coord);
+
+    void moveCharacter(const Vector3D & pos);
+    const Vector3D getAbsCharPos();
 };
 
 #endif // APOGEE_GAMECLIENT_H
