@@ -23,9 +23,10 @@ DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
     init();
 }
 
+static const float maxViewDistance = 4500.0f;
+
 void DemeterScene::shapeView()
 {
-    const float maxViewDistance = 4500.0f;
 
     if ((screen = SDL_SetVideoMode(width, height, 16,
             SDL_OPENGL|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
@@ -37,16 +38,10 @@ void DemeterScene::shapeView()
 
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
-    glClearDepth(1.0);
     glDepthFunc(GL_LEQUAL);
-    glDisable(GL_NORMALIZE);
     glEnableClientState(GL_VERTEX_ARRAY);
-    //glShadeModel(GL_SMOOTH);
-    float fogColor[4];
-    fogColor[0] = FOG_RED;
-    fogColor[1] = FOG_GREEN;
-    fogColor[2] = FOG_BLUE;
-    fogColor[3] = FOG_ALPHA;
+
+    float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
     glEnable(GL_FOG);
     glFogf(GL_FOG_MODE,GL_LINEAR);
     glFogfv(GL_FOG_COLOR,fogColor);
@@ -57,7 +52,6 @@ void DemeterScene::shapeView()
 
 void DemeterScene::projection()
 {
-    const float maxViewDistance = 4500.0f;
     // Not sure how to use this one to get a decent projection no matter
     // what the aspect ratio. Keep it here for reference.
     //gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
@@ -74,25 +68,11 @@ void DemeterScene::viewPoint()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    glEnable(GL_DEPTH_TEST);
     glTranslatef(0.0f, 0.0f, -5.0f);
-}
 
-void DemeterScene::reorient()
-{
-    // FIXME See orient(); we are not its inverse. Is this a problem?
-    glRotatef(-rotation, 0.0, 0.0, 1.0);
-    glRotatef(90-elevation, 1.0, 0.0, 0.0);
-}
-
-void DemeterScene::orient()
-{
     glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
     glTranslatef(0.0f, 0.0f, -2.5f);
-}
 
-void DemeterScene::translate()
-{
     glTranslatef(-x_offset,-y_offset,-z_offset);
 }

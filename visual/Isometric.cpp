@@ -6,21 +6,29 @@
 
 #include "Isometric.h"
 
-#include <common/debug.h>
-
 #include <SDL.h>
-
-#include <iostream>
-
-static const bool debug_flag = false;
-
-bool have_GL_EXT_compiled_vertex_array = false;
 
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght)
 
 {
     init();
+}
+
+void Isometric::shapeView()
+{
+    if ((screen = SDL_SetVideoMode(width, height, 0,
+            SDL_OPENGL|SDL_RESIZABLE)) == NULL) {
+        std::cerr << "Failed to set video mode" << std::endl << std::flush;
+        SDL_Quit();
+        throw RendererSDLinit();
+    }
+    SDL_WM_SetCaption("apogee", "isometric");
+
+    glViewport(0, 0, width, height);
+    glClearColor(0.0, 0.7, 0.7, 0.0);
+    glDepthFunc(GL_LEQUAL);
+    glEnableClientState(GL_VERTEX_ARRAY);
 }
 
 void Isometric::projection()
@@ -35,7 +43,6 @@ void Isometric::viewPoint()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    glTranslatef(0.0f, -1.0f, 0.0f);      // Aim to centre the character
     // GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
     // GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
     // GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
@@ -44,43 +51,10 @@ void Isometric::viewPoint()
     // glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
     // glEnable(GL_LIGHT1);
     // glEnable(GL_LIGHTING);
-}
 
-inline void Isometric::reorient()
-{
-    glRotatef(-rotation, 0.0, 0.0, 1.0);
-    glRotatef(90-elevation, 1.0, 0.0, 0.0);
-}
-
-inline void Isometric::orient()
-{
     glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-}
+    glTranslatef(0.0f, 0.0f, -1.0f);      // Aim to centre the character
 
-inline void Isometric::translate()
-{
     glTranslatef(-x_offset,-y_offset,-z_offset);
-}
-
-void Isometric::shapeView()
-{
-    //if (screen != NULL) {
-        //SDL_FreeSurface(screen);
-    //}
-    if ((screen = SDL_SetVideoMode(width, height, 0,
-            SDL_OPENGL|SDL_RESIZABLE)) == NULL) {
-        std::cerr << "Failed to set video mode" << std::endl << std::flush;
-        SDL_Quit();
-        throw RendererSDLinit();
-    }
-    SDL_WM_SetCaption("apogee", "isometric");
-
-    glViewport(0, 0, width, height);
-    glClearColor(0.0, 0.7, 0.7, 0.0);
-    glClearDepth(1.0);
-    glDepthFunc(GL_LEQUAL);
-    glEnable(GL_DEPTH_TEST);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    // glShadeModel(GL_SMOOTH);
 }

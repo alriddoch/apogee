@@ -1,5 +1,12 @@
 2003-05-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.h, visual/Renderer.cpp, visual/Isometric.h,
+	  visual/Isometric.cpp, visual/DemeterScene.h,
+	  visual/DemeterScene.cpp: Simplify the render interface, and clean
+	  up camera handling. Avoid explicitly setting OpenGL to its defaults.
+
+2003-05-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.h, visual/Renderer.cpp: Clean up the way drawing
 	  works, so positions are handled a bit less weirdly.
 

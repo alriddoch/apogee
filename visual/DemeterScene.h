@@ -15,9 +15,6 @@ class DemeterScene : public Renderer {
 
     void projection();
     void viewPoint();
-    void reorient();
-    void orient();
-    void translate();
 
     const float meterSize() const { return 40.2492f; }
 };

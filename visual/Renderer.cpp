@@ -36,6 +36,8 @@
 
 static const bool debug_flag = false;
 
+bool have_GL_EXT_compiled_vertex_array = false;
+
 #ifndef GL_EXT_compiled_vertex_array
 PFNGLLOCKARRAYSEXTPROC glLockArraysExt = 0;
 PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
@@ -307,8 +309,6 @@ void Renderer::origin()
     glLoadIdentity();
     projection();
     viewPoint();
-    orient();
-    translate();
 }
 
 
@@ -656,8 +656,6 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
 
     projection();
     viewPoint();
-    orient();
-    translate();
 
     glInitNames();
     

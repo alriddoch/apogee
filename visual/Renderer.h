@@ -119,10 +119,7 @@ class Renderer {
     void clear();
     virtual void projection() = 0;
     virtual void viewPoint() = 0;
-    virtual void reorient() = 0;
-    virtual void orient() = 0;
-    virtual void translate() = 0;
-    virtual void origin();
+    void origin();
     void lightOn();
     void lightOff();
     void update(float);
