@@ -1,3 +1,5 @@
+Add support for scaling factor specified in the .cfg file.
+
 Fix up cal3d loader so it looks in the same dir as the material file for 
 the associated texture.
 
