@@ -18,8 +18,12 @@ typedef std::map<int, Widget *> widgmap;
 class Gui {
   private:
     GLuint selectBuf[512];
+    GLuint textBase;
+    GLuint textTexture;
     Renderer & renderer;
     int nameCount;
+    GLint inMotion;
+    int mx,my;
 
     widgmap widgets;
 
@@ -29,9 +33,10 @@ class Gui {
 
     bool setup();
     void draw();
-    void select(int, int);
+    GLint select(int, int);
     bool event(SDL_Event &);
 
+    void print(const char *);
 };
 
 #endif // APOGEE_GUI_GUI_H

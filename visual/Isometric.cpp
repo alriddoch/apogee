@@ -397,15 +397,6 @@ void Isometric::drawGui()
     glLoadIdentity();                     // Reset The View
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    glTranslatef(200.0f, 200.0f, 0.0f);
-
-    // glColor3f(1.0f,0.5f,0.5f);
-    // glBegin(GL_QUADS);
-    // glVertex3f(-100.0f, 100.0f, 0.0f);
-    // glVertex3f( 100.0f, 100.0f, 0.0f);
-    // glVertex3f( 100.0f,-100.0f, 0.0f);
-    // glVertex3f(-100.0f,-100.0f, 0.0f);
-    // glEnd();
 }
 
 void Isometric::resize(int wdth, int hght)

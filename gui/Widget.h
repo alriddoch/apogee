@@ -9,12 +9,18 @@ class Gui;
 
 class Widget {
   private:
+    Gui & m_g;
     int m_x, m_y;
 
   public:
-    Widget(int x, int y) : m_x(x), m_y(y) { }
+    Widget(Gui & g, int x, int y) : m_g(g), m_x(x), m_y(y) { }
 
-    virtual void setup(Gui &) = 0;
+    const int x() const { return m_x; }
+    const int y() const { return m_y; }
+
+    void move(int x, int y) { m_x += x; m_y += y; }
+
+    virtual void setup() = 0;
     virtual void draw() = 0;
     virtual void select() = 0;
 

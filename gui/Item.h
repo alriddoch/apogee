@@ -14,11 +14,11 @@ class Item : public Widget {
     Sprite graphic;
 
   public:
-    Item(int x, int y) : Widget(x,y) { }
+    Item(Gui & g, int x, int y) : Widget(g,x,y) { }
 
     bool load(const char *);
 
-    virtual void setup(Gui &);
+    virtual void setup();
     virtual void draw();
     virtual void select();
 };

@@ -1,3 +1,20 @@
+2001-09-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/IsoClient.cpp, app/IxClient.cpp, gui/Gui.cpp, gui/Gui.h,
+	  gui/Item.cpp, gui/Item.h: Place control over rendering gui
+	  directly with the Gui class. Add widget map, which indexes
+	  using OpenGL names, and fix passing events through to gui
+	  code.
+
+	* gui/Widget.h: Modified passing of Gui reference so it is stored
+	  at initialisation. Add code for moving widget.
+
+	* visual/DemeterScene.cpp, visual/Isometric.cpp: Removed old test
+	  gui code.
+
+	* gui/Gui.cpp: Added text drawing code. Added handling of mouse
+	  drag events to move widgets around.
+
 2001-09-21  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* gui/Gui.cpp, gui/Gui.h, gui/Widget.cpp, gui/Widget.h, gui/Item.cpp,

@@ -116,7 +116,6 @@ bool IsoClient::update()
     axis();
     renderer.lightOff();
     renderer.drawGui();
-    glTranslatef(200.0f, 0.0f,10.0f);
     gui->draw();
     // renderer.draw2Dtest();
     renderer.flip();

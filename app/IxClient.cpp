@@ -110,7 +110,6 @@ bool IxClient::update()
     doWorld();
     renderer.lightOff();
     renderer.drawGui();
-    glTranslatef(200.0f, 0.0f,10.0f);
     gui->draw();
     renderer.flip();
     return false;
@@ -162,7 +161,7 @@ bool IxClient::event(SDL_Event & event)
                 oldRot = renderer.getRotation();
                 oldElv = renderer.getElevation();
                 oldScl = renderer.getScale();
-                return false;
+                // return false;
             }
             break;
         case SDL_KEYDOWN:
@@ -191,7 +190,7 @@ bool IxClient::event(SDL_Event & event)
             return true;
             break;
     }
-    return false;
+    return gui->event(event);
 }
 
 void IxClient::mouse(int dx, int dy)
