@@ -169,11 +169,6 @@ void GameClient::loginComplete()
     o->buttonTwoSignal.connect(SigC::slot(*this, &GameClient::charCreator));
     gui->addWidget(o);
 #endif
-    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
-    d->addField("name", "Apogee Bomble");
-    d->addField("type", "settler");
-    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::createCharacter));
-    gui->addWidget(d);
     charListSync();
 }
 
@@ -364,7 +359,11 @@ void GameClient::moveCharacter(const PosType & pos, bool run)
     Eris::Entity * r;
     while ((r = ref->getLocation()) != NULL) {
         // FIXME Incorrect usage. Needs real orientation.
-        coords = coords.toLocalCoords(ref->getPosition(), WFMath::Quaternion().identity());
+        WFMath::Quaternion q = ref->getOrientation();
+        if (!q.isValid()) {
+            q.identity();
+        }
+        coords = coords.toLocalCoords(ref->getPosition(), q);
         ref = r;
     };
     
@@ -403,7 +402,11 @@ const PosType GameClient::getAbsCharPos()
     for(; ref != NULL && ref != root; ref = ref->getLocation()) {
         std::cout << pos << ", " << ref->getPosition() << std::endl << std::flush;
         // FIXME Incorrect usage. Needs real orientation.
-        pos = pos.toParentCoords(ref->getPosition(), WFMath::Quaternion().identity());
+        WFMath::Quaternion q = ref->getOrientation();
+        if (!q.isValid()) {
+            q.identity();
+        }
+        pos = pos.toParentCoords(ref->getPosition(), q);
         std::cout << pos << std::endl << std::flush;
     }
     return pos;

@@ -280,6 +280,11 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
     assert(ent != 0);
 
     PosType pos = ent->getPosition();
+    WFMath::Quaternion orientation = ent->getOrientation();
+
+    if (!orientation.isValid()) {
+        orientation.identity();
+    }
 
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
@@ -295,10 +300,8 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    PosType camPos = cp;
-    // FIXME Incorrect usage of toLocalCoords. Returns value, and needs
-    // real orientation
-    camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
+
+    PosType camPos = cp.toLocalCoords(pos, orientation);
 
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re == 0) {
@@ -307,7 +310,7 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
 
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
-    orient(ent->getOrientation());
+    orient(orientation);
 
     re->m_drawer->render(*this, camPos);
 
@@ -353,7 +356,15 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
                             const PosType & cp,
                             SelectMap & name, GLuint & next)
 {
+    assert(ent != 0);
+
     PosType pos = ent->getPosition();
+    WFMath::Quaternion orientation = ent->getOrientation();
+
+    if (!orientation.isValid()) {
+        orientation.identity();
+    }
+
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
         debug( std::cout << ent->getVelocity() << " "
@@ -368,12 +379,8 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    PosType camPos = cp;
-    // FIXME Incorrect usage of toLocalCoords. Returns value, and needs
-    // real orientation
-    camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
-    glLoadName(++next);
-    name[next] = ent;
+
+    PosType camPos = cp.toLocalCoords(pos, orientation);
 
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re == 0) {
@@ -382,7 +389,10 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
 
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
-    orient(ent->getOrientation());
+    orient(orientation);
+
+    glLoadName(++next);
+    name[next] = ent;
 
     re->m_drawer->select(*this, camPos);
 
