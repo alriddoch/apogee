@@ -299,11 +299,36 @@ bool Model::onInit(const std::string& strFilename)
     else if(strKey == "material")
     {
       // load core material
+      std::string strFullPath = strPath + strData;
       std::cout << "Loading material '" << strData << "'..." << std::endl;
-      if(m_calCoreModel.loadCoreMaterial(strPath + strData) == -1)
+      int materialId;
+      if((materialId = m_calCoreModel.loadCoreMaterial(strPath + strData))
+                                                                        == -1)
       {
         CalError::printLastError();
         return false;
+      } else {
+        CalCoreMaterial *pCoreMaterial = m_calCoreModel.getCoreMaterial(materialId);
+        std::string strMatPath;
+        unsigned int pos = strFullPath.find_last_of("/");
+        if (pos != std::string::npos) {
+          strMatPath = strFullPath.substr(0, pos + 1);
+        }
+        // loop through all maps of the core material
+        int mapId;
+        for(mapId = 0; mapId < pCoreMaterial->getMapCount(); mapId++)
+        {
+          // get the filename of the texture
+          std::string strFilename;
+          strFilename = pCoreMaterial->getMapFilename(mapId);
+    
+          // load the texture from the file
+          GLuint textureId;
+          textureId = loadTexture(strMatPath + strFilename);
+    
+          // store the opengl texture id in the user data of the map
+          pCoreMaterial->setMapUserData(mapId, (Cal::UserData)textureId);
+        }
       }
     }
     else
@@ -316,6 +341,9 @@ bool Model::onInit(const std::string& strFilename)
   // explicitely close the file
   file.close();
 
+#if 0
+  // Moved this code to the section above, so textures can be loaded from
+  // directory relative to the material file that references them.
   // load all textures and store the opengl texture id in the corresponding map in the material
   int materialId;
   for(materialId = 0; materialId < m_calCoreModel.getCoreMaterialCount(); materialId++)
@@ -340,10 +368,12 @@ bool Model::onInit(const std::string& strFilename)
       pCoreMaterial->setMapUserData(mapId, (Cal::UserData)textureId);
     }
   }
+#endif
 
   // make one material thread for each material
   // NOTE: this is not the right way to do it, but this viewer can't do the right
   // mapping without further information on the model etc.
+  int materialId;
   for(materialId = 0; materialId < m_calCoreModel.getCoreMaterialCount(); materialId++)
   {
     // create the a material thread
