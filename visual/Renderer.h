@@ -70,6 +70,8 @@ class Renderer {
     Application & application;
     Model * model;
 
+    virtual ~Renderer();
+
     void flip() {
         SDL_GL_SwapBuffers();
     }
@@ -120,11 +122,14 @@ class Renderer {
     virtual void projection() = 0;
     virtual void viewPoint() = 0;
     void origin();
+    void orient(const WFMath::Quaternion &);
     void lightOn();
     void lightOff();
     void update(float);
 
     virtual const float meterSize() const = 0;
+
+    SigC::Signal1<void, float> Update;
 };
 
 #endif // APOGEE_RENDERER_H

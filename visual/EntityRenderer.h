@@ -5,13 +5,15 @@
 #ifndef APOGEE_ENTITY_RENDERER_H
 #define APOGEE_ENTITY_RENDERER_H
 
+#include <sigc++/object.h>
+
 class Renderer;
 
 namespace Eris {
   class Entity;
 }
 
-class EntityRenderer
+class EntityRenderer : virtual public SigC::Object
 {
   public:
     Eris::Entity & m_ent;

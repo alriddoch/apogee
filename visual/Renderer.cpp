@@ -62,6 +62,10 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
 {
 }
 
+Renderer::~Renderer()
+{
+}
+
 void Renderer::init()
 {
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE) != 0) { 
@@ -303,6 +307,7 @@ void Renderer::update(float secs)
     }
 
     model->onUpdate(secs);
+    Update.emit(secs);
 }
 
 void Renderer::origin()
@@ -313,7 +318,24 @@ void Renderer::origin()
     viewPoint();
 }
 
+void Renderer::orient(const WFMath::Quaternion & orientation)
+{
+    if (!orientation.isValid()) {
+        return;
+    }
+    float orient[4][4];
+    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            orient[i][j] = omatrix.elem(i,j);
+        }
+    }
+    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
+    orient[3][3] = 1.0f;
+    glMultMatrixf(&orient[0][0]);
+}
 
+#if 0
 void Renderer::selectCal3DModel(Model * m, const WFMath::Quaternion & orientation)
 {
     glPushMatrix();
@@ -424,6 +446,7 @@ void Renderer::draw3DBox(const WFMath::AxisBox<3> & bbox)
         glUnlockArraysEXT();
     }
 }
+#endif
 
 void Renderer::drawEntity(Eris::Entity * ent)
 {
@@ -445,21 +468,14 @@ void Renderer::drawEntity(Eris::Entity * ent)
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
-        Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
+        orient(e->getOrientation());
         RenderableEntity * re = dynamic_cast<RenderableEntity *>(e);
         if (re != 0) {
             re->m_drawer->render(*this);
         }
-        // if (type->safeIsA(charType)) {
-            // drawCal3DModel(model, e->getOrientation());
-        // } else {
-            // if (e->hasBBox()) {
-                // draw3DBox(e->getBBox());
-            // }
-            drawEntity(e);
-        // }
+        drawEntity(e);
         glPopMatrix();
     }
 }
@@ -632,15 +648,12 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
         name[next] = e;
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
-        // Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
-        // if (type->safeIsA(charType)) {
-            // selectCal3DModel(model, pos, e->getOrientation());
-        // } else {
-            if (e->hasBBox()) {
-                select3DBox(e->getBBox());
-            }
-            selectEntity(e, name, next);
-        // }
+        orient(e->getOrientation());
+        RenderableEntity * re = dynamic_cast<RenderableEntity *>(e);
+        if (re != 0) {
+            re->m_drawer->select(*this);
+        }
+        selectEntity(e, name, next);
         glPopMatrix();
     }
 }

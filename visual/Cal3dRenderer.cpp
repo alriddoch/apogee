@@ -5,6 +5,9 @@
 #include "Cal3dRenderer.h"
 
 #include "Model.h"
+#include "Renderer.h"
+
+#include <sigc++/object_slot.h>
 
 Model * Cal3dRenderer::m_default = 0;
 
@@ -26,6 +29,11 @@ void Cal3dRenderer::selectCal3dModel(Model * m)
     glPopMatrix();
 }
 
+void Cal3dRenderer::update(float secs)
+{
+    m_default->onUpdate(secs);
+}
+
 Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
 {
     if (m_default == 0) {
@@ -35,6 +43,7 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r,
         }
         m_default->setLodLevel(1.0f);
         m_default->onUpdate(0);
+        r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
     }
 }
 

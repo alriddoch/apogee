@@ -16,6 +16,7 @@ class Cal3dRenderer : public EntityRenderer
 
     void drawCal3dModel(Model * m);
     void selectCal3dModel(Model * m);
+    void update(float);
   public:
     Cal3dRenderer(Renderer &, Eris::Entity & e);
     virtual ~Cal3dRenderer();
