@@ -49,16 +49,8 @@ void DemeterScene::viewPoint()
 
     glTranslatef(-x_offset,-y_offset,-z_offset);
 
-    static GLfloat AmbientColor[] = {0.3f, 0.3f, 0.3f, 1.f};
-    static GLfloat DiffuseColor[] = {1.f, 1.f, 0.95f, 1.f};
-    static GLfloat LightPos[] = {0.f, 1.f, 1.f, 0.f};
-    static GLfloat lmodel_ambient[] = {0.f, 0.f, 0.f, 1.f};
-    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
-    glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
-    glDisable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
+    static const GLfloat lightPos[] = {0.f, 1.f, 1.f, 0.f};
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
 }
 
 void DemeterScene::drawSky()

@@ -142,6 +142,15 @@ void Renderer::shapeView()
     glFogf(GL_FOG_END,maxViewDistance - 15.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
 
+    static const GLfloat AmbientColor[] = {0.6f, 0.6f, 0.7f, 1.f};
+    static const GLfloat DiffuseColor[] = {1.f, 1.f, 1.00, 1.f};
+    static const GLfloat lmodel_ambient[] = {0.f, 0.f, 0.f, 1.f};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+    glDisable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+
     if (glIsTexture(17)) {
         std::cout << "17 is a texture" << std::endl << std::flush;
     } else {
