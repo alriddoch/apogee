@@ -81,7 +81,7 @@ bool IsoClient::setup()
 
 void IsoClient::doWorld()
 {
-    if (world == NULL) {
+    if ((world == NULL) || (!inGame)) {
         cout << "No world" << endl << flush;
         return;
     }

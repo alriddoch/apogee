@@ -3,6 +3,7 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include <coal/database.h>
+#include <coal/region.h>
 
 #include <iostream>
 

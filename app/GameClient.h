@@ -24,9 +24,11 @@ namespace Atlas {
 }
 
 class GameClient : public Application {
+  protected:
+    bool inGame;
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
-               Application(rend, con), player(NULL), lobby(NULL),
+               Application(rend, con), inGame(false), player(NULL), lobby(NULL),
                                        world(NULL) { }
     Eris::Player * player;
     Eris::Lobby * lobby;
@@ -34,6 +36,7 @@ class GameClient : public Application {
 
     void netConnected();
     void netFailure(std::string msg);
+    void connectionLog(std::string msg);
     void netDisconnected();
 
     void login(const std::string &, const std::string &);

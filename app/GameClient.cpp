@@ -68,6 +68,11 @@ void GameClient::netFailure(std::string msg)
                                   msg));
 }
 
+void GameClient::connectionLog(std::string msg)
+{
+    std::cout << "LOG: " << msg << std::endl << std::flush;
+}
+
 void GameClient::netConnected()
 {
     std::cout << "Connected to server!" << std::endl << std::flush;
@@ -104,4 +109,5 @@ void GameClient::worldEntityCreate(Eris::Entity *r)
 void GameClient::worldEnter(Eris::Entity *r)
 {
     std::cout << "Enter world" << std::endl << std::flush;
+    inGame = true;
 }

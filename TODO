@@ -1,1 +1,7 @@
 Implement a worldforge client.
+
+Thoroughly test eris ingame code.
+
+Thoroughly test eris outofgame code.
+
+Once Eris is up and running, add code to handle other characters.
