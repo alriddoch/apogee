@@ -6,6 +6,7 @@
 #include <coal/region.h>
 
 #include <Eris/Entity.h>
+#include <Eris/TypeInfo.h>
 
 #include <iostream>
 
@@ -20,7 +21,7 @@
 
 static const bool debug_flag = false;
 
-Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght)
+Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght), charType(NULL)
 {
     init();
 }
@@ -377,7 +378,8 @@ void Isometric::drawEntity(Eris::Entity * ent)
                         << e->getBBox().u << e->getBBox().v
                         << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
-        if ((*e->getInherits().begin()) == "farmer") {
+        Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
+        if (type->safeIsA(charType)) {
             drawCal3DModel(model, e->getPosition());
         } else {
             draw3DBox(e->getPosition(), e->getBBox());
@@ -389,6 +391,9 @@ void Isometric::drawEntity(Eris::Entity * ent)
 
 void Isometric::drawWorld(Eris::Entity * wrld)
 {
+    if (charType == NULL) {
+        charType = Eris::TypeInfo::findSafe("character");
+    }
     model->onUpdate(0.1);
     drawEntity(wrld);
 }

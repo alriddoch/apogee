@@ -176,15 +176,15 @@ bool IsoClient::event(SDL_Event & event)
         case SDL_MOUSEBUTTONDOWN:
             if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
                 (event.button.state & SDL_PRESSED)) {
-                if ((event.button.button == SDL_BUTTON(SDL_BUTTON_MIDDLE)) ||
-                    (event.button.button == SDL_BUTTON(SDL_BUTTON_RIGHT))) {
+                if ((event.button.button == SDL_BUTTON_MIDDLE) ||
+                    (event.button.button == SDL_BUTTON_RIGHT)) {
                     oldx = event.button.x;
                     oldy = event.button.y;
                     oldRot = renderer.getRotation();
                     oldElv = renderer.getElevation();
                     oldScl = renderer.getScale();
                 }
-                if (event.button.button == SDL_BUTTON(SDL_BUTTON_LEFT)) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
                     const int x = event.motion.x;
                     const int y = renderer.getHeight() - event.motion.y;
                     renderer.origin();

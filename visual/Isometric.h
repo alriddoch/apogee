@@ -7,9 +7,14 @@
 
 #include "Renderer.h"
 
+namespace Eris {
+  class TypeInfo;
+}
+
 class Isometric : public Renderer {
   private:
     Model * model;
+    Eris::TypeInfo * charType;
 
     Isometric() { throw RendererException(); }
     Isometric(int wdth, int hght);

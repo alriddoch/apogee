@@ -1,3 +1,11 @@
+2001-12-10  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/IsoClient.cpp: Properrly fixed button press detection.
+
+	* visual/Isometric.cpp, visual/Isometric.h: Added test of Eris
+	  typeinfo system, checking if each entity inherits from character,
+	  and if so, using a character animation rather than a bbox.
+
 2001-12-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/IxClient.cpp: Brought perigee up to date with the bbox format
