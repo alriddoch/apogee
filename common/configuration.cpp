@@ -8,8 +8,7 @@
 
 varconf::Config * global_conf;
 
-std::string etc_directory;
-std::string share_directory;
+std::string etc_directory = ETCDIR;
 
 std::string skin;
 
@@ -46,7 +45,7 @@ bool loadConfig(int argc, char ** argv)
     bool main_config = global_conf->readFromFile(etc_directory +
                                                  "/apogee/apogee.vconf");
     if (!main_config) {
-        std::cerr << "FATAL: Unable to read main config file "
+        std::cerr << "ERROR: Unable to read main config file "
                   << etc_directory << "/apogee/apogee.vconf."
                   << std::endl;
 #if 0

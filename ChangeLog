@@ -1,5 +1,13 @@
 2003-11-21  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* common/configuration.h: Fix loadConfig() prototype.
+
+	* common/configuration.cpp: Get compile default config directory.
+
+	* app/apogee.cpp, app/perigee.cpp: Load the new config file.
+
+2003-11-21  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* common/configuration.h, common/configuration.cpp:
 	  Add configuration loader code using varconf.
 

@@ -4,6 +4,8 @@
 
 #include "IsoClient.h"
 
+#include "common/configuration.h"
+
 #include <visual/Renderer.h>
 
 #include <Eris/Connection.h>
@@ -27,6 +29,8 @@ using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {
+    loadConfig(argc, argv);
+
     Eris::Connection & con = * new Eris::Connection("apogee", true);
 
     IsoClient * app = new IsoClient(con);

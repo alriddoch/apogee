@@ -4,6 +4,8 @@
 
 #include "IxClient.h"
 
+#include "common/configuration.h"
+
 #include <visual/Renderer.h>
 
 #include <Eris/Connection.h>
@@ -22,6 +24,8 @@ using Atlas::Message::Element;
 
 int main(int argc, char ** argv)
 {
+    loadConfig(argc, argv);
+
     Eris::Connection & con = * new Eris::Connection("perigee", true);
 
     IxClient * app = new IxClient(con);
