@@ -44,17 +44,8 @@ AC_REQUIRE_CPP
 dnl Test for libraries
 
 SDL_VERSION=1.2.0
-AM_PATH_SDL($SDL_VERSION, [
-    CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
-    LIBS="$LIBS $SDL_LIBS"
-],
-[
-    AC_MSG_ERROR(Could not find SDL. Please try your distribution vendor, or go to http://www.libsdl.org/ and get at least version $SDL_VERSION)
-])
+WF_CHECK_SDL_IMAGE($SDL_VERSION)
 
-AC_CHECK_LIB(SDL_image,IMG_Load, [ LIBS="$LIBS -lSDL_image" ],
-    AC_MSG_ERROR(Could not find SDL_image library)
-)
 AC_CHECK_LIB(GL,glViewport, [ LIBS="$LIBS -lGL" ],
     AC_MSG_ERROR(Could not find OpenGL library)
 )
@@ -79,6 +70,10 @@ AC_CHECK_LIB(cal3d, main,
 [
     LIBS="$LIBS -lcal3d"
 ], AC_MSG_ERROR(Could not find cal3d library))
+
+dnl add SDL flags at the end to avoid SDL_main problems
+CXXFLAGS="$CXXFLAGS $WF_SDL_IMAGE_CFLAGS"
+LIBS="$LIBS $WF_SDL_IMAGE_LIBS"
 
 dnl Generate files
 AC_OUTPUT([
