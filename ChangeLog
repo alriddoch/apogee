@@ -1,3 +1,8 @@
+2003-08-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/TerrainRenderer.cpp: Use terrain vertex coords as texture
+	  coords, as they are the same.
+
 2003-08-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.h, app/GameClient.cpp,

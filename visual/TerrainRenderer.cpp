@@ -34,12 +34,19 @@ void TerrainRenderer::enableRendererState()
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
+    // glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
     glEnable(GL_BLEND);
+    glMatrixMode(GL_TEXTURE);
+    glPushMatrix();
+    glScalef(0.125f, 0.125f, 0.125f);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void TerrainRenderer::disableRendererState()
 {
+    glMatrixMode(GL_TEXTURE);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
     // Can we do this using the state stack
     glDisable(GL_BLEND);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -76,6 +83,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
+    glTexCoordPointer(3, GL_FLOAT, 0, harray);
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();

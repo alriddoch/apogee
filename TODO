@@ -1,3 +1,13 @@
+Use the vertex data as the texcoord data because its basically the same,
+making using of the texture coord transform matrix to scale up.
+
+Stick mipmaps on the terrain.
+
+Move in near clipping plane to avoid loss of Z resolution.
+
+Try re-working terrain so that there is a display list per-pass, with
+no state changes in it, then try batching passes.
+
 Need to get terrain tracking working right, preferably in a way that
 handle parent tracking generically, and probably in conjunction
 with sorting out the same in cyphesis.
