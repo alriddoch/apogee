@@ -1,3 +1,10 @@
+2001-01-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* Added ability to scroll round the map.
+
+	* Added beginnings of lighting support, which does not yet
+	  work it seems.
+
 2001-01-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Fixed alpha blending in sprite code.

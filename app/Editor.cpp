@@ -16,7 +16,9 @@ void Editor::grid()
     const int w = renderer->getWidth(), h = renderer->getHeight();
     const int maxlen = sqrt(w*w + h*h) * scale / (Renderer::meterSize);
 
-    renderer->origin();
+    renderer->viewPoint();
+    renderer->orient();
+    renderer->lightOff();
     for(int i = 0; i < maxlen; i++) {
         glBegin(GL_LINES);
         glColor3f(0.3, 0.3, 0.3);
@@ -36,6 +38,7 @@ void Editor::grid()
         glVertex3f(-maxlen, -i, 0.0);
         glEnd();
     }
+    renderer->lightOn();
 }
 
 void Editor::compass()
@@ -46,6 +49,7 @@ void Editor::compass()
     const double x=-((renderer->getWidth())/(2*Renderer::meterSize)-1.2)*scale;
     const double y=((renderer->getHeight())/(2*Renderer::meterSize)-1.2)*scale;
 
+    renderer->lightOff();
     glTranslatef(x, y, 18);
     renderer->orient();
     glBegin(GL_LINES);
@@ -62,6 +66,7 @@ void Editor::compass()
     glVertex3f(0.1*scale, 0.8*scale, 0);
     glVertex3f(0.1*scale, scale, 0);
     glEnd();
+    renderer->lightOn();
 }
 
 void Editor::axis()
@@ -71,6 +76,7 @@ void Editor::axis()
     const double scale = renderer->getScale();
     const double x=-((renderer->getWidth()) /(2*Renderer::meterSize)-1.2)*scale;
     const double y=-((renderer->getHeight())/(2*Renderer::meterSize)-1.2)*scale;
+    renderer->lightOff();
     glTranslatef(x, y, 19);
     renderer->orient();
     glBegin(GL_LINES);
@@ -88,6 +94,7 @@ void Editor::axis()
     glVertex3f(0, 0, 0);
     glVertex3f(0, scale, 0);
     glEnd();
+    renderer->lightOn();
 }
 
 bool Editor::setup()
@@ -174,9 +181,23 @@ bool Editor::event(SDL_Event & event)
                     renderer->setRotation(45);
                     return true;
                     break;
+                case SDLK_UP:
+                    renderer->setYoffset(renderer->getYoffset() + 1);
+                    break;
+                case SDLK_DOWN:
+                    renderer->setYoffset(renderer->getYoffset() - 1);
+                    break;
+                case SDLK_LEFT:
+                    renderer->setXoffset(renderer->getXoffset() - 1);
+                    break;
+                case SDLK_RIGHT:
+                    renderer->setXoffset(renderer->getXoffset() + 1);
+                    break;
                 default:
+                    return false;
                     break;
             }
+            return true;
             break;
     }
     return false;

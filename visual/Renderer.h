@@ -29,7 +29,7 @@ class Renderer {
     SDL_Surface * button;
     int width, height;
     int elevation, rotation;
-    double scale;
+    double scale, x_offset, y_offset;
   public:
     static Renderer * Instance(int width = 640, int height = 480) {
         if (instance == NULL) {
@@ -66,6 +66,12 @@ class Renderer {
     double setScale(double scl) {double tmp=scale; scale = scl; return tmp; }
     double getScale() { return scale; }
 
+    double setXoffset(double xoff) {double tmp=x_offset; x_offset = xoff; return tmp; }
+    double getXoffset() { return x_offset; }
+
+    double setYoffset(double yoff) {double tmp=y_offset; y_offset = yoff; return tmp; }
+    double getYoffset() { return y_offset; }
+
     void draw3Dtest();
     void draw2Dtest();
     void draw3Dentity();
@@ -77,7 +83,10 @@ class Renderer {
     void viewPoint();
     void reorient();
     void orient();
+    void translate();
     void origin();
+    void lightOn();
+    void lightOff();
 
     static const double meterSize = 40.2492;
 };

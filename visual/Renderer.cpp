@@ -35,9 +35,18 @@ inline void Renderer::viewPoint()
     // this puts us into orthographic perspective
     double xscale = width * scale / meterSize;
     double yscale = height * scale / meterSize;
-    glOrtho( -xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
+    glOrtho(-xscale/2, xscale/2,
+            -yscale/2, yscale/2, -20.0, 20.0 );
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
+    GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
+    GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
+    GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
+    glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHTING);
 }
 
 inline void Renderer::reorient()
@@ -52,19 +61,35 @@ inline void Renderer::orient()
     glRotatef(rotation, 0.0, 0.0, 1.0);
 }
 
+inline void Renderer::translate()
+{
+    glTranslatef(-x_offset,-y_offset,0);
+}
+
 // This function moves the render cursor to the origin and rotates the
 // axis to be inline with the worldforge axis
 inline void Renderer::origin()
 {
     viewPoint();
     orient();
+    translate();
+}
+
+void Renderer::lightOn()
+{
+    glEnable(GL_LIGHTING);
+}
+
+void Renderer::lightOff()
+{
+    glDisable(GL_LIGHTING);
 }
 
 void Renderer::shapeView()
 {
-    if (screen != NULL) {
-        SDL_FreeSurface(screen);
-    }
+    //if (screen != NULL) {
+        //SDL_FreeSurface(screen);
+    //}
     if ((screen = SDL_SetVideoMode(width, height, 16,
             SDL_OPENGLBLIT|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
         cerr << "Failed to set video mode" << endl << flush;
@@ -92,6 +117,7 @@ void Renderer::drawCharacter(Sprite * character, double x, double y)
 
 void Renderer::draw2Dtest()
 {
+    lightOff();
     if (button == NULL) {
         button = IMG_Load("button_base.png");
         // cerr << "Could not load test image" << endl << flush;
@@ -107,6 +133,7 @@ void Renderer::draw2Dtest()
     destRect.w = button->w * 2;
     destRect.h = button->h * 4;
     SDL_UpdateRects(screen, 1, &destRect);
+    lightOn();
 }
 
 void Renderer::draw3Dtest()
@@ -126,7 +153,8 @@ void Renderer::draw3Dtest()
         
     for(int i = 0; i < 4; i++) {
         // draw a square (quadrilateral)
-        glBegin(GL_QUADS);                    // start drawing a polygon (4 sided)
+
+        glBegin(GL_QUADS);                 // start drawing a polygon (4 sided)
         glColor3f(1, 0, 0);
         glVertex3f(-0.5, 0.5, 0.0);        // Top Left
         glColor3f(1, 1, 0);
@@ -148,32 +176,36 @@ void Renderer::draw3Dentity()
     // Lets draw a building
     glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
     glEnable(GL_TEXTURE_2D);
-    glBegin(GL_POLYGON);
+    glBegin(GL_QUADS);
+
+    glNormal3f(0, -1, 0);
     glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
     glTexCoord2f(0, 1); glVertex3f(0, 0, 5);
     glTexCoord2f(1, 1); glVertex3f(5, 0, 5);
     glTexCoord2f(1, 0); glVertex3f(5, 0, 0);
-    glEnd();
-    glBegin(GL_POLYGON);
+
+    glNormal3f(-1, 0, 0);
     glTexCoord2f(0, 0); glVertex3f(0, 5, 0);
     glTexCoord2f(0, 1); glVertex3f(0, 5, 5);
     glTexCoord2f(1, 1); glVertex3f(0, 0, 5);
     glTexCoord2f(1, 0); glVertex3f(0, 0, 0);
-    glEnd();
-    glBegin(GL_POLYGON);
+ 
+    glNormal3f(1, 0, 0);
     glTexCoord2f(1, 0); glVertex3f(0, 5, 0);
     glTexCoord2f(1, 1); glVertex3f(0, 5, 5);
     glTexCoord2f(0, 1); glVertex3f(5, 5, 5);
     glTexCoord2f(0, 0); glVertex3f(5, 5, 0);
-    glEnd();
-    glBegin(GL_POLYGON);
+ 
+    glNormal3f(0, 1, 0);
     glTexCoord2f(1, 0); glVertex3f(5, 5, 0);
     glTexCoord2f(1, 1); glVertex3f(5, 5, 5);
     glTexCoord2f(0, 1); glVertex3f(5, 0, 5);
     glTexCoord2f(0, 0); glVertex3f(5, 0, 0);
+
     glEnd();
     glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
-    glBegin(GL_POLYGON);
+    glBegin(GL_QUADS);
+    glNormal3f(0, 0, 1);
     glTexCoord2f(0, 0); glVertex3f(0, 0, 4.8);
     glTexCoord2f(0, 1); glVertex3f(0, 5, 4.8);
     glTexCoord2f(1, 1); glVertex3f(5, 5, 4.8);
@@ -205,6 +237,7 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
             glColor3f(1.0, 0.0, 1.0);
         }
     }
+    glNormal3f(0, 0, 1);
     CoalShape & shape = map_region;
     for (unsigned int i = 0; i < shape.GetCoordCount (); i++) {
         printf ("\t\t");
