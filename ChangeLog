@@ -1,6 +1,6 @@
-2005-01-28  Al Riddoch  <alriddoch@zepler.org>
+2005-02-01  Al Riddoch  <alriddoch@zepler.org>
 
-	* visual/Texture.cpp
+	* visual/Texture.cpp: Make default texture a mipmap.
 
 2005-01-08  Al Riddoch  <alriddoch@zepler.org>
 
