@@ -237,7 +237,10 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
 
 void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
 {
+    assert(ent != 0);
+
     Point3D pos = ent->getPosition();
+
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
         debug( std::cout << ent->getVelocity() << " "
@@ -255,6 +258,7 @@ void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
     Point3D camPos = cp; camPos -= pos;
+
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
     orient(ent->getOrientation());
