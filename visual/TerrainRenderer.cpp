@@ -228,6 +228,9 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                 Mercator::Segment * s = J->second;
                 if (!s->isValid()) {
                     s->populate();
+                }
+                Mercator::Segment::Surfacestore & surfaces = s->getSurfaces();
+                if (!surfaces.empty() && !surfaces.front()->isValid()) {
                     s->populateSurfaces();
                 }
 
