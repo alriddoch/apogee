@@ -8,6 +8,8 @@
 
 #include "Texture.h"
 
+#include "common/system.h"
+
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght)
 {
@@ -110,11 +112,11 @@ void DemeterScene::drawSky()
         static GLubyte up[] = { 7, 6, 5, 4 };
         // static GLubyte down[] = { 0, 1, 2, 3 };
         if (t_front == -1) {
-            t_front = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
-            t_back = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
-            t_left = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png", false);
-            t_right = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png", false);
-            t_up = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png", false);
+            t_front = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
+            t_back = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
+            t_left = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png", false);
+            t_right = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png", false);
+            t_up = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png", false);
         }
 
         glMatrixMode(GL_PROJECTION);

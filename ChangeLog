@@ -1,5 +1,13 @@
 2003-11-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Model.h: Remove old prefix code.
+
+	* gui/Compass.cpp: Switch compass to load from media dir.
+
+	* visual/DemeterScene.cpp: Switch skybox to load from media dir.
+
+2003-11-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Model.cpp: Use directory of material file as reference for
 	  loading texture.
 

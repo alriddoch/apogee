@@ -5,6 +5,8 @@
 #include "Compass.h"
 #include "Gui.h"
 
+#include "common/system.h"
+
 Sprite Compass::compass_case;
 Sprite Compass::compass_needle;
 Sprite Compass::needle_shadow;
@@ -16,13 +18,13 @@ Compass::~Compass()
 void Compass::setup()
 {
     if (!Compass::compass_case.loaded()) {
-        compass_case.load("compass_case.png");
+        compass_case.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_case.png");
     }
     if (!Compass::compass_needle.loaded()) {
-        compass_needle.load("compass_needle.png");
+        compass_needle.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_needle.png");
     }
     if (!Compass::needle_shadow.loaded()) {
-        needle_shadow.load("compass_needle_shadow.png");
+        needle_shadow.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_needle_shadow.png");
     }
 }
 
