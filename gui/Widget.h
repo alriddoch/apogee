@@ -20,6 +20,7 @@ class Widget {
   public:
     Widget(Gui & g, int x, int y) : m_x(x), m_y(y), m_g(g),
                                     m_obs(false), m_vis(true) { }
+    virtual ~Widget();
 
     const int x() const { return m_x; }
     const int y() const { return m_y; }
@@ -31,6 +32,8 @@ class Widget {
     virtual void draw() = 0;
     virtual void select() = 0;
     virtual void click() = 0;
+    virtual void release() = 0;
+    virtual void key(int sym) = 0;
 
 };
 

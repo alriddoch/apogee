@@ -4,6 +4,10 @@
 
 #include "Item.h"
 
+Item::~Item()
+{
+}
+
 bool Item::load(const char * filename)
 {
     return graphic.load(filename);
@@ -21,9 +25,17 @@ void Item::draw()
 
 void Item::select()
 {
-    this->draw();
+    graphic.draw();
 }
 
 void Item::click()
+{
+}
+
+void Item::release()
+{
+}
+
+void Item::key(int)
 {
 }

@@ -10,6 +10,8 @@
 #include <GL/glu.h>
 
 #include "Alert.h"
+#include "Dialogue.h"
+#include "Item.h"
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1)
 {
@@ -22,13 +24,9 @@ bool Gui::setup()
     item->setup();
     if (item->load("bag.png")) { widgets[newName()] = item; }
 
-    item = new Item(*this, 330, 30);
-    item->setup();
-    if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
-    
-    item = new Alert(*this, 500, 60, "HELLO");
-    item->setup();
-    if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
+    // Widget * w = new Alert(*this, 500, 60, "This program is currently under test");
+    // w->setup();
+    // widgets[newName()] = w;
 
     textTexture = Texture::get("font.png");
     if (textTexture == -1) {
@@ -175,6 +173,11 @@ bool Gui::event(SDL_Event & event)
                 if (inMotion != -1) {
                     mx = event.button.x;
                     my = event.button.y;
+                    widgmap::const_iterator I = widgets.find(inMotion);
+                    if (I != widgets.end()) {
+                        I->second->click();
+                        update = true;
+                    }
                 }
             }
             break;
@@ -185,11 +188,21 @@ bool Gui::event(SDL_Event & event)
                 if (inMotion != -1) {
                     widgmap::const_iterator I = widgets.find(inMotion);
                     if (I != widgets.end()) {
-                        I->second->click();
+                        I->second->release();
                         update = true;
                     }
                 }
                 inMotion = -1;
+            }
+            break;
+        case SDL_KEYDOWN:
+            int widg = select(event.button.x, event.button.y);
+            if (widg != -1) {
+                widgmap::const_iterator I = widgets.find(inMotion);
+                if (I != widgets.end()) {
+                    I->second->key(event.key.keysym.sym);
+                    update = true;
+                }
             }
             break;
     }
@@ -207,4 +220,10 @@ void Gui::print(const char * str)
     glCallLists(strlen(str),GL_BYTE,str);
     glDisable(GL_TEXTURE_2D);
     glPopMatrix();
+}
+
+void Gui::addWidget(Widget * w)
+{
+    w->setup();
+    widgets[newName()] = w;
 }

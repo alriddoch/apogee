@@ -1,3 +1,48 @@
+2001-09-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Isometric.cpp, visual/DemeterScene.cpp: Switched depth
+	  function to LEQUAL for gui text.
+
+	* visual/DemeterScene.cpp: Corrected value of pi. Thanks anubis.
+
+	* gui/Widget.h, gui/Widget.cpp, gui/Item.h, gui/Item.cpp: Added
+	  release() method to widget for when the mouse click is released,
+	  and key() for keypresses.  Added virtual destructor to base class.
+
+	* gui/Gui.h, gui/Gui.cpp: Added addWidget() so application class
+	  can use the gui. Added handling of keypresses and passing them
+	  to widgets. Modified semantics of click() and added release()
+	  when dealing with button clicks. Removed the test Widgets.
+
+	* gui/Button.h, gui/Button.cpp: Added press() and release() methods
+	  to switch between normal graphic and pressed graphic. Added width()
+	  method to query the pixel width.
+
+	* gui/Alert.h, gui/Alert.cpp: Modified so it no longer inherits from
+	  Item, and move graphic handling to a static member so the
+	  background graphic is only loaded once.
+
+	* gui/Dialogue.h, gui/Dialogue.cpp: New simple dialogue with two
+	  buttons, and up to two textfields.
+
+	* gui/TextField.h, gui/TextField.cpp: New textfield widget used
+	  by dialogue for entering text. Currently non-interactive.
+
+	* app/perigee.cpp, app/apogee.cpp: Removed the need for arguments.
+
+	* app/GameClient.h, app/GameClient.cpp: Added common base class for
+	  all clients which are used for playing games. Implements logging
+	  on and some IG and OOG server interaction. Removed all the common
+	  functionality from IsoClient and IxClient and placed in this
+	  class. Add features to use gui Dialogue to get player interaction
+	  during logon.
+
+	* app/Application.h, app/Application.cpp: Moved connection handling
+	  into the application base class.
+
+	* app/IxClient.cpp, app/IsoClient.cpp: Add server connection dialogue
+	  to gui on startup.
+
 2001-09-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* gui/Button.cpp, gui/Button.h: Added new button widget.

@@ -10,6 +10,7 @@
 #include <visual/widgets.h>
 
 #include <gui/Gui.h>
+#include <gui/Dialogue.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
 
@@ -60,6 +61,12 @@ bool IsoClient::setup()
     gui->setup();
     // bag = new Sprite();
     // bag->load("bag.png");
+
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
+    d->addField("host", "localhost");
+    d->addField("port", "6767");
+    d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
+    gui->addWidget(d);
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -200,61 +207,4 @@ bool IsoClient::event(SDL_Event & event)
             break;
     }
     return gui->event(event);
-}
-
-void IsoClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
-{
-    std::cout << "TALK: " << t << std::endl << std::flush;
-}
-
-void IsoClient::loginComplete(const Atlas::Objects::Entity::Player &p)
-{
-    std::cout << "Logged in" << std::endl << std::flush;
-
-    GameEntity chrcter(GameEntity::Instantiate());
-    chrcter.SetParents(Atlas::Message::Object::ListType(1,"farmer"));
-    chrcter.SetName("Apogee Dubneal");
-    chrcter.SetAttr("description", "an apogee person");
-    chrcter.SetAttr("sex", "female");
-    world = player->createCharacter(chrcter);
-
-    lobby->Talk.connect(SigC::slot(this, &IsoClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this, &IsoClient::roomEnter));
-
-    world->EntityCreate.connect(SigC::slot(this, &IsoClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this, &IsoClient::worldEnter));
-}
-
-void IsoClient::roomEnter(Eris::Room *r)
-{
-    std::cout << "Enter room" << std::endl << std::flush;
-}
-
-void IsoClient::netFailure(std::string msg)
-{
-    std::cout << "Got connection failure: " << msg << std::endl << std::flush;
-}
-
-void IsoClient::netConnected()
-{
-    std::cout << "Connected to server!" << std::endl << std::flush;
-
-    player = new Eris::Player();
-    lobby = player->login(&connection, "ajr", "hel");
-    lobby->LoggedIn.connect(SigC::slot(this, &IsoClient::loginComplete));
-}
-
-void IsoClient::netDisconnected()
-{
-    std::cout << "Disconnected from the server" << std::endl << std::flush;
-}
-
-void IsoClient::worldEntityCreate(Eris::Entity *r)
-{
-    std::cout << "Created character" << std::endl << std::flush;
-}
-
-void IsoClient::worldEnter(Eris::Entity *r)
-{
-    std::cout << "Enter world" << std::endl << std::flush;
 }

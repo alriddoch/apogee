@@ -10,21 +10,32 @@
 
 class Button : public Widget {
   protected:
-    static Sprite m_small;
-    static Sprite m_medium;
-    static Sprite m_large;
+    static Sprite m_smallUp;
+    static Sprite m_mediumUp;
+    static Sprite m_largeUp;
+    static Sprite m_smallDown;
+    static Sprite m_mediumDown;
+    static Sprite m_largeDown;
 
     std::string m_label;
     int size;
+    bool pressed;
 
   public:
     Button(Gui & g, int x, int y, const std::string & label) : Widget(g, x, y),
-                                              m_label(label), size(2) { }
+                                              m_label(label), size(2),
+                                              pressed(false) { }
+    virtual ~Button();
 
     virtual void setup();
     virtual void draw();
     virtual void select();
     virtual void click();
+    virtual void key(int);
+
+    void press() { pressed = true; }
+    void release() { pressed = false; }
+    int width();
 };
 
 #endif // APOGEE_GUI_BUTTON_H

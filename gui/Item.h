@@ -15,6 +15,7 @@ class Item : public Widget {
 
   public:
     Item(Gui & g, int x, int y) : Widget(g,x,y) { }
+    virtual ~Item();
 
     bool load(const char *);
 
@@ -22,6 +23,8 @@ class Item : public Widget {
     virtual void draw();
     virtual void select();
     virtual void click();
+    virtual void release();
+    virtual void key(int);
 };
 
 #endif // APOGEE_GUI_ITEM_H

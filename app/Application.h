@@ -3,17 +3,24 @@
 
 #include <sigc++/object.h>
 #include <SDL.h>
+#include <string>
 
 class Renderer;
 class World;
 class Gui;
 
+namespace Eris {
+ class Connection;
+}
+
 class Application : public SigC::Object {
   protected:
     Renderer & renderer;
+    Eris::Connection & connection;
     Gui * gui;
 
-    Application(Renderer & rend) : renderer(rend), gui(NULL) { }
+    Application(Renderer & rend, Eris::Connection & con) :
+                renderer(rend), connection(con), gui(NULL) { }
     //virtual ~Application() = 0;
   public:
 
@@ -21,6 +28,8 @@ class Application : public SigC::Object {
     virtual bool update() = 0;
     virtual bool event(SDL_Event &) = 0;
     virtual void mouse(int,int) = 0;
+
+    void connect(const std::string & host, const std::string & port);
 };
 
 #endif // APOGEE_APPLICATION_H

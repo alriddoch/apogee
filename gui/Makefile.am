@@ -4,4 +4,6 @@ libgui_a_SOURCES = Gui.cpp Gui.h \
 		   Widget.cpp Widget.h \
 		   Item.cpp Item.h \
 		   Alert.cpp Alert.h \
-		   Button.cpp Button.h
+		   Button.cpp Button.h \
+		   TextField.cpp TextField.h \
+		   Dialogue.cpp Dialogue.h

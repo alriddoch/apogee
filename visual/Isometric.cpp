@@ -121,7 +121,7 @@ void Isometric::shapeView()
     glViewport(0, 0, width, height);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClearDepth(1.0);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     // glShadeModel(GL_SMOOTH);

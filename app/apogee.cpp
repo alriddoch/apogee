@@ -1,3 +1,7 @@
+// This file may be redistributed and modified only under the terms of
+// the GNU General Public License (See COPYING for details).
+// Copyright (C) 2000-2001 Alistair Riddoch
+
 #include <iostream>
 
 #include <unistd.h>
@@ -25,20 +29,10 @@ using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {
-    if (argc != 3) {
-        std::cout << "usage: " << argv[0] << " <host> <username>"
-                  << std::endl << std::flush;
-        return 1;
-    }
-
-    std::string host(argv[1]), user(argv[2]), password;
-
     Eris::Connection & con = * new Eris::Connection("apogee");
 
     Renderer * renderer = Isometric::Instance();
     IsoClient * app = new IsoClient(*renderer, con);
-
-    con.connect(host, 6767);
 
     con.Failure.connect(SigC::slot(app, &IsoClient::netFailure));
     con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));

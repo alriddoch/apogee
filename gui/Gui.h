@@ -39,8 +39,8 @@ class Gui {
     void draw();
     GLint select(int, int);
     bool event(SDL_Event &);
-
     void print(const char *);
+    void addWidget(Widget *);
 };
 
 #endif // APOGEE_GUI_GUI_H

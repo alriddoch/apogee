@@ -5,55 +5,20 @@
 #include "IxClient.h"
 
 #include <visual/Renderer.h>
-#include <visual/Sprite.h>
 #include <visual/Model.h>
-#include <visual/widgets.h>
 
 #include <gui/Gui.h>
+#include <gui/Dialogue.h>
 
-#include <Atlas/Objects/Entity/GameEntity.h>
-
-#include <Eris/Player.h>
-#include <Eris/Lobby.h>
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 
 #include <sigc++/object_slot.h>
 
-#include <iostream>
-
-#include <math.h>
-
-#include <coal/debug.h>
-
-using Atlas::Objects::Entity::GameEntity;
-
 using Atlas::Message::Object;
-
-void IxClient::grid()
-{
-    widgets::grid(renderer);
-}
-
-void IxClient::compass()
-{
-    widgets::compass(renderer);
-}
-
-void IxClient::axis()
-{
-    widgets::axis(renderer);
-}
 
 bool IxClient::setup()
 {
-    CoalBladeLoader loader (map_database);
-    loader.LoadMap ("blade2.xml");
-    CoalDebug debug;
-    // debug.Dump (map_database);
-    character = new Sprite();
-    character->load("swinesherd_female_1_us_E_0.png",renderer);
-
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
@@ -61,6 +26,12 @@ bool IxClient::setup()
 
     gui = new Gui(renderer);
     gui->setup();
+
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
+    d->addField("host", "localhost");
+    d->addField("port", "6767");
+    d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
+    gui->addWidget(d);
     
     return 0;
 }
@@ -203,61 +174,4 @@ void IxClient::mouse(int dx, int dy)
     if (newElv < -90) { newElv = -90; }
     if (newElv > 90) { newElv = 90; }
     renderer.setElevation(newElv);
-}
-
-void IxClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
-{
-    std::cout << "TALK: " << t << std::endl << std::flush;
-}
-
-void IxClient::loginComplete(const Atlas::Objects::Entity::Player &p)
-{
-    std::cout << "Logged in" << std::endl << std::flush;
-
-    GameEntity chrcter(GameEntity::Instantiate());
-    chrcter.SetParents(Atlas::Message::Object::ListType(1,"farmer"));
-    chrcter.SetName("Apogee Dubneal");
-    chrcter.SetAttr("description", "a perigee person");
-    chrcter.SetAttr("sex", "female");
-    world = player->createCharacter(chrcter);
-
-    lobby->Talk.connect(SigC::slot(this, &IxClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this, &IxClient::roomEnter));
-
-    world->EntityCreate.connect(SigC::slot(this, &IxClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this, &IxClient::worldEnter));
-}
-
-void IxClient::roomEnter(Eris::Room *r)
-{
-    std::cout << "Enter room" << std::endl << std::flush;
-}
-
-void IxClient::netFailure(std::string msg)
-{
-    std::cout << "Got connection failure: " << msg << std::endl << std::flush;
-}
-
-void IxClient::netConnected()
-{
-    std::cout << "Connected to server!" << std::endl << std::flush;
-
-    player = new Eris::Player();
-    lobby = player->login(&connection, "ajr", "hel");
-    lobby->LoggedIn.connect(SigC::slot(this, &IxClient::loginComplete));
-}
-
-void IxClient::netDisconnected()
-{
-    std::cout << "Disconnected from the server" << std::endl << std::flush;
-}
-
-void IxClient::worldEntityCreate(Eris::Entity *r)
-{
-    std::cout << "Created character" << std::endl << std::flush;
-}
-
-void IxClient::worldEnter(Eris::Entity *r)
-{
-    std::cout << "Enter world" << std::endl << std::flush;
 }

@@ -25,20 +25,10 @@ using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {
-    if (argc != 3) {
-        std::cout << "usage: " << argv[0] << " <host> <username>"
-                  << std::endl << std::flush;
-        return 1;
-    }
-
-    std::string host(argv[1]), user(argv[2]), password;
-
     Eris::Connection & con = * new Eris::Connection("perigee");
 
     Renderer * renderer = DemeterScene::Instance();
     IxClient * app = new IxClient(*renderer, con);
-
-    con.connect(host, 6767);
 
     con.Failure.connect(SigC::slot(app, &IxClient::netFailure));
     con.Connected.connect(SigC::slot(app, &IxClient::netConnected));

@@ -14,7 +14,7 @@
 #include "Model.h"
 #include "Matrix.h"
 
-const float PI = 3.1459f;
+const float PI = 3.14159f;
 const float FOG_RED = 0.5f;
 const float FOG_GREEN = 0.75f;
 const float FOG_BLUE = 1.0f;
@@ -106,7 +106,7 @@ void DemeterScene::shapeView()
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
     glClearDepth(1.0);
-    glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LEQUAL);
     glDisable(GL_NORMALIZE);
     glEnable(GL_BLEND);
     //glShadeModel(GL_SMOOTH);
@@ -435,7 +435,7 @@ void DemeterScene::drawGui()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glClear(GL_DEPTH_BUFFER_BIT);
-
+    // glDisable(GL_CULL_FACE);
 }
 
 void DemeterScene::resize(int wdth, int hght)

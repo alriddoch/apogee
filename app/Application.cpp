@@ -2,14 +2,11 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include "Widget.h"
+#include "Application.h"
 
-Widget::~Widget()
-{
-}
+#include <Eris/Connection.h>
 
-void Widget::move(int x, int y)
+void Application::connect(const std::string & host, const std::string & port)
 {
-    m_x += x;
-    m_y += y;
+    connection.connect(host,6767);
 }
