@@ -1,3 +1,18 @@
+2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Set polygon color to white when rendering
+	  sky, so it always works.
+
+	* gui/Console.h, gui/Console.cpp: Add support for lines of text
+	  to the console.
+
+	* app/GameClient.cpp: Add the console once more.
+
+2004-03-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/font.h, gui/Gui.cpp: Switch text font to alpha texture to support
+	  any color. Also smaller.
+
 2004-03-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/DemeterScene.cpp: Tweak camera position relative
