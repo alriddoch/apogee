@@ -1,3 +1,13 @@
+Make Texture class instancable, and use it to store enough state with
+each texture necessary to reload that texture. Use instances of this
+class in the texture db, and implement iterating over it to reload
+textures for the benefit of proprietary OSs which give a new OpenGL
+context on changing from window to fullscreen.
+
+Add an invalidate method to EntityRenderer which tells the object
+that any OpenGL server side state it had has been invalidated by
+a context change.
+
 Add RenderableEntity * parent to args of drawEntity(), as its inevitable
 that it is renderable, and we then don't need to fiddle around working out
 whether it is.
