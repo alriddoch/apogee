@@ -92,6 +92,14 @@ bool Renderer::init()
     glShadeModel(GL_SMOOTH);
     glEnableClientState(GL_VERTEX_ARRAY);
 
+    static const float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
+    glEnable(GL_FOG);
+    glFogf(GL_FOG_MODE,GL_LINEAR);
+    glFogfv(GL_FOG_COLOR,fogColor);
+    glFogf(GL_FOG_START,15.0f);
+    glFogf(GL_FOG_END,maxViewDistance - 15.0f);
+    glHint(GL_FOG_HINT,GL_FASTEST);
+
     std::string extensions = (char *)glGetString(GL_EXTENSIONS);
 
     std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
@@ -137,14 +145,6 @@ void Renderer::shapeView()
     SDL_WM_SetCaption(m_windowName, m_iconName);
 
     glViewport(0, 0, width, height);
-
-    float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
-    glEnable(GL_FOG);
-    glFogf(GL_FOG_MODE,GL_LINEAR);
-    glFogfv(GL_FOG_COLOR,fogColor);
-    glFogf(GL_FOG_START,15.0f);
-    glFogf(GL_FOG_END,maxViewDistance - 15.0f);
-    glHint(GL_FOG_HINT,GL_FASTEST);
 }
 
 float Renderer::getZ(int x, int y)
