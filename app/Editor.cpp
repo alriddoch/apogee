@@ -95,15 +95,15 @@ void Editor::doWorld()
 
 bool Editor::update()
 {
-    //renderer.clear();
+    renderer.clear();
+    renderer.lightOn();
     renderer.drawMap(map_database);
-    // grid();
     renderer.origin();
-    // renderer.draw3Dentity();
-    // renderer.drawCharacter(character, 1, 2);
     model->onUpdate(0.1);
     renderer.drawCal3DModel(model, 0, 0);
     doWorld();
+    renderer.lightOff();
+    renderer.drawGui();
     // compass();
     // axis();
     // renderer.draw2Dtest();

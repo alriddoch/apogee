@@ -72,6 +72,14 @@ void DemeterScene::init()
     cameraAngle.y = 0.0f;
     cameraAngle.z = 0.0f;
 
+    GLfloat ambientColor[] = {1, 1, 1, 1.0};
+    GLfloat diffuseColor[] = {0, 1, 0, 1.0};
+    GLfloat lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseColor);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
 }
 
 void DemeterScene::shapeView()
@@ -95,7 +103,6 @@ void DemeterScene::shapeView()
     glClearDepth(1.0);
     glDepthFunc(GL_LESS);
     glDisable(GL_NORMALIZE);
-    glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
     float fogColor[4];
     fogColor[0] = FOG_RED;
@@ -131,15 +138,21 @@ inline void DemeterScene::viewPoint()
     const float maxViewDistance = 4500.0f;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
-    // This is copied from the demeter demo app
-    // glFrustum(-0.5f,0.5f,-0.5f,0.5f,0.65f,maxViewDistance);
-    // this puts us into orthographic perspective
-    // float xscale = width * scale / meterSize();
-    // float yscale = height * scale / meterSize();
-    // glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
+
+    // Not sure how to use this one to get a decent projection no matter
+    // what the aspect ratio. Keep it here for reference.
+    //gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
+
+    // Sort out perspective projection, with scale tied to height of the window
+    // this allow a very wide window to give a nice widescreen view, and
+    // allows a narrow window to be usable.
+    float s = ((float)width / (float)height) * 3.0f / 8.0f;
+    glViewport(0,0,width,height);
+    glFrustum(-s,s,-0.375f,0.375f,0.65f,maxViewDistance);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
+    glEnable(GL_DEPTH_TEST);
 }
 
 inline void DemeterScene::reorient()
@@ -171,11 +184,13 @@ inline void DemeterScene::origin()
 void DemeterScene::lightOn()
 {
     glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 }
 
 void DemeterScene::lightOff()
 {
     glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
 }
 
 void DemeterScene::drawCharacter(Sprite * character, float x, float y)
@@ -239,11 +254,12 @@ void DemeterScene::drawCal3DModel(Model * m, float x, float y)
     glTranslatef(x,y,characterElevation);
     viewScale(0.025f);
     m->onRender();
-    viewScale(1.0f);
+    //viewScale(1.0f);
 }
 
-void DemeterScene::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
-                         const Vector3D & bmedian)
+void DemeterScene::draw3DBox(const Vector3D & coords,
+                             const Vector3D & bbox,
+                             const Vector3D & bmedian)
 {
     Vector3D def(0.2,0.2,0.2);
     const Vector3D & box = bbox ? bbox : def;
@@ -366,26 +382,6 @@ void DemeterScene::drawMap(CoalDatabase & map_base)
 {
     origin();
 
-#if 0
-    glDepthMask(GL_FALSE);
-    int count = map_base.GetRegionCount();
-    for (int i = 0; i < count; i++) {
-        CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
-        if (region) {
-            drawMapRegion(*region);
-        }
-    }
-    glDepthMask(GL_TRUE);
-
-    count = map_base.GetObjectCount();
-    for (int i = 0; i < count; i++) {
-        CoalObject * object = (CoalObject*)map_base.GetObject(i);
-        if (object) {
-            drawMapObject(*object);
-        }
-    }
-#endif
-
     cameraAngle.z = -rotation * PI / 180;
     cameraAngle.x = -elevation * PI / 180;
     cout << elevation << "}{" << cameraAngle.x << endl << flush;
@@ -420,6 +416,27 @@ void DemeterScene::drawMap(CoalDatabase & map_base)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     terrain->Render();
 
+}
+
+void DemeterScene::drawGui()
+{
+    cout << "Draw GUI" << endl << flush;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, width, 0, height, -20.0f, 20.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();                     // Reset The View
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glTranslatef(200.0f, 200.0f, 0.0f);
+
+    glColor3f(1.0f,0.5f,0.5f);
+    glBegin(GL_QUADS);
+    glVertex3f(-100.0f, 100.0f, 0.0f);
+    glVertex3f( 100.0f, 100.0f, 0.0f);
+    glVertex3f( 100.0f,-100.0f, 0.0f);
+    glVertex3f(-100.0f,-100.0f, 0.0f);
+    glEnd();
 }
 
 void DemeterScene::resize(int wdth, int hght)

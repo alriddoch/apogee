@@ -84,6 +84,7 @@ class Renderer {
     virtual void drawMapRegion(CoalRegion &) = 0;
     virtual void drawMapObject(CoalObject &) = 0;
     virtual void drawMap(CoalDatabase &) = 0;
+    virtual void drawGui() = 0;
     virtual void resize(int,int) = 0;
     virtual void clear() = 0;
     virtual void viewScale(float) = 0;

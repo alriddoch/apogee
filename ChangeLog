@@ -1,3 +1,20 @@
+2001-09-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.cpp: Removed old code from renderer base class.
+
+	* visual/Renderer.h, visual/Isometric.h, visual/DemeterScene.h:
+	  Added drawGui() pure virtual function.
+
+	* visual/Model.cpp: Removed code which fiddles with the depth test,
+	  as this is now controlled by the renderer class.
+
+	* visual/DemeterScene.cpp: Added code to draw experimental gui
+	  graphics. Added lighting setup code. Modified projection code
+	  so the window can be resized. scale is tied to the windows
+	  height.
+
+	* app/Editor.cpp: Removed old calls to isometric related functions.
+
 2001-09-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Model.cpp, visual/Model.h: Updated to latest versions from

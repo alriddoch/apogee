@@ -41,6 +41,7 @@ class DemeterScene : public Renderer {
     virtual void drawMapRegion(CoalRegion &);
     virtual void drawMapObject(CoalObject &);
     virtual void drawMap(CoalDatabase &);
+    virtual void drawGui();
     virtual void resize(int,int);
     virtual void clear();
     virtual void viewScale(float);

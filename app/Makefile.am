@@ -1,4 +1,4 @@
-bin_PROGRAMS = apogee
+bin_PROGRAMS = apogee # perigee
 
 INCLUDES = $(GNOME_XML_CFLAGS)
 
