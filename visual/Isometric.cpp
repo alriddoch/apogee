@@ -271,17 +271,18 @@ void Isometric::drawEntity(Eris::Entity * ent)
     const Point3D & pos = ent->getPosition();
     glTranslatef(pos.x(), pos.y(), pos.z());
     int numEnts = ent->getNumMembers();
-    debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
+    debug(std::cout << ent->getID() << " " << numEnts << " emts"
+                    << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
         Point3D pos = e->getPosition();
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
-            debug( cout << e->getVelocity() << " " << (worldTime - we->getTime()) << " " << pos; );
+            debug( std::cout << e->getVelocity() << " " << (worldTime - we->getTime()) << " " << pos; );
             pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
-            debug( cout << "=" << pos << endl << flush; );
+            debug( std::cout << "=" << pos << std::endl << std::flush; );
         } else {
-            cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << endl << flush;
+            std::cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << std::endl << std::flush;
         }
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v

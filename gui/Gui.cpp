@@ -12,7 +12,9 @@
 #include <visual/Sprite.h>
 #include <visual/Renderer.h>
 
+#if USE_PUI
 #include <plib/pu.h>
+#endif
 
 #include <GL/glu.h>
 
@@ -21,10 +23,12 @@ Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 
 }
 
+#if USE_PUI
 void button_cb ( puObject * )
 {
   fprintf ( stderr, "Hello World.\n" ) ;
 }
+#endif
 
 
 bool Gui::setup()
@@ -37,6 +41,7 @@ bool Gui::setup()
     // w->setup();
     // widgets[newName()] = w;
 
+#if USE_PUI
     puInit();
 
     puSetDefaultStyle ( PUSTYLE_SMALL_SHADED ) ;                           
@@ -47,6 +52,7 @@ bool Gui::setup()
 
     puOneShot *b = new puOneShot(50, 50, 200, 80);
     b->setLegend("Say Hello");
+#endif
 
     textTexture = Texture::get("font.png");
     if (textTexture == -1) {
@@ -99,7 +105,9 @@ void Gui::draw()
         glTranslated(-w.x(),-w.y(),0.1f);
     }
 
+#if USE_PUI
     puDisplay () ;
+#endif
 
 }
 

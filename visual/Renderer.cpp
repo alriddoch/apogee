@@ -45,6 +45,6 @@ const Point3D Renderer::getWorldCoord(int x, int y, float z)
 
     gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
 
-    cout << "{" << wx << ";" << wy << ";" << wz << endl << flush;
+    std::cout << "{" << wx << ";" << wy << ";" << wz << std::endl << std::flush;
     return Point3D(wx, wy, wz);
 }

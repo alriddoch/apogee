@@ -41,7 +41,7 @@ bool IxClient::setup()
     gui->setup();
 
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
-    d->addField("host", "localhost");
+    d->addField("host", "carom");
     d->addField("port", "6767");
     d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
     gui->addWidget(d);
@@ -55,12 +55,12 @@ bool IxClient::setup()
 void IxClient::doWorld()
 {
     if (world == NULL) {
-        cout << "No world" << endl << flush;
+        std::cout << "No world" << std::endl << std::flush;
         return;
     }
     Eris::Entity * root = world->getRootEntity();
     if (root == NULL) {
-        cout << "No root" << endl << flush;
+        std::cout << "No root" << std::endl << std::flush;
         return;
     }
     renderer.drawWorld(root);

@@ -10,7 +10,12 @@
 
 #include <Demeter/Terrain.h>
 
+namespace Eris {
+  class TypeInfo;
+}
+
 class TileMap;
+class Model;
 
 class DemeterScene : public Renderer {
   private:
@@ -24,11 +29,14 @@ class DemeterScene : public Renderer {
     Demeter::Vector lookAt;
     Demeter::Vector lookUp;
 
+    Model * model;
+    TileMap * tilemap;
+    Eris::TypeInfo * charType;
+    float worldTime;
+
     Camera camera;
     
     float z_offset;
-
-    TileMap * tilemap;
 
     void init();
     virtual void shapeView();
@@ -47,8 +55,8 @@ class DemeterScene : public Renderer {
     void draw3DArea(const Point3D & coords,
                             const Vector3D & bbox = Vector3D(),
                             const Vector3D & bmedian = Vector3D()) { }
-    void drawEntity(Eris::Entity * ent) { }
-    void drawWorld(Eris::Entity * wrld) { }
+    void drawEntity(Eris::Entity * ent);
+    void drawWorld(Eris::Entity * wrld);
     void drawMap(Coal::Container &, HeightMap &);
     void drawGui();
     void resize(int,int);

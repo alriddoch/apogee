@@ -1,5 +1,17 @@
 2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/IsoClient.cpp, app/IxClient.cpp, app/apogee.cpp,
+	  visual/Isometric.cpp, visual/Renderer.cpp,
+	  visual/DemeterScene.cpp, visual/DemeterScene.h:
+	  ISO C++ fixes.
+
+	* gui/Gui.cpp: Remove experimental pui code.
+
+	* visual/DemeterScene.cpp, visual/DemeterScene.h: Add features
+	  bringing perspective client into line with isometric.
+
+2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/IsoClient.cpp, app/IsoClient.h, app/IxClient.cpp,
 	  app/IxClient.h, visual/DemeterScene.cpp, visual/DemeterScene.h,
 	  visual/Isometric.cpp, visual/Isometric.h, visual/Renderer.cpp,

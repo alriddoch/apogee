@@ -9,9 +9,18 @@
 #include "Matrix.h"
 #include "TileMap.h"
 
+#include <common/debug.h>
+
+#include <app/WorldEntity.h>
+
+#include <Eris/Entity.h>
+#include <Eris/TypeInfo.h>
+
 #include <SDL_image.h>
 
 #include <iostream>
+
+static const bool debug_flag = false;
 
 const float PI = 3.14159f;
 const float FOG_RED = 0.5f;
@@ -20,7 +29,7 @@ const float FOG_BLUE = 1.0f;
 const float FOG_ALPHA = 0.0f;
 
 DemeterScene::DemeterScene(int wdth, int hght) : Renderer(wdth, hght),
-                                                 tilemap(NULL)
+                                                 tilemap(NULL), charType(NULL)
 {
     init();
 }
@@ -53,6 +62,12 @@ void DemeterScene::init()
     settings->SetScreenWidth(height);
 
     this->shapeView();
+
+    model = new Model();
+    if (!model->onInit(Datapath() + "paladin.cfg")) {
+        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+    }
+    model->setLodLevel(1.0f);
 
     const int maxNumVisibleTriangles = 40000;
 
@@ -89,8 +104,9 @@ void DemeterScene::init()
 
 }
 
-void DemeterScene::update(float)
+void DemeterScene::update(float secs)
 {
+    model->onUpdate(secs);
 }
 
 void DemeterScene::shapeView()
@@ -209,6 +225,24 @@ void DemeterScene::lightOff()
 void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
                                   const WFMath::Quaternion & orientation)
 {
+#if 1
+    glPushMatrix();
+    glTranslatef(coords.x(), coords.y(), coords.z());
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    float orient[4][4];
+    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            orient[i][j] = omatrix.elem(i,j);
+        }
+    }
+    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
+    orient[3][3] = 1.0f;
+    glMultMatrixf(&orient[0][0]);
+    glScalef(0.025f, 0.025f, 0.025f);
+    m->onRender();
+    glPopMatrix();
+#else
     origin();
     float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.x(), terrain->GetHeight() / 2.0f + coords.y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
     std::cout << "Transl " << characterElevation << std::endl << std::flush;
@@ -216,6 +250,7 @@ void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
     viewScale(0.025f);
     m->onRender();
     //viewScale(1.0f);
+#endif
 }
 
 void DemeterScene::draw3DBox(const Point3D & coords,
@@ -255,6 +290,51 @@ void DemeterScene::draw3DBox(const Point3D & coords,
     glEnd();
 
     glPopMatrix();
+}
+
+void DemeterScene::drawEntity(Eris::Entity * ent)
+{
+    glPushMatrix();
+    const Point3D & pos = ent->getPosition();
+    glTranslatef(pos.x(), pos.y(), pos.z());
+    int numEnts = ent->getNumMembers();
+    debug(std::cout << ent->getID() << " " << numEnts << " emts"
+                    << std::endl << std::flush;);
+    for (int i = 0; i < numEnts; i++) {
+        Eris::Entity * e = ent->getMember(i);
+        Point3D pos = e->getPosition();
+        WorldEntity * we = dynamic_cast<WorldEntity *>(e);
+        if (we != NULL) {
+            debug( std::cout << e->getVelocity() << " " << (worldTime - we->getTime()) << " " << pos; );
+            pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
+            debug( std::cout << "=" << pos << std::endl << std::flush; );
+        } else {
+            std::cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << std::endl << std::flush;
+        }
+        // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
+                        // << e->getBBox().u << e->getBBox().v
+                        // << std::endl << std::flush;);
+        if (!e->isVisible()) { continue; }
+        Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
+        if (type->safeIsA(charType)) {
+            drawCal3DModel(model, pos, e->getOrientation());
+        } else {
+            if (e->hasBBox()) {
+                draw3DBox(pos, e->getBBox());
+            }
+            drawEntity(e);
+        }
+    }
+    glPopMatrix();
+}
+
+void DemeterScene::drawWorld(Eris::Entity * wrld)
+{
+    worldTime = SDL_GetTicks();
+    if (charType == NULL) {
+        charType = Eris::TypeInfo::findSafe("character");
+    }
+    drawEntity(wrld);
 }
 
 void DemeterScene::drawMap(Coal::Container & map_base, HeightMap & map_height)

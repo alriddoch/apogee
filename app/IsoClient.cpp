@@ -62,12 +62,12 @@ bool IsoClient::setup()
 void IsoClient::doWorld()
 {
     if ((world == NULL) || (!inGame)) {
-        cout << "No world" << endl << flush;
+        std::cout << "No world" << std::endl << std::flush;
         return;
     }
     Eris::Entity * root = world->getRootEntity();
     if (root == NULL) {
-        cout << "No root" << endl << flush;
+        std::cout << "No root" << std::endl << std::flush;
         return;
     }
     renderer.drawWorld(root);
