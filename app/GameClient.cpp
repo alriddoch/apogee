@@ -82,7 +82,7 @@ bool GameClient::setup()
 
     // gui->addWidget(new Pie(*gui, 80, 170));
 
-    // gui->addWidget(new Console(*gui, 4, 4));
+    gui->addWidget(new Console(*gui, 4, 4));
 
     return true;
 }

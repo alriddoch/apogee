@@ -120,6 +120,7 @@ void DemeterScene::drawSky()
         glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
         glDepthMask(GL_FALSE);
+        glColor3f(1.f, 1.f, 1.f);
 
         glVertexPointer(3, GL_FLOAT, 0, vertices);
         glEnable(GL_TEXTURE_2D);

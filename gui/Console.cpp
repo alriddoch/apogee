@@ -5,10 +5,19 @@
 #include "Console.h"
 #include "Gui.h"
 
+#include <sigc++/object_slot.h>
+
 static const int lines = 10;
 static const int columns = 20;
 
 static const int charSize = 16;
+
+Console::Console(Gui & g, int x, int y) : Widget(g, x, y), numLines(lines)
+{
+    lineContents.push_back("Test line one");
+    lineContents.push_back("Test line two");
+    lineContents.push_back("Test line three");
+}
 
 Console::~Console()
 {
@@ -21,9 +30,9 @@ void Console::setup()
 void Console::draw()
 {
     glEnable(GL_BLEND);
-    glColor4f(0.f, 0.f, 0.f, 0.5f);
+    glColor4f(0.8f, 0.8f, 0.8f, 0.5f);
     float width = columns * 16 + 8;
-    float height = lines * 16 + 8;
+    float height = numLines * 16 + 8;
     static const float cvertices[] = { 0.f, 0.f,
                                        width, 0.f,
                                        width, 16.f,
@@ -37,12 +46,18 @@ void Console::draw()
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_QUADS, 0, 4);
     m_g.print(cmdLine.c_str());
+    std::deque<std::string>::const_iterator I = lineContents.begin();
+    glTranslatef(0.f, 4.f, 0.f);
+    for(; I != lineContents.end(); ++I) {
+        glTranslatef(0.f, 16.f, 0.f);
+        m_g.print(I->c_str());
+    }
 }
 
 void Console::select()
 {
     float width = columns * 16 + 8;
-    float height = lines * 16 + 8;
+    float height = numLines * 16 + 8;
     float vertices[] = { 0.f, 0.f, width, 0.f, width, height, 0.f, height };
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_QUADS, 0, 4);
@@ -70,6 +85,10 @@ bool Console::key(int sym,int mod)
             }
             return true;
             break;
+        case SDLK_RETURN:
+            lineEntered.emit(cmdLine);
+            cmdLine.clear();
+            return true;
         default:
             break;
     };
@@ -78,4 +97,12 @@ bool Console::key(int sym,int mod)
 
 void Console::addChannel(const std::string & name)
 {
+}
+
+void Console::pushLine(const std::string & line)
+{
+    lineContents.push_front(line);
+    while (lineContents.size() > numLines) {
+        lineContents.pop_back();
+    }
 }

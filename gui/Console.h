@@ -7,13 +7,20 @@
 
 #include "Widget.h"
 
+#include <sigc++/signal.h>
+
 #include <string>
+#include <deque>
 
 class Console : public Widget {
   private:
     std::string cmdLine;
+    int numLines;
+    std::deque<std::string> lineContents;
   public:
-    Console(Gui & g, int x, int y) : Widget(g, x, y) { }
+    SigC::Signal1<void, const std::string &> lineEntered;
+
+    Console(Gui & g, int x, int y);
     virtual ~Console();
 
     virtual void setup();
@@ -24,6 +31,7 @@ class Console : public Widget {
     virtual bool key(int,int);
 
     void addChannel(const std::string & name);
+    void pushLine(const std::string & name);
 };
 
 #endif // APOGEE_GUI_CONSOLE_H
