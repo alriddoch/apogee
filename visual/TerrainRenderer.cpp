@@ -288,10 +288,10 @@ void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
         ny = lrintf(floor(pos.y() - radius)),
         fx = lrintf(ceil(pos.x() + radius)),
         fy = lrintf(ceil(pos.y() + radius));
-    int dx = fx - nx,
-        dy = fy - ny,
-        diameter = std::max(dx, dy),
-        size = diameter + 1;
+    unsigned dx = fx - nx,
+             dy = fy - ny,
+             diameter = std::max(dx, dy),
+             size = diameter + 1;
     fx = nx + diameter;
     fy = ny + diameter;
     float * vertices = new float[size * size * 3];

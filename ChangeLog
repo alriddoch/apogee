@@ -1,3 +1,10 @@
+2003-12-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/TerrainRenderer.cpp: Change some variable to unsigned
+	  to eliminate warnings.
+
+	* gui/Button.cpp: Remove unused variable.
+
 2003-12-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Make configure bail if cal3d is missing.

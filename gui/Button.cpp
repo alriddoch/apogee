@@ -82,7 +82,6 @@ void Button::draw()
 
 void Button::select()
 {
-    int len = m_label.size();
     // It doesn't matter if we draw up or down, as both are the same size
     switch (size) {
         case 0:
