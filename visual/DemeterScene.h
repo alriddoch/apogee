@@ -8,8 +8,6 @@
 #include "Renderer.h"
 
 class DemeterScene : public Renderer {
-  private:
-    virtual void shapeView();
   public:
     explicit DemeterScene(Application & app, int wdth = 640, int hght = 480);
 

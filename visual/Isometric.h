@@ -8,8 +8,6 @@
 #include "Renderer.h"
 
 class Isometric : public Renderer {
-  private:
-    virtual void shapeView();
   public:
     explicit Isometric(Application & app, int wdth = 640, int hght = 480);
 

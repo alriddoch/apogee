@@ -10,40 +10,21 @@
 
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght)
-
 {
+    m_windowName = "apogee";
+    m_iconName = "isometric";
+
     init();
 }
 
-void Isometric::shapeView()
-{
-    Uint32 flags = SDL_OPENGL|SDL_DOUBLEBUF|SDL_ANYFORMAT;
-    if (fullscreen) {
-        flags |= SDL_FULLSCREEN;
-    } else {
-        flags |= SDL_RESIZABLE;
-    }
-    if ((screen = SDL_SetVideoMode(width, height, 0, flags)) == NULL) {
-        std::cerr << "Failed to set video mode" << std::endl << std::flush;
-        SDL_Quit();
-        throw RendererSDLinit();
-    }
-    SDL_WM_SetCaption("apogee", "isometric");
-
-    glViewport(0, 0, width, height);
-    glClearColor(0.0, 0.7, 0.7, 0.0);
-}
-
-void Isometric::drawSky()
-{
-}
+static const float maxViewDistance = 250.0f;
 
 void Isometric::projection()
 {
     // this puts us into orthographic projection
     float xscale = width * scale / meterSize();
     float yscale = height * scale / meterSize();
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -2000.0, 2000.0 );
+    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -200.0, 200.0 );
 }
 
 void Isometric::viewPoint()
@@ -53,6 +34,7 @@ void Isometric::viewPoint()
 
     glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+
     glTranslatef(0.0f, 0.0f, -1.0f);      // Aim to centre the character
 
     glTranslatef(-x_offset,-y_offset,-z_offset);
@@ -67,4 +49,8 @@ void Isometric::viewPoint()
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
+}
+
+void Isometric::drawSky()
+{
 }

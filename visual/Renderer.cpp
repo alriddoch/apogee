@@ -32,6 +32,12 @@ PFNGLLOCKARRAYSEXTPROC glLockArraysExt = 0;
 PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
 #endif // GL_EXT_compiled_vertex_array
 
+static const float PI = 3.14159f;
+static const float FOG_RED = 0.5f;
+static const float FOG_GREEN = 0.5f;
+static const float FOG_BLUE = 0.5f;
+static const float FOG_ALPHA = 0.0f;
+
 Renderer::Renderer(Application & app, int wdth, int hght) : 
                                          screen(NULL),
                                          width(wdth), height(hght),
@@ -42,10 +48,9 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
                                          scale(1), x_offset(0), y_offset(0),
                                          z_offset(0),
                                          frameCount(0), time(0), lastCount(0),
+                                         m_windowName("<default>"),
+                                         m_iconName("<default>"),
                                          application(app)
-
-
-
 {
 }
 
@@ -126,7 +131,31 @@ void Renderer::init()
 
 }
 
+void Renderer::shapeView()
+{
+    Uint32 flags = SDL_OPENGL|SDL_DOUBLEBUF|SDL_ANYFORMAT;
+    if (fullscreen) {
+        flags |= SDL_FULLSCREEN;
+    } else {
+        flags |= SDL_RESIZABLE;
+    }
+    if ((screen = SDL_SetVideoMode(width, height, 0, flags)) == NULL) {
+        std::cerr << "Failed to set video mode" << std::endl << std::flush;
+        SDL_Quit();
+        throw RendererSDLinit();
+    }
+    SDL_WM_SetCaption(m_windowName, m_iconName);
 
+    glViewport(0, 0, width, height);
+
+    float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
+    glEnable(GL_FOG);
+    glFogf(GL_FOG_MODE,GL_LINEAR);
+    glFogfv(GL_FOG_COLOR,fogColor);
+    glFogf(GL_FOG_START,15.0f);
+    glFogf(GL_FOG_END,maxViewDistance - 15.0f);
+    glHint(GL_FOG_HINT,GL_FASTEST);
+}
 
 float Renderer::getZ(int x, int y)
 {

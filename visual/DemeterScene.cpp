@@ -10,49 +10,19 @@
 
 #include <SDL.h>
 
-const float PI = 3.14159f;
-const float FOG_RED = 0.5f;
-const float FOG_GREEN = 0.5f;
-const float FOG_BLUE = 0.5f;
-const float FOG_ALPHA = 0.0f;
-
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
-                                                 Renderer(app, wdth, hght)
+                                           Renderer(app, wdth, hght)
 {
     elevation = 10;
     rotation = 45;
+
+    m_windowName = "perigee";
+    m_iconName = "perspective";
 
     init();
 }
 
 static const float maxViewDistance = 250.0f;
-
-void DemeterScene::shapeView()
-{
-    Uint32 flags = SDL_OPENGL|SDL_DOUBLEBUF|SDL_ANYFORMAT;
-    if (fullscreen) {
-        flags |= SDL_FULLSCREEN;
-    } else {
-        flags |= SDL_RESIZABLE;
-    }
-    if ((screen = SDL_SetVideoMode(width, height, 16, flags)) == NULL) {
-        std::cerr << "Failed to set video mode" << std::endl << std::flush;
-        SDL_Quit();
-        throw RendererSDLinit();
-    }
-    SDL_WM_SetCaption("perigee", "perspective");
-
-    glViewport(0, 0, width, height);
-    glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
-
-    float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
-    glEnable(GL_FOG);
-    glFogf(GL_FOG_MODE,GL_LINEAR);
-    glFogfv(GL_FOG_COLOR,fogColor);
-    glFogf(GL_FOG_START,15.0f);
-    glFogf(GL_FOG_END,maxViewDistance - 15.0f);
-    glHint(GL_FOG_HINT,GL_FASTEST);
-}
 
 void DemeterScene::projection()
 {
@@ -64,7 +34,6 @@ void DemeterScene::projection()
     // this allow a very wide window to give a nice widescreen view, and
     // allows a narrow window to be usable.
     float s = ((float)width / (float)height) * 3.0f / 8.0f;
-    glViewport(0,0,width,height);
     glFrustum(-s,s,-0.375f,0.375f,0.65f,maxViewDistance);
 }
 
@@ -75,7 +44,7 @@ void DemeterScene::viewPoint()
 
     glTranslatef(0.0f, 0.0f, -5.0f);
 
-    glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
+    glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
     glTranslatef(0.0f, 0.0f, -2.5f);

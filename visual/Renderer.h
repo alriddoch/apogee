@@ -34,8 +34,9 @@ class Renderer {
     Renderer(Application & app, int wdth, int hght);
 
     static const int segSize = 64;
+    static const float maxViewDistance = 250.0f;
 
-    virtual void shapeView() = 0;
+    void shapeView();
 
     void init();
 
@@ -51,6 +52,8 @@ class Renderer {
     int frameCount;
     float time;
     float lastCount;
+    char * m_windowName;
+    char * m_iconName;
 
   public:
     Application & application;
