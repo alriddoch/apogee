@@ -8,7 +8,7 @@
 
 #include <gui/Gui.h>
 
-#include <Eris/World.h>
+#include <Eris/View.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 

@@ -79,9 +79,11 @@ int main(int argc, char ** argv)
         } catch (Eris::BaseException b) {
             std::cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
         } catch (Atlas::Objects::NoSuchAttrException n) {
-            std::cout << "ATLAS EXCEPTION: " << n.name << std::endl << std::flush;
-        } catch (Atlas::Message::WrongTypeException w) {
-            std::cout << "ATLAS MESSAGE EXCEPTION" << std::endl << std::flush;
+            std::cout << "ATLAS ATTRIBUTE EXCEPTION: " << n.getName()
+                      << std::endl << std::flush;
+        } catch (Atlas::Exception n) {
+            std::cout << "ATLAS EXCEPTION: " << n.getDescription()
+                      << std::endl << std::flush;
         } catch (...) {
             std::cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
         }

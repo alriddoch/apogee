@@ -221,7 +221,7 @@ void GameClient::connectWorldSignals()
     // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    m_avatar->InGame.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_avatar->GotCharacterEntity.connect(SigC::slot(*this,&GameClient::worldEnter));
     Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
                                            renderer));
 }
@@ -320,7 +320,7 @@ void GameClient::worldEntityCreate(Eris::Entity *e)
     e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
 }
 
-void GameClient::worldEnter(Eris::Avatar * av)
+void GameClient::worldEnter(Eris::Entity * e)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
