@@ -41,5 +41,5 @@ int HeightMap::get(int x, int y) const
     int ix = x;
     int iy = height - y;
 
-    return *(pixelbuf + (iy * pitch + ix * 3));
+    return *(pixelbuf + (iy * pitch + ix * 3)) - 127;
 }

@@ -1,3 +1,12 @@
+2002-02-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/HeightMap.cpp: Make heightmap signed.
+
+	* visual/Sprite.cpp: Use more optimal algorithm for calculating the
+	  best fit texture size.
+
+	* visual/Tile.cpp: Fix to triangle strip tile rendering.
+
 2002-02-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Tile.cpp, visual/Tile.h:

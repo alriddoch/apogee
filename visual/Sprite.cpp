@@ -17,7 +17,7 @@
 unsigned int Sprite::twoN(unsigned int size)
 {
     for(int i = 0; i < 12; i++) {
-        const unsigned int num = pow(2,i);
+        const unsigned int num = (1 << i);
         if (size <= num) {
             return num;
         }

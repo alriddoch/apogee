@@ -131,7 +131,7 @@ void Tile::draw(const HeightMap & h, int x, int y)
     glBegin(GL_TRIANGLE_STRIP);
     float dw = m_pw / (2 * tileSize);
     float dh = m_ph / (2 * tileSize);
-    for(int i = 0; i <= tileSize; i++) {
+    for(int i = 0; i < tileSize; ++i) {
          for(int j = 0; j <= tileSize; ++j) {
             glTexCoord2d(m_pw/2 + dw * (i - j), dh * (i + j)); glVertex3f(i, j, h.get(x + i, y + j) / 32.0f);
             glTexCoord2d(m_pw/2 + dw * (i - j + 1), dh * (i + j + 1)); glVertex3f(i + 1, j, h.get(x + i + 1, y + j) / 32.0f);
