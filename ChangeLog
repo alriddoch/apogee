@@ -1,3 +1,22 @@
+2002-04-08  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.h, visual/Isometric.h, visual/Isometric.cpp,
+	  app/IsoClient.cpp, app/IsoClient.h: Remove cruft, and switch
+	  to moraf.
+
+	* visual/DemeterScene.cpp, app/IxClient.cpp, app/IxClient.h:
+	  Added use of tilemaps to perspective version of client. Removed
+	  isoclient view control code that got into here by mistake. 
+
+	* gui/Alert.cpp, gui/Button.cpp, gui/Dialogue.cpp, gui/TextField.cpp:
+	  Switch to new ui graphics for copyright reasons.
+
+	* visual/DemeterScene.cpp, visual/DemeterScene.h: Tweak for latest
+	  demeter API, and remove obsolete code.
+
+	* visual/TileMap.cpp, visual/TileMap.h: Move tilemap rendering and
+	  compiling into module dor use in multiple places.
+
 2002-03-12  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* ./visual/Renderer.h, ./app/IsoClient.cpp, ./app/IxClient.cpp:

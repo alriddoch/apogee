@@ -5,8 +5,7 @@
 #ifndef APOGEE_ISOCLIENT_H
 #define APOGEE_ISOCLIENT_H
 
-#include <coal/bladeloader.h>
-#include <coal/isoloader.h>
+#include <coal/database.h>
 
 #include <visual/HeightMap.h>
 
@@ -19,10 +18,7 @@ class Compass;
 
 class IsoClient : public GameClient {
   private:
-    void grid();
     void doWorld();
-    void compass();
-    void axis();
 
     CoalDatabase map_database;
     HeightMap map_height;

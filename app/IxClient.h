@@ -7,19 +7,23 @@
 
 #include <coal/bladeloader.h>
 
+#include <visual/HeightMap.h>
+
 #include <string>
 
 #include "GameClient.h"
 
 class Sprite;
 class Model;
+class Compass;
 
 class IxClient : public GameClient {
   private:
     void doWorld();
 
     CoalDatabase map_database;
-    Model * model;
+    HeightMap map_height;
+    Compass * compassWidget;
   public:
     IxClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con)
                                                         { }

@@ -26,35 +26,20 @@
 
 #include <math.h>
 
-#include <coal/debug.h>
+#include <coal/isoloader.h>
 
 using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
-void IsoClient::grid()
-{
-    // widgets::grid(renderer);
-}
-
-void IsoClient::compass()
-{
-    // widgets::compass(renderer);
-}
-
-void IsoClient::axis()
-{
-    // widgets::axis(renderer);
-}
-
 bool IsoClient::setup()
 {
     CoalIsoLoader loader (map_database);
-    loader.LoadMap ("agrilan.map");
+    loader.LoadMap ("moraf.map");
     // CoalDebug debug;
     // debug.Dump (map_database);
 
-    map_height.load("agrilan_hm.png");
+    map_height.load("moraf_hm.png");
 
     gui = new Gui(renderer);
     gui->setup();

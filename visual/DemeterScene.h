@@ -10,6 +10,8 @@
 
 #include <Demeter/Terrain.h>
 
+class TileMap;
+
 class DemeterScene : public Renderer {
   private:
     DemeterScene() { throw RendererException(); }
@@ -25,6 +27,8 @@ class DemeterScene : public Renderer {
     Camera camera;
     
     float z_offset;
+
+    TileMap * tilemap;
 
     void init();
     virtual void shapeView();
@@ -47,8 +51,6 @@ class DemeterScene : public Renderer {
     virtual void drawEntity(Eris::Entity * ent) { }
     virtual void drawWorld(Eris::Entity * wrld) { }
     virtual void drawCharacter(Sprite *, float, float);
-    virtual void drawMapRegion(CoalRegion &);
-    virtual void drawMapObject(CoalObject &);
     virtual void drawMap(CoalDatabase &, HeightMap &);
     virtual void drawGui();
     virtual void resize(int,int);

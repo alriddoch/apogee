@@ -13,6 +13,7 @@
 #include "Sprite.h"
 #include "Model.h"
 #include "Matrix.h"
+#include "TileMap.h"
 
 const float PI = 3.14159f;
 const float FOG_RED = 0.5f;
@@ -20,7 +21,8 @@ const float FOG_GREEN = 0.75f;
 const float FOG_BLUE = 1.0f;
 const float FOG_ALPHA = 0.0f;
 
-DemeterScene::DemeterScene(int wdth, int hght) : Renderer(wdth, hght)
+DemeterScene::DemeterScene(int wdth, int hght) : Renderer(wdth, hght),
+                                                 tilemap(NULL)
 {
     init();
 }
@@ -56,9 +58,10 @@ void DemeterScene::init()
 
     const int maxNumVisibleTriangles = 40000;
 
-    terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
+    // terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
+    terrain = new Demeter::Terrain("LlanoElev.jpg", "LlanoTex.jpg", "grass.png", 30, 3, maxNumVisibleTriangles);
     terrain->SetMaximumVisibleBlockSize(64);
-    terrain->SetCommonTextureRepeats(50.0f);
+    // terrain->SetCommonTextureRepeats(50.0f);
 
     x_offset = -4.0f;
     y_offset = -4.0f;
@@ -163,6 +166,7 @@ inline void DemeterScene::viewPoint()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glEnable(GL_DEPTH_TEST);
+    glTranslatef(0.0f, 1.0f, -5.0f);
 }
 
 inline void DemeterScene::reorient()
@@ -364,57 +368,21 @@ void DemeterScene::draw3DBox(const Point3D & coords,
     glPopMatrix();
 }
 
-
-void DemeterScene::drawMapRegion(CoalRegion & map_region)
-{
-    int tex_id = -1;
-    CoalFill * fill = map_region.GetFill();
-    if (fill != NULL) {
-        if ((fill->graphic != NULL) && (fill->graphic->filename.size() != 0)) {
-            tex_id = Texture::get(fill->graphic->filename);
-        }
-        if (tex_id == -1) {
-            CoalGraphic * fillGraphic = fill->graphic;
-            float r = fillGraphic->bkgdcolor.red;
-            float g = fillGraphic->bkgdcolor.green;
-            float b = fillGraphic->bkgdcolor.blue;
-            //std::cout << "[" << r << "," << g << "," << b
-                      //<< std::endl << std::flush;
-            glBegin(GL_POLYGON);                // start drawing a polygon
-            glColor3f(r/100, g/100, b/100);
-        } else {
-            glBindTexture(GL_TEXTURE_2D, tex_id);
-            glEnable(GL_TEXTURE_2D);
-            glBegin(GL_POLYGON);                // start drawing a polygon
-            glColor3f(1.0, 0.0, 1.0);
-        }
-    }
-    glNormal3f(0, 0, 1);
-    CoalShape & shape = map_region;
-    for (unsigned int i = 0; i < shape.GetCoordCount (); i++) {
-        const CoalCoord & coord = shape.GetCoord(i);
-        float x = coord.GetX();
-        float y = coord.GetY();
-        float z = coord.GetZ();
-        //std::cout << "[" << x << "," << y << "z" << z << std::endl
-                  //<< std::flush;
-        glTexCoord2f(x/16, y/16); glVertex3f(x, y, z);
-    }
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
-void DemeterScene::drawMapObject(CoalObject & map_object)
-{
-    
-}
-
 void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
 {
+    if (tilemap == NULL) {
+        tilemap = new TileMap();
+        tilemap->build(map_base);
+    }
     origin();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    glTranslatef(-100.0f, -100.0f, 0.0f);
+
+    tilemap->draw(map_height, x_offset, y_offset);
+
+#if 0
     cameraAngle.z = -rotation * PI / 180;
     cameraAngle.x = -elevation * PI / 180;
     cout << elevation << "}{" << cameraAngle.x << endl << flush;
@@ -449,6 +417,7 @@ void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     terrain->Render();
 
+#endif // 0
 }
 
 void DemeterScene::drawGui()

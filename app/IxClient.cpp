@@ -6,13 +6,15 @@
 
 #include <visual/Renderer.h>
 #include <visual/Model.h>
-#include <visual/HeightMap.h>
 
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
+#include <gui/Compass.h>
 
 #include <Eris/World.h>
 #include <Eris/Entity.h>
+
+#include <coal/isoloader.h>
 
 #include <sigc++/object_slot.h>
 
@@ -20,10 +22,10 @@ using Atlas::Message::Object;
 
 bool IxClient::setup()
 {
-    model = new Model();
-    if (!model->onInit(Datapath() + "paladin.cfg")) {
-        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
-    }
+    CoalIsoLoader loader(map_database);
+    loader.LoadMap("moraf.map");
+
+    map_height.load("moraf_hm.png");
 
     gui = new Gui(renderer);
     gui->setup();
@@ -33,6 +35,9 @@ bool IxClient::setup()
     d->addField("port", "6767");
     d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
     gui->addWidget(d);
+
+    compassWidget = new Compass(*gui, 42, 10);
+    gui->addWidget(compassWidget);
     
     return 0;
 }
@@ -73,15 +78,21 @@ void IxClient::doWorld()
 
 bool IxClient::update(float secs)
 {
-    HeightMap foo;
     renderer.update(secs);
+    if (inGame) {
+        Point3D offset = getAbsCharPos();
+        renderer.setXoffset(offset.x());
+        renderer.setYoffset(offset.y());
+        renderer.setZoffset(offset.z());
+    }
     renderer.clear();
     renderer.lightOn();
-    renderer.drawMap(map_database, foo);
+    renderer.drawMap(map_database, map_height);
     renderer.origin();
-    model->onUpdate(0.1);
-    renderer.drawCal3DModel(model, Point3D(0,0,0), WFMath::Quaternion());
+
     doWorld();
+
+    compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();
     renderer.drawGui();
     gui->draw();
@@ -91,33 +102,11 @@ bool IxClient::update(float secs)
 
 bool IxClient::event(SDL_Event & event)
 {
-    static int oldx = 0;
     static int oldy = 0;
-    static float oldRot = 0;
-    static float oldElv = 0;
     static float oldScl = 0;
     switch(event.type) {
         case SDL_MOUSEMOTION:
-            if (event.motion.state & SDL_BUTTON(2)) {
-                //int w = renderer.getWidth();
-                //int h = renderer.getHeight();
-                const int x = event.motion.x;
-                const int y = event.motion.y;
-                float newRot = ((x - oldx) * 360.0) / renderer.getWidth();
-                if (oldy > renderer.getHeight()/2) {
-                    newRot = oldRot + newRot;
-                } else {
-                    newRot = oldRot - newRot;
-                }
-                while (newRot >= 360) { newRot -= 360; };
-                float newElv = ((y - oldy) * 90.0) / renderer.getHeight();
-                newElv = oldElv + newElv;
-                if (newElv < 0) { newElv = 0; }
-                if (newElv > 90) { newElv = 90; }
-                renderer.setRotation(newRot);
-                renderer.setElevation(newElv);
-                return true;
-            } else if (event.motion.state & SDL_BUTTON(3)) {
+            if (event.motion.state & SDL_BUTTON(3)) {
                 const int y = event.motion.y;
                 const int h = renderer.getHeight();
                 float newScl = ((float)(h + y - oldy) / h) * oldScl;
@@ -130,10 +119,7 @@ bool IxClient::event(SDL_Event & event)
                 ((event.button.button & SDL_BUTTON_MIDDLE) ||
                  (event.button.button & SDL_BUTTON_RIGHT)) &&
                 (event.button.state & SDL_PRESSED)) {
-                oldx = event.button.x;
                 oldy = event.button.y;
-                oldRot = renderer.getRotation();
-                oldElv = renderer.getElevation();
                 oldScl = renderer.getScale();
                 // return false;
             }

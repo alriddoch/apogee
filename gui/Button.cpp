@@ -22,26 +22,26 @@ void Button::setup()
     if (len < 2) {
         size = 0;
         if (!Button::m_smallUp.loaded()) {
-            m_smallUp.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_up_25x25_us.png");
+            m_smallUp.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_up_115x25_ajr.png");
         }
         if (!Button::m_smallDown.loaded()) {
-            m_smallDown.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_dn_25x25_us.png");
+            m_smallDown.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
         }
     } else if (len < 11) {
         size = 1;
         if (!Button::m_mediumUp.loaded()) {
-            m_mediumUp.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_up_115x25_us.png");
+            m_mediumUp.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_up_115x25_ajr.png");
         }
         if (!Button::m_mediumDown.loaded()) {
-            m_mediumDown.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_dn_115x25_us.png");
+            m_mediumDown.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
         }
     } else {
         size = 2;
         if (!Button::m_largeUp.loaded()) {
-            m_largeUp.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_up_170x25_us.png");
+            m_largeUp.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_up_115x25_ajr.png");
         }
         if (!Button::m_largeDown.loaded()) {
-            m_largeDown.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_horiz_christal_1_orig_dn_170x25_us.png");
+            m_largeDown.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
         }
     }
 }

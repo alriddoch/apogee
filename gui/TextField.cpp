@@ -16,7 +16,7 @@ TextField::~TextField()
 void TextField::setup()
 {
     if (!TextField::graphic.loaded()) {
-        graphic.load("media/media-2d/ui-collection-pegasus/ui_buttons_christals/button_text_christals_grey_1_dn_115x25_us.png");
+        graphic.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
     }
 }
 

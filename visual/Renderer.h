@@ -87,8 +87,6 @@ class Renderer {
     float getZ(int, int);
     const Point3D getWorldCoord(int, int, float);
 
-    //virtual void draw3Dtest() = 0;
-    //virtual void draw2Dtest() = 0;
     virtual void drawCal3DModel(Model *, const Point3D & coords,
                                 const WFMath::Quaternion &) = 0;
     virtual void draw3DBox(const Point3D & coords,

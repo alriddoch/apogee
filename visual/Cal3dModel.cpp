@@ -424,6 +424,7 @@ void Model::renderMesh(bool bWireframe, bool bLight)
   // begin the rendering loop
   if(!pCalRenderer->beginRendering()) return;
 
+  glCullFace(GL_FRONT);
   // set wireframe mode if necessary
   if(bWireframe)
   {

@@ -16,7 +16,7 @@ Dialogue::~Dialogue()
 void Dialogue::setup()
 {
     if (!Dialogue::background.loaded()) {
-        background.load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png");
+        background.load("media/media-2d/collection-alriddoch/ui/panels/pnl_greystone_scored_1_up_462x90_ajr.png");
     }
 
     cButtonName = m_g.newName();

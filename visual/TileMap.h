@@ -6,6 +6,9 @@
 #define APOGEE_VISUAL_TILEMAP_H
 
 class Tile;
+class HeightMap;
+
+class CoalDatabase;
 
 #include <map>
 
@@ -26,6 +29,9 @@ class TileMap {
         if (I != m_tiles.end()) { return I->second; }
         return NULL;
     }
+
+    void build(CoalDatabase & map_base);
+    void draw(HeightMap & map_height, int, int);
 };
 
 #endif // APOGEE_VISUAL_TILEMAP_H
