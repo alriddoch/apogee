@@ -6,6 +6,7 @@
 #define APOGEE_ISOMETRIC_H
 
 #include "Renderer.h"
+#include <lib3ds/file.h>
 
 class TileMap;
 
@@ -28,9 +29,14 @@ class Isometric : public Renderer {
 
     void init();
     void shapeView();
+    void draw3dsNode(Lib3dsNode * node);
+    void draw3dsFile(Lib3dsFile * node);
 
     void Isometric::buildTileMap(Coal::Container &);
   public:
+    Lib3dsFile * treemodel;
+    unsigned long treemodel_list;
+
     static Renderer * Instance(int width = 640, int height = 480) {
         if (instance == NULL) {
             instance = new Isometric(width, height);
