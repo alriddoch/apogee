@@ -580,13 +580,7 @@ void Model::renderMesh(bool bWireframe, bool bLight)
         }
 
         // draw the submesh
-        if (have_GL_EXT_compiled_vertex_array) {
-            glLockArraysEXT(0, vertexCount);
-        }
         glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, &meshFaces[0][0]);
-        if (have_GL_EXT_compiled_vertex_array) {
-            glUnlockArraysEXT();
-        }
 
         // disable the texture coordinate state if necessary
         if((pCalRenderer->getMapCount() > 0) && (textureCoordinateCount > 0))
@@ -682,13 +676,7 @@ void Model::selectMesh()
         glVertexPointer(3, GL_FLOAT, 0, &meshVertices[0][0]);
 
         // draw the submesh
-        if (have_GL_EXT_compiled_vertex_array) {
-            glLockArraysEXT(0, vertexCount);
-        }
         glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, &meshFaces[0][0]);
-        if (have_GL_EXT_compiled_vertex_array) {
-            glUnlockArraysEXT();
-        }
 
       }
     }

@@ -24,13 +24,6 @@
 
 static const bool debug_flag = false;
 
-bool have_GL_EXT_compiled_vertex_array = false;
-
-#ifndef GL_EXT_compiled_vertex_array
-PFNGLLOCKARRAYSEXTPROC glLockArraysExt = 0;
-PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
-#endif // GL_EXT_compiled_vertex_array
-
 static const float PI = 3.14159f;
 static const float FOG_RED = 0.5f;
 static const float FOG_GREEN = 0.5f;
@@ -102,22 +95,13 @@ bool Renderer::init()
 
     std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
 
-    if (extensions.find("GL_EXT_compiled_vertex_array") != std::string::npos) {
-        std::cout << "Found GL_EXT_compiled_vertex_array extension"
-                  << std::endl << std::flush;
-        have_GL_EXT_compiled_vertex_array = true;
+    sage_init();
 
-#ifndef GL_EXT_compiled_vertex_array
-        glLockArraysExt = (PFNGLLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glLockArraysExt");
-        glUnlockArraysExt = (PFNGLUNLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glUnlockArraysExt");
-#endif // GL_EXT_compiled_vertex_array
+    if (sage_ext[GL_ARB_VERTEX_BUFFER_OBJECT]) {
+        std::cout << "GL_ARB_VERTEX_BUFFER_OBJECT supported" << std::endl << std::flush;
+    } else {
+        std::cout << "GL_ARB_VERTEX_BUFFER_OBJECT NOT supported" << std::endl << std::flush;
     }
-
-    model = new Model();
-    if (!model->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
-        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
-    }
-    model->setLodLevel(1.0f);
 
     int textureUnits = -23;
     glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &textureUnits);
@@ -127,6 +111,12 @@ bool Renderer::init()
     SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &depthbits);
     std::cout << "DEPTH BITS AVAILABLE: " << depthbits
               << std::endl << std::flush;
+
+    model = new Model();
+    if (!model->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
+        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+    }
+    model->setLodLevel(1.0f);
 
     return true;
 }

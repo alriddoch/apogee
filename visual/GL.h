@@ -7,6 +7,8 @@
 
 #define GL_GLEXT_PROTOTYPES
 
+#if 0
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #else
@@ -31,16 +33,11 @@
 
 #endif // GL_ARB_multitexture
 
-#ifndef GL_EXT_compiled_vertex_array
+#else // 0
 
-  typedef void (APIENTRY * PFNGLLOCKARRAYSEXTPROC) (GLint first, GLsizei count);
-  typedef void (APIENTRY * PFNGLUNLOCKARRAYSEXTPROC) (void);
+#include <sage/sage.h>
 
-  extern PFNGLLOCKARRAYSEXTPROC glLockArraysExt;
-  extern PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt;
+#endif // 0
 
-#endif // GL_EXT_compiled_vertex_array
-
-extern bool have_GL_EXT_compiled_vertex_array;
 
 #endif // APOGEE_VISUAL_GL_H

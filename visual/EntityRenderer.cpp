@@ -59,13 +59,7 @@ void BBoxRenderer::draw3DBox(const WFMath::AxisBox<3> & bbox)
 
     glColor3f(0.0f, 1.0f, 0.0f);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, 8);
-    }
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, indices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
 }
 
 void BBoxRenderer::select3DBox(const WFMath::AxisBox<3> & bbox)
@@ -84,13 +78,7 @@ void BBoxRenderer::select3DBox(const WFMath::AxisBox<3> & bbox)
                                       3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
 
     glVertexPointer(3, GL_FLOAT, 0, vertices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, 8);
-    }
     glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, indices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
 }
 
 BBoxRenderer::BBoxRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
