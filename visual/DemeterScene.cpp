@@ -66,7 +66,7 @@ void DemeterScene::init()
          << endl << flush;
     cameraPosition.x = terrain->GetWidth() / 2.0f + x_offset;//- 400.0f;
     cameraPosition.y = terrain->GetHeight() / 2.0f + y_offset;//- 351.0f;
-    cameraPosition.z = 200.0f;
+    cameraPosition.z = z_offset;
     camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
     cameraAngle.x = 0.0f;
     cameraAngle.y = 0.0f;
@@ -385,6 +385,11 @@ void DemeterScene::drawMap(CoalDatabase & map_base)
     cameraAngle.z = -rotation * PI / 180;
     cameraAngle.x = -elevation * PI / 180;
     cout << elevation << "}{" << cameraAngle.x << endl << flush;
+    cameraPosition.x = terrain->GetWidth() / 2.0f + x_offset;//- 400.0f;
+    cameraPosition.y = terrain->GetHeight() / 2.0f + y_offset;//- 351.0f;
+    cameraPosition.z = z_offset;
+    camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
+
 
     Matrix rotateX,rotateZ,cameraTransform;
     rotateX.SetRotateX(cameraAngle.x);

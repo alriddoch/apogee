@@ -80,7 +80,8 @@ int Texture::get(const std::string & filename)
 int Texture::loadTexture(SDL_Surface * image)
 {
     int tex_id;
-    int format;
+    int format, fmt;
+    int x, y;
     int bpp = image->format->BitsPerPixel;
 
     if(bpp != 24 && bpp != 32) {
@@ -91,12 +92,13 @@ int Texture::loadTexture(SDL_Surface * image)
     }
 
     format = (bpp == 24) ? GL_RGB : GL_RGBA;
+    fmt = (bpp == 24) ? 3 : 4;
 
     /* load the texture into OGL */
     glGenTextures(1, (unsigned int *)&tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, image->w, image->h, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w/2, image->h/2, 0,
                  format, GL_UNSIGNED_BYTE, image->pixels);
     std::cout << image->w << " " << image->h << std::endl << std::flush;
     if (glGetError() != 0) {
