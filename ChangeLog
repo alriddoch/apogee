@@ -1,7 +1,15 @@
+2003-06-11  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.h, visual/Renderer.cpp: Quick and dirty skybox.
+
+	* visual/Renderer.cpp: Disable clearing the colour buffer.
+
+	* app/GameClient.cpp: Draw the sky.
+
 2003-06-10  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/GameClient.h, app/IsoClient.cpp,
-	  app/IxClient.cpp, 
+	  app/IxClient.cpp, visual/Renderer.cpp, visual/Renderer.h:
 	  Remove old terrain demo code.
 
 	* visual/EntityRenderer.cpp: Temporarily disable debug bbox renderer.

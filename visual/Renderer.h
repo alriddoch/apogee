@@ -112,6 +112,7 @@ class Renderer {
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
     void drawSea(Mercator::Terrain &);
+    void drawSky();
     void drawGui();
 
     void select3DBox(const WFMath::AxisBox<3> & bbox);

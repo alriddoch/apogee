@@ -619,6 +619,96 @@ void Renderer::drawSea(Mercator::Terrain & t)
     glDisable(GL_BLEND);
 }
 
+void Renderer::drawSky()
+{
+    static GLint t_front = -1,
+                 t_back = -1,
+                 t_left = -1,
+                 t_right = -1,
+                 t_up = -1;
+    static float vertices[] = { -1, -1, -1,
+                                 1, -1, -1,
+                                 1,  1, -1,
+                                -1,  1, -1,
+                                -1, -1,  1,
+                                 1, -1,  1,
+                                 1,  1,  1,
+                                -1,  1,  1 };
+    static float fb_tcoords[] = { 1, 0,
+                                  0, 0,
+                                  1, 0,
+                                  0, 0,
+                                  1, 1,
+                                  0, 1,
+                                  1, 1,
+                                  0, 1 };
+    static float lr_tcoords[] = { 0, 0,
+                                  1, 0,
+                                  0, 0,
+                                  1, 0,
+                                  0, 1,
+                                  1, 1,
+                                  0, 1,
+                                  1, 1 };
+    static float ud_tcoords[] = { 0, 0,
+                                  1, 0,
+                                  1, 1,
+                                  0, 1,
+                                  0, 1,
+                                  1, 1,
+                                  1, 0,
+                                  0, 0 };
+    static GLubyte front[] = { 3, 2, 6, 7 };
+    static GLubyte back[] = { 1, 0, 4, 5 };
+    static GLubyte left[] = { 0, 3, 7, 4 };
+    static GLubyte right[] = { 2, 1, 5, 6 };
+    static GLubyte up[] = { 7, 6, 5, 4 };
+    static GLubyte down[] = { 0, 1, 2, 3 };
+    if (t_front == -1) {
+        t_front = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png");
+        t_back = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png");
+        t_left = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png");
+        t_right = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png");
+        t_up = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png");
+    }
+
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    projection();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
+    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+
+    glDepthMask(GL_FALSE);
+
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_COORD_ARRAY);
+
+    glTexCoordPointer(2, GL_FLOAT, 0, fb_tcoords);
+    glBindTexture(GL_TEXTURE_2D, t_front);
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, front);
+    glBindTexture(GL_TEXTURE_2D, t_back);
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, back);
+
+    glTexCoordPointer(2, GL_FLOAT, 0, lr_tcoords);
+    glBindTexture(GL_TEXTURE_2D, t_left);
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, left);
+    glBindTexture(GL_TEXTURE_2D, t_right);
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, right);
+
+    glTexCoordPointer(2, GL_FLOAT, 0, ud_tcoords);
+    glBindTexture(GL_TEXTURE_2D, t_up);
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, up);
+
+    glDisable(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_TEXTURE_2D);
+    
+    glDepthMask(GL_TRUE);
+}
+
 void Renderer::drawGui()
 {
     glMatrixMode(GL_PROJECTION);
@@ -738,8 +828,8 @@ void Renderer::resize(int wdth, int hght)
 
 void Renderer::clear()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
-
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
+    glClear(GL_DEPTH_BUFFER_BIT); // Clear The Screen
 }
 
 void Renderer::toggleFullscreen()

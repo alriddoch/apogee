@@ -127,6 +127,8 @@ bool GameClient::update(float secs)
     renderer.clear();
     renderer.lightOff();
 
+    renderer.drawSky();
+
     renderer.origin();
 
     doWorld();
