@@ -139,6 +139,12 @@ bool IsoClient::event(SDL_Event & event)
                     renderer.setXoffset(renderer.getXoffset() + 1);
                     return true;
                     break;
+                case SDLK_RETURN:
+                    if ((event.key.keysym.mod & KMOD_LALT) ||
+                        (event.key.keysym.mod & KMOD_LALT)) {
+                        renderer.toggleFullscreen();
+                    }
+                    break;
                 default:
                     break;
             }

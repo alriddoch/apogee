@@ -47,6 +47,9 @@ PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
 Renderer::Renderer(Application & app, int wdth, int hght) : 
                                          screen(NULL),
                                          width(wdth), height(hght),
+                                         fullscreen(false),
+                                         window_width(wdth),
+                                         window_height(hght),
                                          elevation(30), rotation(45),
                                          scale(1), x_offset(0), y_offset(0),
                                          z_offset(0),
@@ -87,8 +90,10 @@ void Renderer::init()
     // SDL_WM_GrabInput(SDL_GRAB_ON);
     // SDL_ShowCursor(0);
 
+    shapeView();
 
-    this->shapeView();
+    glDepthFunc(GL_LEQUAL);
+    glEnableClientState(GL_VERTEX_ARRAY);
 
     std::string extensions = (char *)glGetString(GL_EXTENSIONS);
 
@@ -738,5 +743,44 @@ void Renderer::clear()
 
 }
 
+void Renderer::toggleFullscreen()
+{
+    assert(width > 0);
 
+    static const int resolutions[] = {
+        1600, 1200,
+        1280, 1024,
+        1024, 768,
+        800, 600,
+        640, 480,
+        320, 200,
+        0, 0
+    };
+    int new_width, new_height;
+    fullscreen = !fullscreen;
 
+    if (fullscreen) {
+        window_width = width;
+        window_height = height;
+        const int * res;
+        for(res = &resolutions[0]; *res > width ; res += 2);
+        if ((*res) < 1) {
+            new_width = 320;
+            new_height = 200;
+        } else {
+            new_width = *res;
+            new_height = *++res;
+        }
+    } else {
+        new_width = window_width;
+        new_height = window_height;
+    }
+    resize(new_width, new_height);
+}
+
+void Renderer::cleanUp()
+{
+    if (fullscreen) {
+        toggleFullscreen();
+    }
+}

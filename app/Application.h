@@ -23,7 +23,7 @@ class Application : public SigC::Object {
 
     Application(Renderer & rend, Eris::Connection & con) :
                 gui(0), renderer(rend), connection(con) { }
-    //virtual ~Application() = 0;
+    virtual ~Application();
   public:
     Renderer & renderer;
     Eris::Connection & connection;

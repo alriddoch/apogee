@@ -52,6 +52,8 @@ class Renderer {
 
     struct SDL_Surface * screen;
     int width, height;
+    bool fullscreen;
+    int window_width, window_height;
     float elevation, rotation;
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
@@ -126,6 +128,8 @@ class Renderer {
     void lightOn();
     void lightOff();
     void update(float);
+    void toggleFullscreen();
+    void cleanUp();
 
     virtual const float meterSize() const = 0;
 

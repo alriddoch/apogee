@@ -17,8 +17,13 @@ Isometric::Isometric(Application & app, int wdth, int hght) :
 
 void Isometric::shapeView()
 {
-    if ((screen = SDL_SetVideoMode(width, height, 0,
-            SDL_OPENGL|SDL_RESIZABLE)) == NULL) {
+    Uint32 flags = SDL_OPENGL|SDL_DOUBLEBUF|SDL_ANYFORMAT;
+    if (fullscreen) {
+        flags |= SDL_FULLSCREEN;
+    } else {
+        flags |= SDL_RESIZABLE;
+    }
+    if ((screen = SDL_SetVideoMode(width, height, 0, flags)) == NULL) {
         std::cerr << "Failed to set video mode" << std::endl << std::flush;
         SDL_Quit();
         throw RendererSDLinit();
@@ -27,8 +32,6 @@ void Isometric::shapeView()
 
     glViewport(0, 0, width, height);
     glClearColor(0.0, 0.7, 0.7, 0.0);
-    glDepthFunc(GL_LEQUAL);
-    glEnableClientState(GL_VERTEX_ARRAY);
 }
 
 void Isometric::projection()

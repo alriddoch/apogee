@@ -108,6 +108,12 @@ bool IxClient::event(SDL_Event & event)
                     m_use_mouse = m_use_mouse ? false : true;
                     return true;
                     break;
+                case SDLK_RETURN:
+                    if ((event.key.keysym.mod & KMOD_LALT) ||
+                        (event.key.keysym.mod & KMOD_LALT)) {
+                        renderer.toggleFullscreen();
+                    }
+                    break;
                 default:
                     break;
             }

@@ -4,7 +4,14 @@
 
 #include "Application.h"
 
+#include "visual/Renderer.h"
+
 #include <Eris/Connection.h>
+
+Application::~Application()
+{
+    renderer.cleanUp();
+}
 
 void Application::connect(const std::string & host, const std::string & port)
 {

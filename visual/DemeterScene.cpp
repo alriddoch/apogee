@@ -27,9 +27,13 @@ static const float maxViewDistance = 4500.0f;
 
 void DemeterScene::shapeView()
 {
-
-    if ((screen = SDL_SetVideoMode(width, height, 16,
-            SDL_OPENGL|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
+    Uint32 flags = SDL_OPENGL|SDL_DOUBLEBUF|SDL_ANYFORMAT;
+    if (fullscreen) {
+        flags |= SDL_FULLSCREEN;
+    } else {
+        flags |= SDL_RESIZABLE;
+    }
+    if ((screen = SDL_SetVideoMode(width, height, 16, flags)) == NULL) {
         std::cerr << "Failed to set video mode" << std::endl << std::flush;
         SDL_Quit();
         throw RendererSDLinit();
@@ -38,8 +42,6 @@ void DemeterScene::shapeView()
 
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
-    glDepthFunc(GL_LEQUAL);
-    glEnableClientState(GL_VERTEX_ARRAY);
 
     float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
     glEnable(GL_FOG);

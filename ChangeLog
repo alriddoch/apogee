@@ -1,3 +1,18 @@
+2003-06-09  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.cpp, visual/Renderer.h: Provide code to toggle
+	  between window and fullscreen, and provide a clean up function
+	  that reverts to window mode.
+
+	* app/Application.cpp, app/Application.h: Clean up the renderer
+	  when we quit to avoid messing up the desktop res.
+
+	* visual/Isometric.cpp, visual/DemeterScene.cpp: Modify video
+	  initialisation so that it uses fullscreen flag.
+
+	* app/IsoClient.cpp, app/IxClient.cpp: Switch between window and
+	  fullscreen on alt-enter.
+
 2003-06-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Fill
