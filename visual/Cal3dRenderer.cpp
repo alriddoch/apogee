@@ -7,6 +7,8 @@
 #include "Model.h"
 #include "Renderer.h"
 
+#include "common/system.h"
+
 #include <sigc++/object_slot.h>
 
 Model * Cal3dRenderer::m_default = 0;
@@ -38,7 +40,7 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r,
 {
     if (m_default == 0) {
         m_default = new Model();
-        if (!m_default->onInit(Datapath() + "paladin.cfg")) {
+        if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
             std::cerr << "Loading paladin model failed" << std::endl << std::flush;
         }
         m_default->setLodLevel(1.0f);

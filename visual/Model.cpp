@@ -193,6 +193,12 @@ bool Model::onInit(const std::string& strFilename)
 
   // initialize the data path
   std::string strPath;
+  unsigned int pos = strFilename.find_last_of("/");
+  if (pos != std::string::npos) {
+    strPath = strFilename.substr(0, pos + 1);
+  }
+  std::cout << "Got filename \"" << strPath << "\" from filename \""
+            << strFilename << "\"" << std::endl << std::flush;
 
   // initialize the animation count
   int animationCount;

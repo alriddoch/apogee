@@ -14,6 +14,7 @@
 #include <app/Application.h>
 
 #include <common/debug.h>
+#include <common/system.h>
 
 #include <Eris/Entity.h>
 #include <Eris/TypeInfo.h>
@@ -113,7 +114,7 @@ bool Renderer::init()
     }
 
     model = new Model();
-    if (!model->onInit(Datapath() + "paladin.cfg")) {
+    if (!model->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
     model->setLodLevel(1.0f);

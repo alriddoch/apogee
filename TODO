@@ -1,3 +1,6 @@
+Fix up cal3d loader so it looks in the same dir as the material file for 
+the associated texture.
+
 Might be worth normalising arrays, as it only costs something once,
 but the normalise penalty is every frame.
 Try using a single interleaved array for vectices and normals,
