@@ -277,6 +277,13 @@ void Renderer::selectEntity(Eris::Entity * ent, const Point3D & cp,
                          << (worldTime - me->getTime()) << " " << pos; );
         pos = pos + ent->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
         debug( std::cout << "=" << pos << std::endl << std::flush; );
+        Eris::Entity * pe = ent->getContainer();
+        if (pe != 0) {
+            RenderableEntity * re = dynamic_cast<RenderableEntity *>(pe);
+            if (re != 0) {
+                re->constrainChild(pos);;
+            }
+        }
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
