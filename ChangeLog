@@ -1,5 +1,9 @@
 2003-11-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.cpp: Got test shadow working.
+
+2003-11-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* Update copyright dates.
 
 2003-11-27  Al Riddoch  <ajr@ecs.soton.ac.uk>

@@ -152,7 +152,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         }
                      
         // Draw this segment
-        glDrawElements(GL_LINE_STRIP, m_numLineIndeces,
+        glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
 
         if (texNo == 0) {
@@ -285,12 +285,16 @@ void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
     fx = nx + diameter;
     fy = ny + diameter;
     float * vertices = new float[size * size * 3];
+    float * texcoords = new float[size * size * 2];
     float * vptr = vertices - 1;
+    float * tptr = texcoords - 1;
     for(int y = ny; y <= fy; ++y) {
         for(int x = nx; x <= fx; ++x) {
             *++vptr = x;
             *++vptr = y;
             *++vptr = m_terrain.get(x, y);
+            *++tptr = ((float)x - pos.x() + radius) / (radius * 2);
+            *++tptr = ((float)y - pos.y() + radius) / (radius * 2);
         }
     }
     GLushort * indices = new GLushort[diameter * size * 2];
@@ -314,9 +318,19 @@ void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
             }
         }
     }
+    GLuint shTexture = Texture::get("shadow.png", false);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, shTexture);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    
     glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glDrawElements(GL_LINE_STRIP, numind, GL_UNSIGNED_SHORT, indices);
+    glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+    glDrawElements(GL_TRIANGLE_STRIP, numind, GL_UNSIGNED_SHORT, indices);
 
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
         
         
 }
@@ -410,7 +424,7 @@ void TerrainRenderer::render(Renderer &, const PosType & camPos)
     }
     drawMap(m_terrain, camPos);
     drawSea(m_terrain);
-    drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), 2);
+    drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), .5f);
 }
 
 void TerrainRenderer::select(Renderer &, const PosType & camPos)
