@@ -23,7 +23,7 @@
 	* visual/Texture.cpp: Use CLAMP_TO_EDGE for non-wrapping
 	  textures.
 
-	* visual/DemeterScene.cpp, app/GameClient.cpp: Make fog look better,]
+	* visual/DemeterScene.cpp, app/GameClient.cpp: Make fog look better,
 	  and start looking at lighting.
 
 2003-06-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
