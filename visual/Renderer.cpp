@@ -84,6 +84,20 @@ void Renderer::init()
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
+    videoModes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
+
+    /* Check is there are any modes available */
+    if(videoModes == 0){
+        printf("No modes available!\n");
+    } else if (videoModes == (SDL_Rect **)-1) {
+        printf("All resolutions available.\n");
+    } else{
+        /* Print valid modes */
+        printf("Available Modes\n");
+        for(int i=0; videoModes[i]; ++i) {
+            printf("  %d x %d\n", videoModes[i]->w, videoModes[i]->h);
+        }
+    }
     // These should be turned on when running in production mode, but they
     // make using a debugger really hard and are only required in the perspective
     // client
@@ -836,29 +850,29 @@ void Renderer::toggleFullscreen()
 {
     assert(width > 0);
 
-    static const int resolutions[] = {
-        320, 200,
-        640, 480,
-        800, 600,
-        1024, 768,
-        1280, 1024,
-        1600, 1200,
-        0, 0
-    };
-    int new_width, new_height;
+    int new_width = 0, new_height;
     fullscreen = !fullscreen;
 
     if (fullscreen) {
+        if (videoModes == 0) {
+            std::cout << "No modes" << std::endl << std::flush;
+            fullscreen = false;
+            return;
+        }
         window_width = width;
         window_height = height;
-        const int * res;
-        for(res = &resolutions[0]; *res <= width ; res += 2);
-        if ((*res) < 1) {
-            new_width = 1600;
-            new_height = 1200;
-        } else {
-            new_width = *res;
-            new_height = *++res;
+        for (int i = 0; videoModes[i]; ++i) {
+            if (videoModes[i]->w >= width) {
+                if ((new_width == 0) || (videoModes[i]->w < new_width)) {
+                    new_width = videoModes[i]->w;
+                    new_height = videoModes[i]->h;
+                }
+            }
+        }
+        if (new_width == 0) {
+            std::cout << "No mode matched" << std::endl << std::flush;
+            fullscreen = false;
+            return;
         }
     } else {
         new_width = window_width;

@@ -10,6 +10,8 @@
 
 #include "GL.h"
 
+#include <SDL/SDL.h>
+
 class Sprite;
 class Model;
 class HeightMap;
@@ -51,6 +53,7 @@ class Renderer {
     void draw3dsFile(Lib3dsFile * node);
 
     struct SDL_Surface * screen;
+    SDL_Rect ** videoModes;
     int width, height;
     bool fullscreen;
     int window_width, window_height;
