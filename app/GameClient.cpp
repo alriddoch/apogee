@@ -345,7 +345,7 @@ void GameClient::entitySay(const std::string & s, Eris::Entity * e)
     consoleWidget->pushLine(out);
 }
 
-void GameClient::moveCharacter(const PosType & pos)
+void GameClient::moveCharacter(const PosType & pos, bool run)
 {
     if (m_character == NULL) {
         return;
@@ -366,7 +366,9 @@ void GameClient::moveCharacter(const PosType & pos)
     marg["id"] = m_character->getID();
     marg["loc"] = m_character->getContainer()->getID();
     marg["pos"] = coords.toAtlas();
-    marg["velocity"] = VelType(1,0,0).toAtlas();
+    if (!run) {
+        marg["velocity"] = VelType(1,0,0).toAtlas();
+    }
     m.setArgs(Atlas::Message::Element::ListType(1, marg));
     m.setFrom(m_character->getID());
 

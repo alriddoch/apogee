@@ -1,5 +1,12 @@
 2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/GameClient.cpp. app/GameClient.h: Add option for running
+	  to moveCharacter.
+
+	* app/IxClient.cpp: Allow the user to use shift to run.
+
+2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Add FIXME to ensure code
 	  is changed to handle roughness and falloff.
 

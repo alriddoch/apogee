@@ -65,10 +65,11 @@ bool IxClient::event(SDL_Event & event)
                             const int y = renderer.getHeight() - event.motion.y;
                             renderer.origin();
                             const float z = renderer.getZ(x, y);
+                            bool run = (SDL_GetModState() & (KMOD_LSHIFT | KMOD_RSHIFT));
                             // Check that the point clicked on is not in the far
                             // distance
                             if (z < 0.999) {
-                                moveCharacter(renderer.getWorldCoord(x, y, z));
+                                moveCharacter(renderer.getWorldCoord(x, y, z), run);
                             }
                         } else if (e != 0) {
                             m_avatar->touch(e);

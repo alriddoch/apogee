@@ -97,7 +97,7 @@ class GameClient : public Application {
     void charMoved(const PosType &);
     void entitySay(const std::string &, Eris::Entity * e);
 
-    void moveCharacter(const PosType & pos);
+    void moveCharacter(const PosType & pos, bool run = false);
     const PosType getAbsCharPos();
 };
 
