@@ -16,6 +16,8 @@
 
 #include "Model.h"
 
+#include "Texture.h"
+
 #include <cal3d/platform.h>
 
 //----------------------------------------------------------------------------//
@@ -111,13 +113,18 @@ int Model::getState()
 
 GLuint Model::loadTexture(const std::string& strFilename)
 {
+  GLuint texture = Texture::get(strFilename);
+  if (texture != Texture::getDefault()) {
+    return texture;
+  }
+
   // open the texture file
   std::ifstream file;
   file.open(strFilename.c_str(), std::ios::in | std::ios::binary);
   if(!file)
   {
     std::cerr << "Texture file '" << strFilename << "' not found." << std::endl;
-    return 0;
+    return texture;
   }
 
   // load the dimension of the texture
@@ -134,7 +141,7 @@ GLuint Model::loadTexture(const std::string& strFilename)
   if(pBuffer == 0)
   {
     std::cerr << "Memory allocation for texture '" << strFilename << "' failed." << std::endl;
-    return 0;
+    return texture;
   }
 
   // load the texture
