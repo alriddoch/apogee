@@ -1,3 +1,7 @@
+2003-09-25  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/HeightMap.cpp: Fix <cassert> header for gcc 3.3.
+
 2003-09-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Update apogee rule to work more sanely.

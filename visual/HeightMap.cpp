@@ -11,6 +11,7 @@
 #include "png.h"
 
 #include <iostream>
+#include <cassert>
 
 void pngErrorFunction(png_structp, const char *c)
 {
