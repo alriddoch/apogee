@@ -123,12 +123,16 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3, GL_UNSIGNED_INT,
                          &indices[begin * 3]);
     std::cout << "FDRAW " << mesh->faces << ": " << begin << std::endl << std::flush;
+    glDisable(GL_TEXTURE_2D);
 
     delete [] points;
     delete [] normals;
     delete [] texcoords;
 
     glEndList();
+
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void m3dsRenderer::draw3dsFile(Renderer & r)
