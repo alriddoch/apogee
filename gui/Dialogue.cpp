@@ -90,7 +90,7 @@ void Dialogue::select()
         return;
     }
     glTranslatef(0.0f,-25.0f,0.01f);
-    glPushName(field1Name);
+    glPushName(field2Name);
     field2.select();
     glPopName();
     glPopMatrix();

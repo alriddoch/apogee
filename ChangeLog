@@ -1,3 +1,7 @@
+2002-05-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Dialogue.cpp: Fixed text entry so field selection now works.
+
 2002-04-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/IsoClient.cpp, app/IxClient.cpp:
