@@ -1,5 +1,14 @@
 2004-03-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/GameClient.cpp: Tweak the way the character list is handled.
+
+	* app/GameClient.cpp: Use toParentCoords and toLocalCoords more
+	  correctly, and add FIXMEs for orientation.
+
+	* visual/Renderer.cpp: Add fixmes for toLocalCoords.
+
+2004-03-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/ServerSelector.cpp: Render servers as pretty coloured cubes.
 
 2004-03-04  Al Riddoch  <ajr@ecs.soton.ac.uk>

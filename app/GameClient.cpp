@@ -155,12 +155,15 @@ void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
+#if 0
     Option * o = new Option(*gui, renderer.getWidth() / 2,
                                   renderer.getHeight() / 2,
                                   "Select", "Create");
     o->buttonOneSignal.connect(SigC::slot(*this, &GameClient::charListSync));
     o->buttonTwoSignal.connect(SigC::slot(*this, &GameClient::charCreator));
     gui->addWidget(o);
+#endif
+    charListSync();
 }
 
 void GameClient::charCreator()
@@ -332,7 +335,8 @@ void GameClient::moveCharacter(const PosType & pos)
     Eris::Entity * ref = m_character->getContainer();
     Eris::Entity * r;
     while ((r = ref->getContainer()) != NULL) {
-        coords.toLocalCoords(ref->getPosition(), WFMath::Quaternion().identity());
+        // FIXME Incorrect usage. Needs real orientation.
+        coords = coords.toLocalCoords(ref->getPosition(), WFMath::Quaternion().identity());
         ref = r;
     };
     
@@ -367,7 +371,10 @@ const PosType GameClient::getAbsCharPos()
         }
     }
     for(; ref != NULL && ref != root; ref = ref->getContainer()) {
-        pos.toParentCoords(ref->getPosition(), WFMath::Quaternion().identity());
+        std::cout << pos << ", " << ref->getPosition() << std::endl << std::flush;
+        // FIXME Incorrect usage. Needs real orientation.
+        pos = pos.toParentCoords(ref->getPosition(), WFMath::Quaternion().identity());
+        std::cout << pos << std::endl << std::flush;
     }
     return pos;
 }

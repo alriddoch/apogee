@@ -275,6 +275,8 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << std::endl << std::flush;);
     }
     PosType camPos = cp;
+    // FIXME Incorrect usage of toLocalCoords. Returns value, and needs
+    // real orientation
     camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
 
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
@@ -346,6 +348,8 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << std::endl << std::flush;);
     }
     PosType camPos = cp;
+    // FIXME Incorrect usage of toLocalCoords. Returns value, and needs
+    // real orientation
     camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
     glLoadName(++next);
     name[next] = ent;
