@@ -26,8 +26,8 @@ class EntityRenderer : virtual public SigC::Object
     EntityRenderer(Renderer &, Eris::Entity & e);
     virtual ~EntityRenderer();
 
-    virtual void render(Renderer &, const WFMath::Point<3> & camPos) = 0;
-    virtual void select(Renderer &, const WFMath::Point<3> & camPos) = 0;
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos) = 0;
+    virtual void select(Renderer &, const WFMath::Vector<3> & camPos) = 0;
 };
 
 namespace WFMath {
@@ -43,8 +43,8 @@ class BBoxRenderer : public EntityRenderer
     BBoxRenderer(Renderer &, Eris::Entity & e);
     virtual ~BBoxRenderer();
 
-    virtual void render(Renderer &, const WFMath::Point<3> & camPos);
-    virtual void select(Renderer &, const WFMath::Point<3> & camPos);
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
+    virtual void select(Renderer &, const WFMath::Vector<3> & camPos);
 };
 
 #endif // APOGEE_ENTITY_RENDERER_H

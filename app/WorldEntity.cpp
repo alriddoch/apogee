@@ -26,7 +26,7 @@ RenderableEntity::RenderableEntity(const GameEntity &ge,
 {
 }
 
-void RenderableEntity::constrainChild(Point3D & pos)
+void RenderableEntity::constrainChild(Vector3D & pos)
 {
 }
 
@@ -37,7 +37,7 @@ MovableEntity::MovableEntity(const GameEntity &ge,
     updateTime = SDL_GetTicks();
 }
 
-void MovableEntity::movedSignal(const Point3D &)
+void MovableEntity::movedSignal(const Vector3D &)
 {
     updateTime = SDL_GetTicks();
 }
@@ -52,7 +52,7 @@ TerrainEntity::TerrainEntity(const GameEntity &ge,
 {
 }
 
-void TerrainEntity::constrainChild(Point3D & pos)
+void TerrainEntity::constrainChild(Vector3D & pos)
 {
     if (m_drawer == 0) {
         std::cout << "Constraint, but no drawer" << std::endl << std::flush;

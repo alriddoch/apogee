@@ -163,7 +163,7 @@ float Renderer::getZ(int x, int y)
     return z;
 }
 
-const Point3D Renderer::getWorldCoord(int x, int y, float z)
+const Vector3D Renderer::getWorldCoord(int x, int y, float z)
 {
     GLint viewport[4];
 
@@ -178,7 +178,7 @@ const Point3D Renderer::getWorldCoord(int x, int y, float z)
     gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
 
     std::cout << "{" << wx << ";" << wy << ";" << wz << std::endl << std::flush;
-    return Point3D(wx, wy, wz);
+    return Vector3D(wx, wy, wz);
 }
 
 void Renderer::lightOn()
@@ -234,11 +234,11 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
     glMultMatrixf(&orient[0][0]);
 }
 
-void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
+void Renderer::drawEntity(Eris::Entity * ent, const Vector3D & cp)
 {
     assert(ent != 0);
 
-    Point3D pos = ent->getPosition();
+    Vector3D pos = ent->getPosition();
 
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
@@ -256,7 +256,7 @@ void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
-    Point3D camPos = cp; camPos -= pos;
+    Vector3D camPos = cp; camPos -= pos;
 
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
@@ -283,7 +283,7 @@ void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
 void Renderer::drawWorld(Eris::Entity * wrld)
 {
     worldTime = SDL_GetTicks();
-    Point3D camPos(x_offset, y_offset, z_offset);
+    Vector3D camPos(x_offset, y_offset, z_offset);
 
     drawEntity(wrld, camPos);
 }
@@ -299,10 +299,10 @@ void Renderer::drawGui()
     glDisable(GL_CULL_FACE);
 }
 
-void Renderer::selectEntity(Eris::Entity * ent, const Point3D & cp,
+void Renderer::selectEntity(Eris::Entity * ent, const Vector3D & cp,
                             SelectMap & name, GLuint & next)
 {
-    Point3D pos = ent->getPosition();
+    Vector3D pos = ent->getPosition();
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
         debug( std::cout << ent->getVelocity() << " "
@@ -319,7 +319,7 @@ void Renderer::selectEntity(Eris::Entity * ent, const Point3D & cp,
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
-    Point3D camPos = cp; camPos -= pos;
+    Vector3D camPos = cp; camPos -= pos;
     glLoadName(++next);
     name[next] = ent;
     glPushMatrix();
@@ -368,7 +368,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
     glPushName(nextName);
     debug(std::cout << "SELECTING" << std::endl << std::flush;);
 
-    Point3D camPos(x_offset, y_offset, z_offset);
+    Vector3D camPos(x_offset, y_offset, z_offset);
 
     selectEntity(wrld, camPos, nameMap, nextName);
 

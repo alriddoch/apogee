@@ -22,14 +22,14 @@ class RenderableEntity : public Eris::Entity
     EntityRenderer * m_drawer;
 
     RenderableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
-    virtual void constrainChild(Point3D & pos);
+    virtual void constrainChild(Vector3D & pos);
 };
 
 class MovableEntity : public RenderableEntity
 {
     float updateTime;
   public:
-    void movedSignal(const Point3D &);
+    void movedSignal(const Vector3D &);
 
     MovableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
@@ -50,7 +50,7 @@ class TerrainEntity : public RenderableEntity
   public:
     TerrainEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
-    virtual void constrainChild(Point3D & pos);
+    virtual void constrainChild(Vector3D & pos);
 };
 
 class TreeEntity : public RenderableEntity

@@ -1,3 +1,17 @@
+2003-11-25  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* Switch to using Discordia instead of Eris to get round API issues.
+
+	* app/GameClient.cpp, app/GameClient.h, app/WorldEntity.cpp,
+	  app/WorldEntity.h, common/Vector3D.h, visual/3dsRenderer.cpp,
+	  visual/3dsRenderer.h, visual/Cal3dRenderer.cpp,
+	  visual/Cal3dRenderer.h, visual/EntityRenderer.cpp,
+	  visual/EntityRenderer.h, visual/Renderer.cpp,
+	  visual/Renderer.h, visual/TerrainRenderer.cpp,
+	  visual/TerrainRenderer.h: Switch to using Vector3D for
+	  POS attribute type, and get rid of all the nasty hacks
+	  required to make things work with Point3D as POS.
+
 2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.h: Add members for storing time, place, and

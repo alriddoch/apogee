@@ -88,10 +88,10 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 
-    void charMoved(const Point3D &);
+    void charMoved(const Vector3D &);
 
-    void moveCharacter(const Point3D & pos);
-    const Point3D getAbsCharPos();
+    void moveCharacter(const Vector3D & pos);
+    const Vector3D getAbsCharPos();
 };
 
 #endif // APOGEE_GAMECLIENT_H
