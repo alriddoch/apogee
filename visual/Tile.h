@@ -2,8 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#ifndef APOGEE_VISUAL_TILE_H
-#define APOGEE_VISUAL_TILE_H
+#ifndef EQUATOR_TILE_H
+#define EQUATOR_TILE_H
 
 struct SDL_Surface;
 
@@ -31,6 +31,8 @@ class Tile {
     int tileSize;
     float m_pw, m_ph;
   public:
+    std::string m_name;
+
     static Tile * get(const std::string & filename);
 
     Tile() : tex_id(-1), m_pw(0), m_ph(0) { }
@@ -39,10 +41,11 @@ class Tile {
     void draw();
     void draw(const Mercator::Terrain &, int, int);
     void select();
+    void outline(float);
 
     bool loaded() const { return (tex_id != -1); }
     float pw() { return m_pw; }
     float ph() { return m_ph; }
 };
 
-#endif // APOGEE_VISUAL_TEXTURE_H
+#endif // EQUATOR_TILE_H

@@ -189,8 +189,6 @@ const Point3D Renderer::getWorldCoord(int x, int y, float z)
 
     GLdouble mvmatrix[16], projmatrix[16];
 
-    GLint realy;  /*  OpenGL y coordinate position  */
-
     GLdouble wx, wy, wz;  /*  returned world x, y, z coords  */
 
     glGetIntegerv (GL_VIEWPORT, viewport);
@@ -304,7 +302,7 @@ void Renderer::draw3dsFile(Lib3dsFile * node)
   }
 
     if (treemodel_list) {
-      Lib3dsObjectData *d;
+      // Lib3dsObjectData *d;
 
       glPushMatrix();
       // d=&node->data.object;
@@ -338,6 +336,7 @@ void Renderer::origin()
     glLoadIdentity();
     projection();
     viewPoint();
+    glEnable(GL_CULL_FACE);
 }
 
 void Renderer::orient(const WFMath::Quaternion & orientation)
@@ -680,7 +679,7 @@ void Renderer::drawSky()
     static GLubyte left[] = { 0, 3, 7, 4 };
     static GLubyte right[] = { 2, 1, 5, 6 };
     static GLubyte up[] = { 7, 6, 5, 4 };
-    static GLubyte down[] = { 0, 1, 2, 3 };
+    // static GLubyte down[] = { 0, 1, 2, 3 };
     if (t_front == -1) {
         t_front = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
         t_back = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
@@ -734,7 +733,7 @@ void Renderer::drawGui()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     // glClear(GL_DEPTH_BUFFER_BIT);
-    // glDisable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE);
 }
 
 void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)

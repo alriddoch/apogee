@@ -586,6 +586,7 @@ glEnd();
   {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+  glCullFace(GL_BACK);
 
   // end the rendering
   pCalRenderer->endRendering();

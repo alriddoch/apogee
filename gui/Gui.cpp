@@ -178,7 +178,7 @@ GLint Gui::select(int x, int y)
     int closest = -1;
     std::cout << "The closest hit has " << noNames << " names: ";
     hitNames.clear();
-    for (int i = 0; i < noNames; i++,nameItr++) {
+    for (unsigned int i = 0; i < noNames; i++,nameItr++) {
         std::cout << *nameItr;
         widgmap::const_iterator I = widgets.find(*nameItr);
         if (I != widgets.end()) {

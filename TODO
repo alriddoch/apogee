@@ -1,3 +1,5 @@
+For expo, change textures to nearest, and Lod to much lower.
+
 Implement new Eris Entity class which carries pointer to associated terrain.
 Use same technique for a whole load of other rubbish to do with rendering.
 Perhaps a virtual method would help.

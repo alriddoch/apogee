@@ -105,7 +105,7 @@ void m3dsRenderer::draw3dsModel()
   }
 
     if (m_model_list) {
-      Lib3dsObjectData *d;
+      // Lib3dsObjectData *d;
 
       glPushMatrix();
       // d=&node->data.object;

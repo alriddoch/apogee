@@ -10,8 +10,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include <math.h>
-#include <unistd.h>
+#include <cmath>
 
 // This function has an arbitrary size limit of 4096x4096 for textures
 
@@ -34,8 +33,8 @@ bool Sprite::load(const std::string & filename)
         tex_id = Texture::getDefault();
         m_w = Texture::getDefaultWidth();
         m_h = Texture::getDefaultHeight();
-        m_pw = m_w / twoN(m_w);
-        m_ph = m_h / twoN(m_h);
+        m_pw = (float)m_w / (float)twoN((unsigned int)m_w);
+        m_ph = (float)m_h / (float)twoN((unsigned int)m_h);
         loadedp = true;
         return true;
     }
@@ -69,8 +68,8 @@ bool Sprite::load(const std::string & filename)
         return false;
     }
     tex_id = Texture::loadTexture(image);
-    m_w = (float)sprite_w;
-    m_h = (float)sprite_h;
+    m_w = sprite_w;
+    m_h = sprite_h;
     m_pw = (float)sprite_w / textur_w;
     m_ph = (float)sprite_h / textur_h;
     SDL_FreeSurface(image);

@@ -3,15 +3,16 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include "Tile.h"
+
 #include "Texture.h"
-#include "HeightMap.h"
+#include "GL.h"
 
 #include <Mercator/Terrain.h>
 
 #include <SDL_image.h>
-#include <GL/gl.h>
 
 #include <iostream>
+#include <cmath>
 
 std::map<std::string, Tile *> * Tile::tiledb = NULL;
 
@@ -33,8 +34,6 @@ Tile * Tile::get(const std::string & filename)
     tiles()[filename] = t;
     return t;
 }
-    
-
 
 unsigned int Tile::twoN(unsigned int size)
 {
@@ -106,6 +105,7 @@ bool Tile::load(const std::string & filename)
     m_ph = (float)sprite_h / textur_h;
     SDL_FreeSurface(image);
     if (tex_id == -1) { return false; }
+    m_name = filename;
     return true;
 }
 
@@ -175,6 +175,25 @@ void Tile::draw(const Mercator::Terrain & h, int x, int y)
     glDrawElements(GL_TRIANGLE_STRIP, ++iindex, GL_UNSIGNED_INT, indices);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisable(GL_TEXTURE_2D);
+}
+
+void Tile::outline(float offset)
+{
+    GLfloat vertices[] = { 0.f, 0.f, 0.f,
+                           tileSize, 0.f, 0.f,
+                           tileSize, tileSize, 0.f,
+                           0.f, tileSize, 0.f,
+                           0.f, 0.f, 0.f };
+
+    GLfloat texcoords[] = { offset, offset + tileSize,
+                            offset, offset + tileSize,
+                            offset };
+    glColor3f(0.0f, 0.0f, 0.5f);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glTexCoordPointer(1, GL_FLOAT, 0, texcoords);
+    glDrawArrays(GL_LINE_STRIP, 0, 5);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void Tile::select()

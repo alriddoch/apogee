@@ -38,8 +38,8 @@ int main(int argc, char ** argv)
     int newWidth;
     int newHeight;
     int elapsed_time = SDL_GetTicks();
-    int mx = app->renderer.getWidth() / 2.f,
-        my = app->renderer.getHeight() / 2.f;
+    int mx = app->renderer.getWidth() / 2,
+        my = app->renderer.getHeight() / 2;
 
     while (!done) {
         while (SDL_PollEvent(&event) && !done) {
@@ -76,8 +76,8 @@ int main(int argc, char ** argv)
         dx -= mx; dy -= my;
         if ((dx != 0) || (dy != 0)) {
             if (app->mouse(dx, dy)) {
-                mx = app->renderer.getWidth() / 2.f;
-                my = app->renderer.getHeight() / 2.f;
+                mx = app->renderer.getWidth() / 2;
+                my = app->renderer.getHeight() / 2;
                 SDL_WarpMouse(mx, my);
             }
         }

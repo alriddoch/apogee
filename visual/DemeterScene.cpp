@@ -45,8 +45,9 @@ void DemeterScene::shapeView()
 
     float fogColor[] = { FOG_RED, FOG_GREEN, FOG_BLUE, FOG_ALPHA };
     glEnable(GL_FOG);
-    glFogf(GL_FOG_MODE,GL_LINEAR);
+    glFogf(GL_FOG_MODE,GL_EXP);
     glFogfv(GL_FOG_COLOR,fogColor);
+    glFogf(GL_FOG_DENSITY, 0.5f);
     glFogf(GL_FOG_START,25.0f);
     glFogf(GL_FOG_END,maxViewDistance - 100.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);

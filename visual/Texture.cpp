@@ -116,7 +116,6 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap)
 {
     unsigned int tex_id;
     int format, fmt;
-    int x, y;
     int bpp = image->format->BitsPerPixel;
 
     if(bpp != 24 && bpp != 32) {
