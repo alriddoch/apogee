@@ -69,7 +69,7 @@ bool IxClient::event(SDL_Event & event)
                             if (z < 0.999) {
                                 moveCharacter(renderer.getWorldCoord(x, y, z));
                             }
-                        } else {
+                        } else if (e != 0) {
                             m_avatar->touch(e);
                         }
                     } else if (clickDownX == event.motion.x &&

@@ -86,7 +86,7 @@ bool IsoClient::event(SDL_Event & event)
                     if (z < 0.9) {
                         moveCharacter(renderer.getWorldCoord(x, y, z));
                     }
-                } else {
+                } else if (e != 0) {
                     m_avatar->touch(e);
                 }
             }
