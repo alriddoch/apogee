@@ -1,5 +1,14 @@
 2002-02-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.h, visual/Isometric.h, visual/Isometric.cpp,
+	  visual/DemeterScene.h, app/apogee.cpp, app/IsoClient.h,
+	  app/IsoClient.cpp, app/Application.h:
+	  Added mechanism for time to be passed around subsystems, to
+	  be used to update animations etc. Implemented measuring time
+	  using SDL, and used it to animate cal3d models more correctly.
+
+2002-02-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TileMap.h, visual/TileMap.cpp,
 	  visual/HeightMap.h, visual/HeightMap.cpp:
 	  TileMap and HeightMap classes added for more efficiently managing

@@ -42,13 +42,14 @@ int main(int argc, char ** argv)
     con.setLogLevel(Eris::LOG_DEBUG);
 
     app->setup();
-    app->update();
+    app->update(0);
 
     bool done = false;
     SDL_Event event;
     int newWidth;
     int newHeight;
     bool updated;
+    int elapsed_time = SDL_GetTicks();
 
     while (!done) {
         updated = false;
@@ -91,10 +92,10 @@ int main(int argc, char ** argv)
         } catch (...) {
             cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
         }
-        //if (updated) {
-            app->update();
-        //}
-        //SDL_Delay(500);
+        int ticks = SDL_GetTicks();
+        float delta = (ticks - elapsed_time) / 1000.0f;
+        app->update(delta);
+        elapsed_time = ticks;
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;

@@ -33,7 +33,7 @@ class IsoClient : public GameClient {
     virtual ~IsoClient() { }
 
     bool setup();
-    bool update();
+    bool update(float);
     bool event(SDL_Event &);
     void mouse(int,int) { }
 };

@@ -52,7 +52,12 @@ void Isometric::init()
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
-    model->setLodLevel(0.01f);
+    model->setLodLevel(0.5f);
+}
+
+void Isometric::update(float secs)
+{
+    model->onUpdate(secs);
 }
 
 inline void Isometric::viewScale(float scale_factor)
@@ -415,7 +420,6 @@ void Isometric::drawWorld(Eris::Entity * wrld)
     if (charType == NULL) {
         charType = Eris::TypeInfo::findSafe("character");
     }
-    model->onUpdate(0.1);
     drawEntity(wrld);
 }
 

@@ -29,7 +29,7 @@ class Application : public SigC::Object {
   public:
 
     virtual bool setup() { return 0; };
-    virtual bool update() = 0;
+    virtual bool update(float) = 0;
     virtual bool event(SDL_Event &) = 0;
     virtual void mouse(int,int) = 0;
 

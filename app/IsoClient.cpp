@@ -116,8 +116,9 @@ void IsoClient::doWorld()
 #endif
 }
 
-bool IsoClient::update()
+bool IsoClient::update(float secs)
 {
+    renderer.update(secs);
     Vector3D offset = getAbsCharPos();
     if (offset) {
         renderer.setXoffset(offset.X());

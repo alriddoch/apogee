@@ -61,6 +61,7 @@ class DemeterScene : public Renderer {
     virtual void origin();
     virtual void lightOn();
     virtual void lightOff();
+    virtual void update(float);
 
     virtual const float meterSize() const { return 40.2492f; }
 };

@@ -111,6 +111,7 @@ class Renderer {
     virtual void origin() = 0;
     virtual void lightOn() = 0;
     virtual void lightOff() = 0;
+    virtual void update(float) = 0;
 
     virtual const float meterSize() const = 0;
 };
