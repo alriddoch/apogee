@@ -1,5 +1,9 @@
 2001-10-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* configure.in: Patched in correct sigc++ check by James.
+
+2001-10-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/Compass.h, gui/Compass.cpp: Added compass gui widget.
 
 	* gui/Button.h, gui/Button.cpp: Fixed accidentally overloaded
