@@ -15,12 +15,13 @@
 #include <gui/Pie.h>
 #include <gui/Console.h>
 
-
 #include <Eris/Player.h>
 #include <Eris/Lobby.h>
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
+
+#include <wfmath/atlasconv.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
 #include <Atlas/Objects/Operation/Move.h>
@@ -52,6 +53,7 @@ Point3D & operator-=(Point3D & lhs, const Point3D & rhs)
     return lhs;
 }
 
+#if 0
 Atlas::Message::Object Point3D::toAtlas() const
 {
     Atlas::Message::Object::ListType ret(3);
@@ -60,6 +62,7 @@ Atlas::Message::Object Point3D::toAtlas() const
     ret[2] = m_elem[2];
     return Atlas::Message::Object(ret);
 }
+#endif
 
 const Point3D operator+(const Point3D & lhs, const Point3D & rhs)
 {
