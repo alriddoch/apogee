@@ -36,7 +36,6 @@ void TerrainRenderer::enableRendererState()
     glEnable(GL_NORMALIZE);
     glColor4f(1.f, 1.f, 1.f, 1.f);
     glEnableClientState(GL_NORMAL_ARRAY);
-    glEnable(GL_BLEND);
 
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
@@ -73,7 +72,6 @@ void TerrainRenderer::disableRendererState()
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
 
-    glDisable(GL_BLEND);
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisable(GL_NORMALIZE);
 }
@@ -127,6 +125,8 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
 
+    glEnable(GL_BLEND);
+
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
         if (!(*I)->m_shader.checkIntersect(**I)) {
             continue;
@@ -143,9 +143,11 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
         if (texNo == 0) {
             glDepthMask(GL_FALSE);
+            glEnable(GL_BLEND);
         }
     }
 
+    glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);
 
 }
