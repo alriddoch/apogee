@@ -6,6 +6,7 @@ Makefile.in
 acinclude.m4
 aclocal.m4
 apogee-*.tar.gz
+apogee.atlas-*log
 autom4te*.cache
 config.cache
 config.guess
@@ -23,6 +24,7 @@ ltconfig
 ltmain.sh
 missing
 mkinstalldirs
+perigee.atlas-*log
 stamp-h
 stamp-h.in
 stamp-h1
