@@ -87,11 +87,20 @@ void Sprite::draw()
     glBindTexture(GL_TEXTURE_2D, tex_id);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 0); glVertex3f(-m_w/2, 0, 0);
-    glTexCoord2f(m_pw, 0); glVertex3f(m_w/2, 0, 0);
-    glTexCoord2f(m_pw, m_ph); glVertex3f(m_w/2, m_h, 0);
-    glTexCoord2f(0, m_ph); glVertex3f(-m_w/2, m_h, 0);
-    glEnd();
+    float texcoords[] = { 0, 0,
+                          m_pw, 0,
+                          m_pw, m_ph,
+                          0, m_ph };
+    float vertices[] = { -m_w/2.f, 0.f, 0.f,
+                          m_w/2.f, 0.f, 0.f,
+                          m_w/2.f, m_h, 0.f,
+                         -m_w/2.f, m_h, 0.f };
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+    glDrawArrays(GL_QUADS, 0, 4);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_TEXTURE_2D);
 }

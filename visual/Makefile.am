@@ -11,5 +11,4 @@ libvisual_a_SOURCES = \
                       Renderer.cpp Renderer.h \
                       Isometric.cpp Isometric.h \
                       DemeterScene.cpp DemeterScene.h \
-                      widgets.cpp widgets.h \
                       Model.cpp Model.h

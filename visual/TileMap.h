@@ -12,6 +12,10 @@ namespace Coal {
   class Container;
 }
 
+namespace Mercator {
+  class Terrain;
+}
+
 #include <map>
 
 typedef std::pair<int, int> coord;
@@ -33,7 +37,7 @@ class TileMap {
     }
 
     void build(Coal::Container & map_base);
-    void draw(HeightMap & map_height, int, int);
+    void draw(Mercator::Terrain & map_height, int, int);
 };
 
 #endif // APOGEE_VISUAL_TILEMAP_H

@@ -2,6 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#error This file is removed from the build
+
 #ifndef VISUAL_WIDGETS_H
 #define VISUAL_WIDGETS_H
 

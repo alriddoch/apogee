@@ -61,7 +61,7 @@ void TileMap::build(Coal::Container & map_base)
 #endif
 }
 
-void TileMap::draw(HeightMap & map_height, int x_offset, int y_offset)
+void TileMap::draw(Mercator::Terrain & map_height, int x_offset, int y_offset)
 {
     for(int i = -10; i < 10; i++) {
         for(int j = -10; j < 10; j++) {

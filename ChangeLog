@@ -1,3 +1,11 @@
+2003-04-07  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/widgets.cpp, visual/widgets.h: Remove obsolete code.
+
+	* visual/Renderer.cpp, visual/Sprite.cpp, visual/Tile.cpp,
+	  visual/Tile.h, visual/TileMap.cpp, visual/TileMap.h:
+	  Replace discrete vertex calls with vertex arrays.
+
 2003-04-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/Application.h, app/IsoClient.h, app/IxClient.cpp,

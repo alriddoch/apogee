@@ -7,7 +7,9 @@
 
 struct SDL_Surface;
 
-class HeightMap;
+namespace Mercator {
+    class Terrain;
+}
 
 #include <string>
 #include <map>
@@ -35,7 +37,7 @@ class Tile {
 
     bool load(const std::string & filename);
     void draw();
-    void draw(const HeightMap &, int, int);
+    void draw(const Mercator::Terrain &, int, int);
     void select();
 
     bool loaded() const { return (tex_id != -1); }

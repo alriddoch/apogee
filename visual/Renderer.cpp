@@ -333,38 +333,26 @@ void Renderer::drawCal3DModel(Model * m, const Point3D & coords,
 
 void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
 {
-
+    GLfloat vertices[] = {
+        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
+        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
+        bbox.highCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
+        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
+        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
+        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
+        bbox.highCorner().x(), bbox.highCorner().y(), bbox.highCorner().z(),
+        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.highCorner().z() 
+    };
+    GLuint indices[] = { 0, 1, 3, 2, 7, 6, 4, 5, 0, 4, 1, 5,
+                         3, 7, 2, 6, 0, 3, 1, 2, 4, 7, 5, 6 };
     glPushMatrix();
-    // origin();
     glTranslatef(coords.x(), coords.y(), coords.z());
 
-    glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    glEnd();
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, indices);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
 }
