@@ -42,6 +42,9 @@ void DemeterScene::init()
     SDL_EnableUNICODE(1);
     SDL_WM_SetCaption("perigee", "demeter");
 
+    SDL_WM_GrabInput(SDL_GRAB_ON);
+    SDL_ShowCursor(0);
+
     settings = Demeter::Settings::GetInstance();
     settings->SetMediaPath("maps/");
     settings->SetScreenWidth(width);

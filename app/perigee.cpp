@@ -82,6 +82,22 @@ int main(int argc, char ** argv)
                     break;
             }
         }
+        int dx, dy;
+        SDL_GetRelativeMouseState(&dx, &dy);
+        cout << "[" << dx << ":" << dy << endl << flush;
+        if ((dx != 0) && (dy != 0)) {
+            int newRot = renderer->getRotation() + dx;
+            while (newRot >= 360) { newRot -= 360; };
+            renderer->setRotation(newRot);
+
+            int newElv = renderer->getElevation() + dy;
+            if (newElv < -90) { newElv = -90; }
+            if (newElv > 90) { newElv = 90; }
+            renderer->setElevation(newElv);
+
+            updated = true;
+        }
+
         // updated = con.poll() || updated;
         try {
             con.poll();
