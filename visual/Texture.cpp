@@ -87,6 +87,8 @@ unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
     }
 
     unsigned int tex_id = loadTexture(image, wrap, filter);
+    SDL_FreeSurface(image);
+
     textures()[filename] = tex_id;
     return tex_id;
 }

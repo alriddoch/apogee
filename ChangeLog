@@ -1,5 +1,9 @@
 2003-09-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Texture.cpp: Free textures once they have been allocated.
+
+2003-09-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Free up everything but the height
 	  points of a segment, once we have done building the display
 	  list for that segment.
