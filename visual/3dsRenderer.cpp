@@ -205,7 +205,9 @@ void m3dsRenderer::draw3dsNode(Renderer & r, Lib3dsNode * node)
       return;
     }
 
-    if (!node->user.p) {
+    VertexBuffer * vb = (VertexBuffer*)node->user.p;
+
+    if (!vb) {
         debug(std::cout << "Drawing as node" << std::endl << std::flush;);
         Lib3dsMesh *mesh=lib3ds_file_mesh_by_name(m_model, node->name);
         ASSERT(mesh);
@@ -216,14 +218,16 @@ void m3dsRenderer::draw3dsNode(Renderer & r, Lib3dsNode * node)
 
         std::cout << "Node" << std::endl << std::flush;
 
-        VertexBuffer * vb = new VertexBuffer();
+        vb = new VertexBuffer();
         node->user.p = (void*)vb;
 
+        compileVertexBuffer(mesh, vb);
+    } else if (!glIsList(vb->bobject)) {
+        Lib3dsMesh * mesh = lib3ds_file_mesh_by_name(m_model, node->name);
         compileVertexBuffer(mesh, vb);
     }
 
     Lib3dsObjectData *d;
-    VertexBuffer * vb = (VertexBuffer*)node->user.p;
 
     glPushMatrix();
     glMultMatrixf(&node->matrix[0][0]);
