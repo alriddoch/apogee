@@ -5,6 +5,7 @@
 #include "TerrainRenderer.h"
 
 #include "Texture.h"
+#include "GLU.h"
 
 #include "common/debug.h"
 
@@ -27,20 +28,17 @@ static const int segSize = 64;
 static GLfloat sx0[] = {0.125f, 0.f, 0.f, 0.f};
 static GLfloat ty0[] = {0.f, 0.125f, 0.f, 0.f};
 
-static GLfloat sx1[] = {0.109375, 0.f, 0.f, 0.f};
-static GLfloat ty1[] = {0.f, 0.109375, 0.f, 0.f};
+static GLfloat sx1[] = {0.015625f, 0.f, 0.f, 0.f};
+static GLfloat ty1[] = {0.f, 0.015625f, 0.f, 0.f};
 
 void TerrainRenderer::enableRendererState()
 {
     glEnable(GL_NORMALIZE);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
     glColor4f(1.f, 1.f, 1.f, 1.f);
-    glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnable(GL_BLEND);
 
-    // glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
@@ -48,41 +46,63 @@ void TerrainRenderer::enableRendererState()
     glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
     glTexGenfv(GL_S, GL_OBJECT_PLANE, sx0);
     glTexGenfv(GL_T, GL_OBJECT_PLANE, ty0);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-    // glActiveTexture(GL_TEXTURE1);
-    // glEnable(GL_TEXTURE_2D);
-    // glEnable(GL_TEXTURE_GEN_S);
-    // glEnable(GL_TEXTURE_GEN_T);
-    // glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    // glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-    // glTexGenfv(GL_S, GL_OBJECT_PLANE, sx1);
-    // glTexGenfv(GL_T, GL_OBJECT_PLANE, ty1);
+    glActiveTexture(GL_TEXTURE1);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGenfv(GL_S, GL_OBJECT_PLANE, sx1);
+    glTexGenfv(GL_T, GL_OBJECT_PLANE, ty1);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 void TerrainRenderer::disableRendererState()
 {
     // Can we do this using the state stack
 
-    // glActiveTexture(GL_TEXTURE1);
-    // glDisable(GL_TEXTURE_2D);
-    // glDisable(GL_TEXTURE_GEN_S);
-    // glDisable(GL_TEXTURE_GEN_T);
+    glActiveTexture(GL_TEXTURE1);
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
 
-    // glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_TEXTURE_GEN_S);
     glDisable(GL_TEXTURE_GEN_T);
 
     glDisable(GL_BLEND);
-    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_NORMALIZE);
+}
+
+void TerrainRenderer::generateAlphaTextures(Mercator::Segment * map)
+{
+    const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
+    Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
+
+    glGenTextures(surfaces.size(), m_alphaTextures);
+    for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
+        glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
+        gluBuild2DMipmaps(GL_TEXTURE_2D, GL_ALPHA, 65, 65, GL_ALPHA,
+                          GL_UNSIGNED_BYTE, (*I)->getData());
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+        GLenum er;
+        if ((er = glGetError()) != 0) {
+            std::cerr << "Booya " << gluErrorString(er)
+                      << std::endl << std::flush;
+        }
+    }
 }
 
 void TerrainRenderer::drawRegion(Mercator::Segment * map)
 {
-    glNormal3f(0.f, 0.f, 1.f);
     float harray[(segSize+1)*(segSize+1)*3];
     float * narray = map->getNormals();
     if (narray == 0) {
@@ -91,18 +111,15 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         narray = map->getNormals();
     }
     // Fill in the vertex Z coord, which varies
-    if (!map->isVertexCacheValid()) {
-        std::cout << "Populating vertex cache" << std::endl << std::flush;
-        int idx = -1;
-        for(int j = 0; j < (segSize + 1); ++j) {
-            for(int i = 0; i < (segSize + 1); ++i) {
-                float h = map->get(i,j);
-                harray[++idx] = i;
-                harray[++idx] = j;
-                harray[++idx] = h;
-            }
+    std::cout << "Populating vertex cache" << std::endl << std::flush;
+    int idx = -1;
+    for(int j = 0; j < (segSize + 1); ++j) {
+        for(int i = 0; i < (segSize + 1); ++i) {
+            float h = map->get(i,j);
+            harray[++idx] = i;
+            harray[++idx] = j;
+            harray[++idx] = h;
         }
-        map->setVertexCacheValid();
     }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
@@ -114,11 +131,13 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         if (!(*I)->m_shader.checkIntersect(**I)) {
             continue;
         }
-        glColorPointer(4, GL_UNSIGNED_BYTE, 0, (*I)->getData());
-        // glActiveTexture(GL_TEXTURE0);
+
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
-        // glActiveTexture(GL_TEXTURE1);
-        // glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
+                     
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
 
@@ -168,16 +187,22 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                 debug(std::cout << "Building display list for "
                                 << I->first << ", " << J->first
                                 << std::endl << std::flush;);
-                display_list = glGenLists(1);
-                glNewList(display_list, GL_COMPILE);
 
-                glPushMatrix();
-                glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+
                 Mercator::Segment * s = J->second;
                 if (!s->isValid()) {
                     s->populate();
                     s->populateSurfaces();
                 }
+
+                generateAlphaTextures(s);
+
+                display_list = glGenLists(1);
+                glNewList(display_list, GL_COMPILE);
+
+                glPushMatrix();
+                glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+
                 drawRegion(s);
                 glPopMatrix();
     

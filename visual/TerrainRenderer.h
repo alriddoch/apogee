@@ -21,13 +21,15 @@ class TerrainRenderer : public EntityRenderer
     DisplayListStore m_displayLists;
     int m_numLineIndeces;
     unsigned short * const m_lineIndeces;
-    GLuint m_textures[8]; //, m_texture2;
+    GLuint m_textures[8];
+    GLuint m_alphaTextures[8];
     GLuint m_landscapeList;
     bool m_haveTerrain;
 
     void enableRendererState();
     void disableRendererState();
 
+    void generateAlphaTextures(Mercator::Segment *);
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &, const WFMath::Point<3> & camPos);
     void drawSea(Mercator::Terrain &);

@@ -1,5 +1,12 @@
 2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Replace
+	  texturing algorithm based on color values to one based
+	  on an alpha texture. This code requires two texture units to
+	  operate.
+
+2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Remove
 	  obsolete code.
 
