@@ -1,4 +1,9 @@
-2003-12-07  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2003-12-08  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.cpp: Move GL setup code so it is called each
+	  time a new context might be set up.
+
+2003-12-08  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.cpp: Move fog initialisation to be with the
 	  rest of the OpenGL init code.
