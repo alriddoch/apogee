@@ -26,7 +26,7 @@ class IxClient : public GameClient {
     virtual ~IxClient() { }
 
     bool setup();
-    bool update();
+    bool update(float);
     bool event(SDL_Event &);
     void mouse(int x, int y);
 };

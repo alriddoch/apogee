@@ -29,7 +29,7 @@ bool HeightMap::load(const std::string & file)
     return true;
 }
 
-int HeightMap::get(int x, int y)
+int HeightMap::get(int x, int y) const
 {
     assert(m_heightImage != NULL);
 

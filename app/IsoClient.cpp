@@ -123,6 +123,7 @@ bool IsoClient::update(float secs)
     if (offset) {
         renderer.setXoffset(offset.X());
         renderer.setYoffset(offset.Y());
+        renderer.setZoffset(offset.Z());
     }
     renderer.clear();
     renderer.lightOn();

@@ -24,7 +24,7 @@ class Isometric : public Renderer {
     Isometric(int wdth, int hght);
 
     void init();
-    virtual void shapeView();
+    void shapeView();
 
     void Isometric::buildTileMap(CoalDatabase &);
   public:
@@ -35,34 +35,31 @@ class Isometric : public Renderer {
         return instance;
     }
 
-    virtual void draw3Dentity();
-    virtual void drawCal3DModel(Model *, const Vector3D & coords,
+    void drawCal3DModel(Model *, const Vector3D & coords,
                                 const Eris::Quaternion & orientation);
-    virtual void draw3DBox(const Vector3D & coords,
+    void draw3DBox(const Vector3D & coords,
                            const Eris::BBox & bbox);
-    virtual void draw3DArea(const Vector3D & coords,
-                            const Vector3D & bbox = Vector3D(),
-                            const Vector3D & bmedian = Vector3D());
-    virtual void drawEntity(Eris::Entity * ent);
-    virtual void drawWorld(Eris::Entity * wrld);
-    virtual void drawCharacter(Sprite *, float, float);
-    virtual void drawMapRegion(CoalRegion &, HeightMap &);
-    virtual void drawMapObject(CoalObject &);
-    virtual void drawMap(CoalDatabase &, HeightMap &);
-    virtual void drawGui();
-    virtual void resize(int,int);
-    virtual void clear();
-    virtual void viewScale(float);
-    virtual void viewPoint();
-    virtual void reorient();
-    virtual void orient();
-    virtual void translate();
-    virtual void origin();
-    virtual void lightOn();
-    virtual void lightOff();
-    virtual void update(float);
+    void draw3DArea(const Vector3D & coords,
+                    const Vector3D & bbox = Vector3D(),
+                    const Vector3D & bmedian = Vector3D());
+    void drawEntity(Eris::Entity * ent);
+    void drawWorld(Eris::Entity * wrld);
+    void drawMapRegion(CoalRegion &, HeightMap &);
+    void drawMapObject(CoalObject &);
+    void drawMap(CoalDatabase &, HeightMap &);
+    void drawGui();
+    void resize(int,int);
+    void clear();
+    void viewPoint();
+    void reorient();
+    void orient();
+    void translate();
+    void origin();
+    void lightOn();
+    void lightOff();
+    void update(float);
 
-    virtual const float meterSize() const { return 40.2492f; }
+    const float meterSize() const { return 40.2492f; }
 };
 
 #endif // APOGEE_ISOMETRIC_H

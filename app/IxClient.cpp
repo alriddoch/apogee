@@ -71,9 +71,10 @@ void IxClient::doWorld()
 #endif
 }
 
-bool IxClient::update()
+bool IxClient::update(float secs)
 {
     HeightMap foo;
+    renderer.update(secs);
     renderer.clear();
     renderer.lightOn();
     renderer.drawMap(map_database, foo);

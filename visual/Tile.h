@@ -7,6 +7,8 @@
 
 struct SDL_Surface;
 
+class HeightMap;
+
 #include <string>
 #include <map>
 
@@ -24,7 +26,7 @@ class Tile {
     static std::map<std::string, Tile *> * tiledb;
 
     int tex_id;
-    float tileSize;
+    int tileSize;
     float m_pw, m_ph;
   public:
     static Tile * get(const std::string & filename);
@@ -33,6 +35,7 @@ class Tile {
 
     bool load(const std::string & filename);
     void draw();
+    void draw(const HeightMap &, int, int);
     void select();
 
     bool loaded() const { return (tex_id != -1); }

@@ -17,7 +17,7 @@ class HeightMap {
     HeightMap();
 
     bool load(const std::string & file);
-    int get(int x, int y);
+    int get(int x, int y) const;
 };
 
 #endif // APOGEE_VISUAL_HEIGHTMAP_H

@@ -60,23 +60,7 @@ void Isometric::update(float secs)
     model->onUpdate(secs);
 }
 
-inline void Isometric::viewScale(float scale_factor)
-{
-#if 1
-    glScalef(scale_factor, scale_factor, scale_factor);
-#else
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float xscale = width * scale * scale_factor / meterSize();
-    float yscale = height * scale * scale_factor / meterSize();
-    glOrtho(-xscale/2.0f, xscale/2.0f,
-            -yscale/2.0f, yscale/2.0f,
-            -2000.0f * scale_factor, 2000.0f * scale_factor );
-    glMatrixMode(GL_MODELVIEW);
-#endif
-}
-
-inline void Isometric::viewPoint()
+void Isometric::viewPoint()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -112,7 +96,7 @@ inline void Isometric::orient()
 
 inline void Isometric::translate()
 {
-    glTranslatef(-x_offset,-y_offset,0.0f);
+    glTranslatef(-x_offset,-y_offset,-z_offset);
 }
 
 // This function moves the render cursor to the origin and rotates the
@@ -155,14 +139,6 @@ void Isometric::shapeView()
     glEnable(GL_BLEND);
     // glShadeModel(GL_SMOOTH);
     viewPoint();
-}
-
-void Isometric::drawCharacter(Sprite * character, float x, float y)
-{
-    origin();
-    glTranslatef(x,y,0);
-    reorient();
-    character->draw();
 }
 
 #if 0
@@ -221,51 +197,6 @@ void Isometric::draw3Dtest()
 }
 #endif
 
-void Isometric::draw3Dentity()
-{
-    origin();
-    glTranslatef(4,4,0.0);
-    // Lets draw a building
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-
-    glNormal3f(0, -1, 0);
-    glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
-    glTexCoord2f(0, 1); glVertex3f(0, 0, 5);
-    glTexCoord2f(1, 1); glVertex3f(5, 0, 5);
-    glTexCoord2f(1, 0); glVertex3f(5, 0, 0);
-
-    glNormal3f(-1, 0, 0);
-    glTexCoord2f(0, 0); glVertex3f(0, 5, 0);
-    glTexCoord2f(0, 1); glVertex3f(0, 5, 5);
-    glTexCoord2f(1, 1); glVertex3f(0, 0, 5);
-    glTexCoord2f(1, 0); glVertex3f(0, 0, 0);
- 
-    glNormal3f(1, 0, 0);
-    glTexCoord2f(1, 0); glVertex3f(0, 5, 0);
-    glTexCoord2f(1, 1); glVertex3f(0, 5, 5);
-    glTexCoord2f(0, 1); glVertex3f(5, 5, 5);
-    glTexCoord2f(0, 0); glVertex3f(5, 5, 0);
- 
-    glNormal3f(0, 1, 0);
-    glTexCoord2f(1, 0); glVertex3f(5, 5, 0);
-    glTexCoord2f(1, 1); glVertex3f(5, 5, 5);
-    glTexCoord2f(0, 1); glVertex3f(5, 0, 5);
-    glTexCoord2f(0, 0); glVertex3f(5, 0, 0);
-
-    glEnd();
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
-    glBegin(GL_QUADS);
-    glNormal3f(0, 0, 1);
-    glTexCoord2f(0, 0); glVertex3f(0, 0, 4.8);
-    glTexCoord2f(0, 1); glVertex3f(0, 5, 4.8);
-    glTexCoord2f(1, 1); glVertex3f(5, 5, 4.8);
-    glTexCoord2f(1, 0); glVertex3f(5, 0, 4.8);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
 void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
                                const Eris::Quaternion & orientation)
 {
@@ -276,7 +207,7 @@ void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
     orientation.asMatrix(orient);
     float omatrix[16];
     glMultMatrixf(&orient[0][0]);
-    viewScale(0.025f);
+    glScalef(0.025f, 0.025f, 0.025f);
     m->onRender();
     glPopMatrix();
 }
@@ -593,7 +524,8 @@ void Isometric::drawMap(CoalDatabase & map_base, HeightMap & map_height)
             if (t == NULL) { continue; }
             glPushMatrix();
             glTranslatef(x, y, 0);
-            t->draw();
+            t->draw(map_height, x, y);
+            // t->draw();
             glPopMatrix();
         }
     }
