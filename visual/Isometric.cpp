@@ -124,7 +124,7 @@ void Isometric::shapeView()
     glDepthFunc(GL_LESS);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-    glShadeModel(GL_SMOOTH);
+    // glShadeModel(GL_SMOOTH);
     viewPoint();
 }
 
@@ -386,6 +386,26 @@ void Isometric::drawMap(CoalDatabase & map_base)
         }
     }
 
+}
+
+void Isometric::drawGui()
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, width, 0, height, -20.0f, 20.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();                     // Reset The View
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    glTranslatef(200.0f, 200.0f, 0.0f);
+
+    glColor3f(1.0f,0.5f,0.5f);
+    glBegin(GL_QUADS);
+    glVertex3f(-100.0f, 100.0f, 0.0f);
+    glVertex3f( 100.0f, 100.0f, 0.0f);
+    glVertex3f( 100.0f,-100.0f, 0.0f);
+    glVertex3f(-100.0f,-100.0f, 0.0f);
+    glEnd();
 }
 
 void Isometric::resize(int wdth, int hght)

@@ -15,6 +15,7 @@ class Sprite {
   public:
     Sprite() : tex_id(-1), m_w(0), m_h(0), m_pw(0), m_ph(0) { }
 
+    bool load(const std::string & filename);
     bool load(const std::string & filename, const Renderer & renderer);
     void draw();
     float w() { return m_w; }

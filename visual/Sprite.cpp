@@ -13,17 +13,15 @@
 unsigned int Sprite::twoN(unsigned int size)
 {
     for(int i = 0; i < 12; i++) {
-        const unsigned int num = pow(2,i) - 1;
-        std::cout << i << " " << num << " " << std::endl << std::flush;
-        if ((size & ~num) == 0) {
-            std::cout << "woot" << std::endl << std::flush;
-            return num + 1;
+        const unsigned int num = pow(2,i);
+        if (size <= num) {
+            return num;
         }
     }
     return pow(2,12);
 }
 
-bool Sprite::load(const std::string & filename, const Renderer & renderer)
+bool Sprite::load(const std::string & filename)
 {
     SDL_Surface * image = IMG_Load(filename.c_str());
     if (image == NULL) {
@@ -59,8 +57,8 @@ bool Sprite::load(const std::string & filename, const Renderer & renderer)
         return false;
     }
     tex_id = Texture::loadTexture(image);
-    m_w = (float)sprite_w / renderer.meterSize();
-    m_h = (float)sprite_h / renderer.meterSize();
+    m_w = (float)sprite_w;
+    m_h = (float)sprite_h;
     m_pw = (float)sprite_w / textur_w;
     m_ph = (float)sprite_h / textur_h;
     SDL_FreeSurface(image);
@@ -68,6 +66,15 @@ bool Sprite::load(const std::string & filename, const Renderer & renderer)
     return true;
 }
 
+bool Sprite::load(const std::string & filename, const Renderer & renderer)
+{
+    bool ret = load(filename);
+    if (ret) {
+        m_w = m_w / renderer.meterSize();
+        m_h = m_w / renderer.meterSize();
+    }
+    return ret;
+}
 
 void Sprite::draw()
 {

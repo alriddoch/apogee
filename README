@@ -1,0 +1,4 @@
+This is apogee, an experimental codebase to trying and testing 3D client
+ideas for worldforge. It currently consists of a single codebase which
+builds two executables, apogee and perigee. apogee renders its view in
+the isometric projection, and perigee render in the perspective projection.

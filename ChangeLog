@@ -1,3 +1,30 @@
+2001-09-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/perigee.cpp: Renamed perspective version of the client perigee,
+	  and create new build target for it.
+
+	* app/IsoClient.h, app/IsoClient.cpp: Added new application class for
+	  the isometric version of the client.
+
+	* app/Editor.cpp: This is now the application class for perigee, the
+	  perspective version of the client.
+
+	* app/apogee.cpp: Switched back to isometric renderer, and moved
+	  to using the new IsoClient application class.
+
+	* visual/DemeterScene.cpp: Window title should be perigee for
+	  perspective renderer.
+
+	* visual/Isometric.cpp: Disabled smooth shading for performance while
+	  developing. Added drawGui() method for isometric renderer, similar
+	  to that for perspective.
+
+	* visual/Sprite.cpp: Fixed sprite loading code, and adapted it so
+	  it can be used for gui sprites as well as in game ones.
+
+	* visual/Texture.cpp: Removed deliberate corruption of textures for
+	  testing.
+
 2001-09-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.cpp: Removed old code from renderer base class.

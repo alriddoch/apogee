@@ -1,13 +1,20 @@
-bin_PROGRAMS = apogee # perigee
+bin_PROGRAMS = apogee perigee
 
 INCLUDES = $(GNOME_XML_CFLAGS)
 
 apogee_SOURCES = \
                  Application.h \
-                 Editor.cpp Editor.h \
+                 IsoClient.cpp IsoClient.h \
                  apogee.cpp
-#                 LeakTracer.cc \
-
-# Client.cpp Client.h \
 
 apogee_LDADD = ../visual/libvisual.a
+
+perigee_SOURCES = \
+                 Application.h \
+                 Editor.cpp Editor.h \
+                 perigee.cpp
+
+perigee_LDADD = ../visual/libvisual.a
+
+#                 LeakTracer.cc \
+

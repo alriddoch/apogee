@@ -40,7 +40,7 @@ void DemeterScene::init()
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_EnableUNICODE(1);
-    SDL_WM_SetCaption("apogee", "demeter");
+    SDL_WM_SetCaption("perigee", "demeter");
 
     settings = Demeter::Settings::GetInstance();
     settings->SetMediaPath("maps/");

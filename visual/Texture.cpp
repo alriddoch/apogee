@@ -98,7 +98,7 @@ int Texture::loadTexture(SDL_Surface * image)
     glGenTextures(1, (unsigned int *)&tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w/2, image->h/2, 0,
+    glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w, image->h, 0,
                  format, GL_UNSIGNED_BYTE, image->pixels);
     std::cout << image->w << " " << image->h << std::endl << std::flush;
     if (glGetError() != 0) {

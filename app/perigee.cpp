@@ -2,9 +2,9 @@
 
 #include <unistd.h>
 
-#include <visual/Isometric.h>
+#include <visual/DemeterScene.h>
 // #include <net/Connection.h>
-#include "IsoClient.h"
+#include "Editor.h"
 //#include "Client.h"
 
 // #include <world/World.h>
@@ -33,16 +33,16 @@ int main(int argc, char ** argv)
 
     std::string host(argv[1]), user(argv[2]), password;
 
-    Eris::Connection & con = * new Eris::Connection("apogee");
+    Eris::Connection & con = * new Eris::Connection("perigee");
 
-    Renderer * renderer = Isometric::Instance();
-    IsoClient * app = new IsoClient(*renderer, con);
+    Renderer * renderer = DemeterScene::Instance();
+    Editor * app = new Editor(*renderer, con);
 
     con.connect(host, 6767);
 
-    con.Failure.connect(SigC::slot(app, &IsoClient::netFailure));
-    con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));
-    con.Disconnected.connect(SigC::slot(app, &IsoClient::netDisconnected));
+    con.Failure.connect(SigC::slot(app, &Editor::netFailure));
+    con.Connected.connect(SigC::slot(app, &Editor::netConnected));
+    con.Disconnected.connect(SigC::slot(app, &Editor::netDisconnected));
 
     app->setup();
     app->update();

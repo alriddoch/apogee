@@ -2,7 +2,7 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include "Editor.h"
+#include "IsoClient.h"
 
 #include <visual/Renderer.h>
 #include <visual/Sprite.h>
@@ -28,29 +28,31 @@ using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
-void Editor::grid()
+void IsoClient::grid()
 {
     widgets::grid(renderer);
 }
 
-void Editor::compass()
+void IsoClient::compass()
 {
     widgets::compass(renderer);
 }
 
-void Editor::axis()
+void IsoClient::axis()
 {
     widgets::axis(renderer);
 }
 
-bool Editor::setup()
+bool IsoClient::setup()
 {
     CoalBladeLoader loader (map_database);
     loader.LoadMap ("blade2.xml");
     CoalDebug debug;
     // debug.Dump (map_database);
     character = new Sprite();
-    character->load("swinesherd_female_1_us_E_0.png",renderer);
+    character->load("swinesherd_female_1_us_E_0.png"); //,renderer);
+    bag = new Sprite();
+    bag->load("bag.png");
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -59,7 +61,7 @@ bool Editor::setup()
     return 0;
 }
 
-void Editor::doWorld()
+void IsoClient::doWorld()
 {
     if (world == NULL) {
         cout << "No world" << endl << flush;
@@ -93,25 +95,28 @@ void Editor::doWorld()
 #endif
 }
 
-bool Editor::update()
+bool IsoClient::update()
 {
     renderer.clear();
+    grid();
     renderer.lightOn();
     renderer.drawMap(map_database);
     renderer.origin();
     model->onUpdate(0.1);
     renderer.drawCal3DModel(model, 0, 0);
     doWorld();
+    compass();
+    axis();
     renderer.lightOff();
     renderer.drawGui();
-    // compass();
-    // axis();
+    glTranslatef(200.0f, 0.0f,1.0f);
+    bag->draw();
     // renderer.draw2Dtest();
     renderer.flip();
     return false;
 }
 
-bool Editor::event(SDL_Event & event)
+bool IsoClient::event(SDL_Event & event)
 {
     static int oldx = 0;
     static int oldy = 0;
@@ -189,59 +194,59 @@ bool Editor::event(SDL_Event & event)
     return false;
 }
 
-void Editor::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
+void IsoClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
 {
     std::cout << "TALK: " << t << std::endl << std::flush;
 }
 
-void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
+void IsoClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
     GameEntity chrcter(GameEntity::Instantiate());
     chrcter.SetParents(Atlas::Message::Object::ListType(1,"farmer"));
     chrcter.SetName("Apogee Dubneal");
-    chrcter.SetAttr("description", "a perigee person");
+    chrcter.SetAttr("description", "an apogee person");
     chrcter.SetAttr("sex", "female");
     world = player->createCharacter(chrcter);
 
-    lobby->Talk.connect(SigC::slot(this, &Editor::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this, &Editor::roomEnter));
+    lobby->Talk.connect(SigC::slot(this, &IsoClient::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(this, &IsoClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(this, &Editor::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this, &Editor::worldEnter));
+    world->EntityCreate.connect(SigC::slot(this, &IsoClient::worldEntityCreate));
+    world->Entered.connect(SigC::slot(this, &IsoClient::worldEnter));
 }
 
-void Editor::roomEnter(Eris::Room *r)
+void IsoClient::roomEnter(Eris::Room *r)
 {
     std::cout << "Enter room" << std::endl << std::flush;
 }
 
-void Editor::netFailure(std::string msg)
+void IsoClient::netFailure(std::string msg)
 {
     std::cout << "Got connection failure: " << msg << std::endl << std::flush;
 }
 
-void Editor::netConnected()
+void IsoClient::netConnected()
 {
     std::cout << "Connected to server!" << std::endl << std::flush;
 
     player = new Eris::Player();
     lobby = player->login(&connection, "ajr", "hel");
-    lobby->LoggedIn.connect(SigC::slot(this, &Editor::loginComplete));
+    lobby->LoggedIn.connect(SigC::slot(this, &IsoClient::loginComplete));
 }
 
-void Editor::netDisconnected()
+void IsoClient::netDisconnected()
 {
     std::cout << "Disconnected from the server" << std::endl << std::flush;
 }
 
-void Editor::worldEntityCreate(Eris::Entity *r)
+void IsoClient::worldEntityCreate(Eris::Entity *r)
 {
     std::cout << "Created character" << std::endl << std::flush;
 }
 
-void Editor::worldEnter(Eris::Entity *r)
+void IsoClient::worldEnter(Eris::Entity *r)
 {
     std::cout << "Enter world" << std::endl << std::flush;
 }
