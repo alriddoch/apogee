@@ -4,6 +4,22 @@
 
 #include "WorldEntity.h"
 
+#include <sigc++/object_slot.h>
+
+#include <SDL.h>
+
+WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge)
+              : Eris::Entity(ge), visEntity(*new VisualEntity())
+{
+    Moved.connect(SigC::slot(this, &WorldEntity::movedSignal));
+    updateTime = SDL_GetTicks();
+}
+
+void WorldEntity::movedSignal(Eris::Entity *, Eris::Coord)
+{
+    updateTime = SDL_GetTicks();
+}
+
 bool WEFactory::accept(const Atlas::Objects::Entity::GameEntity&)
 {
     return true;

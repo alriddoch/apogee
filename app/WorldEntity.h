@@ -12,11 +12,17 @@
 
 class WorldEntity : public Eris::Entity
 {
+    unsigned int updateTime;
   public:
     VisualEntity & visEntity;
 
-    WorldEntity(const Atlas::Objects::Entity::GameEntity &ge)
-              : Eris::Entity(ge), visEntity(*new VisualEntity()) { }
+    void movedSignal(Eris::Entity *, Eris::Coord);
+
+    WorldEntity(const Atlas::Objects::Entity::GameEntity &ge);
+
+    const unsigned int getTime() {
+        return updateTime;
+    }
 };
 
 class WEFactory : public Eris::Factory

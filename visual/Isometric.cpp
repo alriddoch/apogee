@@ -17,6 +17,8 @@
 #include "Sprite.h"
 #include "Model.h"
 
+#include <app/WorldEntity.h>
+
 #include <common/debug.h>
 
 static const bool debug_flag = false;
@@ -46,7 +48,7 @@ void Isometric::init()
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
-
+    model->setLodLevel(0.2f);
 }
 
 inline void Isometric::viewScale(float scale_factor)
@@ -374,15 +376,24 @@ void Isometric::drawEntity(Eris::Entity * ent)
     debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
+        Vector3D pos = e->getPosition();
+        WorldEntity * we = dynamic_cast<WorldEntity *>(e);
+        if (we != NULL) {
+            cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos;
+            pos = pos + Vector3D(e->getVelocity()) * ((worldTime - we->getTime())/1000);
+            cout << "=" << pos << endl << flush;
+        } else {
+            cout << "Eris::Entity is not a WorldEntity" << endl << flush;
+        }
         debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         << e->getBBox().u << e->getBBox().v
                         << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
         Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {
-            drawCal3DModel(model, e->getPosition());
+            drawCal3DModel(model, pos);
         } else {
-            draw3DBox(e->getPosition(), e->getBBox());
+            draw3DBox(pos, e->getBBox());
             drawEntity(e);
         }
     }
@@ -391,6 +402,7 @@ void Isometric::drawEntity(Eris::Entity * ent)
 
 void Isometric::drawWorld(Eris::Entity * wrld)
 {
+    worldTime = SDL_GetTicks();
     if (charType == NULL) {
         charType = Eris::TypeInfo::findSafe("character");
     }

@@ -15,6 +15,7 @@ class Isometric : public Renderer {
   private:
     Model * model;
     Eris::TypeInfo * charType;
+    unsigned int worldTime;
 
     Isometric() { throw RendererException(); }
     Isometric(int wdth, int hght);

@@ -1,3 +1,11 @@
+2001-12-11  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/WorldEntity.cpp, app/WorldEntity.h: Added code to manage a
+	  movement time stamp.
+
+	* visual/Isometric.cpp, visual/Isometric.h: Added very simple movement
+	  prediction, extrapolating from time of last update from server.
+
 2001-12-10  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/IsoClient.cpp: Properrly fixed button press detection.
