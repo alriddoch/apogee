@@ -12,6 +12,7 @@
 #include <Mercator/FillShader.h>
 #include <Mercator/ThresholdShader.h>
 #include <Mercator/DepthShader.h>
+#include <Mercator/GrassShader.h>
 #include <Mercator/Surface.h>
 
 #include <iostream>
@@ -205,6 +206,7 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     m_textures[1] = Texture::get("sand.png");
     m_textures[2] = Texture::get("rabbithill_grass_hh.png");
     m_textures[3] = Texture::get("dark.png");
+    m_textures[4] = Texture::get("snow.png");
 
     int idx = -1;
     for (int i = 0; i < (segSize + 1) - 1; ++i) {
@@ -229,9 +231,10 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     }
 
     m_terrain.addShader(new Mercator::FillShader());
-    m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f));
-    m_terrain.addShader(new Mercator::HighShader(1.f));
-    m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f));
+    m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f)); // Sandy beach
+    m_terrain.addShader(new Mercator::GrassShader(1.f, 27.f, .5f, 1.f)); // Grass
+    m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f)); // Underwater
+    m_terrain.addShader(new Mercator::HighShader(35.f)); // Snow
 }
 
 TerrainRenderer::~TerrainRenderer()

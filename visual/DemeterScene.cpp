@@ -47,8 +47,8 @@ void DemeterScene::shapeView()
     glEnable(GL_FOG);
     glFogf(GL_FOG_MODE,GL_LINEAR);
     glFogfv(GL_FOG_COLOR,fogColor);
-    glFogf(GL_FOG_START,maxViewDistance - 50.0f);
-    glFogf(GL_FOG_END,maxViewDistance - 25.0f);
+    glFogf(GL_FOG_START,maxViewDistance - 30.0f);
+    glFogf(GL_FOG_END,maxViewDistance - 15.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
 }
 
@@ -81,8 +81,8 @@ void DemeterScene::viewPoint()
     glTranslatef(-x_offset,-y_offset,-z_offset);
 
     static GLfloat AmbientColor[] = {0.3f, 0.3f, 0.3f, 1.f};
-    static GLfloat DiffuseColor[] = {1.f, 1.f, 0.8f, 1.f};
-    static GLfloat LightPos[] = {1.f, 1.f, 1.0, 0.0};
+    static GLfloat DiffuseColor[] = {1.f, 1.f, 0.95f, 1.f};
+    static GLfloat LightPos[] = {0.f, 1.f, 1.f, 0.f};
     static GLfloat lmodel_ambient[] = {0.f, 0.f, 0.f, 1.f};
     glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
