@@ -32,7 +32,7 @@ SDL_Surface * Texture::imageLoad(const std::string & filename)
 
     image = IMG_Load(filename.c_str());
     if ( image == NULL ) {
-        std::cerr << "Unable to load" << filename.c_str() << ":"
+        std::cerr << "Unable to load " << filename.c_str() << " : "
                   << SDL_GetError() << std::endl << std::flush;
         return(NULL);
     }
