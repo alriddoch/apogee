@@ -112,14 +112,18 @@ void GameClient::doWorld()
     if (!inGame) {
         return;
     }
-    assert(world != 0);
-    Eris::Entity * root = world->getRootEntity();
+    assert(m_world != 0);
+    Eris::Entity * root = m_world->getRootEntity();
     assert(root != 0);
     renderer.drawWorld(root);
 }
 
 bool GameClient::update(float secs)
 {
+    if (m_world != 0) {
+        m_world->tick();
+    }
+
     renderer.update(secs);
     if (inGame) {
         Point3D offset = getAbsCharPos();
@@ -176,9 +180,9 @@ void GameClient::charCreator()
 void GameClient::charListSync()
 {
     std::cout << "charListSync" << std::endl << std::flush;
-    assert(player != NULL);
-    player->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
-    player->refreshCharacterInfo();
+    assert(m_player != NULL);
+    m_player->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
+    m_player->refreshCharacterInfo();
 }
 
 void GameClient::charSelector()
@@ -187,7 +191,7 @@ void GameClient::charSelector()
     CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
     cs->selectSignal.connect(SigC::slot(*this, &GameClient::takeCharacter));
     cs->createSignal.connect(SigC::slot(*this, &GameClient::charCreator));
-    Eris::CharacterList cl = player->getCharacters();
+    Eris::CharacterList cl = m_player->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterList::const_iterator I = cl.begin(); I != cl.end(); ++I){
         std::cout << "Selecting from " << I->getId() << ":" << I->getName() << std::endl << std::flush;
@@ -207,28 +211,28 @@ void GameClient::createCharacter(const std::string & name,
     chrcter.setName(name);
     chrcter.setAttr("description", "a perigee person");
     chrcter.setAttr("sex", "female");
-    world = player->createCharacter(chrcter)->getWorld();
+    m_world = m_player->createCharacter(chrcter)->getWorld();
 
-    lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
+    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    world->registerFactory(new WEFactory(*this));
+    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_world->registerFactory(new WEFactory(*this));
 }
 
 void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
-    world = player->takeCharacter(chrcter)->getWorld();
-    std::cout << "Character taken, world = " << world << std::endl << std::flush;
+    m_world = m_player->takeCharacter(chrcter)->getWorld();
+    std::cout << "Character taken, world = " << m_world << std::endl << std::flush;
 
-    lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
+    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    world->registerFactory(new WEFactory(*this));
+    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_world->registerFactory(new WEFactory(*this));
 }
 
 void GameClient::roomEnter(Eris::Room *r)
@@ -275,18 +279,18 @@ void GameClient::loginCancel()
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
-    player = new Eris::Player(&connection);
-    player->login(name, password);
-    lobby = Eris::Lobby::instance();
-    lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_player = new Eris::Player(&connection);
+    m_player->login(name, password);
+    m_lobby = Eris::Lobby::instance();
+    m_lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
 }
 
 void GameClient::create(const std::string & name, const std::string & password)
 {
-    player = new Eris::Player(&connection);
-    player->createAccount(name, "", password);
-    lobby = Eris::Lobby::instance();
-    lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_player = new Eris::Player(&connection);
+    m_player->createAccount(name, "", password);
+    m_lobby = Eris::Lobby::instance();
+    m_lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
 }
 
 void GameClient::netDisconnected()
@@ -307,7 +311,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
-    character = dynamic_cast<AutonomousEntity*>(chr);
+    m_character = dynamic_cast<AutonomousEntity*>(chr);
 
 }
 
@@ -318,12 +322,12 @@ void GameClient::charMoved(const Point3D &)
 
 void GameClient::moveCharacter(const Point3D & pos)
 {
-    if (character == NULL) {
+    if (m_character == NULL) {
         return;
     }
 
     Point3D coords(pos);
-    Eris::Entity * ref = character->getContainer();
+    Eris::Entity * ref = m_character->getContainer();
     Eris::Entity * r;
     while ((r = ref->getContainer()) != NULL) {
         coords -= ref->getPosition();
@@ -333,12 +337,12 @@ void GameClient::moveCharacter(const Point3D & pos)
     Move m(Move::Instantiate());
 
     Atlas::Message::Element::MapType marg;
-    marg["id"] = character->getID();
-    marg["loc"] = character->getContainer()->getID();
+    marg["id"] = m_character->getID();
+    marg["loc"] = m_character->getContainer()->getID();
     marg["pos"] = coords.toAtlas();
     marg["velocity"] = Point3D(1,0,0).toAtlas();
     m.setArgs(Atlas::Message::Element::ListType(1, marg));
-    m.setFrom(character->getID());
+    m.setFrom(m_character->getID());
 
     connection.send(m);
     
@@ -350,10 +354,10 @@ const Point3D GameClient::getAbsCharPos()
         return Point3D();
     }
     float now = SDL_GetTicks();
-    Point3D pos = character->getPosition();
-    pos = pos + character->getVelocity() * (double)((now - character->getTime())/1000.0f);
-    Eris::Entity * root = world->getRootEntity();
-    for(Eris::Entity * ref = character->getContainer();
+    Point3D pos = m_character->getPosition();
+    pos = pos + m_character->getVelocity() * (double)((now - m_character->getTime())/1000.0f);
+    Eris::Entity * root = m_world->getRootEntity();
+    for(Eris::Entity * ref = m_character->getContainer();
         ref != NULL && ref != root;
         ref = ref->getContainer()) {
         pos = pos + ref->getPosition();

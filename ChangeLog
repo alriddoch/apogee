@@ -1,3 +1,12 @@
+2003-08-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.h, app/GameClient.cpp,
+	  app/IsoClient.cpp, app/IxClient.cpp: Add m_ prefix to
+	  member variables, for clarity.
+
+	* app/GameClient.cpp: Call Eris::World::tick() every frame,
+	  as required.
+
 2003-08-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.cpp: Stop using vertex cache as rendering

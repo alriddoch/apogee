@@ -60,7 +60,7 @@ bool IxClient::event(SDL_Event & event)
                     oldScl = renderer.getScale();
                 }
                 if (event.button.button == SDL_BUTTON_LEFT && inGame) {
-                    Eris::Entity * we = world->getRootEntity();
+                    Eris::Entity * we = m_world->getRootEntity();
                     Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
                                                                 event.motion.y);
                     if (e == we) {

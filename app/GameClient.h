@@ -42,11 +42,12 @@ class GameClient : public Application {
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false),
-               player(NULL), lobby(NULL), world(NULL), character(NULL) { }
-    Eris::Player * player;
-    Eris::Lobby * lobby;
-    Eris::World * world;
-    AutonomousEntity * character;
+               m_player(NULL), m_lobby(NULL), m_world(NULL),
+               m_character(NULL) { }
+    Eris::Player * m_player;
+    Eris::Lobby * m_lobby;
+    Eris::World * m_world;
+    AutonomousEntity * m_character;
 
     bool setup();
     bool update(float);
