@@ -398,6 +398,10 @@ bool Cal3dModel::onInit(const std::string& strFilename)
     m_calCoreModel.setCoreMaterialId(materialId, 0, materialId);
   }
 
+  // Calculate Bounding Boxes
+
+  m_calCoreModel.getCoreSkeleton()->calculateBoundingBox(&m_calCoreModel);
+
   // create the model instance from the loaded core model
   if(!m_calModel.create(&m_calCoreModel))
   {
@@ -465,6 +469,73 @@ void Cal3dModel::renderSkeleton()
   glEnd();
   glPointSize(1.0f);
 }
+
+//----------------------------------------------------------------------------//
+// Render the bounding boxes of a model                                       //
+//----------------------------------------------------------------------------//
+
+void Cal3dModel::renderBoundingBox()
+{  
+
+   CalSkeleton *pCalSkeleton = m_calModel.getSkeleton();
+
+   pCalSkeleton->calculateBoundingBox();
+
+   std::vector<CalBone*> &vectorCoreBone = pCalSkeleton->getVectorBone();
+
+   glColor3f(1.0f, 1.0f, 1.0f);
+   glBegin(GL_LINES);      
+
+   for(size_t boneId=0;boneId<vectorCoreBone.size();++boneId)
+   {
+      CalBoundingBox & calBoundingBox  = vectorCoreBone[boneId]->getBoundingBox();
+
+	  CalVector p[8];
+	  calBoundingBox.computePoints(p);
+
+
+	  glVertex3f(p[0].x,p[0].y,p[0].z);
+	  glVertex3f(p[1].x,p[1].y,p[1].z);
+
+	  glVertex3f(p[0].x,p[0].y,p[0].z);
+	  glVertex3f(p[2].x,p[2].y,p[2].z);
+
+	  glVertex3f(p[1].x,p[1].y,p[1].z);
+	  glVertex3f(p[3].x,p[3].y,p[3].z);
+
+	  glVertex3f(p[2].x,p[2].y,p[2].z);
+	  glVertex3f(p[3].x,p[3].y,p[3].z);
+
+	  glVertex3f(p[4].x,p[4].y,p[4].z);
+	  glVertex3f(p[5].x,p[5].y,p[5].z);
+
+	  glVertex3f(p[4].x,p[4].y,p[4].z);
+	  glVertex3f(p[6].x,p[6].y,p[6].z);
+
+	  glVertex3f(p[5].x,p[5].y,p[5].z);
+	  glVertex3f(p[7].x,p[7].y,p[7].z);
+
+	  glVertex3f(p[6].x,p[6].y,p[6].z);
+	  glVertex3f(p[7].x,p[7].y,p[7].z);
+
+	  glVertex3f(p[0].x,p[0].y,p[0].z);
+	  glVertex3f(p[4].x,p[4].y,p[4].z);
+
+	  glVertex3f(p[1].x,p[1].y,p[1].z);
+	  glVertex3f(p[5].x,p[5].y,p[5].z);
+
+	  glVertex3f(p[2].x,p[2].y,p[2].z);
+	  glVertex3f(p[6].x,p[6].y,p[6].z);
+
+	  glVertex3f(p[3].x,p[3].y,p[3].z);
+	  glVertex3f(p[7].x,p[7].y,p[7].z);  
+
+   }
+
+   glEnd();
+
+}
+
 
 //----------------------------------------------------------------------------//
 // Render the mesh of the model                                               //
@@ -565,7 +636,7 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
         textureCoordinateCount = pCalRenderer->getTextureCoordinates(0, &meshTextureCoordinates[0][0]);
 
         // get the faces of the submesh
-        static int meshFaces[50000][3];
+        static CalIndex meshFaces[50000][3];
         int faceCount;
         faceCount = pCalRenderer->getFaces(&meshFaces[0][0]);
 
@@ -589,7 +660,11 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
         }
 
         // draw the submesh
-        glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, &meshFaces[0][0]);
+        
+        if(sizeof(CalIndex)==2)
+            glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_SHORT, &meshFaces[0][0]);
+        else
+            glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, &meshFaces[0][0]);
 
         // disable the texture coordinate state if necessary
         if((pCalRenderer->getMapCount() > 0) && (textureCoordinateCount > 0))

@@ -73,6 +73,7 @@ protected:
   void selectMesh();
   void renderMesh(bool bWireframe, bool bLight);
   void renderSkeleton();
+  void renderBoundingBox();
 };
 
 #endif // VISUAL_MODEL_H

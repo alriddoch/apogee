@@ -1,5 +1,11 @@
 2005-02-02  Al Riddoch  <alriddoch@zepler.org>
 
+	* visual/Model.h, visual/Model.cpp: Make some tweaks to model handling
+	  to keep up to date with the version of this class provided with
+	  cal3d 0.9.1
+
+2005-02-02  Al Riddoch  <alriddoch@zepler.org>
+
 	* visual/Model.cpp: Handle action animations as well as loops.
 	  Report syntax errors more cleanly.
 
