@@ -339,7 +339,7 @@ void Isometric::drawGui()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, width, 0, height, -20.0f, 20.0f);
+    glOrtho(0, width, 0, height, -800.0f, 800.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     //glClear(GL_DEPTH_BUFFER_BIT);

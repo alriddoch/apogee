@@ -19,7 +19,6 @@ namespace Coal {
 
 class Isometric : public Renderer {
   private:
-    Model * model;
     TileMap * tilemap;
     Eris::TypeInfo * charType;
     float worldTime;

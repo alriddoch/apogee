@@ -124,7 +124,7 @@ GLint Gui::select(int x, int y)
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT,viewport);
     gluPickMatrix(x, renderer.getHeight() - y, 5, 5, viewport);
-    glOrtho(0, renderer.getWidth(), 0, renderer.getHeight(), -20.0f, 20.0f);
+    glOrtho(0, renderer.getWidth(), 0, renderer.getHeight(), -800.0f, 800.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

@@ -83,9 +83,9 @@ void DemeterScene::init()
          << endl << flush;
 #endif
 
-    x_offset = -4.0f;
-    y_offset = -4.0f;
-    z_offset = 2.0f;
+    // x_offset = -4.0f;
+    // y_offset = -4.0f;
+    // z_offset = 2.0f;
 
     elevation = 10;
     rotation = 45;
@@ -175,7 +175,7 @@ inline void DemeterScene::viewPoint()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glEnable(GL_DEPTH_TEST);
-    glTranslatef(0.0f, -1.0f, -5.0f);
+    glTranslatef(0.0f, 0.0f, -5.0f);
 }
 
 inline void DemeterScene::reorient()
@@ -188,6 +188,7 @@ inline void DemeterScene::orient()
 {
     glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+    glTranslatef(0.0f, 0.0f, -2.5f);
 }
 
 inline void DemeterScene::translate()
@@ -219,7 +220,6 @@ void DemeterScene::lightOff()
 void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
                                   const WFMath::Quaternion & orientation)
 {
-#if 1
     glPushMatrix();
     glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
@@ -236,15 +236,6 @@ void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
     glScalef(0.025f, 0.025f, 0.025f);
     m->onRender();
     glPopMatrix();
-#else
-    origin();
-    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.x(), terrain->GetHeight() / 2.0f + coords.y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
-    std::cout << "Transl " << characterElevation << std::endl << std::flush;
-    glTranslatef(coords.x(),coords.y(),characterElevation);
-    viewScale(0.025f);
-    m->onRender();
-    //viewScale(1.0f);
-#endif
 }
 
 void DemeterScene::draw3DBox(const Point3D & coords,
@@ -361,7 +352,7 @@ void DemeterScene::drawGui()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, width, 0, height, -20.0f, 20.0f);
+    glOrtho(0, width, 0, height, -800.0f, 800.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     // glClear(GL_DEPTH_BUFFER_BIT);

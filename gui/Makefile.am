@@ -7,4 +7,6 @@ libgui_a_SOURCES = Gui.cpp Gui.h \
 		   Alert.cpp Alert.h \
 		   Button.cpp Button.h \
 		   TextField.cpp TextField.h \
-		   Dialogue.cpp Dialogue.h
+		   Dialogue.cpp Dialogue.h \
+		   Option.cpp Option.h \
+		   CharSelector.cpp CharSelector.h

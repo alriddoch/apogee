@@ -25,7 +25,6 @@ class DemeterScene : public Renderer {
     Demeter::Terrain * terrain;
     Demeter::Settings * settings;
 
-    Model * model;
     TileMap * tilemap;
     Eris::TypeInfo * charType;
     float worldTime;

@@ -8,6 +8,8 @@
 #include <visual/Renderer.h>
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
+#include <gui/Option.h>
+#include <gui/CharSelector.h>
 #include <gui/Alert.h>
 
 #include <Eris/Player.h>
@@ -65,11 +67,46 @@ void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
+    Option * o = new Option(*gui, renderer.getWidth() / 2,
+                                  renderer.getHeight() / 2,
+                                  "Select", "Create");
+    o->buttonOneSignal.connect(SigC::slot(this, &GameClient::charListSync));
+    o->buttonTwoSignal.connect(SigC::slot(this, &GameClient::charCreator));
+    gui->addWidget(o);
+}
+
+void GameClient::charCreator()
+{
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
     d->addField("name", "Apogee Dubneal");
     d->addField("type", "farmer");
     d->oButtonSignal.connect(SigC::slot(this, &GameClient::createCharacter));
     gui->addWidget(d);
+}
+
+void GameClient::charListSync()
+{
+    std::cout << "charListSync" << std::endl << std::flush;
+    assert(player != NULL);
+    player->GotAllCharacters.connect(SigC::slot(this, &GameClient::charSelector));
+    player->refreshCharacterInfo();
+}
+
+void GameClient::charSelector()
+{
+    std::cout << "charSelector" << std::endl << std::flush;
+    CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
+    cs->selectSignal.connect(SigC::slot(this, &GameClient::takeCharacter));
+    cs->createSignal.connect(SigC::slot(this, &GameClient::charCreator));
+    Eris::CharacterList cl = player->getCharacters();
+    std::set<std::pair<std::string, std::string> > charList;
+    for(Eris::CharacterList::const_iterator I = cl.begin(); I != cl.end(); ++I){
+        std::cout << "Selecting from " << I->GetId() << ":" << I->GetName() << std::endl << std::flush;
+        charList.insert(std::pair<std::string,std::string>(I->GetId(),I->GetName()));
+    }
+    cs->addCharacters(charList);
+    
+    gui->addWidget(cs);
 }
 
 void GameClient::createCharacter(const std::string & name,
@@ -89,6 +126,11 @@ void GameClient::createCharacter(const std::string & name,
     world->EntityCreate.connect(SigC::slot(this,&GameClient::worldEntityCreate));
     world->Entered.connect(SigC::slot(this,&GameClient::worldEnter));
     world->registerFactory(new WEFactory());
+}
+
+void GameClient::takeCharacter(const std::string & chrcter)
+{
+    world = player->takeCharacter(chrcter);
 }
 
 void GameClient::roomEnter(Eris::Room *r)

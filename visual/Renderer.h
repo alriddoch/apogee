@@ -42,6 +42,8 @@ class Renderer {
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
   public:
+    Model * model;
+
     //static Renderer * Instance(int width = 640, int height = 480) {
         //if (instance == NULL) {
             //instance = new Renderer(width, height);

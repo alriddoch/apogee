@@ -1,5 +1,29 @@
 2002-04-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Option.h, gui/Option.cpp: gui widget that allows the user
+	  to be asked an either/or question.
+
+	* gui/CharSelector.h, gui/CharSelector.cpp: gui widget that allows
+	  the user to pick an existing character.
+
+	* visual/Renderer.h, visual/Isometric.h, visual/DemeterScene.h:
+	  Make the temporary model pointer common and public.
+
+	* visual/Isometric.cpp, visual/DemeterScene.cpp, gui/Gui.cpp:
+	  Increase the depth available for gui drawing so that models
+	  can be added to the gui.
+
+	* visual/DemeterScene.cpp: Clean off viewpoint control code.
+	  Remove obsolete cal3d drawing code.
+
+	* gui/Gui.h: Allow widgets access to the renderer.
+
+	* app/GameClient.h, app/GameClient.cpp: Implement code for
+	  optionally taking control of existing character using the
+	  charselector widget.
+
+2002-04-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/IxClient.cpp, app/IxClient.h: Add flag used to toggle between
 	  mouse used to control view, and mouse used with ui.
 

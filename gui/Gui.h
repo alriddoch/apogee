@@ -18,11 +18,12 @@ typedef std::map<int, Widget *> widgmap;
 typedef std::list<GLuint> hitlist;
 
 class Gui {
+  public:
+    Renderer & renderer;
   private:
     GLuint selectBuf[512];
     GLuint textBase;
     GLuint textTexture;
-    Renderer & renderer;
     int nameCount;
     GLint inMotion;
     int mx,my;

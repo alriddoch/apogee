@@ -50,9 +50,14 @@ class GameClient : public Application {
 
     void login(const std::string &, const std::string &);
     void createCharacter(const std::string &, const std::string &);
+    void takeCharacter(const std::string &);
 
     void lobbyTalk(Eris::Room *r, const std::string& nm, const std::string& t);
     void loginComplete(const Atlas::Objects::Entity::Player &p);
+
+    void charCreator();
+    void charListSync();
+    void charSelector();
 
     void roomEnter(Eris::Room *r);
     // void roomAppear(Eris::Room *r, std::string id);
