@@ -50,7 +50,7 @@ Renderer::~Renderer()
 
 bool Renderer::init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE) != 0) { 
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK|SDL_INIT_NOPARACHUTE) != 0) { 
         std::cerr << "Failed to initialise video subsytem"
                   << std::endl << std::flush;
         return false;
@@ -62,6 +62,20 @@ bool Renderer::init()
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+    int sticks = SDL_NumJoysticks();
+    if (sticks > 0) {
+        SDL_Joystick * stick = SDL_JoystickOpen(0);
+        int axes = SDL_JoystickNumAxes(stick); // Returns the number of joysitck axes
+        int buttons = SDL_JoystickNumButtons(stick); // Returns the number of joysitck buttons
+        int balls = SDL_JoystickNumBalls(stick); // Returns the number of joysitck balls
+        int hats = SDL_JoystickNumHats(stick); // Returns the number of joysitck hats
+        std::cout << "Querying the first of " << sticks << " joysticks";
+        std::cout << "It has " << axes << " axes, " << buttons << " buttons, "
+                  << balls << " balls and " << hats << " hats"
+                  << std::endl << std::flush;
+
+    }
 
     videoModes = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWSURFACE);
 
@@ -88,7 +102,7 @@ bool Renderer::init()
 
     Texture::getDefault();
 
-    std::string extensions = (char *)glGetString(GL_EXTENSIONS);
+    std::string extensions((const char *)glGetString(GL_EXTENSIONS));
 
     std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
 
