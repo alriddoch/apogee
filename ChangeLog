@@ -1,5 +1,26 @@
 2003-08-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* common/Vector3D.h: Declare vectors for Point<3> addition.
+	  I know this is wrong, but the decision to use Point<3> requires
+	  it.
+
+	* visual/TerrainRenderer.h, visual/EntityRenderer.h,
+	  visual/EntityRenderer.cpp, visual/Cal3dRenderer.h,
+	  visual/Cal3dRenderer.cpp, visual/3dsRenderer.h,
+	  visual/3dsRenderer.cpp: Change cam position to
+	  a point rather than a vector, and pass it to the select
+	  method as well as the render method.
+
+	* visual/Renderer.cpp: Remove sky code, now in perspective
+	  renderer. Calculate camera position relative to 
+	  each entity being rendered, and pass it to the renderer
+	  when rendering or selecting.
+
+	* visual/TerrainRenderer.cpp: Use camera position to select
+	  an area of surrounding segments to render.
+
+2003-08-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* Remove old tile code from the build.
 
 2003-08-16  Al Riddoch  <ajr@ecs.soton.ac.uk>

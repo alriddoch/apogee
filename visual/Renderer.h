@@ -88,12 +88,13 @@ class Renderer {
     float getZ(int, int);
     const Point3D getWorldCoord(int, int, float);
 
-    void drawEntity(Eris::Entity * ent);
+    void drawEntity(Eris::Entity * ent, const Point3D & camPos);
     void drawWorld(Eris::Entity * wrld);
     virtual void drawSky() = 0;
     void drawGui();
 
-    void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);
+    void selectEntity(Eris::Entity * ent, const Point3D & camPos,
+                      SelectMap & names, GLuint & next);
     Eris::Entity * selectWorld(Eris::Entity *, int, int);
 
     void resize(int,int);

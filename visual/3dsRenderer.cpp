@@ -127,10 +127,10 @@ m3dsRenderer::~m3dsRenderer()
 {
 }
 
-void m3dsRenderer::render(Renderer &)
+void m3dsRenderer::render(Renderer &, const WFMath::Point<3> &)
 {
 }
 
-void m3dsRenderer::select(Renderer &)
+void m3dsRenderer::select(Renderer &, const WFMath::Point<3> &)
 {
 }

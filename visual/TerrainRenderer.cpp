@@ -116,25 +116,31 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
 using Mercator::Terrain;
 
-void TerrainRenderer::drawMap(Mercator::Terrain & t)
+void TerrainRenderer::drawMap(Mercator::Terrain & t,
+                              const WFMath::Point<3> & camPos)
 {
     // m_landscapeList = glGenLists(1);
     // glNewList(m_landscapeList, GL_COMPILE);
+
+    long lowXBound = lrintf(camPos[0] / segSize) - 2,
+         upXBound = lrintf(camPos[0] / segSize) + 2,
+         lowYBound = lrintf(camPos[1] / segSize) - 2,
+         upYBound = lrintf(camPos[1] / segSize) + 2;
 
     enableRendererState();
 
     const Terrain::Segmentstore & segs = t.getTerrain();
 
     // Terrain::Segmentstore::const_iterator I = segs.begin();
-    Terrain::Segmentstore::const_iterator I = segs.lower_bound(-1);
-    Terrain::Segmentstore::const_iterator K = segs.upper_bound(1);
+    Terrain::Segmentstore::const_iterator I = segs.lower_bound(lowXBound);
+    Terrain::Segmentstore::const_iterator K = segs.upper_bound(upXBound);
     for (; I != K; ++I) {
         const Terrain::Segmentcolumn & col = I->second;
         TerrainRenderer::DisplayListStore::iterator M = m_displayLists.find(I->first);
 
         // Terrain::Segmentcolumn::const_iterator J = col.begin();
-        Terrain::Segmentcolumn::const_iterator J = col.lower_bound(-1);
-        Terrain::Segmentcolumn::const_iterator L = col.upper_bound(1);
+        Terrain::Segmentcolumn::const_iterator J = col.lower_bound(lowYBound);
+        Terrain::Segmentcolumn::const_iterator L = col.upper_bound(upYBound);
         for (; J != L; ++J) {
             DisplayListColumn & dcol = (M == m_displayLists.end()) ? 
                                            m_displayLists[I->first] :
@@ -292,18 +298,18 @@ TerrainRenderer::~TerrainRenderer()
 {
 }
 
-void TerrainRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
+void TerrainRenderer::render(Renderer &, const WFMath::Point<3> & camPos)
 {
     if (!m_haveTerrain) {
         readTerrain();
         m_haveTerrain = true;
     }
-    drawMap(m_terrain);
+    drawMap(m_terrain, camPos);
     drawSea(m_terrain);
 }
 
-void TerrainRenderer::select(Renderer &)
+void TerrainRenderer::select(Renderer &, const WFMath::Point<3> & camPos)
 {
-    drawMap(m_terrain);
+    drawMap(m_terrain, camPos);
     // selectTerrain(m_terrain);
 }

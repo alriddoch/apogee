@@ -206,7 +206,7 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
     glMultMatrixf(&orient[0][0]);
 }
 
-void Renderer::drawEntity(Eris::Entity * ent)
+void Renderer::drawEntity(Eris::Entity * ent, const Point3D & cp)
 {
     Point3D pos = ent->getPosition();
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
@@ -218,12 +218,13 @@ void Renderer::drawEntity(Eris::Entity * ent)
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
+    Point3D camPos = cp; camPos -= pos;
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
     orient(ent->getOrientation());
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re != 0) {
-        re->m_drawer->render(*this, Vector3D());
+        re->m_drawer->render(*this, camPos);
     }
 
     int numEnts = ent->getNumMembers();
@@ -235,7 +236,7 @@ void Renderer::drawEntity(Eris::Entity * ent)
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
-        drawEntity(e);
+        drawEntity(e, camPos);
     }
     glPopMatrix();
 }
@@ -243,101 +244,10 @@ void Renderer::drawEntity(Eris::Entity * ent)
 void Renderer::drawWorld(Eris::Entity * wrld)
 {
     worldTime = SDL_GetTicks();
+    Point3D camPos(x_offset, y_offset, z_offset);
 
-    drawEntity(wrld);
+    drawEntity(wrld, camPos);
 }
-
-#if 0
-void Renderer::drawSky()
-{
-    static GLint t_front = -1,
-                 t_back = -1,
-                 t_left = -1,
-                 t_right = -1,
-                 t_up = -1;
-    static float vertices[] = { -1, -1, -1,
-                                 1, -1, -1,
-                                 1,  1, -1,
-                                -1,  1, -1,
-                                -1, -1,  1,
-                                 1, -1,  1,
-                                 1,  1,  1,
-                                -1,  1,  1 };
-    static float fb_tcoords[] = { 1, 0,
-                                  0, 0,
-                                  1, 0,
-                                  0, 0,
-                                  1, 1,
-                                  0, 1,
-                                  1, 1,
-                                  0, 1 };
-    static float lr_tcoords[] = { 0, 0,
-                                  1, 0,
-                                  0, 0,
-                                  1, 0,
-                                  0, 1,
-                                  1, 1,
-                                  0, 1,
-                                  1, 1 };
-    static float ud_tcoords[] = { 0, 0,
-                                  1, 0,
-                                  1, 1,
-                                  0, 1,
-                                  0, 1,
-                                  1, 1,
-                                  1, 0,
-                                  0, 0 };
-    static GLubyte front[] = { 3, 2, 6, 7 };
-    static GLubyte back[] = { 1, 0, 4, 5 };
-    static GLubyte left[] = { 0, 3, 7, 4 };
-    static GLubyte right[] = { 2, 1, 5, 6 };
-    static GLubyte up[] = { 7, 6, 5, 4 };
-    // static GLubyte down[] = { 0, 1, 2, 3 };
-    if (t_front == -1) {
-        t_front = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
-        t_back = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
-        t_left = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png", false);
-        t_right = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png", false);
-        t_up = Texture::get("media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png", false);
-    }
-
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    projection();
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
-    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-
-    glDepthMask(GL_FALSE);
-
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_TEXTURE_COORD_ARRAY);
-
-    glTexCoordPointer(2, GL_FLOAT, 0, fb_tcoords);
-    glBindTexture(GL_TEXTURE_2D, t_front);
-    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, front);
-    glBindTexture(GL_TEXTURE_2D, t_back);
-    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, back);
-
-    glTexCoordPointer(2, GL_FLOAT, 0, lr_tcoords);
-    glBindTexture(GL_TEXTURE_2D, t_left);
-    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, left);
-    glBindTexture(GL_TEXTURE_2D, t_right);
-    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, right);
-
-    glTexCoordPointer(2, GL_FLOAT, 0, ud_tcoords);
-    glBindTexture(GL_TEXTURE_2D, t_up);
-    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_BYTE, up);
-
-    glDisable(GL_TEXTURE_COORD_ARRAY);
-    glDisable(GL_TEXTURE_2D);
-    
-    glDepthMask(GL_TRUE);
-}
-#endif
 
 void Renderer::drawGui()
 {
@@ -350,7 +260,8 @@ void Renderer::drawGui()
     glDisable(GL_CULL_FACE);
 }
 
-void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
+void Renderer::selectEntity(Eris::Entity * ent, const Point3D & cp,
+                            SelectMap & name, GLuint & next)
 {
     Point3D pos = ent->getPosition();
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
@@ -362,6 +273,7 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
     }
+    Point3D camPos = cp; camPos -= pos;
     glLoadName(++next);
     name[next] = ent;
     glPushMatrix();
@@ -369,7 +281,7 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
     orient(ent->getOrientation());
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re != 0) {
-        re->m_drawer->select(*this);
+        re->m_drawer->select(*this, camPos);
     }
 
     int numEnts = ent->getNumMembers();
@@ -382,7 +294,7 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
             debug(std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;);
             continue;
         }
-        selectEntity(e, name, next);
+        selectEntity(e, camPos, name, next);
     }
     glPopMatrix();
 }
@@ -410,7 +322,9 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
     glPushName(nextName);
     debug(std::cout << "SELECTING" << std::endl << std::flush;);
 
-    selectEntity(wrld, nameMap, nextName);
+    Point3D camPos(x_offset, y_offset, z_offset);
+
+    selectEntity(wrld, camPos, nameMap, nextName);
 
     debug(std::cout << "DONE ENITTIES" << std::endl << std::flush;);
     glPopName();

@@ -10,4 +10,10 @@
 typedef WFMath::Point<3> Point3D;
 typedef WFMath::Vector<3> Vector3D;
 
+Point3D & operator+=(Point3D & lhs, const Point3D & rhs);
+Point3D & operator-=(Point3D & lhs, const Point3D & rhs);
+
+const Point3D operator+(const Point3D & lhs, const Point3D & rhs);
+// const Point3D operator-(const Point3D & lhs, const Point3D & rhs);
+
 #endif // VECTOR_3D_H

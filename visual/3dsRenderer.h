@@ -20,8 +20,8 @@ class m3dsRenderer : public EntityRenderer
     m3dsRenderer(Renderer &, Eris::Entity & e);
     virtual ~m3dsRenderer();
 
-    virtual void render(Renderer &);
-    virtual void select(Renderer &);
+    virtual void render(Renderer &, const WFMath::Point<3> &);
+    virtual void select(Renderer &, const WFMath::Point<3> &);
 };
 
 #endif // APOGEE_M3DS_RENDERER_H

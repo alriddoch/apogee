@@ -51,12 +51,12 @@ Cal3dRenderer::~Cal3dRenderer()
 {
 }
 
-void Cal3dRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
+void Cal3dRenderer::render(Renderer &, const WFMath::Point<3> & camPos)
 {
     drawCal3dModel(m_default);
 }
 
-void Cal3dRenderer::select(Renderer &)
+void Cal3dRenderer::select(Renderer &, const WFMath::Point<3> & camPos)
 {
     selectCal3dModel(m_default);
 }
