@@ -98,8 +98,7 @@ bool Editor::update()
     //renderer.clear();
     renderer.drawMap(map_database);
     // grid();
-    renderer.viewPoint();
-    renderer.orient();
+    renderer.origin();
     // renderer.draw3Dentity();
     // renderer.drawCharacter(character, 1, 2);
     model->onUpdate(0.1);

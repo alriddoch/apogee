@@ -51,21 +51,26 @@ void DemeterScene::init()
 
     const int maxNumVisibleTriangles = 40000;
 
-    terrain = new Demeter::Terrain("Test.map", maxNumVisibleTriangles, false);
+    terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
     terrain->SetMaximumVisibleBlockSize(64);
     terrain->SetCommonTextureRepeats(50.0f);
 
+    x_offset = -4.0f;
+    y_offset = -4.0f;
+    z_offset = 2.0f;
+
+    elevation = 10;
+    rotation = 45;
     cout << "Loaded Terrain " << terrain->GetWidth() << " : "
          << terrain->GetHeight()
          << endl << flush;
-    cameraPosition.x = terrain->GetWidth() / 2.0f ;//- 400.0f;
-    cameraPosition.y = terrain->GetHeight() / 2.0f ;//- 351.0f;
+    cameraPosition.x = terrain->GetWidth() / 2.0f + x_offset;//- 400.0f;
+    cameraPosition.y = terrain->GetHeight() / 2.0f + y_offset;//- 351.0f;
     cameraPosition.z = 200.0f;
     camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
     cameraAngle.x = 0.0f;
     cameraAngle.y = 0.0f;
     cameraAngle.z = 0.0f;
-
 
 }
 
@@ -109,15 +114,16 @@ void DemeterScene::shapeView()
 
 inline void DemeterScene::viewScale(float scale_factor)
 {
-    const float maxViewDistance = 4500.0f;
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float xscale = 0.5f / scale_factor;
-    float yscale = 0.5f / scale_factor;
+    // const float maxViewDistance = 4500.0f;
+    // glMatrixMode(GL_PROJECTION);
+    // glLoadIdentity();
+    // float xscale = 0.5f / scale_factor;
+    // float yscale = 0.5f / scale_factor;
     // This is complete arse
     // glFrustum(-xscale, xscale, -yscale, yscale, 0.65f / scale_factor, maxViewDistance * scale_factor );
-    gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
-    glMatrixMode(GL_MODELVIEW);
+    // gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
+    // glMatrixMode(GL_MODELVIEW);
+    glScalef(scale_factor, scale_factor, scale_factor);
 }
 
 inline void DemeterScene::viewPoint()
@@ -150,7 +156,7 @@ inline void DemeterScene::orient()
 
 inline void DemeterScene::translate()
 {
-    glTranslatef(-x_offset,-y_offset,0.0f);
+    glTranslatef(-x_offset,-y_offset,-z_offset);
 }
 
 // This function moves the render cursor to the origin and rotates the
@@ -227,9 +233,9 @@ void DemeterScene::draw3Dentity()
 
 void DemeterScene::drawCal3DModel(Model * m)
 {
-    viewScale(40);
+    viewScale(0.025f);
     m->onRender();
-    viewScale(1);
+    viewScale(1.0f);
 }
 
 void DemeterScene::draw3DBox(const Vector3D & coords, const Vector3D & bbox,

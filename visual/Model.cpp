@@ -473,13 +473,13 @@ void Model::renderMesh(bool bWireframe, bool bLight)
 void Model::onRender()
 {
   // set global OpenGL states
-  glEnable(GL_DEPTH_TEST);
+  // glEnable(GL_DEPTH_TEST);
   glShadeModel(GL_SMOOTH);
 
   renderMesh(false, true);
 
   // clear global OpenGL states
-  glDisable(GL_DEPTH_TEST);
+  // glDisable(GL_DEPTH_TEST);
 }
 
 //----------------------------------------------------------------------------//

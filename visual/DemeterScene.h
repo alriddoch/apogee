@@ -20,6 +20,7 @@ class DemeterScene : public Renderer {
 
     Camera camera;
     
+    float z_offset;
 
     void init();
     virtual void shapeView();
