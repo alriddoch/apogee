@@ -19,6 +19,8 @@
 #include <Mercator/GrassShader.h>
 #include <Mercator/Surface.h>
 
+#include <sigc++/object_slot.h>
+
 #include <iostream>
 
 using Atlas::Message::Element;
@@ -355,15 +357,26 @@ void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
         
 }
 
-void TerrainRenderer::readTerrain()
+void TerrainRenderer::removeDisplayList(int x, int y)
 {
-    if (!m_ent.hasProperty("terrain")) {
-        std::cerr << "World entity has no terrain" << std::endl << std::flush;
-        std::cerr << "World entity id " << m_ent.getID() << std::endl
-                  << std::flush;
+    DisplayListStore::iterator I = m_displayLists.find(x);
+    if (I == m_displayLists.end()) {
         return;
     }
-    const Element & terrain = m_ent.getProperty("terrain");
+    DisplayListColumn::iterator J = I->second.find(y);
+    if (J == I->second.end()) {
+        return;
+    }
+    GLuint dl = J->second;
+    glDeleteLists(dl, 1);
+    I->second.erase(J);
+    if (I->second.empty()) {
+        m_displayLists.erase(I);
+    }
+}
+
+void TerrainRenderer::readTerrainFrom(const Atlas::Message::Element & terrain)
+{
     if (!terrain.isMap()) {
         std::cerr << "Terrain is not a map" << std::endl << std::flush;
     }
@@ -410,15 +423,39 @@ void TerrainRenderer::readTerrain()
             }
             int x = (int)point[0].asNum();
             int y = (int)point[1].asNum();
+            float z = point[2].asNum();
+            Mercator::BasePoint bp;
+            if (m_terrain.getBasePoint(x, y, bp) && (z == bp.height())) {
+                std::cout << "Point [" << x << "," << y << " unchanged"
+                          << std::endl << std::flush;
+                continue;
+            }
             xmin = std::min(xmin, x);
             xmax = std::max(xmax, x);
             ymin = std::min(ymin, y);
             ymax = std::max(ymax, y);
             m_terrain.setBasePoint(x, y, point[2].asNum());
+            removeDisplayList(x - 1, y - 1);
+            removeDisplayList(x    , y - 1);
+            removeDisplayList(x - 1, y    );
+            removeDisplayList(x    , y    );
         }
     } else {
         std::cerr << "Terrain is the wrong type" << std::endl << std::flush;
     }
+}
+
+bool TerrainRenderer::readTerrain()
+{
+    if (!m_ent.hasProperty("terrain")) {
+        std::cerr << "World entity has no terrain" << std::endl << std::flush;
+        std::cerr << "World entity id " << m_ent.getID() << std::endl
+                  << std::flush;
+        return false;
+    }
+    const Element & terrain = m_ent.getProperty("terrain");
+    readTerrainFrom(terrain);
+    return true;
 }
 
 TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
@@ -465,7 +502,9 @@ TerrainRenderer::~TerrainRenderer()
 void TerrainRenderer::render(Renderer & r, const PosType & camPos)
 {
     if (!m_haveTerrain) {
-        readTerrain();
+        if (readTerrain()) {
+            m_ent.observeProperty("terrain", SigC::slot(*this, &TerrainRenderer::readTerrainFrom));
+        }
         m_haveTerrain = true;
     }
     drawMap(m_terrain, camPos);

@@ -11,6 +11,12 @@
 
 #include <Mercator/Terrain.h>
 
+namespace Atlas {
+  namespace Message {
+    class Element;
+  }
+}
+
 class TerrainRenderer : public EntityRenderer
 {
   public:
@@ -36,7 +42,10 @@ class TerrainRenderer : public EntityRenderer
     void drawMap(Mercator::Terrain &, const PosType & camPos);
     void drawSea(Renderer &, Mercator::Terrain &);
     void drawShadow(const WFMath::Point<2> & pos, float radius = 1.f);
-    void readTerrain();
+
+    void removeDisplayList(int x, int y);
+    void readTerrainFrom(const Atlas::Message::Element &);
+    bool readTerrain();
   public:
     TerrainRenderer(Renderer &, RenderableEntity & e);
     virtual ~TerrainRenderer();

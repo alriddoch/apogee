@@ -1,5 +1,11 @@
 2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Add code
+	  to update the terrain model in response to changes on the server,
+	  and handle the display lists.
+
+2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/Widget.h, gui/Widget.cpp, gui/Gui.h, gui/Gui.cpp: Sort
 	  out a general mechanism for sorting out widget focus.
 
