@@ -19,8 +19,6 @@
 #include <Eris/TypeInfo.h>
 #include <Eris/Connection.h>
 
-#include <SDL_image.h>
-
 #include <iostream>
 
 static const bool debug_flag = false;

@@ -7,8 +7,7 @@
 #include "GL.h"
 #include "Renderer.h"
 
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 
 #include <cmath>
 

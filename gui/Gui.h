@@ -7,7 +7,7 @@
 
 #include "visual/GL.h"
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 #include <map>
 #include <list>

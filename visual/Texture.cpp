@@ -8,7 +8,7 @@
 #include "GLU.h"
 #include "default_texture.h"
 
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 
 #include <iostream>
 

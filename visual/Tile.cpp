@@ -2,6 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#error This file has been removed from the build
+
 #include "Tile.h"
 
 #include "Texture.h"
@@ -9,7 +11,7 @@
 
 #include <Mercator/Terrain.h>
 
-#include <SDL_image.h>
+#include <SDL/SDL_image.h>
 
 #include <iostream>
 #include <cmath>

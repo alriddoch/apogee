@@ -8,8 +8,6 @@
 
 #include "Texture.h"
 
-#include <SDL.h>
-
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght)
 {

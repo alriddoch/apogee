@@ -6,7 +6,7 @@
 #define APOGEE_APPLICATION_H
 
 #include <sigc++/object.h>
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <string>
 
 class Renderer;

@@ -6,8 +6,6 @@
 
 #include "Isometric.h"
 
-#include <SDL.h>
-
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght)
 {

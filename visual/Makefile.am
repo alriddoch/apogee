@@ -3,7 +3,6 @@ noinst_LIBRARIES = libvisual.a
 INCLUDES = -I$(top_srcdir)
 
 libvisual_a_SOURCES = \
-                      HeightMap.cpp HeightMap.h \
                       Texture.cpp Texture.h \
                       Sprite.cpp Sprite.h \
                       Renderer.cpp Renderer.h \

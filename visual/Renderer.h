@@ -5,7 +5,7 @@
 #ifndef APOGEE_RENDERER_H
 #define APOGEE_RENDERER_H
 
-#include <common/Vector3D.h>
+#include "common/Vector3D.h"
 
 #include "GL.h"
 
@@ -13,9 +13,6 @@
 
 class Model;
 class Application;
-
-extern "C" void SDL_GL_SwapBuffers();
-extern "C" void SDL_Quit();
 
 class RendererException { };
 

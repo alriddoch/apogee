@@ -18,15 +18,11 @@
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 
-#include <coal/isoloader.h>
-
 #include <sigc++/object_slot.h>
-
-#include <SDL.h>
 
 #include <iostream>
 
-#include <math.h>
+#include <cmath>
 
 using Atlas::Objects::Entity::GameEntity;
 

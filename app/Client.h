@@ -3,8 +3,6 @@
 
 #error This file has been removed from the build
 
-#include <SDL.h>
-
 #include <coal/isoloader.h>
 
 #include "Application.h"
