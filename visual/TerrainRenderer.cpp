@@ -9,6 +9,10 @@
 #include <Eris/Entity.h>
 
 #include <Mercator/Segment.h>
+#include <Mercator/FillShader.h>
+#include <Mercator/ThresholdShader.h>
+#include <Mercator/DepthShader.h>
+#include <Mercator/Surface.h>
 
 #include <iostream>
 
@@ -20,7 +24,6 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 {
     glNormal3f(0.f, 0.f, 1.f);
     static float * harray = 0;
-    static float * carray = 0;
     float * narray = map->getNormals();
     static int allocated_segSize = 0;
     if (narray == 0) {
@@ -32,14 +35,11 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     if (segSize != allocated_segSize) {
         if (harray != 0) {
             delete [] harray;
-            delete [] carray;
             harray = 0;
-            carray = 0;
         }
         harray = new float[(segSize + 1) * (segSize + 1) * 3];
-        carray = new float[(segSize + 1) * (segSize + 1) * 4];
         allocated_segSize = segSize;
-        int idx = -1, cdx = -1;
+        int idx = -1;
         // Fill in the invarient vertices and colors, so we only do it once
         for(int j = 0; j < (segSize + 1); ++j) {
             for(int i = 0; i < (segSize + 1); ++i) {
@@ -47,22 +47,16 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
                 harray[++idx] = i;
                 harray[++idx] = j;
                 harray[++idx] = 0.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 0.f;
             }
         }
     }
     // Fill in the vertex Z coord, and alpha value, which vary
-    int idx = -1, cdx = -1;
+    int idx = -1;
     for(int j = 0; j < (segSize + 1); ++j) {
         for(int i = 0; i < (segSize + 1); ++i) {
             float h = map->get(i,j);
             idx += 2;
             harray[++idx] = h;
-            cdx += 3;
-            carray[++cdx] = (h > 0.4f) ? 1.f : 0.f;
         }
     }
     glEnable(GL_TEXTURE_2D);
@@ -74,25 +68,31 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     glEnableClientState(GL_COLOR_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
-    glColorPointer(4, GL_FLOAT, 0, carray);
     glNormalPointer(GL_FLOAT, 0, narray);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
-    }
-    glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                   GL_UNSIGNED_INT, m_lineIndeces);
-
-    glBindTexture(GL_TEXTURE_2D, m_texture2);
+    // if (have_GL_EXT_compiled_vertex_array) {
+        // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
+    // }
     glEnable(GL_BLEND);
-    glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                   GL_UNSIGNED_INT, m_lineIndeces);
+
+    const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
+    Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
+    for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
+        glColorPointer(4, GL_FLOAT, 0, (*I)->getData());
+        glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
+        glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
+                       GL_UNSIGNED_INT, m_lineIndeces);
+
+        // glBindTexture(GL_TEXTURE_2D, m_textures[2]);
+        // glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
+                       // GL_UNSIGNED_INT, m_lineIndeces);
+    }
+
     glDisable(GL_BLEND);
 
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
+    // if (have_GL_EXT_compiled_vertex_array) {
+        // glUnlockArraysEXT();
+    // }
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
@@ -115,6 +115,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
             Mercator::Segment * s = J->second;
             if (!s->isValid()) {
                 s->populate();
+                s->populateSurfaces();
             }
             drawRegion(s);
             glPopMatrix();
@@ -192,14 +193,18 @@ void TerrainRenderer::readTerrain()
 }
 
 TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
-    EntityRenderer(r, e), m_numLineIndeces(0),
+    EntityRenderer(r, e), m_terrain(Mercator::Terrain::SHADED),
+    m_numLineIndeces(0),
     m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
     m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
-    m_texture(0), m_texture2(0), m_haveTerrain(false)
+    m_haveTerrain(false)
 
 {
-    m_texture = Texture::get("granite.png");
-    m_texture2 = Texture::get("rabbithill_grass_hh.png");
+    m_textures[0] = Texture::get("granite.png");
+    // m_textures[1] = Texture::get("media/media_new/scratchpad/pato/textures/finished/ground_sand_256x256_00.png");
+    m_textures[1] = Texture::get("sand.png");
+    m_textures[2] = Texture::get("rabbithill_grass_hh.png");
+    m_textures[3] = Texture::get("dark.png");
 
     int idx = -1;
     for (int i = 0; i < (segSize + 1) - 1; ++i) {
@@ -222,6 +227,11 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
             m_texCoords[++tidx] = ((float)j)/8;
         }
     }
+
+    m_terrain.addShader(new Mercator::FillShader());
+    m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f));
+    m_terrain.addShader(new Mercator::HighShader(1.f));
+    m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f));
 }
 
 TerrainRenderer::~TerrainRenderer()

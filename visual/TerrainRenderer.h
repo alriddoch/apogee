@@ -18,7 +18,7 @@ class TerrainRenderer : public EntityRenderer
     int m_numLineIndeces;
     unsigned int * const m_lineIndeces;
     float * const m_texCoords;
-    GLuint m_texture, m_texture2;
+    GLuint m_textures[8]; //, m_texture2;
     bool m_haveTerrain;
 
     void drawRegion(Mercator::Segment *);

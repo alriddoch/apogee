@@ -1,3 +1,11 @@
+2003-07-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Tweak fog to allow better view of terrain.
+
+	* visual/TerrainRenderer.cpp, visual/TerrainRenderer.h:
+	  Re-write terrain rendering code to make use of new Mercator
+	  shaders.
+
 2003-07-25  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp: Use wfmath Atlas conversion correctly.
