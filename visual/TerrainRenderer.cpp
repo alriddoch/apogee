@@ -91,7 +91,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
 
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
-        glColorPointer(4, GL_FLOAT, 0, (*I)->getData());
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, (*I)->getData());
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
         // if (have_GL_EXT_compiled_vertex_array) {
             // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
