@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU General Public License (See COPYING for details).
-// Copyright (C) 2000-2001 Alistair Riddoch
+// Copyright (C) 2000-2003 Alistair Riddoch
 
 #ifndef APOGEE_GAMECLIENT_H
 #define APOGEE_GAMECLIENT_H

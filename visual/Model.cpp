@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------//
 // model.cpp                                                                  //
 // Copyright (C) 2001 Bruno 'Beosil' Heidelberger                             //
+// Copyright (C) 2001-2003 Alistair Riddoch                                   //
 //----------------------------------------------------------------------------//
 // This program is free software; you can redistribute it and/or modify it    //
 // under the terms of the GNU General Public License as published by the Free //
