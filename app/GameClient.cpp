@@ -117,7 +117,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
     chr->Moved.connect(SigC::slot(this, &GameClient::charMoved));
-    character = chr;
+    character = dynamic_cast<WorldEntity*>(chr);
 
 }
 
@@ -150,7 +150,9 @@ const Vector3D GameClient::getAbsCharPos()
     if (!inGame) {
         return Vector3D();
     }
+    float now = SDL_GetTicks();
     Vector3D pos = character->getPosition();
+    pos = pos + Vector3D(character->getVelocity()) * ((now - character->getTime())/1000.0f);
     Eris::Entity * root = world->getRootEntity();
     for(Eris::Entity * ref = character->getContainer();
         ref != NULL && ref != root;

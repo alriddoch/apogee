@@ -217,7 +217,7 @@ void Isometric::draw3Dentity()
     origin();
     glTranslatef(4,4,0.0);
     // Lets draw a building
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
+    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
 
@@ -246,7 +246,7 @@ void Isometric::draw3Dentity()
     glTexCoord2f(0, 0); glVertex3f(5, 0, 0);
 
     glEnd();
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
+    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
     glBegin(GL_QUADS);
     glNormal3f(0, 0, 1);
     glTexCoord2f(0, 0); glVertex3f(0, 0, 4.8);
@@ -380,7 +380,7 @@ void Isometric::drawEntity(Eris::Entity * ent)
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
             cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos;
-            pos = pos + Vector3D(e->getVelocity()) * ((worldTime - we->getTime())/1000);
+            pos = pos + Vector3D(e->getVelocity()) * ((worldTime - we->getTime())/1000.0f);
             cout << "=" << pos << endl << flush;
         } else {
             cout << "Eris::Entity is not a WorldEntity" << endl << flush;

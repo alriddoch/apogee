@@ -12,7 +12,7 @@
 
 class WorldEntity : public Eris::Entity
 {
-    unsigned int updateTime;
+    float updateTime;
   public:
     VisualEntity & visEntity;
 
@@ -20,7 +20,7 @@ class WorldEntity : public Eris::Entity
 
     WorldEntity(const Atlas::Objects::Entity::GameEntity &ge);
 
-    const unsigned int getTime() {
+    const float getTime() {
         return updateTime;
     }
 };

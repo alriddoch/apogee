@@ -94,7 +94,7 @@ int main(int argc, char ** argv)
         //if (updated) {
             app->update();
         //}
-        SDL_Delay(500);
+        //SDL_Delay(500);
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;

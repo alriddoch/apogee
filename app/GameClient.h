@@ -10,6 +10,7 @@
 #include <Eris/Connection.h>
 
 class Vector3D;
+class WorldEntity;
 
 namespace Eris {
   class Player;
@@ -38,7 +39,7 @@ class GameClient : public Application {
     Eris::Player * player;
     Eris::Lobby * lobby;
     Eris::World * world;
-    Eris::Entity * character;
+    WorldEntity * character;
 
     void netConnected();
     void netFailure(std::string msg);

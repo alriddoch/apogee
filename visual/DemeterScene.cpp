@@ -77,13 +77,13 @@ void DemeterScene::init()
     cameraAngle.y = 0.0f;
     cameraAngle.z = 0.0f;
 
-    GLfloat ambientColor[] = {1, 1, 1, 1.0};
-    GLfloat diffuseColor[] = {0, 1, 0, 1.0};
-    GLfloat lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseColor);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+    // GLfloat ambientColor[] = {1, 1, 1, 1.0};
+    // GLfloat diffuseColor[] = {0, 1, 0, 1.0};
+    // GLfloat lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+// 
+    // glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
+    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseColor);
+    // glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
 }
 
@@ -190,13 +190,13 @@ inline void DemeterScene::origin()
 void DemeterScene::lightOn()
 {
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    // glEnable(GL_LIGHT0);
 }
 
 void DemeterScene::lightOff()
 {
     glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
+    // glDisable(GL_LIGHT0);
 }
 
 void DemeterScene::drawCharacter(Sprite * character, float x, float y)
@@ -212,7 +212,7 @@ void DemeterScene::draw3Dentity()
     origin();
     glTranslatef(4,4,0.0);
     // Lets draw a building
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
+    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS);
 
@@ -241,7 +241,7 @@ void DemeterScene::draw3Dentity()
     glTexCoord2f(0, 0); glVertex3f(5, 0, 0);
 
     glEnd();
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
+    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
     glBegin(GL_QUADS);
     glNormal3f(0, 0, 1);
     glTexCoord2f(0, 0); glVertex3f(0, 0, 4.8);
