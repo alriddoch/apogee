@@ -5,10 +5,13 @@ vertex and surface caches at least.
 Add some kind of check so render passes can be skipped for layers which just
 don't apply. This will involve a bbox check for the simple banded renderers,
 but a more complex trick for things like forest floor.
-(this is partly a mercator note)
+General mechanism established, but modifiers are not yet there, so its
+not possible to consider how to do it there.
 
-Camera interface to renderers is now in, but not used. Implement it,
-and make use of it for terrain.
+Memory allocated by vertex buffers is now no longer required. Vertex cache
+gone, but it would probably be advantageous to clean up surface
+buffers, etc. Also probably need some kind of caching scheme for the segment
+display lists, as just letting them build up is bound to cause problems.
 
 Modify the interface to entity renderers so that we provide an indication
 of the camera position, so some kind of judgement can be made about how
