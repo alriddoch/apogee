@@ -6,8 +6,8 @@
 
 	* visual/Model.cpp: Disable setting color in cal3d.
 
-	* visual/TerrainRenderer.cpp: Set COLOR_MATERIAL mode so that the multi-pass
-	  terrrain renderer works with the lights on.
+	* visual/TerrainRenderer.cpp: Set COLOR_MATERIAL mode so that the
+	  multi-pass terrrain renderer works with the lights on.
 
 2003-06-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
