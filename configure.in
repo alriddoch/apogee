@@ -1,0 +1,56 @@
+dnl Initialise autoconf
+
+AC_INIT(app/apogee.cpp)
+AM_CONFIG_HEADER(config.h)
+
+dnl Initialise automake
+
+AM_INIT_AUTOMAKE(apogee, 0.0.0)
+
+dnl Need libtool
+
+AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
+
+dnl Test for C++ compiler
+
+AC_PROG_CC
+AC_PROG_CXX
+
+CFLAGS='-Wall -g -I/usr/X11R6/include'
+CXXFLAGS='-Wall -g -I/usr/X11R6/include'
+LIBS='-L/usr/X11R6/lib -L/usr/local/lib'
+
+SDL_VERSION=1.1.0
+AM_PATH_SDL($SDL_VERSION)
+CFLAGS="$CFLAGS $SDL_CFLAGS"
+CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
+CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+LIBS="$LIBS $SDL_LIBS"
+
+AC_CHECK_LIB(SDL_image,IMG_Load)
+AC_CHECK_LIB(dl,dlopen)
+AC_CHECK_LIB(pthread,pthread_create)
+AC_CHECK_LIB(varconf,main)
+AC_CHECK_LIB(GL,glViewport)
+AC_CHECK_LIB(GLU,gluPerspective)
+GNOME_XML_CHECK
+
+AC_PREFIX_DEFAULT("/usr/local")
+AC_DEFINE_UNQUOTED(INSTALLDIR,"$prefix")
+AC_CHECK_FUNC(cos,,[AC_CHECK_LIB(m,cos)])
+
+dnl Test for WorldForge Atlas Libraries
+
+AC_LANG_CPLUSPLUS
+AC_REQUIRE_CPP
+
+AC_CHECK_LIB(coal,main)
+AC_CHECK_LIB(coalblade,main)
+
+dnl Generate files
+AC_OUTPUT([
+	Makefile
+	visual/Makefile
+	app/Makefile
+])

@@ -1,0 +1,397 @@
+<?xml version="1.0"?>
+<!DOCTYPE blade SYSTEM "blade.dtd">
+<blade>
+  <media>
+    <graphic type="2d">
+      <name>LongGrass</name>
+      <file orient="base">media-3d/collection-pegasus/textures_512x512/ground/grass_meadow_1_orig.png</file>
+      <file orient="w">media/tiles/ground/grass/bluegrass33.png</file>
+      <file orient="n">media/tiles/ground/grass/bluegrass34.png</file>
+      <file orient="e">media/tiles/ground/grass/bluegrass31.png</file>
+      <file orient="s">media/tiles/ground/grass/bluegrass32.png</file>
+      <file orient="nw">media/tiles/ground/grass/bluegrass13.png</file>
+      <file orient="ne">media/tiles/ground/grass/bluegrass14.png</file>
+      <file orient="se">media/tiles/ground/grass/bluegrass11.png</file>
+      <file orient="sw">media/tiles/ground/grass/bluegrass12.png</file>
+      <!-- *** Color of graphic in radar view *** -->
+      <color>
+        <red>47</red>
+        <green>73</green>
+        <blue>16</blue>
+      </color>
+      <desc>Long Field Grass</desc>
+    </graphic>
+    <graphic type="2d">
+      <name>ShortGrass</name>
+      <file orient="base">media-3d/collection-pegasus/textures_512x512/ground/grass_meadow_1_orig.png</file>
+      <file orient="w">media/tiles/ground/grass/bluegrass33.png</file>
+      <file orient="n">media/tiles/ground/grass/bluegrass34.png</file>
+      <file orient="e">media/tiles/ground/grass/bluegrass31.png</file>
+      <file orient="s">media/tiles/ground/grass/bluegrass32.png</file>
+      <file orient="nw">media/tiles/ground/grass/bluegrass13.png</file>
+      <file orient="ne">media/tiles/ground/grass/bluegrass14.png</file>
+      <file orient="se">media/tiles/ground/grass/bluegrass11.png</file>
+      <file orient="sw">media/tiles/ground/grass/bluegrass12.png</file>
+      <!-- *** Color of graphic in radar view *** -->
+      <color>
+        <red>57</red>
+        <green>83</green>
+        <blue>36</blue>
+      </color>
+      <desc>Short Field Grass</desc>
+    </graphic>
+    <graphic type="2d">
+      <name>Grass</name>
+      <file orient="base">media-3d/collection-pegasus/textures_512x512/ground/grass_meadow_1_orig.png</file>
+      <file orient="w">media/tiles/ground/grass/bluegrass33.png</file>
+      <file orient="n">media/tiles/ground/grass/bluegrass34.png</file>
+      <file orient="e">media/tiles/ground/grass/bluegrass31.png</file>
+      <file orient="s">media/tiles/ground/grass/bluegrass32.png</file>
+      <file orient="nw">media/tiles/ground/grass/bluegrass13.png</file>
+      <file orient="ne">media/tiles/ground/grass/bluegrass14.png</file>
+      <file orient="se">media/tiles/ground/grass/bluegrass11.png</file>
+      <file orient="sw">media/tiles/ground/grass/bluegrass12.png</file>
+      <!-- *** Color of graphic in radar view *** -->
+      <color>
+        <red>57</red>
+        <green>73</green>
+        <blue>16</blue>
+      </color>
+      <desc>Blue Field Grass</desc>
+    </graphic>
+    <graphic type="2d">
+      <name>Water</name>
+      <file orient="base">media-3d/collection-pegasus/textures_512x512/ground/water_1_orig.png</file>
+      <file orient="w">media/tiles/water/bluewater23.png</file>
+      <file orient="n">media/tiles/water/bluewater24.png</file>
+      <file orient="e">media/tiles/water/bluewater21.png</file>
+      <file orient="s">media/tiles/water/bluewater22.png</file>
+      <file orient="nw">media/tiles/water/bluewater13.png</file>
+      <file orient="ne">media/tiles/water/bluewater14.png</file>
+      <file orient="se">media/tiles/water/bluewater11.png</file>
+      <file orient="sw">media/tiles/water/bluewater12.png</file>
+      <color>
+        <red>8</red>
+        <green>81</green>
+        <blue>99</blue>
+      </color>
+      <desc>Blue Water</desc>
+    </graphic>
+    <areafill>
+      <name>LongGrassfill</name>
+      <texture>
+        <graphicref>LongGrass</graphicref>
+      </texture>
+    </areafill>
+    <areafill>
+      <name>ShortGrassfill</name>
+      <texture>
+        <graphicref>ShortGrass</graphicref>
+      </texture>
+    </areafill>
+    <areafill>
+      <name>Grassfill</name>
+      <texture>
+        <graphicref>Grass</graphicref>
+      </texture>
+    </areafill>
+    <areafill>
+      <name>Waterfill</name>
+      <texture>
+        <graphicref>Water</graphicref>
+      </texture>
+    </areafill>
+  </media>
+  <map>
+    <region>
+      <name>Grassregion1</name>
+      <layer>1</layer>
+      <!-- *** shape attribute determines how many coords *** -->
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>0</x>
+            <y>5</y>
+          </coord>
+          <coord>
+            <x>3</x>
+            <y>4</y>
+          </coord>
+          <coord>
+            <x>4</x>
+            <y>0</y>
+          </coord>
+          <coord>
+            <x>19</x>
+            <y>4</y>
+          </coord>
+          <coord>
+            <x>24</x>
+            <y>18</y>
+          </coord>
+          <coord>
+            <x>38</x>
+            <y>22</y>
+          </coord>
+          <coord>
+            <x>38</x>
+            <y>32</y>
+          </coord>
+          <coord>
+            <x>27</x>
+            <y>44</y>
+          </coord>
+          <coord>
+            <x>12</x>
+            <y>33</y>
+          </coord>
+          <coord>
+            <x>6</x>
+            <y>27</y>
+          </coord>
+          <coord>
+            <x>2</x>
+            <y>19</y>
+          </coord>
+          <coord>
+            <x>4</x>
+            <y>15</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <!-- *** Must be an areafill from above *** -->
+      <fill>LongGrassfill</fill>
+    </region>
+    <region>
+      <name>Grassregion2</name>
+      <layer>1</layer>
+      <!-- *** shape attribute determines how many coords *** -->
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>0</x>
+            <y>5</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>5</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>0</y>
+          </coord>
+          <coord>
+            <x>-19</x>
+            <y>4</y>
+          </coord>
+          <coord>
+            <x>-24</x>
+            <y>18</y>
+          </coord>
+          <coord>
+            <x>-38</x>
+            <y>22</y>
+          </coord>
+          <coord>
+            <x>-38</x>
+            <y>32</y>
+          </coord>
+          <coord>
+            <x>-27</x>
+            <y>44</y>
+          </coord>
+          <coord>
+            <x>-12</x>
+            <y>33</y>
+          </coord>
+          <coord>
+            <x>-6</x>
+            <y>27</y>
+          </coord>
+          <coord>
+            <x>-2</x>
+            <y>19</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>15</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <!-- *** Must be an areafill from above *** -->
+      <fill>ShortGrassfill</fill>
+    </region>
+    <region>
+      <name>Grassregion</name>
+      <layer>1</layer>
+      <!-- *** shape attribute determines how many coords *** -->
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>0</x>
+            <y>-5</y>
+          </coord>
+          <coord>
+            <x>4</x>
+            <y>-5</y>
+          </coord>
+          <coord>
+            <x>4</x>
+            <y>0</y>
+          </coord>
+          <coord>
+            <x>19</x>
+            <y>-4</y>
+          </coord>
+          <coord>
+            <x>24</x>
+            <y>-18</y>
+          </coord>
+          <coord>
+            <x>38</x>
+            <y>-22</y>
+          </coord>
+          <coord>
+            <x>38</x>
+            <y>-32</y>
+          </coord>
+          <coord>
+            <x>27</x>
+            <y>-44</y>
+          </coord>
+          <coord>
+            <x>12</x>
+            <y>-33</y>
+          </coord>
+          <coord>
+            <x>6</x>
+            <y>-27</y>
+          </coord>
+          <coord>
+            <x>2</x>
+            <y>-19</y>
+          </coord>
+          <coord>
+            <x>4</x>
+            <y>-15</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <!-- *** Must be an areafill from above *** -->
+      <fill>Grassfill</fill>
+    </region>
+    <region>
+      <name>Grassregion</name>
+      <layer>1</layer>
+      <!-- *** shape attribute determines how many coords *** -->
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>0</x>
+            <y>-5</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>-5</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>0</y>
+          </coord>
+          <coord>
+            <x>-19</x>
+            <y>-4</y>
+          </coord>
+          <coord>
+            <x>-24</x>
+            <y>-18</y>
+          </coord>
+          <coord>
+            <x>-38</x>
+            <y>-22</y>
+          </coord>
+          <coord>
+            <x>-38</x>
+            <y>-32</y>
+          </coord>
+          <coord>
+            <x>-27</x>
+            <y>-44</y>
+          </coord>
+          <coord>
+            <x>-12</x>
+            <y>-33</y>
+          </coord>
+          <coord>
+            <x>-6</x>
+            <y>-27</y>
+          </coord>
+          <coord>
+            <x>-2</x>
+            <y>-19</y>
+          </coord>
+          <coord>
+            <x>-4</x>
+            <y>-15</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <!-- *** Must be an areafill from above *** -->
+      <fill>Grassfill</fill>
+    </region>
+    <region>
+      <name>Waterregion1</name>
+      <layer>2</layer>
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>14</x>
+            <y>24</y>
+          </coord>
+          <coord>
+            <x>7</x>
+            <y>17</y>
+          </coord>
+          <coord>
+            <x>13</x>
+            <y>13</y>
+          </coord>
+          <coord>
+            <x>16</x>
+            <y>20</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <fill>Waterfill</fill>
+    </region>
+    <region>
+      <name>Waterregion2</name>
+      <layer>3</layer>
+      <geometry shape="polygon">
+        <vertices>
+          <coord>
+            <x>26</x>
+            <y>31</y>
+          </coord>
+          <coord>
+            <x>23</x>
+            <y>29</y>
+          </coord>
+          <coord>
+            <x>25</x>
+            <y>25</y>
+          </coord>
+          <coord>
+            <x>29</x>
+            <y>27</y>
+          </coord>
+          <coord>
+            <x>29</x>
+            <y>30</y>
+          </coord>
+        </vertices>
+      </geometry>
+      <fill>Waterfill</fill>
+    </region>
+  </map>
+</blade>
