@@ -9,6 +9,8 @@
 #include <visual/Model.h>
 #include <visual/widgets.h>
 
+#include <gui/Gui.h>
+
 #include <Atlas/Objects/Entity/GameEntity.h>
 
 #include <Eris/Player.h>
@@ -17,6 +19,8 @@
 #include <Eris/Entity.h>
 
 #include <sigc++/object_slot.h>
+
+#include <SDL.h>
 
 #include <iostream>
 
@@ -51,8 +55,11 @@ bool IsoClient::setup()
     // debug.Dump (map_database);
     character = new Sprite();
     character->load("swinesherd_female_1_us_E_0.png"); //,renderer);
-    bag = new Sprite();
-    bag->load("bag.png");
+
+    gui = new Gui(renderer);
+    gui->setup();
+    // bag = new Sprite();
+    // bag->load("bag.png");
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -109,8 +116,8 @@ bool IsoClient::update()
     axis();
     renderer.lightOff();
     renderer.drawGui();
-    glTranslatef(200.0f, 0.0f,1.0f);
-    bag->draw();
+    glTranslatef(200.0f, 0.0f,10.0f);
+    gui->draw();
     // renderer.draw2Dtest();
     renderer.flip();
     return false;
@@ -123,6 +130,7 @@ bool IsoClient::event(SDL_Event & event)
     static int oldRot = 0;
     static int oldElv = 0;
     static float oldScl = 0;
+    cout << "APP:";
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if (event.motion.state & SDL_BUTTON(2)) {
@@ -162,7 +170,7 @@ bool IsoClient::event(SDL_Event & event)
                 oldRot = renderer.getRotation();
                 oldElv = renderer.getElevation();
                 oldScl = renderer.getScale();
-                return false;
+                //return false;
             }
             break;
         case SDL_KEYDOWN:
@@ -174,24 +182,26 @@ bool IsoClient::event(SDL_Event & event)
                     break;
                 case SDLK_UP:
                     renderer.setYoffset(renderer.getYoffset() + 1);
+                    return true;
                     break;
                 case SDLK_DOWN:
                     renderer.setYoffset(renderer.getYoffset() - 1);
+                    return true;
                     break;
                 case SDLK_LEFT:
                     renderer.setXoffset(renderer.getXoffset() - 1);
+                    return true;
                     break;
                 case SDLK_RIGHT:
                     renderer.setXoffset(renderer.getXoffset() + 1);
+                    return true;
                     break;
                 default:
-                    return false;
                     break;
             }
-            return true;
             break;
     }
-    return false;
+    return gui->event(event);
 }
 
 void IsoClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)

@@ -37,7 +37,6 @@ class IsoClient: public Application {
 
     CoalDatabase map_database;
     Sprite * character;
-    Sprite * bag;
     Model * model;
     Eris::Connection & connection;
   public:

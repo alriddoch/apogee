@@ -7,14 +7,14 @@ apogee_SOURCES = \
                  IsoClient.cpp IsoClient.h \
                  apogee.cpp
 
-apogee_LDADD = ../visual/libvisual.a
+apogee_LDADD = ../visual/libvisual.a ../gui/libgui.a
 
 perigee_SOURCES = \
                  Application.h \
                  Editor.cpp Editor.h \
                  perigee.cpp
 
-perigee_LDADD = ../visual/libvisual.a
+perigee_LDADD = ../visual/libvisual.a ../gui/libgui.a
 
 #                 LeakTracer.cc \
 

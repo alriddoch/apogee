@@ -1,5 +1,11 @@
 2001-09-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Gui.h, gui/Gui.cpp, app/Application.h, app/IsoClient.cpp,
+	  app/IsoClient.h, visual/Isometric.cpp: Added gui class for
+	  handling opengl user interface code.
+
+2001-09-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/perigee.cpp: Renamed perspective version of the client perigee,
 	  and create new build target for it.
 
