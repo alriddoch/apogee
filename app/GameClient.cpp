@@ -181,7 +181,7 @@ void GameClient::createCharacter(const std::string & name,
                                  const std::string & type)
 {
 
-    GameEntity chrcter(GameEntity::Instantiate());
+    GameEntity chrcter;
     chrcter.setParents(Atlas::Message::Element::ListType(1,type));
     chrcter.setName(name);
     chrcter.setAttr("description", "a perigee person");
@@ -301,7 +301,7 @@ void GameClient::moveCharacter(const PosType & pos)
         ref = r;
     };
     
-    Move m(Move::Instantiate());
+    Move m;
 
     Atlas::Message::Element::MapType marg;
     marg["id"] = m_character->getID();

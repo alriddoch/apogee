@@ -212,7 +212,7 @@ void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
-    GameEntity chrcter(GameEntity::Instantiate());
+    GameEntity chrcter;
     chrcter.setParents(Atlas::Message::Element::ListType(1,"farmer"));
     chrcter.setName("Apogee Dubneal");
     chrcter.setAttr("description", "a perigee person");
