@@ -8,8 +8,8 @@
 
 #include <SDL.h>
 
-WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge)
-              : Eris::Entity(ge), visEntity(*new VisualEntity())
+WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World * w)
+              : Eris::Entity(ge, w), visEntity(*new VisualEntity())
 {
     Moved.connect(SigC::slot(this, &WorldEntity::movedSignal));
     updateTime = SDL_GetTicks();
@@ -20,12 +20,13 @@ void WorldEntity::movedSignal(const Point3D &)
     updateTime = SDL_GetTicks();
 }
 
-bool WEFactory::accept(const Atlas::Objects::Entity::GameEntity&)
+bool WEFactory::accept(const Atlas::Objects::Entity::GameEntity&, Eris::World *)
 {
     return true;
 }
 
-Eris::EntityPtr WEFactory::instantiate(const Atlas::Objects::Entity::GameEntity & ge)
+Eris::EntityPtr WEFactory::instantiate(const Atlas::Objects::Entity::GameEntity & ge,
+                                       Eris::World * w)
 {
-    return new WorldEntity(ge);
+    return new WorldEntity(ge, w);
 }

@@ -29,7 +29,7 @@ class IxClient : public GameClient {
     bool terrain_detail;
     bool terrain_over;
   public:
-    IxClient(Renderer & rend, Eris::Connection & con);
+    IxClient(Eris::Connection & con);
     virtual ~IxClient();
 
     bool setup();

@@ -10,6 +10,7 @@
 class Sprite;
 class Model;
 class HeightMap;
+class Application;
 
 namespace Coal {
   class Container;
@@ -29,12 +30,9 @@ namespace Eris {
 
 class Renderer {
   protected:
-    Renderer() { throw RendererException(); }
-    Renderer(int wdth, int hght);
+    Renderer(Application & app, int wdth, int hght);
 
     virtual void shapeView() = 0;
-
-    static Renderer * instance;
 
     struct SDL_Surface * screen;
     int width, height;
@@ -42,22 +40,8 @@ class Renderer {
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
   public:
+    Application & application;
     Model * model;
-
-    //static Renderer * Instance(int width = 640, int height = 480) {
-        //if (instance == NULL) {
-            //instance = new Renderer(width, height);
-        //}
-        //return instance;
-    //}
-
-    static void Shutdown() {
-        if (instance == NULL) {
-            return;
-        }
-        instance = NULL;
-        SDL_Quit();
-    }
 
     void flip() {
         SDL_GL_SwapBuffers();

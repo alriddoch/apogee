@@ -4,7 +4,7 @@
 
 #include "IxClient.h"
 
-#include <visual/Renderer.h>
+#include <visual/DemeterScene.h>
 #include <visual/Model.h>
 
 #include <gui/Gui.h>
@@ -20,8 +20,8 @@
 
 using Atlas::Message::Object;
 
-IxClient::IxClient(Renderer & rend, Eris::Connection & con)
-                   : GameClient(rend, con),
+IxClient::IxClient(Eris::Connection & con)
+                   : GameClient(* new DemeterScene(*this), con),
                      m_use_mouse(false),
                      terrain_detail(true), terrain_over(false)
 {

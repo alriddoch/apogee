@@ -18,7 +18,7 @@ class WorldEntity : public Eris::Entity
 
     void movedSignal(const Point3D &);
 
-    WorldEntity(const Atlas::Objects::Entity::GameEntity &ge);
+    WorldEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
     const float getTime() {
         return updateTime;
@@ -28,8 +28,8 @@ class WorldEntity : public Eris::Entity
 class WEFactory : public Eris::Factory
 {
   public:
-    virtual bool accept(const Atlas::Objects::Entity::GameEntity &);
-    virtual Eris::EntityPtr instantiate(const Atlas::Objects::Entity::GameEntity & ge);
+    virtual bool accept(const Atlas::Objects::Entity::GameEntity &, Eris::World *);
+    virtual Eris::EntityPtr instantiate(const Atlas::Objects::Entity::GameEntity &, Eris::World *);
 };
 
 #endif // APOGEE_WORLDENTITY_H

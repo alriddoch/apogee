@@ -1,3 +1,14 @@
+2003-01-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/Application.h, app/GameClient.cpp, app/IsoClient.h,
+	  app/IxClient.cpp, app/IxClient.h, app/WorldEntity.cpp,
+	  app/WorldEntity.h, app/apogee.cpp, app/perigee.cpp,
+	  visual/DemeterScene.cpp, visual/DemeterScene.h,
+	  visual/Isometric.cpp, visual/Isometric.h,
+	  visual/Renderer.cpp, visual/Renderer.h:
+	  Re-structure code to fit with the way Eris works now, and
+	  get it up and working again.
+
 2002-06-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Isometric.cpp: Be a bit less picky about screen depth.

@@ -6,12 +6,7 @@
 
 #include <unistd.h>
 
-#include <visual/Isometric.h>
-// #include <net/Connection.h>
 #include "IsoClient.h"
-//#include "Client.h"
-
-// #include <world/World.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
 
@@ -32,8 +27,7 @@ int main(int argc, char ** argv)
 {
     Eris::Connection & con = * new Eris::Connection("apogee", true);
 
-    Renderer * renderer = Isometric::Instance();
-    IsoClient * app = new IsoClient(*renderer, con);
+    IsoClient * app = new IsoClient(con);
 
     con.Failure.connect(SigC::slot(app, &IsoClient::netFailure));
     con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));
@@ -74,7 +68,7 @@ int main(int argc, char ** argv)
                     if (newHeight < MIN_HEIGHT) {
                         newHeight = MIN_HEIGHT;
                     }
-                    renderer->resize(newWidth, newHeight);
+                    app->renderer.resize(newWidth, newHeight);
                     updated = true;
                     break;
                 default:
@@ -100,5 +94,4 @@ int main(int argc, char ** argv)
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;
-    Renderer::Shutdown();
 }

@@ -10,8 +10,6 @@ libvisual_a_SOURCES = \
                       TileMap.cpp TileMap.h \
                       Renderer.cpp Renderer.h \
                       Isometric.cpp Isometric.h \
-                      Matrix.cpp Matrix.h \
-                      Camera.cpp Camera.h \
                       DemeterScene.cpp DemeterScene.h \
                       widgets.cpp widgets.h \
                       Model.cpp Model.h

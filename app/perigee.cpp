@@ -14,6 +14,8 @@
 
 #include <sigc++/object_slot.h>
 
+#include <iostream>
+
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
 
@@ -23,8 +25,7 @@ int main(int argc, char ** argv)
 {
     Eris::Connection & con = * new Eris::Connection("perigee", true);
 
-    Renderer * renderer = DemeterScene::Instance();
-    IxClient * app = new IxClient(*renderer, con);
+    IxClient * app = new IxClient(con);
 
     con.Failure.connect(SigC::slot(app, &IxClient::netFailure));
     con.Connected.connect(SigC::slot(app, &IxClient::netConnected));
@@ -62,7 +63,7 @@ int main(int argc, char ** argv)
                     if (newHeight < MIN_HEIGHT) {
                         newHeight = MIN_HEIGHT;
                     }
-                    renderer->resize(newWidth, newHeight);
+                    app->renderer.resize(newWidth, newHeight);
                     updated = true;
                     break;
                 default:
@@ -80,13 +81,13 @@ int main(int argc, char ** argv)
         try {
             Eris::PollDefault::poll();
         } catch (Eris::BaseException b) {
-            cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
+            std::cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
         } catch (Atlas::Objects::NoSuchAttrException n) {
-            cout << "ATLAS EXCEPTION: " << n.name << std::endl << std::flush;
+            std::cout << "ATLAS EXCEPTION: " << n.name << std::endl << std::flush;
         } catch (Atlas::Message::WrongTypeException w) {
-            cout << "ATLAS MESSAGE EXCEPTION" << std::endl << std::flush;
+            std::cout << "ATLAS MESSAGE EXCEPTION" << std::endl << std::flush;
         } catch (...) {
-            cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
+            std::cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
         }
         int ticks = SDL_GetTicks();
         float delta = (ticks - elapsed_time) / 1000.0f;
@@ -95,5 +96,4 @@ int main(int argc, char ** argv)
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;
-    Renderer::Shutdown();
 }

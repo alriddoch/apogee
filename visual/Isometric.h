@@ -24,9 +24,6 @@ class Isometric : public Renderer {
     Eris::TypeInfo * charType;
     float worldTime;
 
-    Isometric() { throw RendererException(); }
-    Isometric(int wdth, int hght);
-
     void init();
     void shapeView();
     void draw3dsNode(Lib3dsNode * node);
@@ -37,12 +34,7 @@ class Isometric : public Renderer {
     Lib3dsFile * treemodel;
     unsigned long treemodel_list;
 
-    static Renderer * Instance(int width = 640, int height = 480) {
-        if (instance == NULL) {
-            instance = new Isometric(width, height);
-        }
-        return instance;
-    }
+    explicit Isometric(Application & app, int wdth = 640, int hght = 480);
 
     void drawCal3DModel(Model *, const Point3D & coords,
                                 const WFMath::Quaternion & orientation);

@@ -19,14 +19,14 @@ namespace Eris {
 
 class Application : public SigC::Object {
   protected:
-    Renderer & renderer;
-    Eris::Connection & connection;
     Gui * gui;
 
     Application(Renderer & rend, Eris::Connection & con) :
-                renderer(rend), connection(con), gui(NULL) { }
+                gui(0), renderer(rend), connection(con) { }
     //virtual ~Application() = 0;
   public:
+    Renderer & renderer;
+    Eris::Connection & connection;
 
     virtual bool setup() { return 0; };
     virtual bool update(float) = 0;

@@ -6,15 +6,16 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
-#include "Matrix.h"
 #include "TileMap.h"
 
 #include <common/debug.h>
 
 #include <app/WorldEntity.h>
+#include <app/Application.h>
 
 #include <Eris/Entity.h>
 #include <Eris/TypeInfo.h>
+#include <Eris/Connection.h>
 
 #include <SDL_image.h>
 
@@ -30,7 +31,8 @@ const float FOG_GREEN = 0.75f;
 const float FOG_BLUE = 1.0f;
 const float FOG_ALPHA = 0.0f;
 
-DemeterScene::DemeterScene(int wdth, int hght) : Renderer(wdth, hght),
+DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
+                                                 Renderer(app, wdth, hght),
                                                  tilemap(NULL), charType(NULL)
 {
     init();
@@ -58,10 +60,12 @@ void DemeterScene::init()
     // SDL_WM_GrabInput(SDL_GRAB_ON);
     // SDL_ShowCursor(0);
 
+#if USE_DEMETER
     settings = Demeter::Settings::GetInstance();
     settings->SetMediaPath("maps/");
     settings->SetScreenWidth(width);
     settings->SetScreenWidth(height);
+#endif
 
     this->shapeView();
 
@@ -116,8 +120,10 @@ void DemeterScene::shapeView()
         throw RendererSDLinit();
     }
 
+#if USE_DEMETER
     settings->SetScreenWidth(width);
     settings->SetScreenWidth(height);
+#endif
 
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
@@ -300,7 +306,7 @@ void DemeterScene::drawEntity(Eris::Entity * ent)
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
-        Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
+        Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {
             drawCal3DModel(model, pos, e->getOrientation());
         } else {
@@ -317,7 +323,7 @@ void DemeterScene::drawWorld(Eris::Entity * wrld)
 {
     worldTime = SDL_GetTicks();
     if (charType == NULL) {
-        charType = Eris::TypeInfo::findSafe("character");
+        charType = application.connection.getTypeInfoEngine()->findSafe("character");
     }
     drawEntity(wrld);
 }

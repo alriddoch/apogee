@@ -16,6 +16,7 @@
 #include <Eris/Lobby.h>
 #include <Eris/World.h>
 #include <Eris/Entity.h>
+#include <Eris/Avatar.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
 #include <Atlas/Objects/Operation/Move.h>
@@ -118,7 +119,7 @@ void GameClient::createCharacter(const std::string & name,
     chrcter.SetName(name);
     chrcter.SetAttr("description", "a perigee person");
     chrcter.SetAttr("sex", "female");
-    world = player->createCharacter(chrcter);
+    world = player->createCharacter(chrcter)->getWorld();
 
     lobby->Talk.connect(SigC::slot(this,&GameClient::lobbyTalk));
     lobby->Entered.connect(SigC::slot(this,&GameClient::roomEnter));
@@ -131,7 +132,7 @@ void GameClient::createCharacter(const std::string & name,
 void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
-    world = player->takeCharacter(chrcter);
+    world = player->takeCharacter(chrcter)->getWorld();
     std::cout << "Character taken, world = " << world << std::endl << std::flush;
 
     lobby->Talk.connect(SigC::slot(this,&GameClient::lobbyTalk));

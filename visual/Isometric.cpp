@@ -11,11 +11,13 @@
 #include "TileMap.h"
 
 #include <app/WorldEntity.h>
+#include <app/Application.h>
 
 #include <common/debug.h>
 
 #include <Eris/Entity.h>
 #include <Eris/TypeInfo.h>
+#include <Eris/Connection.h>
 
 #include <lib3ds/mesh.h>
 #include <lib3ds/node.h>
@@ -30,7 +32,8 @@
 
 static const bool debug_flag = false;
 
-Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght),
+Isometric::Isometric(Application & app, int wdth, int hght) :
+                                           Renderer(app, wdth, hght),
                                            tilemap(NULL), charType(NULL),
                                            treemodel(NULL), treemodel_list(0)
 {
@@ -412,7 +415,7 @@ void Isometric::drawEntity(Eris::Entity * ent)
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
-        Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
+        Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {
             drawCal3DModel(model, pos, e->getOrientation());
         } else {
@@ -432,7 +435,7 @@ void Isometric::drawWorld(Eris::Entity * wrld)
 
     worldTime = SDL_GetTicks();
     if (charType == NULL) {
-        charType = Eris::TypeInfo::findSafe("character");
+        charType = application.connection.getTypeInfoEngine()->findSafe("character");
     }
     drawEntity(wrld);
 }

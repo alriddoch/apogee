@@ -6,9 +6,6 @@
 #define APOGEE_DEMETER_H
 
 #include "Renderer.h"
-#include "Camera.h"
-
-#include <Demeter/Terrain.h>
 
 namespace Eris {
   class TypeInfo;
@@ -19,11 +16,6 @@ class Model;
 
 class DemeterScene : public Renderer {
   private:
-    DemeterScene() { throw RendererException(); }
-    DemeterScene(int wdth, int hght);
-
-    Demeter::Terrain * terrain;
-    Demeter::Settings * settings;
 
     TileMap * tilemap;
     Eris::TypeInfo * charType;
@@ -34,12 +26,7 @@ class DemeterScene : public Renderer {
     void init();
     virtual void shapeView();
   public:
-    static Renderer * Instance(int width = 640, int height = 480) {
-        if (instance == NULL) {
-            instance = new DemeterScene(width, height);
-        }
-        return instance;
-    }
+    explicit DemeterScene(Application & app, int wdth = 640, int hght = 480);
 
     void drawCal3DModel(Model *, const Point3D & coords,
                                 const WFMath::Quaternion & orientation);

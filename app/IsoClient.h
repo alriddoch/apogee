@@ -7,6 +7,7 @@
 
 #include <coal/container.h>
 
+#include <visual/Isometric.h>
 #include <visual/HeightMap.h>
 
 #include <string>
@@ -24,7 +25,7 @@ class IsoClient : public GameClient {
     HeightMap map_height;
     Compass * compassWidget;
   public:
-    IsoClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con)
+    IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
                                                        { }
     virtual ~IsoClient() { }
 

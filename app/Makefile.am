@@ -19,6 +19,3 @@ perigee_SOURCES = \
                  perigee.cpp
 
 perigee_LDADD = ../gui/libgui.a ../visual/libvisual.a
-
-#                 LeakTracer.cc \
-
