@@ -4,11 +4,10 @@
 
 #include "TileMap.h"
 #include "Tile.h"
+#include "GL.h"
 
 #include <coal/container.h>
 #include <coal/maptile.h>
-
-#include <GL/gl.h>
 
 TileMap::TileMap()
 {

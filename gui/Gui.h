@@ -5,8 +5,10 @@
 #ifndef APOGEE_GUI_GUI_H
 #define APOGEE_GUI_GUI_H
 
+#include "visual/GL.h"
+
 #include <SDL.h>
-#include <GL/gl.h>
+
 #include <map>
 #include <list>
 

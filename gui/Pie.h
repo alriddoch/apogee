@@ -8,9 +8,9 @@
 #include "Widget.h"
 #include "Gui.h"
 
+#include "visual/GL.h"
 #include "visual/Sprite.h"
 
-#include <GL/gl.h>
 #include <sigc++/object.h>
 #if SIGC_MAJOR_VERSION == 1 && SIGC_MINOR_VERSION == 0
 #include <sigc++/basic_signal.h>

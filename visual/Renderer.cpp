@@ -3,6 +3,7 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include "GL.h"
+#include "GLU.h"
 
 #include "Renderer.h"
 #include "EntityRenderer.h"
@@ -19,8 +20,6 @@
 #include <Eris/Connection.h>
 
 #include <SDL_image.h>
-
-#include <GL/glu.h>
 
 #include <iostream>
 

@@ -1,3 +1,23 @@
+2003-07-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/GL.h: Add conditionals to include OpenGL headers differently
+	  on Apple platforms.
+
+	* visual/GLU.h: Include glu.h as above for gl.h.
+
+	* gui/Alert.h, gui/CharSelector.h, gui/Dialogue.h, gui/Gui.h,
+	  gui/Option.h, gui/Pie.h, visual/Model.h, visual/Renderer.cpp,
+	  visual/Sprite.cpp, visual/TileMap.cpp: Ensure that gl headers are
+	  always included using the wrapper headers that sort out the platforms
+	  issues and extensions.
+
+	* visual/Model.cpp: Use the cal3d platform independant file loading
+	  functions to avoid byte order problems.
+
+	* app/GameClient.cpp: Remove test widgets for now.
+
+	* visual/EntityRenderer.cpp: Put back the bounding boxes.
+
 2003-07-07  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* TerrainRenderer.h, visual/TerrainRenderer.cpp:

@@ -16,6 +16,8 @@
 
 #include "Model.h"
 
+#include <cal3d/platform.h>
+
 //----------------------------------------------------------------------------//
 // Static member variables initialization                                     //
 //----------------------------------------------------------------------------//
@@ -120,11 +122,11 @@ GLuint Model::loadTexture(const std::string& strFilename)
 
   // load the dimension of the texture
   int width;
-  file.read((char *)&width, 4);
+  CalPlatform::readInteger(file, width);
   int height;
-  file.read((char *)&height, 4);
+  CalPlatform::readInteger(file, height);
   int depth;
-  file.read((char *)&depth, 4);
+  CalPlatform::readInteger(file, depth);
 
   // allocate a temporary buffer to load the texture to
   unsigned char *pBuffer;

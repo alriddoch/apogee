@@ -15,8 +15,9 @@
 // Includes                                                                   //
 //----------------------------------------------------------------------------//
 
+#include "GL.h"
+
 #include <cal3d/cal3d.h>
-#include <GL/gl.h>
 
 static inline std::string Datapath() {
     return "./data/";

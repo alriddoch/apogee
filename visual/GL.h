@@ -6,7 +6,12 @@
 #define APOGEE_VISUAL_GL_H
 
 #define GL_GLEXT_PROTOTYPES
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #ifndef GL_EXT_compiled_vertex_array
 typedef void (APIENTRY * PFNGLLOCKARRAYSEXTPROC) (GLint first, GLsizei count);

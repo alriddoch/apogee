@@ -6,7 +6,8 @@
 #define APOGEE_GUI_ALERT_H
 
 #include "Button.h"
-#include <GL/gl.h>
+
+#include "visual/GL.h"
 
 class Alert : public Widget {
   private:

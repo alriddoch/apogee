@@ -4,9 +4,9 @@
 
 #include "Sprite.h"
 
+#include "GL.h"
 #include "Renderer.h"
 
-#include <GL/gl.h>
 #include <SDL.h>
 #include <SDL_image.h>
 

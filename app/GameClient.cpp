@@ -97,9 +97,9 @@ bool GameClient::setup()
     compassWidget = new Compass(*gui, -42, 10);
     gui->addWidget(compassWidget);
 
-    gui->addWidget(new Pie(*gui, 80, 170));
+    // gui->addWidget(new Pie(*gui, 80, 170));
 
-    gui->addWidget(new Console(*gui, 4, 4));
+    // gui->addWidget(new Console(*gui, 4, 4));
 
     return 0;
 }
