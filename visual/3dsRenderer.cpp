@@ -7,6 +7,8 @@
 #include "GL.h"
 #include "Texture.h"
 
+#include "common/system.h"
+
 #include <lib3ds/mesh.h>
 #include <lib3ds/node.h>
 #include <lib3ds/material.h>
@@ -127,8 +129,23 @@ m3dsRenderer::~m3dsRenderer()
 {
 }
 
+void m3dsRenderer::load(const std::string & filename)
+{
+    std::string fullPath = getMediaPath() + "/" + filename;
+    std::cout << "LOADING " << fullPath << std::endl << std::flush;
+    m_model = lib3ds_file_load(fullPath.c_str());
+}
+
 void m3dsRenderer::render(Renderer &, const PosType &)
 {
+    if (m_model != 0) {
+        glPushMatrix();
+        glEnable(GL_BLEND);
+        glScalef(50.f, 50.f, 50.f);
+        draw3dsModel();
+        glDisable(GL_BLEND);
+        glPopMatrix();
+    }
 }
 
 void m3dsRenderer::select(Renderer &, const PosType &)

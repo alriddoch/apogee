@@ -9,6 +9,8 @@
 
 #include <lib3ds/file.h>
 
+#include <string>
+
 class m3dsRenderer : public EntityRenderer
 {
   protected:
@@ -19,6 +21,8 @@ class m3dsRenderer : public EntityRenderer
   public:
     m3dsRenderer(Renderer &, Eris::Entity & e);
     virtual ~m3dsRenderer();
+
+    void load(const std::string &);
 
     virtual void render(Renderer &, const PosType &);
     virtual void select(Renderer &, const PosType &);

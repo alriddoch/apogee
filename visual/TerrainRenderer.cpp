@@ -33,8 +33,18 @@ static GLfloat ty1[] = {0.f, 0.015625f, 0.f, 0.f};
 
 void TerrainRenderer::enableRendererState()
 {
+    static const float ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    static const float diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+    static const float specular[] = { 0.f, 0.f, 0.f, 1.0f };
+    static const float emission[] = { 0.f, 0.f, 0.f, 1.0f };
+    static const float shininess[] = { 0.0f };
     glEnable(GL_NORMALIZE);
     glColor4f(1.f, 1.f, 1.f, 1.f);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+    glMaterialfv(GL_FRONT, GL_EMISSION, emission);
+    glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
     glEnableClientState(GL_NORMAL_ARRAY);
     // glAlphaFunc(GL_GREATER, 0.5f);
     // glEnable(GL_ALPHA_TEST);

@@ -18,3 +18,12 @@ paladin = "media/media_new/3d_skeletons/paladin/paladin.cfg"
 settler = "media/media_new/3d_skeletons/gen_humanoid/malebuilder/character_01.cfg"
 pig = "media/media_new/3d_skeletons/pig/fat_pig/Pig01_entityforge.cfg"
 skeleton = "media/media_new/3d_skeletons//.cfg"
+
+[3ds]
+
+tree = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
+willow = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
+hickory = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
+
+[textures]
+

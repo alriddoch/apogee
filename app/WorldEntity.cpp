@@ -7,6 +7,7 @@
 #include "Application.h"
 
 #include "visual/Cal3dRenderer.h"
+#include "visual/3dsRenderer.h"
 #include "visual/TerrainRenderer.h"
 
 #include "common/configuration.h"
@@ -84,6 +85,16 @@ WEFactory::WEFactory(Application & a) : m_app(a)
     for(; I != cal3d_list.end(); ++I) {
         const std::string filename = I->second;
         RenderFactory * rf = new RendererFactory<Cal3dRenderer>(filename);
+        Eris::TypeInfo * ti = ts->getTypeByName(I->first);
+        assert(ti != 0);
+        m_renderFactories.insert(std::make_pair(ti, rf));
+    }
+
+    const varconf::sec_map & m3ds_list = global_conf->getSection("3ds");
+    I = m3ds_list.begin();
+    for(; I != m3ds_list.end(); ++I) {
+        const std::string filename = I->second;
+        RenderFactory * rf = new RendererFactory<m3dsRenderer>(filename);
         Eris::TypeInfo * ti = ts->getTypeByName(I->first);
         assert(ti != 0);
         m_renderFactories.insert(std::make_pair(ti, rf));

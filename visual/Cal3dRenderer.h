@@ -24,7 +24,7 @@ class Cal3dRenderer : public EntityRenderer
     Cal3dRenderer(Renderer &, Eris::Entity & e);
     virtual ~Cal3dRenderer();
 
-    virtual void load(const std::string &);
+    void load(const std::string &);
 
     virtual void render(Renderer &, const PosType & camPos);
     virtual void select(Renderer &, const PosType & camPos);

@@ -1,5 +1,18 @@
 2003-11-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/3dsRenderer.cpp, visual/3dsRenderer.h: Get the 3ds renderer
+	  working.
+
+	* visual/Cal3dRenderer.h: Load method does not need to be virtual.
+
+	* app/WorldEntity.cpp: Add 3ds section to conf file, and set up
+	  renderer factories.
+
+	* visual/TerrainRenderer.cpp: Ensure material settings are reset
+	  before drawing terrain.
+
+2003-11-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/WorldEntity.h, app/WorldEntity.cpp: Use slightly more efficient
 	  and much more flexible lookup mechanism for renderers.
 
