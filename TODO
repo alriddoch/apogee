@@ -1,3 +1,8 @@
+Add some kind of check so render passes can be skipped for layers which just
+don't apply. This will involve a bbox check for the simple banded renderers,
+but a more complex trick for things like forest floor.
+(this is partly a mercator note)
+
 Camera interface to renderers is now in, but not used. Implement it,
 and make use of it for terrain.
 
