@@ -14,7 +14,7 @@
 #include "Item.h"
 #include "Compass.h"
 
-Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1)
+Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {
 
 }
@@ -171,6 +171,7 @@ bool Gui::event(SDL_Event & event)
                 (event.button.state & SDL_PRESSED)) {
                 cout << "Gui button pressed" << endl << flush;
                 inMotion = select(event.button.x, event.button.y);
+                focus = inMotion;
                 if (inMotion != -1) {
                     mx = event.button.x;
                     my = event.button.y;
@@ -197,11 +198,11 @@ bool Gui::event(SDL_Event & event)
             }
             break;
         case SDL_KEYDOWN:
-            int widg = select(event.button.x, event.button.y);
+            int widg = focus;
             if (widg != -1) {
-                widgmap::const_iterator I = widgets.find(inMotion);
+                widgmap::const_iterator I = widgets.find(widg);
                 if (I != widgets.end()) {
-                    I->second->key(event.key.keysym.sym);
+                    I->second->key(event.key.keysym.sym, event.key.keysym.mod);
                     update = true;
                 }
             }
@@ -227,4 +228,22 @@ void Gui::addWidget(Widget * w)
 {
     w->setup();
     widgets[newName()] = w;
+}
+
+int Gui::keyToAscii(int key, int mod)
+{
+    if ((mod & (KMOD_LCTRL | KMOD_RCTRL | KMOD_LALT | KMOD_RALT)) != 0) {
+        cout << "ctrl or alt pressed" << endl << flush;
+        return -1;
+    }
+    int val = -1;
+    bool cap = (mod & (KMOD_LSHIFT | KMOD_RSHIFT | KMOD_CAPS)) ? true : false;
+    if ((key >= SDLK_SPACE) && (key <= SDLK_AT) ||
+        (key >= SDLK_LEFTBRACKET) && (key <= SDLK_z)) {
+        val = key;
+    }
+    if (cap && (val > SDLK_BACKQUOTE) && (val < SDLK_DELETE)) {
+        val -= 32;
+    }
+    return val;
 }

@@ -40,6 +40,21 @@ void TextField::release()
 {
 }
 
-void TextField::key(int)
+void TextField::key(int sym,int mod)
 {
+    int k = Gui::keyToAscii(sym,mod);
+    if (k != -1) {
+        m_contents.push_back(k);
+        return;
+    }
+    switch (sym) {
+        case SDLK_BACKSPACE:
+            if (m_contents.size() != 0) {
+                m_contents.erase(m_contents.end() - 1);
+            }
+            break;
+        default:
+            cout << "WEIRD keypress" << endl << flush;
+            break;
+    };
 }

@@ -29,6 +29,7 @@ class Gui {
 
     widgmap widgets;
     hitlist hitNames;
+    int focus;
   public:
     Gui(Renderer & r);
 
@@ -41,6 +42,8 @@ class Gui {
     bool event(SDL_Event &);
     void print(const char *);
     void addWidget(Widget *);
+
+    static int keyToAscii(int key, int mod);
 };
 
 #endif // APOGEE_GUI_GUI_H

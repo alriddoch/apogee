@@ -99,6 +99,7 @@ void Dialogue::select()
 void Dialogue::click()
 {
     const hitlist & h = m_g.getHits();
+    focus = -1;
 
     hitlist::const_iterator I = h.begin();
     for (;I != h.end(); I++) {
@@ -107,6 +108,12 @@ void Dialogue::click()
         }
         if (cButtonName == *I) {
             cButton.press();
+        }
+        if (field1Name == *I) {
+            focus = 1;
+        }
+        if (field2Name == *I) {
+            focus = 2;
         }
     }
 }
@@ -130,8 +137,15 @@ void Dialogue::release()
     }
 }
 
-void Dialogue::key(int sym)
+void Dialogue::key(int sym,int mod)
 {
+    //int k = Gui::keyToAscii(sym,mod);
+    //if (k != -1) { cout << "[" << k << "]" << endl << flush; }
+    if (focus == 1) {
+        field1.key(sym, mod);
+    } else if (focus == 2) {
+        field2.key(sym, mod);
+    }
 }
 
 void Dialogue::addField(const std::string & name, const std::string & contents)

@@ -1,3 +1,14 @@
+2001-10-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Alert.cpp, gui/Alert.h, gui/Button.cpp, gui/Button.h,
+	  gui/Compass.cpp, gui/Compass.h, gui/Dialogue.cpp, gui/Dialogue.h,
+	  gui/Gui.cpp, gui/Gui.h, gui/Item.cpp, gui/Item.h,
+	  gui/TextField.cpp, gui/TextField.h, Widget.h:
+	  Modified key() method so it takes mod info as well as key pressed.
+	  Added variables to track which widget has focus. Added static
+	  method to convert SDL keypress info to ascii value. Implemented
+	  text editing in TextField and Dialogue.
+
 2001-10-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* configure.in: Patched in correct sigc++ check by James.

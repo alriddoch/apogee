@@ -28,7 +28,7 @@ class Alert : public Widget {
     virtual void select();
     virtual void click();
     virtual void release();
-    virtual void key(int sym);
+    virtual void key(int sym, int mod);
 
 };
 

@@ -66,7 +66,7 @@ void Alert::release()
     }
 }
 
-void Alert::key(int sym)
+void Alert::key(int sym, int mod)
 {
     if (sym == SDLK_RETURN) {
         m_obs = true;

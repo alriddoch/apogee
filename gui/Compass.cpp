@@ -59,6 +59,6 @@ void Compass::release()
 {
 }
 
-void Compass::key(int)
+void Compass::key(int,int)
 {
 }

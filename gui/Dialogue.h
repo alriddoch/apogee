@@ -20,6 +20,7 @@ class Dialogue : public Widget {
     TextField field2;
     std::string field1Tag, field2Tag;
     int fieldCount;
+    int focus;
 
   protected:
     static Sprite background;
@@ -32,7 +33,8 @@ class Dialogue : public Widget {
                                       oButton(g, x, y, "OK"),
                                       cButton(g, x, y, "Cancel"),
                                       field1(g, x, y),
-                                      field2(g, x, y), fieldCount(0) { }
+                                      field2(g, x, y),
+                                      fieldCount(0), focus(-1) { }
     virtual ~Dialogue();
 
     virtual void setup();
@@ -40,7 +42,7 @@ class Dialogue : public Widget {
     virtual void select();
     virtual void click();
     virtual void release();
-    virtual void key(int);
+    virtual void key(int,int);
 
     void addField(const std::string & name, const std::string & contents);
 };

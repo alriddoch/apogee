@@ -105,7 +105,7 @@ void Button::release()
 {
 }
 
-void Button::key(int)
+void Button::key(int,int)
 {
 }
 
