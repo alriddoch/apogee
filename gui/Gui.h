@@ -7,6 +7,8 @@
 
 #include "visual/GL.h"
 
+#include <sigc++/object.h>
+
 #include <SDL/SDL.h>
 
 #include <map>
@@ -20,7 +22,7 @@ class Widget;
 typedef std::map<int, Widget *> widgmap;
 typedef std::list<GLuint> hitlist;
 
-class Gui {
+class Gui : public SigC::Object {
   public:
     typedef enum { SELECT_MISS, SELECT_CLICK, SELECT_DRAG } select_t;
 
@@ -37,6 +39,8 @@ class Gui {
     hitlist hitNames;
     int focus;
     std::string skinName;
+
+    void initFont();
   public:
     Gui(Renderer & r);
 
@@ -46,6 +50,7 @@ class Gui {
     int getFocus() const { return focus; }
 
     bool setup();
+    void checkSetup();
     void draw();
     GLint select(int, int);
     bool event(SDL_Event &);

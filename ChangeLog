@@ -1,5 +1,14 @@
 2004-03-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.h, visual/Renderer.cpp: Add a signal to indicate
+	  that the renderer has been modified, and reloading of textures
+	  and display lists may be required.
+
+	* gui/Gui.h, gui/Gui.cpp: Add code to re-load the text font
+	  and attach it to the renderer restart signal.
+
+2004-03-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.cpp: Add query for maximum texture size.
 
 2004-03-20  Al Riddoch  <ajr@ecs.soton.ac.uk>

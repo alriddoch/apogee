@@ -17,56 +17,17 @@
 
 #include "common/configuration.h"
 
-#if USE_PUI
-#include <plib/pu.h>
-#endif
-
 #include <varconf/Config.h>
+
+#include <sigc++/object_slot.h>
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {
 
 }
 
-#if USE_PUI
-void button_cb ( puObject * )
+void Gui::initFont()
 {
-  fprintf ( stderr, "Hello World.\n" ) ;
-}
-#endif
-
-
-bool Gui::setup()
-{
-    // Item * item = new Item(*this, 150, 150);
-    // item->setup();
-    // if (item->load("bag.png")) { widgets[newName()] = item; }
-
-    // Widget * w = new Alert(*this, 500, 60, "This program is currently under test");
-    // w->setup();
-    // widgets[newName()] = w;
-
-    if (global_conf->findItem("apogee", "skin")) {
-        skinName = (std::string)global_conf->getItem("apogee", "skin");
-        std::cout << "Got skin " << skinName << std::endl << std::flush;
-    } else {
-        std::cout << "No skin" << std::endl << std::flush;
-    }
-
-#if USE_PUI
-    puInit();
-
-    puSetDefaultStyle ( PUSTYLE_SMALL_SHADED ) ;                           
-    puSetDefaultFonts ( PUFONT_HELVETICA_10, PUFONT_HELVETICA_10 ) ;
-
-
-    puSetWindowSize(renderer.getWidth(), renderer.getHeight());
-
-    puOneShot *b = new puOneShot(50, 50, 200, 80);
-    b->setLegend("Say Hello");
-#endif
-
-    // textTexture = Texture::get("font.png");
     glGenTextures(1, &textTexture);
     glBindTexture(GL_TEXTURE_2D, textTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, texture_font_internalFormat,
@@ -74,16 +35,16 @@ bool Gui::setup()
                  texture_font_format, GL_UNSIGNED_BYTE, texture_font_pixels);
     if (glGetError() != 0) {
         std::cerr << "Failed to load font texture" << std::endl << std::flush;
-        return false;
+        return;
     }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     textBase = glGenLists(256);
     for(int loop=0; loop<256; loop++) {
-        float cx=(float)(loop%16)/16.0f;             // X Position Of Current Character
-        float cy=(float)(loop/16)/16.0f;             // Y Position Of Current Character
+        float cx=(float)(loop%16)/16.0f;      // X Position Of Current Character
+        float cy=(float)(loop/16)/16.0f;      // Y Position Of Current Character
 
-        glNewList(textBase+loop,GL_COMPILE);       // Start Building A List
+        glNewList(textBase+loop,GL_COMPILE);   // Start Building A List
         glBegin(GL_QUADS);                     // Use A Quad For Each Character
         glTexCoord2f(cx,1-cy-0.0625f);         // Texture Coord (Bottom Left)
         glVertex2i(0,0);                       // Vertex Coord (Bottom Left)
@@ -97,9 +58,36 @@ bool Gui::setup()
         glTranslated(10,0,0);                  // Move To The Right Of The Character
         glEndList();                           // Done Building The Display List
     }                                        
-    
+}
+
+bool Gui::setup()
+{
+    if (global_conf->findItem("apogee", "skin")) {
+        skinName = (std::string)global_conf->getItem("apogee", "skin");
+        std::cout << "Got skin " << skinName << std::endl << std::flush;
+    } else {
+        std::cout << "No skin" << std::endl << std::flush;
+    }
+
+    initFont();
+
+    renderer.Restart.connect(SigC::slot(*this, &Gui::checkSetup));
 
     return true;
+}
+
+void Gui::checkSetup()
+{
+    if (!glIsList(textBase)) {
+        std::cout << "Font list has gone" << std::endl << std::flush;
+        if (glIsTexture(textTexture)) {
+            std::cout << "But texture is still around"
+                      << std::endl << std::flush;
+            glDeleteTextures(1, &textTexture);
+        }
+        initFont();
+    }
+    // FIXME Check the font display lists and stuff
 }
 
 void Gui::draw()
@@ -126,11 +114,6 @@ void Gui::draw()
     }
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
-
-#if USE_PUI
-    puDisplay () ;
-#endif
-
 }
 
 GLint Gui::select(int x, int y)

@@ -458,6 +458,7 @@ void Renderer::resize(int wdth, int hght)
     width = wdth;
     height = hght;
     shapeView();
+    Restart.emit();
 }
 
 void Renderer::clear()
