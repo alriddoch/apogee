@@ -104,6 +104,8 @@ class Renderer {
     virtual void viewPoint() = 0;
     void origin();
     void orient(const WFMath::Quaternion &);
+    void fogOn();
+    void fogOff();
     void lightOn();
     void lightOff();
     void update(float);

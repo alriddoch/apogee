@@ -4,6 +4,7 @@
 
 #include "TerrainRenderer.h"
 
+#include "Renderer.h"
 #include "Texture.h"
 #include "GLU.h"
 
@@ -259,13 +260,13 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
 
 }
 
-void TerrainRenderer::drawSea(Mercator::Terrain & t)
+void TerrainRenderer::drawSea(Renderer & r, Mercator::Terrain & t)
 {
     const Terrain::Segmentstore & segs = t.getTerrain();
 
     Terrain::Segmentstore::const_iterator I = segs.begin();
-    glDisable(GL_FOG);
-    glDisable(GL_LIGHTING);
+    r.fogOff();
+    r.lightOff();
     glEnable(GL_BLEND);
     for (; I != segs.end(); ++I) {
         const Terrain::Segmentcolumn & col = I->second;
@@ -284,8 +285,8 @@ void TerrainRenderer::drawSea(Mercator::Terrain & t)
         }
     }
     glDisable(GL_BLEND);
-    glEnable(GL_FOG);
-    glEnable(GL_LIGHTING);
+    r.lightOn();
+    r.fogOn();
 }
 
 void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
@@ -432,14 +433,14 @@ TerrainRenderer::~TerrainRenderer()
 {
 }
 
-void TerrainRenderer::render(Renderer &, const PosType & camPos)
+void TerrainRenderer::render(Renderer & r, const PosType & camPos)
 {
     if (!m_haveTerrain) {
         readTerrain();
         m_haveTerrain = true;
     }
     drawMap(m_terrain, camPos);
-    drawSea(m_terrain);
+    drawSea(r, m_terrain);
     drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), .5f);
 }
 

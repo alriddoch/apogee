@@ -24,6 +24,7 @@ skeleton = "media/media_new/3d_skeletons//.cfg"
 tree = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
 willow = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
 hickory = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
+sty = "media/media_new/3d_objects/items/building_element/models/wooden_fence/pig-sty.3ds"
 
 [textures]
 

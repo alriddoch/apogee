@@ -34,7 +34,7 @@ class TerrainRenderer : public EntityRenderer
     void generateAlphaTextures(Mercator::Segment *);
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &, const PosType & camPos);
-    void drawSea(Mercator::Terrain &);
+    void drawSea(Renderer &, Mercator::Terrain &);
     void drawShadow(const WFMath::Point<2> & pos, float radius = 1.f);
     void readTerrain();
   public:

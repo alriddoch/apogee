@@ -181,6 +181,16 @@ const PosType Renderer::getWorldCoord(int x, int y, float z)
     return PosType(wx, wy, wz);
 }
 
+void Renderer::fogOn()
+{
+    glEnable(GL_FOG);
+}
+
+void Renderer::fogOff()
+{
+    glDisable(GL_FOG);
+}
+
 void Renderer::lightOn()
 {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);

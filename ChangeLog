@@ -1,5 +1,16 @@
 2004-01-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/3dsRenderer.cpp: Disable random scaling for 3ds renderer.
+
+	* visual/Renderer.cpp, visual/Renderer.h: Add functions to renderer
+	  interface to turn on and off fogging.
+
+	* visual/TerrainRenderer.cpp, visual/TerrainRenderer.h:
+	  Pass Renderer reference to drawSea(), and make it use that
+	  to disable lighting and fog.
+
+2004-01-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Texture.cpp: Clean up texture loading error
 	  reporting.
 

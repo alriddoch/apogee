@@ -235,7 +235,7 @@ void m3dsRenderer::render(Renderer &, const PosType &)
         glEnable(GL_ALPHA_TEST);
         glEnable(GL_NORMALIZE);
         glAlphaFunc(GL_GREATER, 0.2f);
-        glScalef(5.f, 5.f, 5.f);
+        // glScalef(5.f, 5.f, 5.f);
         draw3dsFile();
         glDisable(GL_NORMALIZE);
         glDisable(GL_ALPHA_TEST);
