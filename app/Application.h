@@ -28,7 +28,7 @@ class Application : public SigC::Object {
     Renderer & renderer;
     Eris::Connection & connection;
 
-    virtual bool setup() { return 0; };
+    virtual bool setup() = 0;
     virtual bool update(float) = 0;
     virtual bool event(SDL_Event &) = 0;
     virtual bool mouse(int,int) = 0;

@@ -1,6 +1,8 @@
 #ifndef APOGEE_EDITOR_H
 #define APOGEE_EDITOR_H
 
+#error This file has been removed from the build
+
 #include <coal/bladeloader.h>
 
 #include <string>

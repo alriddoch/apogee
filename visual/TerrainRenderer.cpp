@@ -209,8 +209,8 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     m_textures[4] = Texture::get("snow.png");
 
     int idx = -1;
-    for (int i = 0; i < (segSize + 1) - 1; ++i) {
-        for (int j = 0; j < (segSize + 1); ++j) {
+    for (unsigned int i = 0; i < (segSize + 1) - 1; ++i) {
+        for (unsigned int j = 0; j < (segSize + 1); ++j) {
             m_lineIndeces[++idx] = j * (segSize + 1) + i;
             m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
         }

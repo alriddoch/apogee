@@ -1,6 +1,8 @@
 #ifndef APOGEE_CLIENT_H
 #define APOGEE_CLIENT_H
 
+#error This file has been removed from the build
+
 #include <SDL.h>
 
 #include <coal/isoloader.h>
