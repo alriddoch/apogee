@@ -1,5 +1,9 @@
 2003-06-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.cpp: Use normals to light terrain.
+
+2003-06-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Model.cpp: Disable setting color in cal3d.
 
 	* visual/TerrainRenderer.cpp: Set COLOR_MATERIAL mode so that the multi-pass

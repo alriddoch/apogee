@@ -21,7 +21,12 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     glNormal3f(0.f, 0.f, 1.f);
     static float * harray = 0;
     static float * carray = 0;
+    float * narray = map->getNormals();
     static int allocated_segSize = 0;
+    if (narray == 0) {
+        map->populateNormals();
+        narray = map->getNormals();
+    }
     // Only re-allocate the vertex arrays if we are dealing with a different
     // segment size.
     if (segSize != allocated_segSize) {
@@ -61,10 +66,16 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         }
     }
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_NORMALIZE);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+    glColor4f(1.f, 1.f, 1.f, 1.f);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
     glColorPointer(4, GL_FLOAT, 0, carray);
+    glNormalPointer(GL_FLOAT, 0, narray);
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glVertexPointer(3, GL_FLOAT, 0, harray);
     if (have_GL_EXT_compiled_vertex_array) {
@@ -74,19 +85,19 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
                    GL_UNSIGNED_INT, m_lineIndeces);
 
     glBindTexture(GL_TEXTURE_2D, m_texture2);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_BLEND);
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
     glDisable(GL_BLEND);
-    glDisable(GL_COLOR_MATERIAL);
 
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisable(GL_NORMALIZE);
+    glDisable(GL_COLOR_MATERIAL);
     glDisable(GL_TEXTURE_2D);
 }
 
