@@ -296,7 +296,7 @@ void GameClient::moveCharacter(const PosType & pos)
     Eris::Entity * ref = m_character->getContainer();
     Eris::Entity * r;
     while ((r = ref->getContainer()) != NULL) {
-        coords -= ref->getPosition();
+        coords.toLocalCoords(ref->getPosition(), WFMath::Quaternion().identity());
         ref = r;
     };
     
@@ -331,7 +331,7 @@ const PosType GameClient::getAbsCharPos()
         }
     }
     for(; ref != NULL && ref != root; ref = ref->getContainer()) {
-        pos = pos + ref->getPosition();
+        pos.toParentCoords(ref->getPosition(), WFMath::Quaternion().identity());
     }
     return pos;
 }

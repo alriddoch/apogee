@@ -255,7 +255,8 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    PosType camPos = cp; camPos -= pos;
+    PosType camPos = cp;
+    camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
 
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re == 0) {
@@ -325,7 +326,8 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    PosType camPos = cp; camPos -= pos;
+    PosType camPos = cp;
+    camPos.toLocalCoords(pos, WFMath::Quaternion().identity());
     glLoadName(++next);
     name[next] = ent;
 

@@ -12,6 +12,6 @@ namespace WFMath {
 }
 
 typedef WFMath::Vector<3> VelType;
-typedef WFMath::Vector<3> PosType;
+typedef WFMath::Point<3> PosType;
 
 #endif // VECTOR_3D_H

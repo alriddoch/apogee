@@ -1,5 +1,14 @@
 2003-11-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* common/Vector3D.h: Switch back to Eris, and using Point<3> for POS
+	  attribute.
+
+	* app/GameClient.cpp, visual/Renderer.cpp: Switch to using the new
+	  WFMath API additions to transform coords between parent/child
+	  spaces.
+
+2003-11-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Use slightly cleaner technique to
 	  generate triangle strip indeces for terrain. Ensure that
 	  the strip direction for shadows matches for drawing shadows.
