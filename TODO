@@ -1,3 +1,7 @@
+Add RenderableEntity * parent to args of drawEntity(), as its inevitable
+that it is renderable, and we then don't need to fiddle around working out
+whether it is.
+
 Add decal shadows to the terrain - extra pass after terrain drawing. Depth
 write off.
 
