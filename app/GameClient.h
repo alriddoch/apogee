@@ -60,7 +60,10 @@ class GameClient : public Application {
     void connectionLog(Eris::LogLevel level, const std::string & msg);
     void netDisconnected();
 
+    void loginCancel();
+
     void login(const std::string &, const std::string &);
+    void create(const std::string &, const std::string &);
     void createCharacter(const std::string &, const std::string &);
     void takeCharacter(const std::string &);
 

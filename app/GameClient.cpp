@@ -258,14 +258,33 @@ void GameClient::netConnected()
     d->addField("login", "ajr");
     d->addField("password", "hel");
     d->oButtonSignal.connect(SigC::slot(*this, &GameClient::login));
+    d->cButtonSignal.connect(SigC::slot(*this, &GameClient::loginCancel));
     gui->addWidget(d);
 
+}
+
+void GameClient::loginCancel()
+{
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/
+2);
+    d->addField("new login", "ajr");
+    d->addField("password", "hel");
+    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::create));
+    gui->addWidget(d);
 }
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
     player = new Eris::Player(&connection);
     player->login(name, password);
+    lobby = Eris::Lobby::instance();
+    lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
+}
+
+void GameClient::create(const std::string & name, const std::string & password)
+{
+    player = new Eris::Player(&connection);
+    player->createAccount(name, "", password);
     lobby = Eris::Lobby::instance();
     lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
 }
