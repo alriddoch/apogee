@@ -83,7 +83,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    glTexCoordPointer(3, GL_FLOAT, 0, harray);
+    glTexCoordPointer(2, GL_FLOAT, 12, harray);
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
