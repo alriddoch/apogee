@@ -6,7 +6,7 @@ apogee_SOURCES = \
                  Application.h \
                  Editor.cpp Editor.h \
                  Client.cpp Client.h \
-                 LeakTracer.cc \
                  apogee.cpp
+#                 LeakTracer.cc \
 
-apogee_LDADD = ../visual/libvisual.a ../net/libnet.a ../world/libworld.a
+apogee_LDADD = ../visual/libvisual.a

@@ -1,1 +1,1 @@
-SUBDIRS = visual net world app
+SUBDIRS = visual app

@@ -6,7 +6,7 @@
 #include <SDL.h>
 #include <coal/database.h>
 
-#include <world/Vector3D.h>
+#include <common/Vector3D.h>
 
 class Sprite;
 class Model;

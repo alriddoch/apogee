@@ -8,13 +8,23 @@
 #include <visual/Sprite.h>
 #include <visual/Model.h>
 
-#include <world/World.h>
+#include <Atlas/Objects/Entity/GameEntity.h>
+
+#include <Eris/Player.h>
+#include <Eris/Lobby.h>
+#include <Eris/World.h>
+
+#include <sigc++/object_slot.h>
 
 #include <iostream>
 
 #include <math.h>
 
 #include <coal/debug.h>
+
+using Atlas::Objects::Entity::GameEntity;
+
+using Atlas::Message::Object;
 
 void Editor::grid()
 {
@@ -122,6 +132,7 @@ bool Editor::setup()
 
 void Editor::doWorld()
 {
+#if 0
     const World::edict & ents = world.getWorld();
 
     World::edict::const_iterator I;
@@ -133,6 +144,7 @@ void Editor::doWorld()
                            I->second->getBbox(),
                            I->second->getBmedian());
     }
+#endif
 }
 
 bool Editor::update()
@@ -228,4 +240,61 @@ bool Editor::event(SDL_Event & event)
             break;
     }
     return false;
+}
+
+void Editor::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
+{
+    std::cout << "TALK: " << t << std::endl << std::flush;
+}
+
+void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
+{
+    std::cout << "Logged in" << std::endl << std::flush;
+
+    GameEntity chrcter(GameEntity::Instantiate());
+    chrcter.SetParents(Atlas::Message::Object::ListType(1,"farmer"));
+    chrcter.SetName("Apogee Dubneal");
+    chrcter.SetAttr("description", "an apogee person");
+    chrcter.SetAttr("sex", "female");
+    world = player->createCharacter(chrcter);
+
+    lobby->Talk.connect(SigC::slot(this, &Editor::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(this, &Editor::roomEnter));
+
+    world->EntityCreate.connect(SigC::slot(this, &Editor::worldEntityCreate));
+    world->Entered.connect(SigC::slot(this, &Editor::worldEnter));
+}
+
+void Editor::roomEnter(Eris::Room *r)
+{
+    std::cout << "Enter room" << std::endl << std::flush;
+}
+
+void Editor::netFailure(std::string msg)
+{
+    std::cout << "Got connection failure: " << msg << std::endl << std::flush;
+}
+
+void Editor::netConnected()
+{
+    std::cout << "Connected to server!" << std::endl << std::flush;
+
+    player = new Eris::Player();
+    lobby = player->login(&connection, "ajr", "hel");
+    lobby->LoggedIn.connect(SigC::slot(this, &Editor::loginComplete));
+}
+
+void Editor::netDisconnected()
+{
+    std::cout << "Disconnected from the server" << std::endl << std::flush;
+}
+
+void Editor::worldEntityCreate(Eris::Entity *r)
+{
+    std::cout << "Created character" << std::endl << std::flush;
+}
+
+void Editor::worldEnter(Eris::Entity *r)
+{
+    std::cout << "Enter world" << std::endl << std::flush;
 }

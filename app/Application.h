@@ -1,17 +1,18 @@
 #ifndef APOGEE_APPLICATION_H
 #define APOGEE_APPLICATION_H
 
+#include <sigc++/object.h>
+
 #include <SDL.h>
 
 class Renderer;
 class World;
 
-class Application {
+class Application : public SigC::Object {
   protected:
     Renderer & renderer;
-    World & world;
 
-    Application(Renderer & rend, World & wrld) : renderer(rend), world(wrld) { }
+    Application(Renderer & rend) : renderer(rend) { }
     //virtual ~Application() = 0;
   public:
 

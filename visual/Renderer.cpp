@@ -7,8 +7,6 @@
 #include "Sprite.h"
 #include "Model.h"
 
-#include <world/Vector3D.h>
-
 Renderer * Renderer::instance = NULL;
 
 Renderer::Renderer(int wdth, int hght) : screen(NULL), character(NULL),

@@ -1,6 +1,0 @@
-ALPHA blending onto area written by GL currently doesn't work, as it seems
-to assume that the background is what was there before GL started. Is this
-a bug, or can I do something about it?
-
-Setting a video mode as OPENGLBLIT leaks a surface. Can this be fixed? It
-is an internal to SDL problem, and it is marked as TODO in the source.

@@ -3,14 +3,25 @@
 #include <unistd.h>
 
 #include <visual/Renderer.h>
-#include <net/Connection.h>
+// #include <net/Connection.h>
 #include "Editor.h"
 //#include "Client.h"
 
-#include <world/World.h>
+// #include <world/World.h>
+
+#include <Atlas/Objects/Entity/GameEntity.h>
+
+#include <Eris/Connection.h>
+#include <Eris/Player.h>
+#include <Eris/Lobby.h>
+
+#include <sigc++/object_slot.h>
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
+
+using Atlas::Message::Object;
+using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {
@@ -20,24 +31,18 @@ int main(int argc, char ** argv)
         return 1;
     }
 
-    World world;
-
-    Connection con(world);
-
     std::string host(argv[1]), user(argv[2]), password;
 
-    con.connect(host);
-
-    std::cout << "Password: ";
-    std::cin >> password;
-
-    con.login(user, password);
-    con.create_char("Al", "farmer");
-    con.look();
+    Eris::Connection & con = * new Eris::Connection("apogee");
 
     Renderer * renderer = Renderer::Instance();
-    Application * app = new Editor(*renderer, world);
-    //Application * app = new Client(renderer);
+    Editor * app = new Editor(*renderer, con);
+
+    con.connect(host, 6767);
+
+    con.Failure.connect(SigC::slot(app, &Editor::netFailure));
+    con.Connected.connect(SigC::slot(app, &Editor::netConnected));
+    con.Disconnected.connect(SigC::slot(app, &Editor::netDisconnected));
 
     app->setup();
     app->update();
@@ -46,11 +51,12 @@ int main(int argc, char ** argv)
     SDL_Event event;
     int newWidth;
     int newHeight;
+    bool updated;
 
     while (!done) {
-        bool updated;
+        updated = false;
         while (SDL_PollEvent(&event) && !done) {
-            updated = app->event(event);
+            updated = app->event(event) || updated;
             switch (event.type) {
                 case SDL_QUIT:
                     done = true;
@@ -76,12 +82,24 @@ int main(int argc, char ** argv)
                     break;
             }
         }
-        updated = con.poll() || updated;
+        // updated = con.poll() || updated;
+        try {
+            con.poll();
+        } catch (Eris::BaseException b) {
+            cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
+        } catch (Atlas::Objects::NoSuchAttrException n) {
+            cout << "ATLAS EXCEPTION: " << n.name << std::endl << std::flush;
+        } catch (Atlas::Message::WrongTypeException w) {
+            cout << "ATLAS MESSAGE EXCEPTION" << std::endl << std::flush;
+        } catch (...) {
+            cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
+        }
         if (updated) {
             app->update();
         }
         usleep(10000L);
     }
+    std::cout << "Quitting" << std::endl << std::flush;
     delete app;
     Renderer::Shutdown();
 }

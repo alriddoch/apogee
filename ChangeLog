@@ -1,3 +1,12 @@
+2001-08-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.h, visual/Renderer.cpp: Moved Vector3D into
+	  common.
+
+	* app/apogee.cpp, app/Editor.h, app/Editor.cpp, app/Client.h,
+	  app/Application.h: Re-wrote client and entity code to use
+	  Eris, the newly commited client library.
+
 2001-07-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Model.h, visual/Model.cpp: Added model class from cal3d

@@ -61,12 +61,12 @@ AC_CHECK_LIB(coalblade,main)
 AC_CHECK_LIB(coaliso,main)
 AC_CHECK_LIB(skstream,main)
 AC_CHECK_LIB(cal3d,main)
+AC_CHECK_LIB(sigc,main)
+AC_CHECK_LIB(eris,main)
 
 dnl Generate files
 AC_OUTPUT([
 	Makefile
 	visual/Makefile
-	net/Makefile
-	world/Makefile
 	app/Makefile
 ])

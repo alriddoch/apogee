@@ -14,8 +14,7 @@ class Client: public Application {
     CoalDatabase map_database;
     Sprite * character;
   public:
-    Client(Renderer & rend, World & wrld) : Application(rend, wrld),
-                                            character(NULL) { }
+    Client(Renderer & rend) : Application(rend), character(NULL) { }
     virtual ~Client() { }
 
     bool setup();
