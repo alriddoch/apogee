@@ -102,7 +102,7 @@ bool Editor::update()
     // renderer.draw3Dentity();
     // renderer.drawCharacter(character, 1, 2);
     model->onUpdate(0.1);
-    renderer.drawCal3DModel(model);
+    renderer.drawCal3DModel(model, 0, 0);
     doWorld();
     // compass();
     // axis();

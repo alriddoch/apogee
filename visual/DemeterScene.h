@@ -33,7 +33,7 @@ class DemeterScene : public Renderer {
     }
 
     virtual void draw3Dentity();
-    virtual void drawCal3DModel(Model *);
+    virtual void drawCal3DModel(Model *, float x, float y);
     virtual void draw3DBox(const Vector3D & coords,
                            const Vector3D & bbox = Vector3D(),
                            const Vector3D & bmedian = Vector3D());

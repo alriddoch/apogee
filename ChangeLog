@@ -1,3 +1,8 @@
+2001-09-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Fixed cal3d model rendering so it is
+	  drawn at the terrains surface.
+
 2001-09-12  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Fixed camera to track terrains surface.

@@ -76,7 +76,7 @@ class Renderer {
     //virtual void draw3Dtest() = 0;
     //virtual void draw2Dtest() = 0;
     virtual void draw3Dentity() = 0;
-    virtual void drawCal3DModel(Model *) = 0;
+    virtual void drawCal3DModel(Model *,float,float) = 0;
     virtual void draw3DBox(const Vector3D & coords,
                            const Vector3D & bbox = Vector3D(),
                            const Vector3D & bmedian = Vector3D()) = 0;

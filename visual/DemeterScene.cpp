@@ -231,8 +231,12 @@ void DemeterScene::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void DemeterScene::drawCal3DModel(Model * m)
+void DemeterScene::drawCal3DModel(Model * m, float x, float y)
 {
+    origin();
+    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + x, terrain->GetHeight() / 2.0f + y) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
+    std::cout << "Transl " << characterElevation << std::endl << std::flush;
+    glTranslatef(x,y,characterElevation);
     viewScale(0.025f);
     m->onRender();
     viewScale(1.0f);

@@ -237,7 +237,7 @@ void Isometric::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void Isometric::drawCal3DModel(Model * m)
+void Isometric::drawCal3DModel(Model * m,float,float)
 {
     viewScale(40);
     m->onRender();
