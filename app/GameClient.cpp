@@ -122,6 +122,7 @@ bool GameClient::update(float secs)
         if (!haveTerrain) {
             Eris::Entity * worldRoot = world->getRootEntity();
             readTerrain(worldRoot);
+            haveTerrain = true;
         }
         Point3D offset = getAbsCharPos();
         renderer.setXoffset(offset.x());

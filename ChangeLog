@@ -1,4 +1,9 @@
-2003-04-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2003-05-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp: Don't refresh the terrain every frame, which
+	  was coincedently leaking memory.
+
+2003-05-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/GameClient.h: Get terrain base points from
 	  server. 
