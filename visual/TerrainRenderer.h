@@ -28,7 +28,9 @@ class TerrainRenderer : public EntityRenderer
   protected:
     DisplayListStore m_displayLists;
     int m_numLineIndeces;
+    int m_numHalfIndeces;
     unsigned short * const m_lineIndeces;
+    unsigned short * const m_halfIndeces;
     GLuint m_textures[8];
     GLuint m_alphaTextures[8];
     GLuint m_landscapeList;

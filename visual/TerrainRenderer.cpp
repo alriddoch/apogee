@@ -165,8 +165,13 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         }
                      
         // Draw this segment
+#if 0
+        glDrawElements(GL_TRIANGLE_STRIP, m_numHalfIndeces,
+                       GL_UNSIGNED_SHORT, m_halfIndeces);
+#else
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
+#endif
 
         if (texNo == 0) {
             // After the first pass, which we assume is a fill, enable
@@ -194,9 +199,9 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                               const PosType & camPos)
 {
     long lowXBound = lrintf(camPos[0] / segSize) - 2,
-         upXBound = lrintf(camPos[0] / segSize) + 2,
+         upXBound = lrintf(camPos[0] / segSize) + 1,
          lowYBound = lrintf(camPos[1] / segSize) - 2,
-         upYBound = lrintf(camPos[1] / segSize) + 2;
+         upYBound = lrintf(camPos[1] / segSize) + 1;
 
     enableRendererState();
 
@@ -464,7 +469,9 @@ bool TerrainRenderer::readTerrain()
 TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
     EntityRenderer(r, e), m_terrain(Terrain::SHADED),
     m_numLineIndeces(0),
+    m_numHalfIndeces(0),
     m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
+    m_halfIndeces(new unsigned short[(segSize/2 + 1) * (segSize/2 + 1) * 2]),
     m_landscapeList(0), m_haveTerrain(false)
 
 {
@@ -490,6 +497,24 @@ TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
         // if (++i >= (segSize + 1) - 1) { break; }
     }
     m_numLineIndeces = ++idx;
+
+    idx = -1;
+    for (unsigned int i = 0; i < (segSize + 1) - 2; ++i, ++i) {
+        std::cout << "G: " << i << ":" << (i&2) << std::endl << std::flush;
+        if (i & 2) {
+            for (int j = (segSize + 1) - 1; j >= 0; --j, --j) {
+                m_halfIndeces[++idx] = j * (segSize + 1) + i + 2;
+                m_halfIndeces[++idx] = j * (segSize + 1) + i;
+            }
+        } else {
+            for (unsigned int j = 0; j < (segSize + 1); ++j, ++j) {
+                m_halfIndeces[++idx] = j * (segSize + 1) + i;
+                m_halfIndeces[++idx] = j * (segSize + 1) + i + 2;
+            }
+        }
+        // if (++i >= (segSize + 1) - 1) { break; }
+    }
+    m_numHalfIndeces = ++idx;
 
     m_terrain.addShader(new Mercator::FillShader());
     m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f)); // Sandy beach
