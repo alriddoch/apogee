@@ -26,8 +26,8 @@ class Cal3dRenderer : public EntityRenderer
 
     virtual void load(const std::string &);
 
-    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
-    virtual void select(Renderer &, const WFMath::Vector<3> & camPos);
+    virtual void render(Renderer &, const PosType & camPos);
+    virtual void select(Renderer &, const PosType & camPos);
 };
 
 #endif // APOGEE_CAL3D_RENDERER_H

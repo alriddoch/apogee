@@ -5,17 +5,14 @@
 #ifndef APOGEE_ENTITY_RENDERER_H
 #define APOGEE_ENTITY_RENDERER_H
 
+#include "common/Vector3D.h"
+
 #include <sigc++/object.h>
 
 class Renderer;
 
 namespace Eris {
   class Entity;
-}
-
-namespace WFMath {
-  template<const int dim> class Vector;
-  template<const int dim> class Point;
 }
 
 class EntityRenderer : virtual public SigC::Object
@@ -29,8 +26,8 @@ class EntityRenderer : virtual public SigC::Object
 
     bool drawContents() const { return m_drawContents; }
 
-    virtual void render(Renderer &, const WFMath::Vector<3> & camPos) = 0;
-    virtual void select(Renderer &, const WFMath::Vector<3> & camPos) = 0;
+    virtual void render(Renderer &, const PosType & camPos) = 0;
+    virtual void select(Renderer &, const PosType & camPos) = 0;
 };
 
 namespace WFMath {
@@ -46,8 +43,8 @@ class BBoxRenderer : public EntityRenderer
     BBoxRenderer(Renderer &, Eris::Entity & e);
     virtual ~BBoxRenderer();
 
-    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
-    virtual void select(Renderer &, const WFMath::Vector<3> & camPos);
+    virtual void render(Renderer &, const PosType & camPos);
+    virtual void select(Renderer &, const PosType & camPos);
 };
 
 #endif // APOGEE_ENTITY_RENDERER_H

@@ -33,15 +33,15 @@ class TerrainRenderer : public EntityRenderer
 
     void generateAlphaTextures(Mercator::Segment *);
     void drawRegion(Mercator::Segment *);
-    void drawMap(Mercator::Terrain &, const WFMath::Vector<3> & camPos);
+    void drawMap(Mercator::Terrain &, const PosType & camPos);
     void drawSea(Mercator::Terrain &);
     void readTerrain();
   public:
     TerrainRenderer(Renderer &, Eris::Entity & e);
     virtual ~TerrainRenderer();
 
-    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
-    virtual void select(Renderer &, const WFMath::Vector<3> & camPos);
+    virtual void render(Renderer &, const PosType & camPos);
+    virtual void select(Renderer &, const PosType & camPos);
 };
 
 #endif // APOGEE_TERRAIN_RENDERER_H

@@ -178,7 +178,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 using Mercator::Terrain;
 
 void TerrainRenderer::drawMap(Mercator::Terrain & t,
-                              const WFMath::Vector<3> & camPos)
+                              const PosType & camPos)
 {
     long lowXBound = lrintf(camPos[0] / segSize) - 2,
          upXBound = lrintf(camPos[0] / segSize) + 2,
@@ -350,7 +350,7 @@ TerrainRenderer::~TerrainRenderer()
 {
 }
 
-void TerrainRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
+void TerrainRenderer::render(Renderer &, const PosType & camPos)
 {
     if (!m_haveTerrain) {
         readTerrain();
@@ -360,7 +360,7 @@ void TerrainRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
     drawSea(m_terrain);
 }
 
-void TerrainRenderer::select(Renderer &, const WFMath::Vector<3> & camPos)
+void TerrainRenderer::select(Renderer &, const PosType & camPos)
 {
     drawMap(m_terrain, camPos);
     // selectTerrain(m_terrain);

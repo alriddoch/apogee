@@ -127,10 +127,10 @@ m3dsRenderer::~m3dsRenderer()
 {
 }
 
-void m3dsRenderer::render(Renderer &, const WFMath::Vector<3> &)
+void m3dsRenderer::render(Renderer &, const PosType &)
 {
 }
 
-void m3dsRenderer::select(Renderer &, const WFMath::Vector<3> &)
+void m3dsRenderer::select(Renderer &, const PosType &)
 {
 }

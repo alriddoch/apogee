@@ -5,8 +5,13 @@
 #ifndef VECTOR_3D_H
 #define VECTOR_3D_H
 
-#include <Eris/Types.h>
+namespace WFMath {
+  template<const int dim> class Vector;
+  template<const int dim> class Point;
+  class Quaternion;
+}
 
-typedef WFMath::Vector<3> Vector3D;
+typedef WFMath::Vector<3> VelType;
+typedef WFMath::Vector<3> PosType;
 
 #endif // VECTOR_3D_H

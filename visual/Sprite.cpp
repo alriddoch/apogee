@@ -10,6 +10,7 @@
 
 #include <SDL/SDL_image.h>
 
+#include <iostream>
 #include <cmath>
 
 // This function has an arbitrary size limit of 4096x4096 for textures

@@ -5,7 +5,7 @@
 #ifndef APOGEE_WORLDENTITY_H
 #define APOGEE_WORLDENTITY_H
 
-#include <common/Vector3D.h>
+#include "common/Vector3D.h"
 
 #include <Eris/Entity.h>
 #include <Eris/Factory.h>
@@ -22,14 +22,14 @@ class RenderableEntity : public Eris::Entity
     EntityRenderer * m_drawer;
 
     RenderableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
-    virtual void constrainChild(Vector3D & pos);
+    virtual void constrainChild(PosType & pos);
 };
 
 class MovableEntity : public RenderableEntity
 {
     float updateTime;
   public:
-    void movedSignal(const Vector3D &);
+    void movedSignal(const PosType &);
 
     MovableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
@@ -50,7 +50,7 @@ class TerrainEntity : public RenderableEntity
   public:
     TerrainEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
-    virtual void constrainChild(Vector3D & pos);
+    virtual void constrainChild(PosType & pos);
 };
 
 class TreeEntity : public RenderableEntity

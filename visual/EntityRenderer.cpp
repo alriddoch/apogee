@@ -101,14 +101,14 @@ BBoxRenderer::~BBoxRenderer()
 {
 }
 
-void BBoxRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
+void BBoxRenderer::render(Renderer &, const PosType & camPos)
 {
     if (m_ent.hasBBox()) {
         draw3DBox(m_ent.getBBox());
     }
 }
 
-void BBoxRenderer::select(Renderer &, const WFMath::Vector<3> & camPos)
+void BBoxRenderer::select(Renderer &, const PosType & camPos)
 {
     if (m_ent.hasBBox()) {
         select3DBox(m_ent.getBBox());

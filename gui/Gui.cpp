@@ -173,7 +173,7 @@ GLint Gui::select(int x, int y)
 
     GLuint * ptr = &selectBuf[0];
     GLuint minDepth = UINT_MAX, noNames = 0;
-    GLuint * namePtr;
+    GLuint * namePtr = 0;
     for (int i = 0; i < hits; i++) {
         int names = *(ptr++);
         std::cout << "{" << *ptr << "}";

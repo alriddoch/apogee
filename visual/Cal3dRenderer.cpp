@@ -73,12 +73,12 @@ void Cal3dRenderer::load(const std::string & file)
     m_model = model;
 }
 
-void Cal3dRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
+void Cal3dRenderer::render(Renderer &, const PosType & camPos)
 {
     drawCal3dModel(m_model);
 }
 
-void Cal3dRenderer::select(Renderer &, const WFMath::Vector<3> & camPos)
+void Cal3dRenderer::select(Renderer &, const PosType & camPos)
 {
     selectCal3dModel(m_model);
 }

@@ -7,7 +7,7 @@
 
 #include "Application.h"
 
-#include <common/Vector3D.h>
+#include "common/Vector3D.h"
 
 #include <Eris/Log.h>
 
@@ -88,10 +88,10 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 
-    void charMoved(const Vector3D &);
+    void charMoved(const PosType &);
 
-    void moveCharacter(const Vector3D & pos);
-    const Vector3D getAbsCharPos();
+    void moveCharacter(const PosType & pos);
+    const PosType getAbsCharPos();
 };
 
 #endif // APOGEE_GAMECLIENT_H

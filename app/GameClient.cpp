@@ -89,7 +89,7 @@ bool GameClient::update(float secs)
 
     renderer.update(secs);
     if (inGame) {
-        Vector3D offset = getAbsCharPos();
+        PosType offset = getAbsCharPos();
         renderer.setXoffset(offset.x());
         renderer.setYoffset(offset.y());
         renderer.setZoffset(offset.z());
@@ -281,18 +281,18 @@ void GameClient::worldEnter(Eris::Entity * chr)
 
 }
 
-void GameClient::charMoved(const Vector3D &)
+void GameClient::charMoved(const PosType &)
 {
     std::cout << "Char moved" << std::endl << std::flush;
 }
 
-void GameClient::moveCharacter(const Vector3D & pos)
+void GameClient::moveCharacter(const PosType & pos)
 {
     if (m_character == NULL) {
         return;
     }
 
-    Vector3D coords(pos);
+    PosType coords(pos);
     Eris::Entity * ref = m_character->getContainer();
     Eris::Entity * r;
     while ((r = ref->getContainer()) != NULL) {
@@ -306,7 +306,7 @@ void GameClient::moveCharacter(const Vector3D & pos)
     marg["id"] = m_character->getID();
     marg["loc"] = m_character->getContainer()->getID();
     marg["pos"] = coords.toAtlas();
-    marg["velocity"] = Vector3D(1,0,0).toAtlas();
+    marg["velocity"] = VelType(1,0,0).toAtlas();
     m.setArgs(Atlas::Message::Element::ListType(1, marg));
     m.setFrom(m_character->getID());
 
@@ -314,13 +314,13 @@ void GameClient::moveCharacter(const Vector3D & pos)
     
 }
 
-const Vector3D GameClient::getAbsCharPos()
+const PosType GameClient::getAbsCharPos()
 {
     if (!inGame) {
-        return Vector3D();
+        return PosType();
     }
     float now = SDL_GetTicks();
-    Vector3D pos = m_character->getPosition();
+    PosType pos = m_character->getPosition();
     pos = pos + m_character->getVelocity() * (double)((now - m_character->getTime())/1000.0f);
     Eris::Entity * root = m_world->getRootEntity();
     Eris::Entity * ref = m_character->getContainer();

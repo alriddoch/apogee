@@ -163,7 +163,7 @@ float Renderer::getZ(int x, int y)
     return z;
 }
 
-const Vector3D Renderer::getWorldCoord(int x, int y, float z)
+const PosType Renderer::getWorldCoord(int x, int y, float z)
 {
     GLint viewport[4];
 
@@ -178,7 +178,7 @@ const Vector3D Renderer::getWorldCoord(int x, int y, float z)
     gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
 
     std::cout << "{" << wx << ";" << wy << ";" << wz << std::endl << std::flush;
-    return Vector3D(wx, wy, wz);
+    return PosType(wx, wy, wz);
 }
 
 void Renderer::lightOn()
@@ -235,11 +235,11 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
 }
 
 void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
-                          const Vector3D & cp)
+                          const PosType & cp)
 {
     assert(ent != 0);
 
-    Vector3D pos = ent->getPosition();
+    PosType pos = ent->getPosition();
 
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
@@ -255,7 +255,7 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    Vector3D camPos = cp; camPos -= pos;
+    PosType camPos = cp; camPos -= pos;
 
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re == 0) {
@@ -290,7 +290,7 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
 void Renderer::drawWorld(Eris::Entity * wrld)
 {
     worldTime = SDL_GetTicks();
-    Vector3D camPos(x_offset, y_offset, z_offset);
+    PosType camPos(x_offset, y_offset, z_offset);
 
     drawEntity(wrld, 0, camPos);
 }
@@ -307,10 +307,10 @@ void Renderer::drawGui()
 }
 
 void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
-                            const Vector3D & cp,
+                            const PosType & cp,
                             SelectMap & name, GLuint & next)
 {
-    Vector3D pos = ent->getPosition();
+    PosType pos = ent->getPosition();
     MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
     if (me != NULL) {
         debug( std::cout << ent->getVelocity() << " "
@@ -325,7 +325,7 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
-    Vector3D camPos = cp; camPos -= pos;
+    PosType camPos = cp; camPos -= pos;
     glLoadName(++next);
     name[next] = ent;
 
@@ -383,7 +383,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
     glPushName(nextName);
     debug(std::cout << "SELECTING" << std::endl << std::flush;);
 
-    Vector3D camPos(x_offset, y_offset, z_offset);
+    PosType camPos(x_offset, y_offset, z_offset);
 
     selectEntity(wrld, 0, camPos, nameMap, nextName);
 
@@ -399,7 +399,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
 
     GLuint * ptr = &selectBuf[0];
     GLuint minDepth = UINT_MAX, noNames = 0;
-    GLuint * namePtr;
+    GLuint * namePtr = 0;
     for (int i = 0; i < hits; ++i) {
         int names = *(ptr++);
         debug(std::cout << "{" << *ptr << "}";);

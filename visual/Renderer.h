@@ -9,7 +9,11 @@
 
 #include "common/Vector3D.h"
 
+#include <sigc++/signal.h>
+
 #include <SDL/SDL.h>
+
+#include <map>
 
 class Model;
 class Application;
@@ -82,16 +86,16 @@ class Renderer {
     float getZoffset() { return z_offset; }
 
     float getZ(int, int);
-    const Vector3D getWorldCoord(int, int, float);
+    const PosType getWorldCoord(int, int, float);
 
     void drawEntity(Eris::Entity * ent, RenderableEntity * parent,
-                    const Vector3D & camPos);
+                    const PosType & camPos);
     void drawWorld(Eris::Entity * wrld);
     virtual void drawSky() = 0;
     void drawGui();
 
     void selectEntity(Eris::Entity * ent, RenderableEntity * parent,
-                      const Vector3D & camPos,
+                      const PosType & camPos,
                       SelectMap & names, GLuint & next);
     Eris::Entity * selectWorld(Eris::Entity *, int, int);
 
