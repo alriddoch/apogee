@@ -10,6 +10,7 @@
 #include "IxClient.h"
 
 #include <Eris/Connection.h>
+#include <Eris/PollDefault.h>
 
 #include <sigc++/object_slot.h>
 
@@ -77,7 +78,7 @@ int main(int argc, char ** argv)
 
         // updated = con.poll() || updated;
         try {
-            con.poll();
+            Eris::PollDefault::poll();
         } catch (Eris::BaseException b) {
             cout << "EXCEPTION: " << b._msg << std::endl << std::flush;
         } catch (Atlas::Objects::NoSuchAttrException n) {
