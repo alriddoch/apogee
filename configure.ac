@@ -49,12 +49,17 @@ AM_PATH_SDL($SDL_VERSION)
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-AC_CHECK_LIB(SDL_image,IMG_Load)
-AC_CHECK_LIB(GL,glViewport)
-AC_CHECK_LIB(GLU,gluPerspective)
+AC_CHECK_LIB(SDL_image,IMG_Load, [ LIBS="$LIBS -lSDL_image" ],
+    AC_MSG_ERROR(Could not find SDL_image library)
+)
+AC_CHECK_LIB(GL,glViewport, [ LIBS="$LIBS -lGL" ],
+    AC_MSG_ERROR(Could not find OpenGL library)
+)
+AC_CHECK_LIB(GLU,gluPerspective, [ LIBS="$LIBS -lGLU" ],
+    AC_MSG_ERROR(Could not find OpenGL U library)
+)
 
-PKG_CHECK_MODULES(WF, eris-1.2 coal-blade-0.4 coal-iso-0.4 mercator-0.2
-                      varconf-1.0 sage ,
+PKG_CHECK_MODULES(WF, eris-1.2 mercator-0.2 varconf-1.0 sage ,
     [
         CPPFLAGS="$CPPFLAGS $WF_CFLAGS"
         LIBS="$LIBS $WF_LIBS"
