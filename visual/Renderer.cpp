@@ -247,6 +247,7 @@ void Renderer::drawWorld(Eris::Entity * wrld)
     drawEntity(wrld);
 }
 
+#if 0
 void Renderer::drawSky()
 {
     static GLint t_front = -1,
@@ -336,6 +337,7 @@ void Renderer::drawSky()
     
     glDepthMask(GL_TRUE);
 }
+#endif
 
 void Renderer::drawGui()
 {

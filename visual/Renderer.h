@@ -90,7 +90,7 @@ class Renderer {
 
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
-    void drawSky();
+    virtual void drawSky() = 0;
     void drawGui();
 
     void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);

@@ -15,6 +15,7 @@ class Isometric : public Renderer {
   public:
     explicit Isometric(Application & app, int wdth = 640, int hght = 480);
 
+    void drawSky();
     void projection();
     void viewPoint();
 

@@ -34,6 +34,10 @@ void Isometric::shapeView()
     glClearColor(0.0, 0.7, 0.7, 0.0);
 }
 
+void Isometric::drawSky()
+{
+}
+
 void Isometric::projection()
 {
     // this puts us into orthographic projection
@@ -46,18 +50,21 @@ void Isometric::viewPoint()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    // GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
-    // GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
-    // GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
-    // glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
-    // glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
-    // glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
-    // glEnable(GL_LIGHT1);
-    // glEnable(GL_LIGHTING);
 
     glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
     glTranslatef(0.0f, 0.0f, -1.0f);      // Aim to centre the character
 
     glTranslatef(-x_offset,-y_offset,-z_offset);
+
+    static GLfloat AmbientColor[] = {0.3f, 0.3f, 0.3f, 1.f};
+    static GLfloat DiffuseColor[] = {1.f, 1.f, 0.95f, 1.f};
+    static GLfloat LightPos[] = {0.f, 1.f, 1.f, 0.f};
+    static GLfloat lmodel_ambient[] = {0.f, 0.f, 0.f, 1.f};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
+    glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+    glDisable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
 }
