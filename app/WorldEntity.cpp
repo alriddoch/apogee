@@ -11,7 +11,7 @@
 WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World * w)
               : Eris::Entity(ge, w), visEntity(*new VisualEntity())
 {
-    Moved.connect(SigC::slot(this, &WorldEntity::movedSignal));
+    Moved.connect(SigC::slot(*this, &WorldEntity::movedSignal));
     updateTime = SDL_GetTicks();
 }
 

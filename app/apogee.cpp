@@ -29,10 +29,10 @@ int main(int argc, char ** argv)
 
     IsoClient * app = new IsoClient(con);
 
-    con.Failure.connect(SigC::slot(app, &IsoClient::netFailure));
-    con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));
-    con.Disconnected.connect(SigC::slot(app, &IsoClient::netDisconnected));
-    Eris::Logged.connect(SigC::slot(app, &IsoClient::connectionLog));
+    con.Failure.connect(SigC::slot(*app, &IsoClient::netFailure));
+    con.Connected.connect(SigC::slot(*app, &IsoClient::netConnected));
+    con.Disconnected.connect(SigC::slot(*app, &IsoClient::netDisconnected));
+    Eris::Logged.connect(SigC::slot(*app, &IsoClient::connectionLog));
 
     Eris::setLogLevel(Eris::LOG_DEBUG);
 

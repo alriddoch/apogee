@@ -71,8 +71,8 @@ void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
     Option * o = new Option(*gui, renderer.getWidth() / 2,
                                   renderer.getHeight() / 2,
                                   "Select", "Create");
-    o->buttonOneSignal.connect(SigC::slot(this, &GameClient::charListSync));
-    o->buttonTwoSignal.connect(SigC::slot(this, &GameClient::charCreator));
+    o->buttonOneSignal.connect(SigC::slot(*this, &GameClient::charListSync));
+    o->buttonTwoSignal.connect(SigC::slot(*this, &GameClient::charCreator));
     gui->addWidget(o);
 }
 
@@ -81,7 +81,7 @@ void GameClient::charCreator()
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
     d->addField("name", "Apogee Bomble");
     d->addField("type", "settler");
-    d->oButtonSignal.connect(SigC::slot(this, &GameClient::createCharacter));
+    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::createCharacter));
     gui->addWidget(d);
 }
 
@@ -89,7 +89,7 @@ void GameClient::charListSync()
 {
     std::cout << "charListSync" << std::endl << std::flush;
     assert(player != NULL);
-    player->GotAllCharacters.connect(SigC::slot(this, &GameClient::charSelector));
+    player->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
     player->refreshCharacterInfo();
 }
 
@@ -97,8 +97,8 @@ void GameClient::charSelector()
 {
     std::cout << "charSelector" << std::endl << std::flush;
     CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
-    cs->selectSignal.connect(SigC::slot(this, &GameClient::takeCharacter));
-    cs->createSignal.connect(SigC::slot(this, &GameClient::charCreator));
+    cs->selectSignal.connect(SigC::slot(*this, &GameClient::takeCharacter));
+    cs->createSignal.connect(SigC::slot(*this, &GameClient::charCreator));
     Eris::CharacterList cl = player->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterList::const_iterator I = cl.begin(); I != cl.end(); ++I){
@@ -121,11 +121,11 @@ void GameClient::createCharacter(const std::string & name,
     chrcter.SetAttr("sex", "female");
     world = player->createCharacter(chrcter)->getWorld();
 
-    lobby->Talk.connect(SigC::slot(this,&GameClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this,&GameClient::roomEnter));
+    lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(this,&GameClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this,&GameClient::worldEnter));
+    world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
     world->registerFactory(new WEFactory());
 }
 
@@ -135,11 +135,11 @@ void GameClient::takeCharacter(const std::string & chrcter)
     world = player->takeCharacter(chrcter)->getWorld();
     std::cout << "Character taken, world = " << world << std::endl << std::flush;
 
-    lobby->Talk.connect(SigC::slot(this,&GameClient::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this,&GameClient::roomEnter));
+    lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(this,&GameClient::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this,&GameClient::worldEnter));
+    world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
     world->registerFactory(new WEFactory());
 }
 
@@ -169,7 +169,7 @@ void GameClient::netConnected()
 2);
     d->addField("login", "ajr");
     d->addField("password", "hel");
-    d->oButtonSignal.connect(SigC::slot(this, &GameClient::login));
+    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::login));
     gui->addWidget(d);
 
 }
@@ -179,7 +179,7 @@ void GameClient::login(const std::string & name, const std::string & password)
     player = new Eris::Player(&connection);
     player->login(name, password);
     lobby = Eris::Lobby::instance();
-    lobby->LoggedIn.connect(SigC::slot(this, &GameClient::loginComplete));
+    lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
 }
 
 void GameClient::netDisconnected()
@@ -199,7 +199,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
-    chr->Moved.connect(SigC::slot(this, &GameClient::charMoved));
+    chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
     character = dynamic_cast<WorldEntity*>(chr);
 
 }

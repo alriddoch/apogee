@@ -27,9 +27,9 @@ int main(int argc, char ** argv)
 
     IxClient * app = new IxClient(con);
 
-    con.Failure.connect(SigC::slot(app, &IxClient::netFailure));
-    con.Connected.connect(SigC::slot(app, &IxClient::netConnected));
-    con.Disconnected.connect(SigC::slot(app, &IxClient::netDisconnected));
+    con.Failure.connect(SigC::slot(*app, &IxClient::netFailure));
+    con.Connected.connect(SigC::slot(*app, &IxClient::netConnected));
+    con.Disconnected.connect(SigC::slot(*app, &IxClient::netDisconnected));
 
     app->setup();
     app->update(0);

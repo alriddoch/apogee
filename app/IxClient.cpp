@@ -44,7 +44,7 @@ bool IxClient::setup()
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
+    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
     gui->addWidget(d);
 
     compassWidget = new Compass(*gui, 42, 10);
