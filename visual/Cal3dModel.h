@@ -8,8 +8,8 @@
 // any later version.                                                         //
 //----------------------------------------------------------------------------//
 
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef VISUAL_MODEL_H
+#define VISUAL_MODEL_H
 
 #include <cal3d/cal3d.h>
 #include <GL/glu.h>
@@ -69,6 +69,6 @@ protected:
   void renderSkeleton();
 };
 
-#endif
+#endif // VISUAL_MODEL_H
 
 //----------------------------------------------------------------------------//

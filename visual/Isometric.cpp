@@ -8,42 +8,54 @@
 
 #include <SDL_image.h>
 
-#include "Renderer.h"
+#include "Isometric.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
 
-Renderer * Renderer::instance = NULL;
-
-Renderer::Renderer(int wdth, int hght) : screen(NULL), character(NULL),
-                                         button(NULL),
-                                         width(wdth), height(hght),
-                                         elevation(30), rotation(45),
-                                         scale(1), x_offset(0), y_offset(0)
+Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght)
 {
+    init();
 }
 
-#if 0
+void Isometric::init()
+{
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE) != 0) { 
+        std::cerr << "Failed to initialise video subsytem"
+                  << std::endl << std::flush;
+        throw RendererSDLinit();
+    }
 
-void Renderer::viewScale(float scale_factor)
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+    this->shapeView();
+}
+
+inline void Isometric::viewScale(float scale_factor)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    float xscale = width * scale * scale_factor / meterSize;
-    float yscale = height * scale * scale_factor / meterSize;
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0 * scale_factor, 20.0 * scale_factor );
+    float xscale = width * scale * scale_factor / meterSize();
+    float yscale = height * scale * scale_factor / meterSize();
+    glOrtho(-xscale/2.0f, xscale/2.0f,
+            -yscale/2.0f, yscale/2.0f,
+            -20.0f * scale_factor, 20.0f * scale_factor );
     glMatrixMode(GL_MODELVIEW);
 }
 
-void Renderer::viewPoint()
+inline void Isometric::viewPoint()
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     // this puts us in perpective projection
     //gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
     // this puts us into orthographic perspective
-    float xscale = width * scale / meterSize;
-    float yscale = height * scale / meterSize;
+    float xscale = width * scale / meterSize();
+    float yscale = height * scale / meterSize();
     glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
@@ -57,43 +69,43 @@ void Renderer::viewPoint()
     // glEnable(GL_LIGHTING);
 }
 
-void Renderer::reorient()
+inline void Isometric::reorient()
 {
     glRotatef(-rotation, 0.0, 0.0, 1.0);
     glRotatef(90-elevation, 1.0, 0.0, 0.0);
 }
 
-void Renderer::orient()
+inline void Isometric::orient()
 {
-    glRotatef(elevation-90, 1.0, 0.0, 0.0);
-    glRotatef(rotation, 0.0, 0.0, 1.0);
+    glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 }
 
-void Renderer::translate()
+inline void Isometric::translate()
 {
-    glTranslatef(-x_offset,-y_offset,0);
+    glTranslatef(-x_offset,-y_offset,0.0f);
 }
 
 // This function moves the render cursor to the origin and rotates the
 // axis to be inline with the worldforge axis
-void Renderer::origin()
+inline void Isometric::origin()
 {
     viewPoint();
     orient();
     translate();
 }
 
-Renderer::lightOn()
+void Isometric::lightOn()
 {
     glEnable(GL_LIGHTING);
 }
 
-Renderer::lightOff()
+void Isometric::lightOff()
 {
     glDisable(GL_LIGHTING);
 }
 
-void Renderer::shapeView()
+void Isometric::shapeView()
 {
     //if (screen != NULL) {
         //SDL_FreeSurface(screen);
@@ -104,6 +116,7 @@ void Renderer::shapeView()
         SDL_Quit();
         throw RendererSDLinit();
     }
+    SDL_WM_SetCaption("apogee", "isometric");
 
     glViewport(0, 0, width, height);
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -115,7 +128,7 @@ void Renderer::shapeView()
     viewPoint();
 }
 
-void Renderer::drawCharacter(Sprite * character, float x, float y)
+void Isometric::drawCharacter(Sprite * character, float x, float y)
 {
     origin();
     glTranslatef(x,y,0);
@@ -123,7 +136,8 @@ void Renderer::drawCharacter(Sprite * character, float x, float y)
     character->draw();
 }
 
-void Renderer::draw2Dtest()
+#if 0
+void Isometric::draw2Dtest()
 {
     lightOff();
     if (button == NULL) {
@@ -144,7 +158,7 @@ void Renderer::draw2Dtest()
     lightOn();
 }
 
-void Renderer::draw3Dtest()
+void Isometric::draw3Dtest()
 {
     viewPoint();
 
@@ -176,8 +190,9 @@ void Renderer::draw3Dtest()
         glTranslatef(1.0,0.0,0.0);         // Move Right 3 Units
     }
 }
+#endif
 
-void Renderer::draw3Dentity()
+void Isometric::draw3Dentity()
 {
     origin();
     glTranslatef(4,4,0.0);
@@ -222,14 +237,14 @@ void Renderer::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void Renderer::drawCal3DModel(Model * m)
+void Isometric::drawCal3DModel(Model * m)
 {
     viewScale(40);
     m->onRender();
     viewScale(1);
 }
 
-void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
+void Isometric::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
                          const Vector3D & bmedian)
 {
     Vector3D def(0.2,0.2,0.2);
@@ -305,7 +320,7 @@ void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
     lightOn();
 }
 
-void Renderer::drawMapRegion(CoalRegion & map_region)
+void Isometric::drawMapRegion(CoalRegion & map_region)
 {
     int tex_id = -1;
     CoalFill * fill = map_region.GetFill();
@@ -344,12 +359,12 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
     glDisable(GL_TEXTURE_2D);
 }
 
-void Renderer::drawMapObject(CoalObject & map_object)
+void Isometric::drawMapObject(CoalObject & map_object)
 {
     
 }
 
-void Renderer::drawMap(CoalDatabase & map_base)
+void Isometric::drawMap(CoalDatabase & map_base)
 {
     origin();
 
@@ -373,17 +388,15 @@ void Renderer::drawMap(CoalDatabase & map_base)
 
 }
 
-void Renderer::resize(int wdth, int hght)
+void Isometric::resize(int wdth, int hght)
 {
     width = wdth;
     height = hght;
     shapeView();
 }
 
-void Renderer::clear()
+void Isometric::clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
 
 }
-
-#endif // 0

@@ -1,8 +1,6 @@
 #ifndef APOGEE_EDITOR_H
 #define APOGEE_EDITOR_H
 
-#include <SDL.h>
-
 #include <coal/bladeloader.h>
 
 #include <string>

@@ -23,7 +23,7 @@ unsigned int Sprite::twoN(unsigned int size)
     return pow(2,12);
 }
 
-bool Sprite::load(const std::string & filename)
+bool Sprite::load(const std::string & filename, const Renderer & renderer)
 {
     SDL_Surface * image = IMG_Load(filename.c_str());
     if (image == NULL) {
@@ -59,10 +59,10 @@ bool Sprite::load(const std::string & filename)
         return false;
     }
     tex_id = Texture::loadTexture(image);
-    m_w = (double)sprite_w / Renderer::meterSize;
-    m_h = (double)sprite_h / Renderer::meterSize;
-    m_pw = (double)sprite_w / textur_w;
-    m_ph = (double)sprite_h / textur_h;
+    m_w = (float)sprite_w / renderer.meterSize();
+    m_h = (float)sprite_h / renderer.meterSize();
+    m_pw = (float)sprite_w / textur_w;
+    m_ph = (float)sprite_h / textur_h;
     SDL_FreeSurface(image);
     if (tex_id == -1) { return false; }
     return true;

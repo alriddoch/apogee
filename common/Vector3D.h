@@ -6,6 +6,7 @@
 #define VECTOR_3D_H
 
 #include <Atlas/Message/Object.h>
+#include <Eris/Types.h>
 
 #include <math.h>
 #include <algo.h>
@@ -15,23 +16,19 @@ using std::sin;
 
 using Atlas::Message::Object;
 
-class Vector3D {
-    double x,y,z;
+class Vector3D : protected Eris::Coord {
+    // double x,y,z;
     bool _set;
   public:
     static const int cX = 0;    // Used to indicate which axis
     static const int cY = 1;
     static const int cZ = 2;
 
-    Vector3D() : x(0), y(0), z(0), _set(false) { }
-    Vector3D(double size) : x(size), y(size), z(size), _set(true) { }
-    Vector3D(double x, double y, double z) : x(x), y(y), z(z), _set(true) { }
-    Vector3D(const Object::ListType & vector) : _set(true) {
-        Object::ListType::const_iterator I = vector.begin();
-        x = I->AsNum();
-        y = (++I)->AsNum();
-        z = (++I)->AsNum();
-    }
+    Vector3D() : Coord(0, 0, 0), _set(false) { }
+    Vector3D(double size) : Coord(size, size, size), _set(true) { }
+    Vector3D(double x, double y, double z) : Coord(x, y, z), _set(true) { }
+    Vector3D(const Eris::Coord & coord) : Coord(coord), _set(true) { }
+    Vector3D(const Object::ListType & vector) : Coord(vector), _set(true) { }
 
     double X() const { return x; }
     double Y() const { return y; }
@@ -154,8 +151,13 @@ class Vector3D {
     }
 
 
+    friend ostream & operator<<(ostream& s, const Eris::Coord& v);
     friend ostream & operator<<(ostream& s, const Vector3D& v);
 };
+
+inline ostream & operator<<(ostream& s, const Eris::Coord& v) {
+    return s << "[" << v.x << "," << v.y << "," << v.z << "]";
+}
 
 inline ostream & operator<<(ostream& s, const Vector3D& v) {
     if (!v._set) {

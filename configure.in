@@ -63,6 +63,10 @@ AC_CHECK_LIB(skstream,main)
 AC_CHECK_LIB(cal3d,main)
 AC_CHECK_LIB(sigc,main)
 AC_CHECK_LIB(eris,main)
+AC_CHECK_LIB(Demeter,main)
+AC_CHECK_LIB(ccstd,main)
+AC_CHECK_LIB(ccio,main)
+AC_CHECK_LIB(ccxx,main)
 
 dnl Generate files
 AC_OUTPUT([

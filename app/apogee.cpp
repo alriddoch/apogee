@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-#include <visual/Renderer.h>
+#include <visual/DemeterScene.h>
 // #include <net/Connection.h>
 #include "Editor.h"
 //#include "Client.h"
@@ -35,7 +35,7 @@ int main(int argc, char ** argv)
 
     Eris::Connection & con = * new Eris::Connection("apogee");
 
-    Renderer * renderer = Renderer::Instance();
+    Renderer * renderer = DemeterScene::Instance();
     Editor * app = new Editor(*renderer, con);
 
     con.connect(host, 6767);

@@ -8,93 +8,70 @@
 
 #include <SDL_image.h>
 
-#include "Renderer.h"
+#include "DemeterScene.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
+#include "Matrix.h"
 
-Renderer * Renderer::instance = NULL;
+const float PI = 3.1459f;
+const float FOG_RED = 0.5f;
+const float FOG_GREEN = 0.75f;
+const float FOG_BLUE = 1.0f;
+const float FOG_ALPHA = 0.0f;
 
-Renderer::Renderer(int wdth, int hght) : screen(NULL), character(NULL),
-                                         button(NULL),
-                                         width(wdth), height(hght),
-                                         elevation(30), rotation(45),
-                                         scale(1), x_offset(0), y_offset(0)
+DemeterScene::DemeterScene(int wdth, int hght) : Renderer(wdth, hght)
 {
+    init();
 }
 
-#if 0
-
-void Renderer::viewScale(float scale_factor)
+void DemeterScene::init()
 {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    float xscale = width * scale * scale_factor / meterSize;
-    float yscale = height * scale * scale_factor / meterSize;
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0 * scale_factor, 20.0 * scale_factor );
-    glMatrixMode(GL_MODELVIEW);
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE) != 0) { 
+        std::cerr << "Failed to initialise video subsytem"
+                  << std::endl << std::flush;
+        throw RendererSDLinit();
+    }
+
+    //SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    //SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    //SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_EnableUNICODE(1);
+    SDL_WM_SetCaption("apogee", "demeter");
+
+    settings = Demeter::Settings::GetInstance();
+    settings->SetMediaPath("maps/");
+    settings->SetScreenWidth(width);
+    settings->SetScreenWidth(height);
+
+    this->shapeView();
+
+    const int maxNumVisibleTriangles = 40000;
+
+    terrain = new Demeter::Terrain("Test.map", maxNumVisibleTriangles, false);
+    terrain->SetMaximumVisibleBlockSize(64);
+    terrain->SetCommonTextureRepeats(50.0f);
+
+    cout << "Loaded Terrain " << terrain->GetWidth() << " : "
+         << terrain->GetHeight()
+         << endl << flush;
+    cameraPosition.x = terrain->GetWidth() / 2.0f ;//- 400.0f;
+    cameraPosition.y = terrain->GetHeight() / 2.0f ;//- 351.0f;
+    cameraPosition.z = 200.0f;
+    camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
+    cameraAngle.x = 0.0f;
+    cameraAngle.y = 0.0f;
+    cameraAngle.z = 0.0f;
+
+
 }
 
-void Renderer::viewPoint()
+void DemeterScene::shapeView()
 {
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    // this puts us in perpective projection
-    //gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
-    // this puts us into orthographic perspective
-    float xscale = width * scale / meterSize;
-    float yscale = height * scale / meterSize;
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();                     // Reset The View
-    // GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
-    // GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
-    // GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
-    // glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
-    // glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
-    // glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
-    // glEnable(GL_LIGHT1);
-    // glEnable(GL_LIGHTING);
-}
-
-void Renderer::reorient()
-{
-    glRotatef(-rotation, 0.0, 0.0, 1.0);
-    glRotatef(90-elevation, 1.0, 0.0, 0.0);
-}
-
-void Renderer::orient()
-{
-    glRotatef(elevation-90, 1.0, 0.0, 0.0);
-    glRotatef(rotation, 0.0, 0.0, 1.0);
-}
-
-void Renderer::translate()
-{
-    glTranslatef(-x_offset,-y_offset,0);
-}
-
-// This function moves the render cursor to the origin and rotates the
-// axis to be inline with the worldforge axis
-void Renderer::origin()
-{
-    viewPoint();
-    orient();
-    translate();
-}
-
-Renderer::lightOn()
-{
-    glEnable(GL_LIGHTING);
-}
-
-Renderer::lightOff()
-{
-    glDisable(GL_LIGHTING);
-}
-
-void Renderer::shapeView()
-{
+    const float maxViewDistance = 4500.0f;
     //if (screen != NULL) {
         //SDL_FreeSurface(screen);
     //}
@@ -105,79 +82,105 @@ void Renderer::shapeView()
         throw RendererSDLinit();
     }
 
+    settings->SetScreenWidth(width);
+    settings->SetScreenWidth(height);
+
     glViewport(0, 0, width, height);
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
     glClearDepth(1.0);
     glDepthFunc(GL_LESS);
+    glDisable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
     glShadeModel(GL_SMOOTH);
+    float fogColor[4];
+    fogColor[0] = FOG_RED;
+    fogColor[1] = FOG_GREEN;
+    fogColor[2] = FOG_BLUE;
+    fogColor[3] = FOG_ALPHA;
+    glEnable(GL_FOG);
+    glFogf(GL_FOG_MODE,GL_LINEAR);
+    glFogfv(GL_FOG_COLOR,fogColor);
+    glFogf(GL_FOG_START,100.0f);
+    glFogf(GL_FOG_END,maxViewDistance - 100.0f);
+    glHint(GL_FOG_HINT,GL_FASTEST);
+
     viewPoint();
 }
 
-void Renderer::drawCharacter(Sprite * character, float x, float y)
+inline void DemeterScene::viewScale(float scale_factor)
+{
+    const float maxViewDistance = 4500.0f;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float xscale = 0.5f / scale_factor;
+    float yscale = 0.5f / scale_factor;
+    // This is complete arse
+    // glFrustum(-xscale, xscale, -yscale, yscale, 0.65f / scale_factor, maxViewDistance * scale_factor );
+    gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+inline void DemeterScene::viewPoint()
+{
+    const float maxViewDistance = 4500.0f;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, (float)width/(float)height,0.65f, maxViewDistance);
+    // This is copied from the demeter demo app
+    // glFrustum(-0.5f,0.5f,-0.5f,0.5f,0.65f,maxViewDistance);
+    // this puts us into orthographic perspective
+    // float xscale = width * scale / meterSize();
+    // float yscale = height * scale / meterSize();
+    // glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();                     // Reset The View
+}
+
+inline void DemeterScene::reorient()
+{
+    glRotatef(-rotation, 0.0, 0.0, 1.0);
+    glRotatef(90-elevation, 1.0, 0.0, 0.0);
+}
+
+inline void DemeterScene::orient()
+{
+    glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
+    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+}
+
+inline void DemeterScene::translate()
+{
+    glTranslatef(-x_offset,-y_offset,0.0f);
+}
+
+// This function moves the render cursor to the origin and rotates the
+// axis to be inline with the worldforge axis
+inline void DemeterScene::origin()
+{
+    viewPoint();
+    orient();
+    translate();
+}
+
+void DemeterScene::lightOn()
+{
+    glEnable(GL_LIGHTING);
+}
+
+void DemeterScene::lightOff()
+{
+    glDisable(GL_LIGHTING);
+}
+
+void DemeterScene::drawCharacter(Sprite * character, float x, float y)
 {
     origin();
-    glTranslatef(x,y,0);
+    glTranslatef(x,y,0.0f);
     reorient();
     character->draw();
 }
 
-void Renderer::draw2Dtest()
-{
-    lightOff();
-    if (button == NULL) {
-        button = IMG_Load("button_base.png");
-        // std::cerr << "Could not load test image" << std::endl << std::flush;
-    }
-    SDL_Rect destRect = { width - button->w - 8, 32, button->w, button->h };
-    for(int i=0; i < 8; i++) {
-        destRect.x = width - button->w * (1 + i / 4) - 4;
-        destRect.y = 4 + (i % 4) * 24;
-        SDL_BlitSurface(button, NULL, screen, &destRect);
-    }
-    destRect.x = width - button->w * 2 - 4;
-    destRect.y = 4;
-    destRect.w = button->w * 2;
-    destRect.h = button->h * 4;
-    SDL_UpdateRects(screen, 1, &destRect);
-    lightOn();
-}
-
-void Renderer::draw3Dtest()
-{
-    viewPoint();
-
-    glBindTexture(GL_TEXTURE_2D, Texture::get("texture.png"));
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-    glTexCoord2f(1.0, 1.0); glVertex3f(0.5, 0.5, 0.5);
-    glTexCoord2f(1.0, 0.0); glVertex3f(0.5, -0.5, 0.5);
-    glTexCoord2f(0.0, 0.0); glVertex3f(-0.5, -0.5, 0.5);
-    glTexCoord2f(0.0, 1.0); glVertex3f(-0.5, 0.5, 0.5);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-    origin();
-        
-    for(int i = 0; i < 4; i++) {
-        // draw a square (quadrilateral)
-
-        glBegin(GL_QUADS);                 // start drawing a polygon (4 sided)
-        glColor3f(1, 0, 0);
-        glVertex3f(-0.5, 0.5, 0.0);        // Top Left
-        glColor3f(1, 1, 0);
-        glVertex3f( 0.5, 0.5, 0.0);        // Top Right
-        glColor3f(0, 1, 1);
-        glVertex3f( 0.5,-0.5, 0.0);        // Bottom Right
-        glColor3f(0, 0, 1);
-        glVertex3f(-0.5,-0.5, 0.0);        // Bottom Left  
-        glEnd();                              // done with the polygon
-      
-        glTranslatef(1.0,0.0,0.0);         // Move Right 3 Units
-    }
-}
-
-void Renderer::draw3Dentity()
+void DemeterScene::draw3Dentity()
 {
     origin();
     glTranslatef(4,4,0.0);
@@ -187,7 +190,7 @@ void Renderer::draw3Dentity()
     glBegin(GL_QUADS);
 
     glNormal3f(0, -1, 0);
-    glTexCoord2f(0, 0); glVertex3f(0, 0, 0);
+    glTexCoord2f(0.0f, 0.0f); glVertex3f(0, 0, 0);
     glTexCoord2f(0, 1); glVertex3f(0, 0, 5);
     glTexCoord2f(1, 1); glVertex3f(5, 0, 5);
     glTexCoord2f(1, 0); glVertex3f(5, 0, 0);
@@ -222,14 +225,14 @@ void Renderer::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void Renderer::drawCal3DModel(Model * m)
+void DemeterScene::drawCal3DModel(Model * m)
 {
     viewScale(40);
     m->onRender();
     viewScale(1);
 }
 
-void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
+void DemeterScene::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
                          const Vector3D & bmedian)
 {
     Vector3D def(0.2,0.2,0.2);
@@ -305,7 +308,7 @@ void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
     lightOn();
 }
 
-void Renderer::drawMapRegion(CoalRegion & map_region)
+void DemeterScene::drawMapRegion(CoalRegion & map_region)
 {
     int tex_id = -1;
     CoalFill * fill = map_region.GetFill();
@@ -344,15 +347,16 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
     glDisable(GL_TEXTURE_2D);
 }
 
-void Renderer::drawMapObject(CoalObject & map_object)
+void DemeterScene::drawMapObject(CoalObject & map_object)
 {
     
 }
 
-void Renderer::drawMap(CoalDatabase & map_base)
+void DemeterScene::drawMap(CoalDatabase & map_base)
 {
     origin();
 
+#if 0
     glDepthMask(GL_FALSE);
     int count = map_base.GetRegionCount();
     for (int i = 0; i < count; i++) {
@@ -370,20 +374,48 @@ void Renderer::drawMap(CoalDatabase & map_base)
             drawMapObject(*object);
         }
     }
+#endif
+
+    cameraAngle.z = -rotation * PI / 180;
+    cameraAngle.x = -elevation * PI / 180;
+    cout << elevation << "}{" << cameraAngle.x << endl << flush;
+
+    Matrix rotateX,rotateZ,cameraTransform;
+    rotateX.SetRotateX(cameraAngle.x);
+    rotateZ.SetRotateZ(cameraAngle.z);
+    cameraTransform = rotateX * rotateZ;
+    lookAt.x = 0.0f;
+    lookAt.y = 100000.0f;
+    lookAt.z = 0.0f;
+    lookUp.x = 0.0f;
+    lookUp.y = 0.5f;
+    lookUp.z = 1.0f;
+    lookUp.Normalize();
+    Demeter::Vector currentLookAt = cameraTransform * lookAt;
+    Demeter::Vector currentLookUp = cameraTransform * lookUp;
+    camera.SetLookAt(cameraPosition.x + currentLookAt.x,cameraPosition.y + currentLookAt.y,cameraPosition.z + currentLookAt.z);
+    camera.SetLookUp(currentLookUp.x,currentLookUp.y,currentLookUp.z);
+    float currentCameraElevation = terrain->GetElevation(cameraPosition.x,cameraPosition.y) + cameraPosition.z;
+    camera.SetPosition(cameraPosition.x,cameraPosition.y,currentCameraElevation);
+    camera.UpdateViewTransform();
+
+    const float threshold = 12.0f;
+    terrain->SetDetailThreshold(threshold);
+    terrain->ModelViewMatrixChanged();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    terrain->Render();
 
 }
 
-void Renderer::resize(int wdth, int hght)
+void DemeterScene::resize(int wdth, int hght)
 {
     width = wdth;
     height = hght;
     shapeView();
 }
 
-void Renderer::clear()
+void DemeterScene::clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
 
 }
-
-#endif // 0

@@ -3,22 +3,24 @@
 
 #include "Texture.h"
 
+class Renderer;
+
 class Sprite {
   private:
     static unsigned int twoN(unsigned int);
 
     int tex_id;
-    double m_w, m_h;
-    double m_pw, m_ph;
+    float m_w, m_h;
+    float m_pw, m_ph;
   public:
     Sprite() : tex_id(-1), m_w(0), m_h(0), m_pw(0), m_ph(0) { }
 
-    bool load(const std::string & filename);
+    bool load(const std::string & filename, const Renderer & renderer);
     void draw();
-    double w() { return m_w; }
-    double h() { return m_h; }
-    double pw() { return m_pw; }
-    double ph() { return m_ph; }
+    float w() { return m_w; }
+    float h() { return m_h; }
+    float pw() { return m_pw; }
+    float ph() { return m_ph; }
 };
 
 #endif // APOGEE_VISUAL_SPRITE_H

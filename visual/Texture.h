@@ -1,7 +1,7 @@
 #ifndef APOGEE_VISUAL_TEXTURE_H
 #define APOGEE_VISUAL_TEXTURE_H
 
-#include <SDL.h>
+struct SDL_Surface;
 
 #include <string>
 #include <map>
@@ -16,12 +16,12 @@ class Texture {
         }
         return *texturedb;
     }
-    static SDL_Surface * imageLoad(const std::string & filename);
+    static struct SDL_Surface * imageLoad(const std::string & filename);
 
     static std::map<std::string, int> * texturedb;
   public:
-    static int loadTexture(SDL_Surface * image);
-    static SDL_Surface * imageTransform(SDL_Surface * image);
+    static int loadTexture(struct SDL_Surface * image);
+    static struct SDL_Surface * imageTransform(struct SDL_Surface * image);
     static int get(const std::string & filename);
 };
 
