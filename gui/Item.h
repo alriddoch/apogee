@@ -7,7 +7,7 @@
 
 #include "Widget.h"
 
-#include <visual/Sprite.h>
+#include "visual/Sprite.h"
 
 class Item : public Widget {
   private:

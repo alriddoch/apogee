@@ -6,7 +6,8 @@
 #define APOGEE_GUI_BUTTON_H
 
 #include "Widget.h"
-#include <visual/Sprite.h>
+
+#include "visual/Sprite.h"
 
 class Button : public Widget {
   protected:

@@ -5,8 +5,6 @@
 #ifndef COMMON_GLOBALS_H
 #define COMMON_GLOBALS_H
 
-#include <string>
-
 namespace varconf {
   class Config;
 }

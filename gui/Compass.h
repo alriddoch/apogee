@@ -6,7 +6,8 @@
 #define APOGEE_GUI_COMPASS_H
 
 #include "Widget.h"
-#include <visual/Sprite.h>
+
+#include "visual/Sprite.h"
 
 class Compass : public Widget {
   protected:

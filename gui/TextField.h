@@ -6,7 +6,8 @@
 #define APOGEE_GUI_TEXTFIELD_H
 
 #include "Widget.h"
-#include <visual/Sprite.h>
+
+#include "visual/Sprite.h"
 
 class TextField : public Widget {
   protected:
