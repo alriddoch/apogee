@@ -1,3 +1,18 @@
+2001-09-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Alert.h, gui/Alert.cpp: New gui class for popup or alert
+	  messages.
+
+	* gui/Gui.cpp: Implemented print function for text in OpenGL.
+
+	* gui/Gui.h: Made newName() public so that Widgets can get names
+	  for their subwidgets.
+
+	* gui/Widget.h: Made reference to gui object protected.
+
+	* visual/Isometric.cpp: Set blend function, as text code in gui
+	  needs a different one.
+
 2001-09-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/IsoClient.cpp, app/IxClient.cpp, gui/Gui.cpp, gui/Gui.h,

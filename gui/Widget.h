@@ -9,11 +9,13 @@ class Gui;
 
 class Widget {
   private:
-    Gui & m_g;
     int m_x, m_y;
 
+  protected:
+    Gui & m_g;
+
   public:
-    Widget(Gui & g, int x, int y) : m_g(g), m_x(x), m_y(y) { }
+    Widget(Gui & g, int x, int y) : m_x(x), m_y(y), m_g(g) { }
 
     const int x() const { return m_x; }
     const int y() const { return m_y; }

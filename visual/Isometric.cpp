@@ -368,6 +368,7 @@ void Isometric::drawMap(CoalDatabase & map_base)
 {
     origin();
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDepthMask(GL_FALSE);
     int count = map_base.GetRegionCount();
     for (int i = 0; i < count; i++) {

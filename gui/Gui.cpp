@@ -9,7 +9,7 @@
 
 #include <GL/glu.h>
 
-#include "Item.h"
+#include "Alert.h"
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1)
 {
@@ -24,6 +24,8 @@ bool Gui::setup()
     item = new Item(*this, 330, 30);
     if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
     
+    item = new Alert(*this, 500, 60, "HELLO");
+    if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
 
     textTexture = Texture::get("font.png");
     if (textTexture == -1) {
@@ -158,4 +160,15 @@ bool Gui::event(SDL_Event & event)
             break;
     }
     return update;
+}
+
+void Gui::print(const char * str)
+{
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+    glBindTexture(GL_TEXTURE_2D, textTexture);
+    glEnable(GL_TEXTURE_2D);
+    glListBase(textBase-32);
+    glCallLists(strlen(str),GL_BYTE,str);
+    glDisable(GL_TEXTURE_2D);
 }

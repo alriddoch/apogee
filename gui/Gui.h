@@ -26,10 +26,10 @@ class Gui {
     int mx,my;
 
     widgmap widgets;
-
-    int newName() { return ++nameCount; }
   public:
     Gui(Renderer & r);
+
+    int newName() { return ++nameCount; }
 
     bool setup();
     void draw();
