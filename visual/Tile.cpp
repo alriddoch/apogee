@@ -96,7 +96,7 @@ bool Tile::load(const std::string & filename)
         tileSize = 6;
         if (sprite_h > 216) { sprite_h = 216; }
     } else {
-        std::cout << "Tile size is unknown " << tileSize << "," << sprite_w << std::endl << std::flush;
+        std::cout << "Tile size is unknown " << filename << "," << sprite_w << std::endl << std::flush;
         tileSize = 0;
     }
     m_pw = (float)sprite_w / textur_w;

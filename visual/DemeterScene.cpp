@@ -405,7 +405,7 @@ void DemeterScene::drawMapObject(CoalObject & map_object)
     
 }
 
-void DemeterScene::drawMap(CoalDatabase & map_base)
+void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
 {
     origin();
 

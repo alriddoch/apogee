@@ -132,13 +132,21 @@ void GameClient::moveCharacter(const Vector3D & pos)
     if (character == NULL) {
         return;
     }
+
+    Vector3D coords(pos);
+    Eris::Entity * ref = character->getContainer();
+    Eris::Entity * r;
+    while ((r = ref->getContainer()) != NULL) {
+        coords -= Vector3D(ref->getPosition());
+        ref = r;
+    };
     
     Move m(Move::Instantiate());
 
     Atlas::Message::Object::MapType marg;
     marg["id"] = character->getID();
     marg["loc"] = character->getContainer()->getID();
-    marg["pos"] = pos.asObject();
+    marg["pos"] = coords.asObject();
     marg["velocity"] = Vector3D(1,0,0).asObject();
     m.SetArgs(Atlas::Message::Object::ListType(1, marg));
     m.SetFrom(character->getID());

@@ -6,6 +6,7 @@
 
 #include <visual/Renderer.h>
 #include <visual/Model.h>
+#include <visual/HeightMap.h>
 
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
@@ -72,9 +73,10 @@ void IxClient::doWorld()
 
 bool IxClient::update()
 {
+    HeightMap foo;
     renderer.clear();
     renderer.lightOn();
-    renderer.drawMap(map_database);
+    renderer.drawMap(map_database, foo);
     renderer.origin();
     model->onUpdate(0.1);
     renderer.drawCal3DModel(model, Vector3D(0,0,0), Eris::Quaternion());

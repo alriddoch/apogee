@@ -8,6 +8,8 @@
 #include <coal/bladeloader.h>
 #include <coal/isoloader.h>
 
+#include <visual/HeightMap.h>
+
 #include <string>
 
 #include "GameClient.h"
@@ -23,6 +25,7 @@ class IsoClient : public GameClient {
     void axis();
 
     CoalDatabase map_database;
+    HeightMap map_height;
     Compass * compassWidget;
   public:
     IsoClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con)

@@ -10,6 +10,7 @@
 class Sprite;
 class Model;
 class Vector3D;
+class HeightMap;
 
 class CoalRegion;
 class CoalObject;
@@ -98,9 +99,7 @@ class Renderer {
     virtual void drawEntity(Eris::Entity * ent) = 0;
     virtual void drawWorld(Eris::Entity * wrld) = 0;
     virtual void drawCharacter(Sprite *, float, float) = 0;
-    virtual void drawMapRegion(CoalRegion &) = 0;
-    virtual void drawMapObject(CoalObject &) = 0;
-    virtual void drawMap(CoalDatabase &) = 0;
+    virtual void drawMap(CoalDatabase &, HeightMap &) = 0;
     virtual void drawGui() = 0;
     virtual void resize(int,int) = 0;
     virtual void clear() = 0;

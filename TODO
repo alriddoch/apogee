@@ -1,4 +1,5 @@
-FInd out why character entering buildings does not render.
+Terrain is now working better. Need to tie new tilemap code to heightmap code,
+using triangle strips instead of those naughty quads.
 
 Make terrain work.
 

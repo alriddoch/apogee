@@ -7,6 +7,8 @@
 
 #include "Renderer.h"
 
+class TileMap;
+
 namespace Eris {
   class TypeInfo;
 }
@@ -14,6 +16,7 @@ namespace Eris {
 class Isometric : public Renderer {
   private:
     Model * model;
+    TileMap * tilemap;
     Eris::TypeInfo * charType;
     float worldTime;
 
@@ -22,6 +25,8 @@ class Isometric : public Renderer {
 
     void init();
     virtual void shapeView();
+
+    void Isometric::buildTileMap(CoalDatabase &);
   public:
     static Renderer * Instance(int width = 640, int height = 480) {
         if (instance == NULL) {
@@ -41,9 +46,9 @@ class Isometric : public Renderer {
     virtual void drawEntity(Eris::Entity * ent);
     virtual void drawWorld(Eris::Entity * wrld);
     virtual void drawCharacter(Sprite *, float, float);
-    virtual void drawMapRegion(CoalRegion &);
+    virtual void drawMapRegion(CoalRegion &, HeightMap &);
     virtual void drawMapObject(CoalObject &);
-    virtual void drawMap(CoalDatabase &);
+    virtual void drawMap(CoalDatabase &, HeightMap &);
     virtual void drawGui();
     virtual void resize(int,int);
     virtual void clear();

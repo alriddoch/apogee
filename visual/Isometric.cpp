@@ -13,10 +13,12 @@
 #include <SDL_image.h>
 
 #include "Isometric.h"
+#include "HeightMap.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
 #include "Tile.h"
+#include "TileMap.h"
 
 #include <app/WorldEntity.h>
 
@@ -24,7 +26,8 @@
 
 static const bool debug_flag = false;
 
-Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght), charType(NULL)
+Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght),
+                                           tilemap(NULL), charType(NULL)
 {
     init();
 }
@@ -487,7 +490,7 @@ void Isometric::drawMap(CoalDatabase & map_base)
 }
 #else
 
-void Isometric::drawMapRegion(CoalRegion & map_region)
+void Isometric::drawMapRegion(CoalRegion & map_region, HeightMap & map_height)
 {
     Tile * tile = NULL;
     CoalFill * fill = map_region.GetFill();
@@ -505,7 +508,7 @@ void Isometric::drawMapRegion(CoalRegion & map_region)
             const CoalCoord & coord = shape.GetCoord(0);
             float bx = coord.GetX();
             float by = coord.GetY();
-            float bz = coord.GetZ();
+            float bz = coord.GetZ() + map_height.get((int)bx, (int)by) / 8.0f;
             glTranslatef(bx, by, bz);
             if (tile != NULL) {
                 tile->draw();
@@ -532,8 +535,36 @@ void Isometric::drawMapObject(CoalObject & map_object)
     
 }
 
-void Isometric::drawMap(CoalDatabase & map_base)
+void Isometric::buildTileMap(CoalDatabase & map_base)
 {
+    tilemap = new TileMap();
+    int count = map_base.GetRegionCount();
+    for (int i = 0; i < count; i++) {
+        CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
+        if (region) {
+            CoalFill * fill = region->GetFill();
+            if ((fill == NULL) || (fill->graphic == NULL) ||
+                (fill->graphic->filename.size() == 0)) {
+                continue;
+            }
+            Tile * tile = Tile::get(fill->graphic->filename);
+            if (tile == NULL) {
+                continue;
+            }
+            CoalShape & shape = *region;
+            const CoalCoord & coord = shape.GetCoord(0);
+            float bx = coord.GetX();
+            float by = coord.GetY();
+            tilemap->add((int)bx, (int)by, tile);
+        }
+    }
+}
+
+void Isometric::drawMap(CoalDatabase & map_base, HeightMap & map_height)
+{
+    if (tilemap == NULL) {
+        buildTileMap(map_base);
+    }
     origin();
 
     glTranslatef(-100.0f, -100.0f, 0.0f);
@@ -541,16 +572,31 @@ void Isometric::drawMap(CoalDatabase & map_base)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // glDepthMask(GL_FALSE);
     // glDisable(GL_DEPTH_TEST);
+#if 0
     int count = map_base.GetRegionCount();
     for (int i = 0; i < count; i++) {
         CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
         if (region) {
-            drawMapRegion(*region);
+            drawMapRegion(*region, map_height);
+        }
+    }
+#endif
+    for(int i = -10; i < 10; i++) {
+        for(int j = -10; j < 10; j++) {
+            int x = x_offset + 100 + i;
+            int y = y_offset + 100 + j;
+            Tile * t = tilemap->get(x, y);
+            if (t == NULL) { continue; }
+            glPushMatrix();
+            glTranslatef(x, y, 0);
+            t->draw();
+            glPopMatrix();
         }
     }
     // glDepthMask(GL_TRUE);
     // glEnable(GL_DEPTH_TEST);
 
+#if 0
     count = map_base.GetObjectCount();
     for (int i = 0; i < count; i++) {
         CoalObject * object = (CoalObject*)map_base.GetObject(i);
@@ -558,6 +604,7 @@ void Isometric::drawMap(CoalDatabase & map_base)
             drawMapObject(*object);
         }
     }
+#endif
 }
 #endif
 

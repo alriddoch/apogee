@@ -54,6 +54,8 @@ bool IsoClient::setup()
     // CoalDebug debug;
     // debug.Dump (map_database);
 
+    map_height.load("agrilan_hm.png");
+
     gui = new Gui(renderer);
     gui->setup();
     // bag = new Sprite();
@@ -123,7 +125,7 @@ bool IsoClient::update()
     }
     renderer.clear();
     renderer.lightOn();
-    renderer.drawMap(map_database);
+    renderer.drawMap(map_database, map_height);
     renderer.origin();
 
     doWorld();
