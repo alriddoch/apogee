@@ -5,14 +5,12 @@
 #include "ServerSelector.h"
 #include "Gui.h"
 
-#include "visual/Model.h"
 #include "visual/Renderer.h"
 
 #include <Eris/Metaserver.h>
 #include <Eris/ServerInfo.h>
 
-#include <wfmath/quaternion.h>
-#include <wfmath/point.h>
+#include <iostream>
 
 static int xoffset[] = {0, 80, -80, 160, -160, 240, -240 };
 static int yoffset[] = {0, -15, -15, -35, -35, -60, -60 };
@@ -29,7 +27,7 @@ ServerSelector::ServerSelector(Gui & g, int x, int y) : Widget(g, x, y),
 
 ServerSelector::~ServerSelector()
 {
-    // delete &metaServer; FIXME
+    delete &metaServer;
 }
 
 void ServerSelector::setup()
@@ -44,6 +42,29 @@ void ServerSelector::setup()
     filter.setup();
 }
 
+static const GLshort cube_vertices[] = { -20, -20, -20,
+                                          20, -20, -20,
+                                          20,  20, -20,
+                                         -20,  20, -20,
+                                         -20, -20,  20,
+                                          20, -20,  20,
+                                          20,  20,  20,
+                                         -20,  20,  20 };
+
+static const GLubyte cube_colours[] = { 255, 255, 255,  63,
+                                        255,   0, 255,  63,
+                                          0, 255,   0,  63,
+                                        255, 255,   0,  63,
+                                          0, 255, 255,  63,
+                                        255,   0,   0,  63,
+                                          0,   0, 255,  63,
+                                          0,   0,   0,  63 };
+
+static const GLubyte cube_indices[] = { 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6,
+                                        3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
+
+static int rot = 0;
+
 void ServerSelector::draw()
 {
     glPushMatrix();
@@ -57,21 +78,33 @@ void ServerSelector::draw()
     filter.draw();
     glPopMatrix();
 
+    if (++rot > 359) { rot = 0; }
+
     std::map<GLuint, const Eris::ServerInfo*>::const_iterator I;
-    WFMath::Quaternion rot(1,0,0,0);
     for(unsigned i = 0; i < metaServer.numServers(); ++i) {
         const Eris::ServerInfo & svr = metaServer.getInfoForServer(i);
         glPushMatrix();
         glTranslatef(xoffset[i], yoffset[i], 0.0f);
         m_g.print(svr.getServername().c_str());
-        glTranslatef(0.0f, 20.0f, 0.0f);
+        glTranslatef(0.0f, 50.0f, 0.0f);
         if (selectedServer == svr.getHostname()) {
             glScalef(1.2f, 1.2f, 1.2f);
         }
-        glRotatef(-90,1,0,0);
+        glRotatef(-70,1,0,0);
+        glRotatef(rot,0,0,1);
         glPushAttrib(GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
-        m_g.renderer.model->onRender();
+        glEnable(GL_CULL_FACE);
+        glVertexPointer(3, GL_SHORT, 0, cube_vertices);
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, cube_colours);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glCullFace(GL_FRONT);
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cube_indices);
+        glCullFace(GL_BACK);
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cube_indices);
+        // m_g.renderer.model->onRender();
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisable(GL_CULL_FACE);
         glPopAttrib();
         glPopMatrix();
     }
@@ -96,19 +129,21 @@ void ServerSelector::select()
 
     names.clear();
     for(unsigned i = 0; i < metaServer.numServers(); ++i) {
+        const Eris::ServerInfo & svr = metaServer.getInfoForServer(i);
         glPushMatrix();
         glTranslatef(xoffset[i], yoffset[i], 0.0f);
         GLuint name = m_g.newName();
         glLoadName(name);
-        const Eris::ServerInfo & svr = metaServer.getInfoForServer(i);
         names[name] = &svr;
         // m_g.print(I->second.second.c_str());
-        glTranslatef(0.0f, 20.0f, 0.0f);
+        glTranslatef(0.0f, 50.0f, 0.0f);
         if (selectedServer == svr.getHostname()) {
             glScalef(1.2f, 1.2f, 1.2f);
         }
-        glRotatef(-90,1,0,0);
-        m_g.renderer.model->onRender();
+        glRotatef(-70,1,0,0);
+        glRotatef(rot,0,0,1);
+        glVertexPointer(3, GL_SHORT, 0, cube_vertices);
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cube_indices);
         glPopMatrix();
     }
     glPopName();
