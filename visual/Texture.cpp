@@ -12,8 +12,8 @@
 
 #include <iostream>
 
-std::map<std::string, unsigned int> * Texture::texturedb = NULL;
-unsigned int Texture::defaultTexture;
+Texture::TextureStore * Texture::textureStore = NULL;
+GLuint Texture::defaultTexture;
 bool Texture::defaultTextureLoaded;
 unsigned int Texture::defaultTextureWidth;
 unsigned int Texture::defaultTextureHeight;
