@@ -1,7 +1,7 @@
 EXTRA_PROGRAMS = apogee
 bin_PROGRAMS = perigee
 
-INCLUDES = $(GNOME_XML_CFLAGS) -I$(top_srcdir)
+INCLUDES = -I$(top_srcdir)
 
 apogee_SOURCES = \
                  Application.cpp Application.h \
@@ -10,7 +10,9 @@ apogee_SOURCES = \
                  IsoClient.cpp IsoClient.h \
                  apogee.cpp
 
-apogee_LDADD = ../gui/libgui.a ../visual/libvisual.a ../common/libcommon.a
+apogee_LDADD = $(top_builddir)/gui/libgui.a \
+               $(top_builddir)/visual/libvisual.a \
+               $(top_builddir)/common/libcommon.a
 
 perigee_SOURCES = \
                  Application.cpp Application.h \
@@ -19,4 +21,6 @@ perigee_SOURCES = \
                  IxClient.cpp IxClient.h \
                  perigee.cpp
 
-perigee_LDADD = ../gui/libgui.a ../visual/libvisual.a ../common/libcommon.a
+perigee_LDADD = $(top_builddir)/gui/libgui.a \
+                $(top_builddir)/visual/libvisual.a \
+                $(top_builddir)/common/libcommon.a
