@@ -1,24 +1,43 @@
 dnl Initialise autoconf
 
-AC_INIT(app/apogee.cpp)
+AC_INIT()
 AM_CONFIG_HEADER(config.h)
+
+dnl Detect the canonical host and target environment
+
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 
 dnl Initialise automake
 
-AM_INIT_AUTOMAKE(apogee, 0.0.1)
+VERSION=0.0.1
 
+AM_INIT_AUTOMAKE(apogee, $VERSION)
+
+dnl check if user wishes maintainer-mode ("--enable-maintainer-mode = yes")
 AM_MAINTAINER_MODE
 
 dnl Need libtool
 
+AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 dnl Test for C++ compiler
 
 AC_PROG_CXX
 
-CFLAGS="$CFLAGS -Wall"
-CXXFLAGS="$CXXFLAGS -Wall"
+AC_ARG_ENABLE(debug,
+    [  --enable-debug          enable debug information [default=no]],
+    [
+        if test "$enableval" = "yes"; then
+            CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
+        else
+            CXXFLAGS="$CXXFLAGS -Wall -DNDEBUG"
+        fi
+    ],[
+        CXXFLAGS="$CXXFLAGS -Wall -DNDEBUG"
+    ]
+)
 
 AC_LANG_CPLUSPLUS
 AC_REQUIRE_CPP
@@ -34,15 +53,6 @@ AC_CHECK_LIB(SDL_image,IMG_Load)
 AC_CHECK_LIB(GL,glViewport)
 AC_CHECK_LIB(GLU,gluPerspective)
 
-PKG_CHECK_MODULES(SIGC, sigc++-1.2 >= 1.2 ,
-    [
-        CPPFLAGS="$CPPFLAGS $SIGC_CFLAGS"
-        LIBS="$LIBS $SIGC_LIBS"
-    ],
-    [
-        AC_MSG_ERROR(Couldn't find libsigc++.)
-    ])
-
 PKG_CHECK_MODULES(WF, eris-1.2 coal-blade-0.4 coal-iso-0.4 mercator-0.2 ,
     [
         CPPFLAGS="$CPPFLAGS $WF_CFLAGS"
@@ -57,7 +67,6 @@ CPPFLAGS="$CPPFLAGS $LIB3DS_CFLAGS"
 LIBS="$LIBS $LIB3DS_LIBS"
 
 AC_CHECK_LIB(cal3d,main)
-AC_CHECK_LIB(Demeter,main)
 
 dnl Generate files
 AC_OUTPUT([
