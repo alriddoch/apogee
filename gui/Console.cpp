@@ -47,6 +47,12 @@ void Console::draw()
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_QUADS, 0, 4);
     m_g.print(cmdLine.c_str());
+    if (hasFocus()) {
+        glPushMatrix();
+        glTranslatef(10.f * cmdLine.size(), 0.f, 0.f);
+        m_g.print("_");
+        glPopMatrix();
+    }
     std::deque<std::string>::const_iterator I = lineContents.begin();
     glTranslatef(0.f, 4.f, 0.f);
     for(; I != lineContents.end(); ++I) {
@@ -88,7 +94,11 @@ bool Console::key(int sym,int mod)
             return true;
             break;
         case SDLK_RETURN:
-            lineEntered.emit(cmdLine);
+            if (cmdLine.empty()) {
+                releaseFocus();
+            } else {
+                lineEntered.emit(cmdLine);
+            }
             cmdLine.clear();
             return true;
         default:

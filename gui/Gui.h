@@ -43,13 +43,17 @@ class Gui {
     int newName() { return ++nameCount; }
     const hitlist & getHits() { return hitNames; }
     const std::string & getSkinName() const { return skinName; }
+    int getFocus() const { return focus; }
 
     bool setup();
     void draw();
     GLint select(int, int);
     bool event(SDL_Event &);
     void print(const char *);
+    void printColour(const char *);
     void addWidget(Widget *);
+    void clearFocus();
+    void takeFocus(const Widget &);
 
     static int keyToAscii(int key, int mod);
 };

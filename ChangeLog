@@ -1,5 +1,13 @@
 2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Widget.h, gui/Widget.cpp, gui/Gui.h, gui/Gui.cpp: Sort
+	  out a general mechanism for sorting out widget focus.
+
+	* gui/Console.cpp, app/IxClient.cpp: Toggle console focus with
+	  the return key.
+
+2004-03-18  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.h, app/GameClient.cpp: Hook IG chat up to the console
 	  widget.
 

@@ -264,8 +264,13 @@ bool Gui::event(SDL_Event & event)
 
 void Gui::print(const char * str)
 {
-    glPushMatrix();
     glColor3f(0.0f, 0.0f, 0.0f);
+    printColour(str);
+}
+
+void Gui::printColour(const char * str)
+{
+    glPushMatrix();
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glBindTexture(GL_TEXTURE_2D, textTexture);
     glEnable(GL_TEXTURE_2D);
@@ -279,7 +284,17 @@ void Gui::print(const char * str)
 void Gui::addWidget(Widget * w)
 {
     w->setup();
-    widgets[newName()] = w;
+    widgets[w->getName()] = w;
+}
+
+void Gui::clearFocus()
+{
+    focus = -1;
+}
+
+void Gui::takeFocus(const Widget & w)
+{
+    focus = w.getName();
 }
 
 int Gui::keyToAscii(int key, int mod)

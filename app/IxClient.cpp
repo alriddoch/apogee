@@ -7,6 +7,7 @@
 #include <visual/DemeterScene.h>
 
 #include <gui/Gui.h>
+#include <gui/Console.h>
 
 #include <Eris/World.h>
 #include <Eris/Entity.h>
@@ -105,6 +106,9 @@ bool IxClient::event(SDL_Event & event)
                     if ((event.key.keysym.mod & KMOD_LALT) ||
                         (event.key.keysym.mod & KMOD_LALT)) {
                         renderer.toggleFullscreen();
+                    }
+                    if (event.key.keysym.mod == 0) {
+                        consoleWidget->takeFocus();
                     }
                     break;
                 default:

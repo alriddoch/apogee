@@ -16,16 +16,21 @@ class Widget {
     Gui & m_g;
     bool m_obs;
     bool m_vis;
+    const int m_name;
 
   public:
-    Widget(Gui & g, int x, int y) : m_x(x), m_y(y), m_g(g),
-                                    m_obs(false), m_vis(true) { }
+    Widget(Gui & g, int x, int y);
     virtual ~Widget();
 
     const int x() const { return m_x; }
     const int y() const { return m_y; }
     const bool obsolete() const { return m_obs; }
     const bool visible() const { return m_vis; }
+    int getName() const { return m_name; }
+
+    bool hasFocus() const;
+    void releaseFocus() const;
+    void takeFocus() const;
 
     virtual void move(int x, int y); //{ m_x += x; m_y += y; }
     virtual void setup() = 0;
