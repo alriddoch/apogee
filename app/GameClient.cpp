@@ -329,7 +329,7 @@ void GameClient::worldEnter(Eris::Entity * e)
 
 }
 
-void GameClient::charMoved(Eris::Entity *)
+void GameClient::charMoved()
 {
     std::cout << "Char moved" << std::endl << std::flush;
 }

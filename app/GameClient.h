@@ -88,7 +88,7 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *);
 
-    void charMoved(Eris::Entity *);
+    void charMoved();
     void entitySay(const std::string &, Eris::Entity * e);
 
     void moveCharacter(const PosType & pos, bool run = false);
