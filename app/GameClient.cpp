@@ -206,7 +206,8 @@ void GameClient::createCharacter(const std::string & name,
     chrcter.setName(name);
     chrcter.setAttr("description", "a perigee person");
     chrcter.setAttr("sex", "female");
-    m_world = m_player->createCharacter(chrcter)->getWorld();
+    m_avatar = m_player->createCharacter(chrcter);
+    m_world = m_avatar->getWorld();
 
     m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
     m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
@@ -219,7 +220,8 @@ void GameClient::createCharacter(const std::string & name,
 void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
-    m_world = m_player->takeCharacter(chrcter)->getWorld();
+    m_avatar = m_player->takeCharacter(chrcter);
+    m_world = m_avatar->getWorld();
     std::cout << "Character taken, world = " << m_world << std::endl << std::flush;
 
     m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));

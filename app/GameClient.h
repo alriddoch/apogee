@@ -15,6 +15,7 @@ class AutonomousEntity;
 
 namespace Eris {
   class Player;
+  class Avatar;
   class Lobby;
   class World;
   class Room;
@@ -42,9 +43,10 @@ class GameClient : public Application {
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false),
-               m_player(NULL), m_lobby(NULL), m_world(NULL),
+               m_player(NULL), m_avatar(NULL), m_lobby(NULL), m_world(NULL),
                m_character(NULL) { }
     Eris::Player * m_player;
+    Eris::Avatar * m_avatar;
     Eris::Lobby * m_lobby;
     Eris::World * m_world;
     AutonomousEntity * m_character;

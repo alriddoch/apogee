@@ -13,6 +13,7 @@
 
 #include <Eris/World.h>
 #include <Eris/Entity.h>
+#include <Eris/Avatar.h>
 
 #include <coal/isoloader.h>
 
@@ -74,7 +75,7 @@ bool IxClient::event(SDL_Event & event)
                             moveCharacter(renderer.getWorldCoord(x, y, z));
                         }
                     } else {
-                        // We clicked on something other than the world.
+                        m_avatar->touch(e);
                     }
                 }
                 return true;
