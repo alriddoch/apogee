@@ -246,6 +246,12 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                 dcol[J->first] = display_list;
             }
 
+            if (!glIsList(display_list)) {
+                std::cout << "Display list for terrain segment " << I->first
+                          << "," << J->first
+                          << " is no longer a display list in this context" 
+                          << std::endl << std::flush;
+            }
             glCallList(display_list);
         }
     }

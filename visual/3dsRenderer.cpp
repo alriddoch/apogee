@@ -152,6 +152,9 @@ void m3dsRenderer::draw3dsMesh(Lib3dsMesh * mesh)
    
     VertexBuffer * vb = (VertexBuffer*)mesh->user.p;
 
+    if (!glIsList(vb->bobject)) {
+        std::cout << "display list for 3ds model is no longer a display list in this context" << std::endl << std::flush;
+    }
     glCallList(vb->bobject);
 }
 
@@ -193,6 +196,9 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
     d=&node->data.object;
     glMultMatrixf(&node->matrix[0][0]);
     glTranslatef(-d->pivot[0], -d->pivot[1], -d->pivot[2]);
+    if (!glIsList(vb->bobject)) {
+        std::cout << "display list for 3ds model is no longer a display list in this context" << std::endl << std::flush;
+    }
     glCallList(vb->bobject);
     glPopMatrix();
 }
