@@ -1,5 +1,14 @@
 2003-12-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/WorldEntity.cpp, visual/3dsRenderer.cpp, visual/Renderer.cpp:
+	  Add <cassert> include as required.
+
+	* visual/3dsRenderer.cpp, visual/3dsRenderer.h: Restructure compile
+	  vs rendering code, and add support for rendering slightly broken
+	  .3ds files that contain no nodes.
+
+2003-12-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* Make configure bail if SDL is missing.
 
 2003-12-02  Al Riddoch  <ajr@ecs.soton.ac.uk>

@@ -20,6 +20,8 @@
 
 #include <sigc++/object_slot.h>
 
+#include <cassert>
+
 using Atlas::Objects::Entity::GameEntity;
 
 RenderableEntity::RenderableEntity(const GameEntity &ge,

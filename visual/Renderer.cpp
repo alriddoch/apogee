@@ -21,6 +21,7 @@
 #include <Eris/Connection.h>
 
 #include <iostream>
+#include <cassert>
 
 static const bool debug_flag = false;
 
