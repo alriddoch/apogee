@@ -1,3 +1,7 @@
+Need to get terrain tracking working right, preferably in a way that
+handle parent tracking generically, and probably in conjunction
+with sorting out the same in cyphesis.
+
 See if we can get on-the-fly skybox rendering working. Needs render-to-texture.
 Memory allocated by vertex buffers is now no longer required. Can scrap
 vertex and surface caches at least.
