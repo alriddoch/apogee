@@ -2,9 +2,10 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#include "GL.h"
+
 #include "Sprite.h"
 
-#include "GL.h"
 #include "Renderer.h"
 
 #include <SDL/SDL_image.h>

@@ -1,5 +1,11 @@
 2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/EntityRenderer.cpp, visual/Sprite.cpp, visual/Renderer.h,
+	  visual/Renderer.cpp, visual/EntityRenderer.cpp: Fix include
+	  orders, and some compiler warnings.
+
+2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.h, app/GameClient.cpp: Move duplicated code into
 	  a single function.
 

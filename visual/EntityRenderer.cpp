@@ -2,9 +2,9 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include "EntityRenderer.h"
-
 #include "GL.h"
+
+#include "EntityRenderer.h"
 
 #include <Eris/Entity.h>
 

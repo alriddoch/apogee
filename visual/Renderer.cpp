@@ -426,7 +426,7 @@ void Renderer::toggleFullscreen()
 {
     assert(width > 0);
 
-    int new_width = 0, new_height;
+    int new_width = 0, new_height = 0;
     fullscreen = !fullscreen;
 
     if (fullscreen) {

@@ -26,7 +26,6 @@ class Renderer {
   protected:
     Renderer(Application & app, int wdth, int hght);
 
-    static const int segSize = 64;
     static const float maxViewDistance = 250.0f;
 
     void shapeView();
