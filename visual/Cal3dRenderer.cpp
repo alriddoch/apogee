@@ -20,7 +20,9 @@ void Cal3dRenderer::drawCal3dModel(Cal3dModel * m)
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     // glScalef(0.025f, 0.025f, 0.025f);
     glScalef(scale, scale, scale);
+    glEnable(GL_NORMALIZE);
     m->onRender();
+    glDisable(GL_NORMALIZE);
     glPopMatrix();
 }
 

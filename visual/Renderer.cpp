@@ -225,7 +225,7 @@ void Renderer::update(float secs)
     time += secs;
     // std::cout << "SECS " << secs << ":" << lastCount << std::endl << std::flush;
     if ((time - lastCount) > 1.f) {
-        std::cout << frameCount << " frames per second" << std::endl << std::flush;
+        // std::cout << frameCount << " frames per second" << std::endl << std::flush;
         lastCount = time;
         frameCount = 0;
     }
