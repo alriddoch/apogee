@@ -53,21 +53,7 @@ void TerrainRenderer::disableRendererState()
 void TerrainRenderer::drawRegion(Mercator::Segment * map)
 {
     glNormal3f(0.f, 0.f, 1.f);
-    float * harray = map->getVertexCache();
-    if (harray == 0) {
-        std::cout << "Creating vertex cache" << std::endl << std::flush;
-        harray = map->setVertexCache(new float[(segSize+1)*(segSize+1)*3]);
-        int idx = -1;
-        // Fill in the invarient vertices and colors, so we only do it once
-        for(int j = 0; j < (segSize + 1); ++j) {
-            for(int i = 0; i < (segSize + 1); ++i) {
-                // float h = map->get(i,j);
-                harray[++idx] = i;
-                harray[++idx] = j;
-                harray[++idx] = 0.f;
-            }
-        }
-    }
+    float harray[(segSize+1)*(segSize+1)*3];
     float * narray = map->getNormals();
     if (narray == 0) {
         std::cout << "Populating normals" << std::endl << std::flush;
@@ -81,7 +67,8 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         for(int j = 0; j < (segSize + 1); ++j) {
             for(int i = 0; i < (segSize + 1); ++i) {
                 float h = map->get(i,j);
-                idx += 2;
+                harray[++idx] = i;
+                harray[++idx] = j;
                 harray[++idx] = h;
             }
         }
@@ -94,6 +81,9 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
 
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
+        if (!(*I)->m_shader.checkIntersect(**I)) {
+            continue;
+        }
         glColorPointer(4, GL_UNSIGNED_BYTE, 0, (*I)->getData());
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
         // if (have_GL_EXT_compiled_vertex_array) {
