@@ -63,6 +63,10 @@ void Isometric::init()
     glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &textureUnits);
     std::cout << "TEXTURE UNITS AVAILABLE: " << textureUnits
               << std::endl << std::flush;
+    int depthbits = -1;
+    SDL_GL_GetAttribute(SDL_GL_DEPTH_SIZE, &depthbits);
+    std::cout << "DEPTH BITS AVAILABLE: " << depthbits
+              << std::endl << std::flush;
 
     treemodel = lib3ds_file_load("oak.3ds");
     if (!treemodel) {
@@ -246,8 +250,8 @@ void Isometric::shapeView()
     //if (screen != NULL) {
         //SDL_FreeSurface(screen);
     //}
-    if ((screen = SDL_SetVideoMode(width, height, 16,
-            SDL_OPENGL|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
+    if ((screen = SDL_SetVideoMode(width, height, 0,
+            SDL_OPENGL|SDL_RESIZABLE)) == NULL) {
         std::cerr << "Failed to set video mode" << std::endl << std::flush;
         SDL_Quit();
         throw RendererSDLinit();
@@ -423,10 +427,7 @@ void Isometric::drawEntity(Eris::Entity * ent)
 
 void Isometric::drawWorld(Eris::Entity * wrld)
 {
-    {
-      std::cout << "DRAWING 3ds model" << std::endl << std::flush;
-      draw3dsFile(treemodel);
-    }
+    draw3dsFile(treemodel);
 
 
     worldTime = SDL_GetTicks();

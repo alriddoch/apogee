@@ -1,5 +1,9 @@
 2002-06-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Isometric.cpp: Be a bit less picky about screen depth.
+
+2002-06-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Texture.cpp: Add support for BGR textures.
 
 	* app/IsoClient.cpp: Make view calculations a bit more floaty.
