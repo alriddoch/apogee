@@ -152,7 +152,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         }
                      
         // Draw this segment
-        glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
+        glDrawElements(GL_LINE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
 
         if (texNo == 0) {
@@ -272,6 +272,50 @@ void TerrainRenderer::drawSea(Mercator::Terrain & t)
     glEnable(GL_LIGHTING);
 }
 
+void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
+{
+    int nx = lrintf(floor(pos.x() - radius)),
+        ny = lrintf(floor(pos.y() - radius)),
+        fx = lrintf(ceil(pos.x() + radius)),
+        fy = lrintf(ceil(pos.y() + radius));
+    int dx = fx - nx,
+        dy = fy - ny,
+        diameter = std::max(dx, dy),
+        size = diameter + 1;
+    fx = nx + diameter;
+    fy = ny + diameter;
+    float * vertices = new float[size * size * 3];
+    float * vptr = vertices - 1;
+    for(int y = ny; y <= fy; ++y) {
+        for(int x = nx; x <= fx; ++x) {
+            *++vptr = x;
+            *++vptr = y;
+            *++vptr = m_terrain.get(x, y);
+        }
+    }
+    GLushort * indices = new GLushort[diameter * size * 2];
+    GLushort * iptr = indices - 1;
+    int numind = 0;
+    for(GLuint i = 0; i < diameter; ++i) {
+        for(GLuint j = 0; j <= diameter; ++j) {
+            *++iptr = j * size + i;
+            *++iptr = j * size + i + 1;
+            numind += 2;
+        }
+        if (++i >= diameter) { break; }
+        for(GLshort j = diameter; j >= 0; --j) {
+            *++iptr = j * size + i + 1;
+            *++iptr = j * size + i;
+            numind += 2;
+        }
+    }
+    glVertexPointer(3, GL_FLOAT, 0, vertices);
+    glDrawElements(GL_LINE_STRIP, numind, GL_UNSIGNED_SHORT, indices);
+
+        
+        
+}
+
 void TerrainRenderer::readTerrain()
 {
     if (!m_ent.hasProperty("terrain")) {
@@ -358,6 +402,7 @@ void TerrainRenderer::render(Renderer &, const PosType & camPos)
     }
     drawMap(m_terrain, camPos);
     drawSea(m_terrain);
+    drawShadow(WFMath::Point<2>(camPos.x(), camPos.y()), 2);
 }
 
 void TerrainRenderer::select(Renderer &, const PosType & camPos)

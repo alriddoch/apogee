@@ -1,5 +1,10 @@
 2003-11-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp:
+	  Add experimental code to draw shadows on terrain surface.
+
+2003-11-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* common/Vector3D.h: Set up forward declarations, and typedefs
 	  for the WFMath types used. Abstract the type used for POS
 	  attributes to make this problem easier to resolve.

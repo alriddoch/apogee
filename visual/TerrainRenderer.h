@@ -35,6 +35,7 @@ class TerrainRenderer : public EntityRenderer
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &, const PosType & camPos);
     void drawSea(Mercator::Terrain &);
+    void drawShadow(const WFMath::Point<2> & pos, float radius = 1.f);
     void readTerrain();
   public:
     TerrainRenderer(Renderer &, Eris::Entity & e);
