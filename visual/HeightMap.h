@@ -8,10 +8,14 @@
 struct SDL_Surface;
 
 #include <string>
+#include <stdint.h>
 
 class HeightMap {
   private:
     struct SDL_Surface * m_heightImage;
+    uint16_t * m_buffer;
+    int m_pitch;
+    
 
   public:
     HeightMap();

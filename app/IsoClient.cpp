@@ -119,11 +119,11 @@ void IsoClient::doWorld()
 bool IsoClient::update(float secs)
 {
     renderer.update(secs);
-    Vector3D offset = getAbsCharPos();
-    if (offset) {
-        renderer.setXoffset(offset.X());
-        renderer.setYoffset(offset.Y());
-        renderer.setZoffset(offset.Z());
+    if (inGame) {
+        Point3D offset = getAbsCharPos();
+        renderer.setXoffset(offset.x());
+        renderer.setYoffset(offset.y());
+        renderer.setZoffset(offset.z());
     }
     renderer.clear();
     renderer.lightOn();

@@ -256,26 +256,26 @@ void DemeterScene::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void DemeterScene::drawCal3DModel(Model * m, const Vector3D & coords,
+void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
                                   const Eris::Quaternion & orientation)
 {
     origin();
-    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.X(), terrain->GetHeight() / 2.0f + coords.Y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
+    float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.x(), terrain->GetHeight() / 2.0f + coords.y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);
     std::cout << "Transl " << characterElevation << std::endl << std::flush;
-    glTranslatef(coords.X(),coords.Y(),characterElevation);
+    glTranslatef(coords.x(),coords.y(),characterElevation);
     viewScale(0.025f);
     m->onRender();
     //viewScale(1.0f);
 }
 
-void DemeterScene::draw3DBox(const Vector3D & coords,
+void DemeterScene::draw3DBox(const Point3D & coords,
                              const Eris::BBox & bbox)
 {
     lightOff();
 
     glPushMatrix();
     // origin();
-    glTranslatef(coords.X(), coords.Y(), coords.Z());
+    glTranslatef(coords.x(), coords.y(), coords.z());
 
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);

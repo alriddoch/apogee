@@ -21,9 +21,9 @@ Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 
 bool Gui::setup()
 {
-    Item * item = new Item(*this, 150, 150);
-    item->setup();
-    if (item->load("bag.png")) { widgets[newName()] = item; }
+    // Item * item = new Item(*this, 150, 150);
+    // item->setup();
+    // if (item->load("bag.png")) { widgets[newName()] = item; }
 
     // Widget * w = new Alert(*this, 500, 60, "This program is currently under test");
     // w->setup();

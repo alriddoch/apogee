@@ -1,3 +1,19 @@
+2002-03-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp, app/GameClient.h, app/IsoClient.cpp,
+	  app/IxClient.cpp, app/WorldEntity.cpp, app/WorldEntity.h,
+	  common/Vector3D.h, visual/DemeterScene.cpp,
+	  visual/DemeterScene.h, visual/Isometric.cpp,
+	  visual/Isometric.h, visual/Renderer.cpp,
+	  visual/Renderer.h: Switch to using wfmath types for vectors
+	  and coordinates, so that conversion is no longer necessary
+	  between libraries and the application.
+
+	* gui/Gui.cpp: Remove inventory graphic cos its confusing.
+
+	* visual/HeightMap.cpp, visual/HeightMap.h: Start work on libpng
+	  based heightmap loader for 16bit support.
+
 2002-02-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/HeightMap.cpp: Make heightmap signed.

@@ -197,11 +197,11 @@ void Isometric::draw3Dtest()
 }
 #endif
 
-void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
+void Isometric::drawCal3DModel(Model * m, const Point3D & coords,
                                const Eris::Quaternion & orientation)
 {
     glPushMatrix();
-    glTranslatef(coords.X(), coords.Y(), coords.Z());
+    glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
     orientation.asMatrix(orient);
@@ -212,13 +212,13 @@ void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
     glPopMatrix();
 }
 
-void Isometric::draw3DBox(const Vector3D & coords, const Eris::BBox & bbox)
+void Isometric::draw3DBox(const Point3D & coords, const Eris::BBox & bbox)
 {
     lightOff();
 
     glPushMatrix();
     // origin();
-    glTranslatef(coords.X(), coords.Y(), coords.Z());
+    glTranslatef(coords.x(), coords.y(), coords.z());
 
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);
@@ -307,7 +307,7 @@ void Isometric::draw3DBox(const Vector3D & coords, const Eris::BBox & bbox)
     glPopMatrix();
 }
 
-void Isometric::draw3DArea(const Vector3D & coords, const Vector3D & bbox,
+void Isometric::draw3DArea(const Point3D & coords, const Vector3D & bbox,
                          const Vector3D & bmedian)
 {
 }
@@ -321,18 +321,18 @@ void Isometric::drawEntity(Eris::Entity * ent)
     debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
-        Vector3D pos = Vector3D(e->getPosition());
+        Point3D pos = e->getPosition();
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
-            debug( cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos; );
-            pos = pos + Vector3D(e->getVelocity()) * (double)((worldTime - we->getTime())/1000.0f);
+            debug( cout << e->getVelocity() << " " << (worldTime - we->getTime()) << " " << pos; );
+            pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
             debug( cout << "=" << pos << endl << flush; );
         } else {
             cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << endl << flush;
         }
-        debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
-                        << e->getBBox().u << e->getBBox().v
-                        << std::endl << std::flush;);
+        // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
+                        // << e->getBBox().u << e->getBBox().v
+                        // << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
         Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {

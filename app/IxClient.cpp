@@ -52,9 +52,9 @@ void IxClient::doWorld()
     cout << numEnts << " root" << endl << flush;
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * ent = root->getMember(i);
-        std::cout << ":" << ent->getID() << ent->getPosition() << ":"
-                  << ent->getBBox().v << std::endl << std::flush;
-        renderer.draw3DBox(Vector3D(ent->getPosition()), ent->getBBox());
+        //std::cout << ":" << ent->getID() << ent->getPosition() << ":"
+                  //<< ent->getBBox().v << std::endl << std::flush;
+        renderer.draw3DBox(ent->getPosition(), ent->getBBox());
     }
 #if 0
     const World::edict & ents = world.getWorld();
@@ -80,7 +80,7 @@ bool IxClient::update(float secs)
     renderer.drawMap(map_database, foo);
     renderer.origin();
     model->onUpdate(0.1);
-    renderer.drawCal3DModel(model, Vector3D(0,0,0), Eris::Quaternion());
+    renderer.drawCal3DModel(model, Point3D(0,0,0), Eris::Quaternion());
     doWorld();
     renderer.lightOff();
     renderer.drawGui();

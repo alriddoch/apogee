@@ -9,7 +9,6 @@
 
 class Sprite;
 class Model;
-class Vector3D;
 class HeightMap;
 
 class CoalRegion;
@@ -87,13 +86,13 @@ class Renderer {
     float getZoffset() { return z_offset; }
 
     float getZ(int, int);
-    const Vector3D getWorldCoord(int, int, float);
+    const Point3D getWorldCoord(int, int, float);
 
     //virtual void draw3Dtest() = 0;
     //virtual void draw2Dtest() = 0;
-    virtual void drawCal3DModel(Model *, const Vector3D & coords,
+    virtual void drawCal3DModel(Model *, const Point3D & coords,
                                 const Eris::Quaternion &) = 0;
-    virtual void draw3DBox(const Vector3D & coords,
+    virtual void draw3DBox(const Point3D & coords,
                            const Eris::BBox & bbox) = 0;
     virtual void drawEntity(Eris::Entity * ent) = 0;
     virtual void drawWorld(Eris::Entity * wrld) = 0;

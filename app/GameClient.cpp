@@ -25,6 +25,36 @@ using Atlas::Message::Object;
 using Atlas::Objects::Operation::Move;
 using Atlas::Objects::Entity::GameEntity;
 
+Point3D & operator+=(Point3D & lhs, const Point3D & rhs)
+{
+    lhs[0] += rhs[0];
+    lhs[1] += rhs[1];
+    lhs[2] += rhs[2];
+    return lhs;
+}
+
+Point3D & operator-=(Point3D & lhs, const Point3D & rhs)
+{
+    lhs[0] -= rhs[0];
+    lhs[1] -= rhs[1];
+    lhs[2] -= rhs[2];
+    return lhs;
+}
+
+Atlas::Message::Object Point3D::toAtlas() const
+{
+    Atlas::Message::Object::ListType ret(3);
+    ret[0] = m_elem[0];
+    ret[1] = m_elem[1];
+    ret[2] = m_elem[2];
+    return Atlas::Message::Object(ret);
+}
+
+const Point3D operator+(const Point3D & lhs, const Point3D & rhs)
+{
+    return Point3D(lhs[0] + rhs[0], lhs[1] + rhs[1], lhs[2] + rhs[2]);
+}
+
 void GameClient::lobbyTalk(Eris::Room *r, const std::string& nm,
                                           const std::string& t)
 {
@@ -122,22 +152,22 @@ void GameClient::worldEnter(Eris::Entity * chr)
 
 }
 
-void GameClient::charMoved(const Eris::Coord &)
+void GameClient::charMoved(const Point3D &)
 {
     std::cout << "Char moved" << std::endl << std::flush;
 }
 
-void GameClient::moveCharacter(const Vector3D & pos)
+void GameClient::moveCharacter(const Point3D & pos)
 {
     if (character == NULL) {
         return;
     }
 
-    Vector3D coords(pos);
+    Point3D coords(pos);
     Eris::Entity * ref = character->getContainer();
     Eris::Entity * r;
     while ((r = ref->getContainer()) != NULL) {
-        coords -= Vector3D(ref->getPosition());
+        coords -= ref->getPosition();
         ref = r;
     };
     
@@ -146,8 +176,8 @@ void GameClient::moveCharacter(const Vector3D & pos)
     Atlas::Message::Object::MapType marg;
     marg["id"] = character->getID();
     marg["loc"] = character->getContainer()->getID();
-    marg["pos"] = coords.asObject();
-    marg["velocity"] = Vector3D(1,0,0).asObject();
+    marg["pos"] = coords.toAtlas();
+    marg["velocity"] = Point3D(1,0,0).toAtlas();
     m.SetArgs(Atlas::Message::Object::ListType(1, marg));
     m.SetFrom(character->getID());
 
@@ -155,19 +185,19 @@ void GameClient::moveCharacter(const Vector3D & pos)
     
 }
 
-const Vector3D GameClient::getAbsCharPos()
+const Point3D GameClient::getAbsCharPos()
 {
     if (!inGame) {
-        return Vector3D();
+        return Point3D();
     }
     float now = SDL_GetTicks();
-    Vector3D pos = Vector3D(character->getPosition());
-    pos = pos + Vector3D(character->getVelocity()) * (double)((now - character->getTime())/1000.0f);
+    Point3D pos = character->getPosition();
+    pos = pos + character->getVelocity() * (double)((now - character->getTime())/1000.0f);
     Eris::Entity * root = world->getRootEntity();
     for(Eris::Entity * ref = character->getContainer();
         ref != NULL && ref != root;
         ref = ref->getContainer()) {
-        pos = pos + Vector3D(ref->getPosition());
+        pos = pos + ref->getPosition();
     }
     return pos;
 }

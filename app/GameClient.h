@@ -7,9 +7,10 @@
 
 #include "Application.h"
 
+#include <common/Vector3D.h>
+
 #include <Eris/Connection.h>
 
-class Vector3D;
 class WorldEntity;
 
 namespace Eris {
@@ -59,10 +60,10 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 
-    void charMoved(const Eris::Coord &);
+    void charMoved(const Point3D &);
 
-    void moveCharacter(const Vector3D & pos);
-    const Vector3D getAbsCharPos();
+    void moveCharacter(const Point3D & pos);
+    const Point3D getAbsCharPos();
 };
 
 #endif // APOGEE_GAMECLIENT_H

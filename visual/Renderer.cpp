@@ -31,7 +31,7 @@ float Renderer::getZ(int x, int y)
     return z;
 }
 
-const Vector3D Renderer::getWorldCoord(int x, int y, float z)
+const Point3D Renderer::getWorldCoord(int x, int y, float z)
 {
     GLint viewport[4];
 
@@ -48,5 +48,5 @@ const Vector3D Renderer::getWorldCoord(int x, int y, float z)
     gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
 
     cout << "{" << wx << ";" << wy << ";" << wz << endl << flush;
-    return Vector3D(wx, wy, wz);
+    return Point3D(wx, wy, wz);
 }

@@ -5,6 +5,8 @@
 #ifndef VECTOR_3D_H
 #define VECTOR_3D_H
 
+#if 0
+
 #include <Atlas/Message/Object.h>
 #include <Eris/Types.h>
 
@@ -213,6 +215,15 @@ inline std::ostream & operator<<(std::ostream& s, const Vector3D& v) {
     }
     return s << "[" << v.x << "," << v.y << "," << v.z << "]";
 }
+
+#else // 0
+
+#include <Eris/Types.h>
+
+typedef WFMath::Point<3> Point3D;
+typedef WFMath::Vector<3> Vector3D;
+
+#endif // 0
 
 
 #endif // VECTOR_3D_H

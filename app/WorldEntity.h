@@ -16,7 +16,7 @@ class WorldEntity : public Eris::Entity
   public:
     VisualEntity & visEntity;
 
-    void movedSignal(const Eris::Coord &);
+    void movedSignal(const Point3D &);
 
     WorldEntity(const Atlas::Objects::Entity::GameEntity &ge);
 

@@ -37,11 +37,11 @@ class DemeterScene : public Renderer {
     }
 
     virtual void draw3Dentity();
-    virtual void drawCal3DModel(Model *, const Vector3D & coords,
+    virtual void drawCal3DModel(Model *, const Point3D & coords,
                                 const Eris::Quaternion & orientation);
-    virtual void draw3DBox(const Vector3D & coords,
+    virtual void draw3DBox(const Point3D & coords,
                            const Eris::BBox & bbox);
-    virtual void draw3DArea(const Vector3D & coords,
+    virtual void draw3DArea(const Point3D & coords,
                             const Vector3D & bbox = Vector3D(),
                             const Vector3D & bmedian = Vector3D()) { }
     virtual void drawEntity(Eris::Entity * ent) { }

@@ -35,11 +35,11 @@ class Isometric : public Renderer {
         return instance;
     }
 
-    void drawCal3DModel(Model *, const Vector3D & coords,
+    void drawCal3DModel(Model *, const Point3D & coords,
                                 const Eris::Quaternion & orientation);
-    void draw3DBox(const Vector3D & coords,
+    void draw3DBox(const Point3D & coords,
                            const Eris::BBox & bbox);
-    void draw3DArea(const Vector3D & coords,
+    void draw3DArea(const Point3D & coords,
                     const Vector3D & bbox = Vector3D(),
                     const Vector3D & bmedian = Vector3D());
     void drawEntity(Eris::Entity * ent);
