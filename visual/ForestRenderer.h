@@ -7,11 +7,17 @@
 
 #include "EntityRenderer.h"
 
+#include <Mercator/Forest.h>
+
 #include <string>
 
-class ForestRenderer : public EntityRenderer
+class ForestRenderer : public BBoxRenderer
 {
+  public:
+    Mercator::Forest m_forest;
   protected:
+
+    void drawTree(float height);
   public:
     ForestRenderer(Renderer &, Eris::Entity & e);
     virtual ~ForestRenderer();

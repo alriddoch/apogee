@@ -23,7 +23,7 @@
 #include <iostream>
 #include <cassert>
 
-static const bool debug_flag = true;
+static const bool debug_flag = false;
 
 void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
 {
