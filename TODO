@@ -1,3 +1,9 @@
+Camera interface to renderers is now in, but not used. Implement it,
+and make use of it for terrain.
+
+Memory allocated by vertex buffers is now no longer required. Can scrap
+vertex and surface caches at least.
+
 Modify the interface to entity renderers so that we provide an indication
 of the camera position, so some kind of judgement can be made about how
 much detail, and how the entity should be rendered. Make use of this

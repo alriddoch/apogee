@@ -6,6 +6,8 @@
 
 #include "Texture.h"
 
+#include "common/debug.h"
+
 #include <Eris/Entity.h>
 
 #include <Mercator/Segment.h>
@@ -19,6 +21,7 @@
 
 using Atlas::Message::Element;
 
+static const bool debug_flag = false;
 static const int segSize = 64;
 
 void TerrainRenderer::enableRendererState()
@@ -111,6 +114,8 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
 }
 
+using Mercator::Terrain;
+
 void TerrainRenderer::drawMap(Mercator::Terrain & t)
 {
     // m_landscapeList = glGenLists(1);
@@ -118,26 +123,51 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
 
     enableRendererState();
 
-    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+    const Terrain::Segmentstore & segs = t.getTerrain();
 
-    // Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
-    Mercator::Terrain::Segmentstore::const_iterator I = segs.lower_bound(-1);
-    Mercator::Terrain::Segmentstore::const_iterator K = segs.upper_bound(1);
+    // Terrain::Segmentstore::const_iterator I = segs.begin();
+    Terrain::Segmentstore::const_iterator I = segs.lower_bound(-1);
+    Terrain::Segmentstore::const_iterator K = segs.upper_bound(1);
     for (; I != K; ++I) {
-        const Mercator::Terrain::Segmentcolumn & col = I->second;
-        // Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
-        Mercator::Terrain::Segmentcolumn::const_iterator J = col.lower_bound(-1);
-        Mercator::Terrain::Segmentcolumn::const_iterator L = col.upper_bound(1);
+        const Terrain::Segmentcolumn & col = I->second;
+        TerrainRenderer::DisplayListStore::iterator M = m_displayLists.find(I->first);
+
+        // Terrain::Segmentcolumn::const_iterator J = col.begin();
+        Terrain::Segmentcolumn::const_iterator J = col.lower_bound(-1);
+        Terrain::Segmentcolumn::const_iterator L = col.upper_bound(1);
         for (; J != L; ++J) {
-            glPushMatrix();
-            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-            Mercator::Segment * s = J->second;
-            if (!s->isValid()) {
-                s->populate();
-                s->populateSurfaces();
+            DisplayListColumn & dcol = (M == m_displayLists.end()) ? 
+                                           m_displayLists[I->first] :
+                                           M->second;
+            DisplayListColumn::const_iterator N = dcol.find(J->first);
+            GLuint display_list;
+            if (N != dcol.end()) {
+                debug(std::cout << "Using display list for "
+                                << I->first << ", " << J->first
+                                << std::endl << std::flush;);
+                display_list = N->second;
+            } else {
+                debug(std::cout << "Building display list for "
+                                << I->first << ", " << J->first
+                                << std::endl << std::flush;);
+                display_list = glGenLists(1);
+                glNewList(display_list, GL_COMPILE);
+
+                glPushMatrix();
+                glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+                Mercator::Segment * s = J->second;
+                if (!s->isValid()) {
+                    s->populate();
+                    s->populateSurfaces();
+                }
+                drawRegion(s);
+                glPopMatrix();
+    
+                glEndList();
+                dcol[J->first] = display_list;
             }
-            drawRegion(s);
-            glPopMatrix();
+
+            glCallList(display_list);
         }
     }
     disableRendererState();
@@ -147,15 +177,15 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
 
 void TerrainRenderer::drawSea(Mercator::Terrain & t)
 {
-    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+    const Terrain::Segmentstore & segs = t.getTerrain();
 
-    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+    Terrain::Segmentstore::const_iterator I = segs.begin();
     glDisable(GL_FOG);
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     for (; I != segs.end(); ++I) {
-        const Mercator::Terrain::Segmentcolumn & col = I->second;
-        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+        const Terrain::Segmentcolumn & col = I->second;
+        Terrain::Segmentcolumn::const_iterator J = col.begin();
         for (; J != col.end(); ++J) {
             glPushMatrix();
             glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
@@ -215,7 +245,7 @@ void TerrainRenderer::readTerrain()
 }
 
 TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
-    EntityRenderer(r, e), m_terrain(Mercator::Terrain::SHADED),
+    EntityRenderer(r, e), m_terrain(Terrain::SHADED),
     m_numLineIndeces(0),
     m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
     m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
