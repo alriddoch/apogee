@@ -343,15 +343,21 @@ void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox
         bbox.highCorner().x(), bbox.highCorner().y(), bbox.highCorner().z(),
         bbox.lowCorner().x(), bbox.highCorner().y(), bbox.highCorner().z() 
     };
-    GLuint indices[] = { 0, 1, 3, 2, 7, 6, 4, 5, 0, 4, 1, 5,
-                         3, 7, 2, 6, 0, 3, 1, 2, 4, 7, 5, 6 };
+    static const GLuint indices[] = { 0, 1, 3, 2, 7, 6, 4, 5, 0, 4, 1, 5,
+                                      3, 7, 2, 6, 0, 3, 1, 2, 4, 7, 5, 6 };
     glPushMatrix();
     glTranslatef(coords.x(), coords.y(), coords.z());
 
     glColor3f(0.0f, 1.0f, 0.0f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
+    if (have_GL_EXT_compiled_vertex_array) {
+        glLockArraysEXT(0, 8);
+    }
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, indices);
+    if (have_GL_EXT_compiled_vertex_array) {
+        glUnlockArraysEXT();
+    }
     glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
@@ -427,14 +433,14 @@ void Renderer::drawRegion(Mercator::Segment * map)
         glBindTexture(GL_TEXTURE_2D, texture);
     }
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    // if (have_GL_EXT_compiled_vertex_array) {
-        // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
-    // }
+    if (have_GL_EXT_compiled_vertex_array) {
+        glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
+    }
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
-    // if (have_GL_EXT_compiled_vertex_array) {
-        // glUnlockArraysEXT();
-    // }
+    if (have_GL_EXT_compiled_vertex_array) {
+        glUnlockArraysEXT();
+    }
     if (texture != -1) {
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);

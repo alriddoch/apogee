@@ -75,7 +75,6 @@ int main(int argc, char ** argv)
         SDL_GetMouseState(&dx, &dy);
         dx -= mx; dy -= my;
         if ((dx != 0) || (dy != 0)) {
-            std::cout << dx << " : " << dy << std::endl << std::flush;
             if (app->mouse(dx, dy)) {
                 mx = app->renderer.getWidth() / 2.f;
                 my = app->renderer.getHeight() / 2.f;
