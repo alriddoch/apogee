@@ -24,7 +24,6 @@ class RendererSDLinit : public RendererException { };
 
 namespace Eris {
   class Entity;
-  class BBox;
   class Quaternion;
 }
 
@@ -91,9 +90,9 @@ class Renderer {
     //virtual void draw3Dtest() = 0;
     //virtual void draw2Dtest() = 0;
     virtual void drawCal3DModel(Model *, const Point3D & coords,
-                                const Eris::Quaternion &) = 0;
+                                const WFMath::Quaternion &) = 0;
     virtual void draw3DBox(const Point3D & coords,
-                           const Eris::BBox & bbox) = 0;
+                           const WFMath::AxisBox<3> & bbox) = 0;
     virtual void drawEntity(Eris::Entity * ent) = 0;
     virtual void drawWorld(Eris::Entity * wrld) = 0;
     virtual void drawMap(CoalDatabase &, HeightMap &) = 0;

@@ -38,9 +38,9 @@ class DemeterScene : public Renderer {
 
     virtual void draw3Dentity();
     virtual void drawCal3DModel(Model *, const Point3D & coords,
-                                const Eris::Quaternion & orientation);
+                                const WFMath::Quaternion & orientation);
     virtual void draw3DBox(const Point3D & coords,
-                           const Eris::BBox & bbox);
+                           const WFMath::AxisBox<3> & bbox);
     virtual void draw3DArea(const Point3D & coords,
                             const Vector3D & bbox = Vector3D(),
                             const Vector3D & bmedian = Vector3D()) { }

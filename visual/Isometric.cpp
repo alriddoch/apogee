@@ -151,12 +151,12 @@ void Isometric::draw2Dtest()
     }
     SDL_Rect destRect = { width - button->w - 8, 32, button->w, button->h };
     for(int i=0; i < 8; i++) {
-        destRect.x = width - button->w * (1 + i / 4) - 4;
-        destRect.y = 4 + (i % 4) * 24;
+        destRect.x() = width - button->w * (1 + i / 4) - 4;
+        destRect.y() = 4 + (i % 4) * 24;
         SDL_BlitSurface(button, NULL, screen, &destRect);
     }
-    destRect.x = width - button->w * 2 - 4;
-    destRect.y = 4;
+    destRect.x() = width - button->w * 2 - 4;
+    destRect.y() = 4;
     destRect.w = button->w * 2;
     destRect.h = button->h * 4;
     SDL_UpdateRects(screen, 1, &destRect);
@@ -198,13 +198,13 @@ void Isometric::draw3Dtest()
 #endif
 
 void Isometric::drawCal3DModel(Model * m, const Point3D & coords,
-                               const Eris::Quaternion & orientation)
+                               const WFMath::Quaternion & orientation)
 {
     glPushMatrix();
     glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
-    orientation.asMatrix(orient);
+    Eris::Quaternion(orientation).asMatrix(orient);
     float omatrix[16];
     glMultMatrixf(&orient[0][0]);
     glScalef(0.025f, 0.025f, 0.025f);
@@ -212,7 +212,7 @@ void Isometric::drawCal3DModel(Model * m, const Point3D & coords,
     glPopMatrix();
 }
 
-void Isometric::draw3DBox(const Point3D & coords, const Eris::BBox & bbox)
+void Isometric::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
 {
     lightOff();
 
@@ -222,83 +222,83 @@ void Isometric::draw3DBox(const Point3D & coords, const Eris::BBox & bbox)
 
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     //glVertex3f(-box.X(),box.Y(),-box.Z());
     //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     //glVertex3f(-box.X(),box.Y(),box.Z());
     //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     //glVertex3f(-box.X(),-box.Y(),box.Z());
     //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     //glVertex3f(-box.X(),-box.Y(),-box.Z());
     //glVertex3f(-box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     //glVertex3f(box.X(),-box.Y(),-box.Z());
     //glVertex3f(box.X(),-box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     //glVertex3f(-box.X(),box.Y(),-box.Z());
     //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     //glVertex3f(box.X(),box.Y(),-box.Z());
     //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.u.z);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     //glVertex3f(-box.X(),-box.Y(),-box.Z());
     //glVertex3f(-box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.u.z);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.u.z);
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     //glVertex3f(box.X(),-box.Y(),-box.Z());
     //glVertex3f(box.X(),box.Y(),-box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.u.x,bbox.u.y,bbox.v.z);
-    glVertex3f(bbox.u.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
+    glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     //glVertex3f(-box.X(),-box.Y(),box.Z());
     //glVertex3f(-box.X(),box.Y(),box.Z());
     glEnd();
 
     glBegin(GL_LINES);
-    glVertex3f(bbox.v.x,bbox.u.y,bbox.v.z);
-    glVertex3f(bbox.v.x,bbox.v.y,bbox.v.z);
+    glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
+    glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     //glVertex3f(box.X(),-box.Y(),box.Z());
     //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
@@ -308,15 +308,15 @@ void Isometric::draw3DBox(const Point3D & coords, const Eris::BBox & bbox)
 }
 
 void Isometric::draw3DArea(const Point3D & coords, const Vector3D & bbox,
-                         const Vector3D & bmedian)
+                           const Vector3D & bmedian)
 {
 }
 
 void Isometric::drawEntity(Eris::Entity * ent)
 {
     glPushMatrix();
-    const Eris::Coord & pos = ent->getPosition();
-    glTranslatef(pos.x, pos.y, pos.z);
+    const Point3D & pos = ent->getPosition();
+    glTranslatef(pos.x(), pos.y(), pos.z());
     int numEnts = ent->getNumMembers();
     debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
     for (int i = 0; i < numEnts; i++) {

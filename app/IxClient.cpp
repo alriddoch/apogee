@@ -80,7 +80,7 @@ bool IxClient::update(float secs)
     renderer.drawMap(map_database, foo);
     renderer.origin();
     model->onUpdate(0.1);
-    renderer.drawCal3DModel(model, Point3D(0,0,0), Eris::Quaternion());
+    renderer.drawCal3DModel(model, Point3D(0,0,0), WFMath::Quaternion());
     doWorld();
     renderer.lightOff();
     renderer.drawGui();
