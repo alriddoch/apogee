@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libvisual.a
 
-INCLUDES = -I..
+INCLUDES = -I$(top_srcdir)
 
 libvisual_a_SOURCES = \
                       HeightMap.cpp HeightMap.h \
@@ -15,4 +15,5 @@ libvisual_a_SOURCES = \
                       3dsRenderer.cpp 3dsRenderer.h \
                       Isometric.cpp Isometric.h \
                       DemeterScene.cpp DemeterScene.h \
-                      Model.cpp Model.h
+                      Model.cpp Model.h \
+                      default_texture.h GL.h

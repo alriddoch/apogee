@@ -1,3 +1,5 @@
+INCLUDES = -I$(top_srcdir)
+
 noinst_LIBRARIES = libgui.a
 
 libgui_a_SOURCES = Gui.cpp Gui.h font.h \

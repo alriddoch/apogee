@@ -5,10 +5,10 @@
 #ifndef APOGEE_WORLDENTITY_H
 #define APOGEE_WORLDENTITY_H
 
+#include <common/Vector3D.h>
+
 #include <Eris/Entity.h>
 #include <Eris/Factory.h>
-
-#include <visual/VisualEntity.h>
 
 namespace Eris {
   class TypeInfo;

@@ -64,6 +64,7 @@ AC_CHECK_LIB(Demeter,main)
 dnl Generate files
 AC_OUTPUT([
 	Makefile
+	common/Makefile
 	visual/Makefile
 	gui/Makefile
 	app/Makefile

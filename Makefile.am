@@ -1,1 +1,1 @@
-SUBDIRS = visual gui app
+SUBDIRS = common visual gui app
