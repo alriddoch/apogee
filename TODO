@@ -1,3 +1,7 @@
+Turn off depth write for subsequent passes in multi-pass.
+
+Use short for index arrays, especially for terrain code.
+
 For expo, change textures to nearest, and Lod to much lower.
 
 Implement new Eris Entity class which carries pointer to associated terrain.
