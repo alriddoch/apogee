@@ -254,16 +254,26 @@ void Renderer::drawEntity(Eris::Entity * ent, const Vector3D & cp)
             }
         }
     } else {
-        debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
+        debug(std::cout << "Eris::Entity \"" << ent->getID()
+                        << "\" is not a MovableEntity"
+                        << std::endl << std::flush;);
     }
     Vector3D camPos = cp; camPos -= pos;
+
+    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
+    if (re == 0) {
+        return;
+    }
 
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
     orient(ent->getOrientation());
-    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
-    if (re != 0) {
-        re->m_drawer->render(*this, camPos);
+
+    re->m_drawer->render(*this, camPos);
+
+    if (!re->m_drawer->drawContents()) {
+        glPopMatrix();
+        return;
     }
 
     int numEnts = ent->getNumMembers();
@@ -317,17 +327,28 @@ void Renderer::selectEntity(Eris::Entity * ent, const Vector3D & cp,
             }
         }
     } else {
-        debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
+        debug(std::cout << "Eris::Entity \"" << ent->getID()
+                        << "\" is not a MovableEntity"
+                        << std::endl << std::flush;);
     }
     Vector3D camPos = cp; camPos -= pos;
     glLoadName(++next);
     name[next] = ent;
+
+    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
+    if (re == 0) {
+        return;
+    }
+
     glPushMatrix();
     glTranslatef(pos.x(), pos.y(), pos.z());
     orient(ent->getOrientation());
-    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
-    if (re != 0) {
-        re->m_drawer->select(*this, camPos);
+
+    re->m_drawer->select(*this, camPos);
+
+    if (!re->m_drawer->drawContents()) {
+        glPopMatrix();
+        return;
     }
 
     int numEnts = ent->getNumMembers();

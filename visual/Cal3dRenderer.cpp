@@ -43,6 +43,7 @@ void Cal3dRenderer::update(float secs)
 Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) :
                              EntityRenderer(r, e), m_model(0)
 {
+    m_drawContents = false;
     if (m_default == 0) {
         m_default = new Model();
         if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/cally/cally.cfg")) {

@@ -22,9 +22,12 @@ class EntityRenderer : virtual public SigC::Object
 {
   public:
     Eris::Entity & m_ent;
+    bool m_drawContents;
 
     EntityRenderer(Renderer &, Eris::Entity & e);
     virtual ~EntityRenderer();
+
+    bool drawContents() const { return m_drawContents; }
 
     virtual void render(Renderer &, const WFMath::Vector<3> & camPos) = 0;
     virtual void select(Renderer &, const WFMath::Vector<3> & camPos) = 0;

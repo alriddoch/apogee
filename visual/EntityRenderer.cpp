@@ -10,7 +10,8 @@
 
 #include <wfmath/axisbox.h>
 
-EntityRenderer::EntityRenderer(Renderer & r, Eris::Entity & e) : m_ent(e)
+EntityRenderer::EntityRenderer(Renderer & r, Eris::Entity & e) : m_ent(e),
+                                             m_drawContents(true)
 {
 }
 
