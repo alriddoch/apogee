@@ -15,18 +15,22 @@ Model * Cal3dRenderer::m_default = 0;
 
 void Cal3dRenderer::drawCal3dModel(Model * m)
 {
+    float scale = 0.0125f / m->getRenderScale();
     glPushMatrix();
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    glScalef(0.025f, 0.025f, 0.025f);
+    // glScalef(0.025f, 0.025f, 0.025f);
+    glScalef(scale, scale, scale);
     m->onRender();
     glPopMatrix();
 }
 
 void Cal3dRenderer::selectCal3dModel(Model * m)
 {
+    float scale = 0.0125f / m->getRenderScale();
     glPushMatrix();
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    glScalef(0.025f, 0.025f, 0.025f);
+    // glScalef(0.025f, 0.025f, 0.025f);
+    glScalef(scale, scale, scale);
     m->onSelect();
     glPopMatrix();
 }
