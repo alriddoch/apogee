@@ -1,3 +1,6 @@
+Terrain shaders always seem to get the 0,0 corner wrong, or at least
+grass does.
+
 toParentCoords and toLocalCoords do not operate on itself, it returns the
 transformed value.
 

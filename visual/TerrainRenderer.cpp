@@ -434,7 +434,10 @@ void TerrainRenderer::readTerrainFrom(const Atlas::Message::Element & terrain)
             xmax = std::max(xmax, x);
             ymin = std::min(ymin, y);
             ymax = std::max(ymax, y);
-            m_terrain.setBasePoint(x, y, point[2].asNum());
+            bp.height() = z;
+            // FIXME Sort out roughness and falloff, and generally
+            // verify this code is the same as that in Terrain layer
+            m_terrain.setBasePoint(x, y, bp);
             removeDisplayList(x - 1, y - 1);
             removeDisplayList(x    , y - 1);
             removeDisplayList(x - 1, y    );
