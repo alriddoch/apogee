@@ -1,3 +1,8 @@
+2005-02-06  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Model.h, visual/Model.cpp: Add accessors and signals
+	  for instrumenting loading a cal3d model.
+
 2005-02-02  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Model.h, visual/Model.cpp: Make some tweaks to model handling

@@ -20,6 +20,8 @@
 
 #include <cal3d/cal3d.h>
 
+#include <sigc++/signal.h>
+
 //----------------------------------------------------------------------------//
 // Class declaration                                                          //
 //----------------------------------------------------------------------------//
@@ -68,6 +70,15 @@ public:
   void setMotionBlend(float *pMotionBlend, float delay);
   void setState(int state, float delay);
 
+  CalCoreModel & getCoreModel() {
+    return m_calCoreModel;
+  }
+
+  SigC::Signal1<void, const std::string &> skeletonLoaded;
+  SigC::Signal2<void, const std::string &, int> animationLoaded;
+  SigC::Signal2<void, const std::string &, int> actionLoaded;
+  SigC::Signal2<void, const std::string &, int> meshLoaded;
+  SigC::Signal2<void, const std::string &, int> materialLoaded;
 protected:
   GLuint loadTexture(const std::string& strFilename);
   void selectMesh();

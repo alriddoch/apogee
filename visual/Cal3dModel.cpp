@@ -280,18 +280,20 @@ bool Cal3dModel::onInit(const std::string& strFilename)
         CalError::printLastError();
         return false;
       }
+      skeletonLoaded.emit(strData);
     }
     else if(strKey == "animation")
     {
       // load core animation
       std::cout << "Loading animation '" << strData << "'..." << std::endl;
-      m_animationId[animationCount] = m_calCoreModel.loadCoreAnimation(strPath + strData);
-      if(m_animationId[animationCount] == -1)
+      int animationId = m_calCoreModel.loadCoreAnimation(strPath + strData);
+      if(animationId == -1)
       {
         CalError::printLastError();
         return false;
       }
-
+      m_animationId[animationCount] = animationId;
+      animationLoaded.emit(strData, animationId);
       animationCount++;
     }
     else if(strKey == "animation_action")
@@ -303,11 +305,13 @@ bool Cal3dModel::onInit(const std::string& strFilename)
     {
       // load core mesh
       std::cout << "Loading mesh '" << strData << "'..." << std::endl;
-      if(m_calCoreModel.loadCoreMesh(strPath + strData) == -1)
+      int meshId = m_calCoreModel.loadCoreMesh(strPath + strData);
+      if(meshId == -1)
       {
         CalError::printLastError();
         return false;
       }
+      meshLoaded.emit(strData, meshId);
     }
     else if(strKey == "material")
     {
@@ -320,28 +324,28 @@ bool Cal3dModel::onInit(const std::string& strFilename)
       {
         CalError::printLastError();
         return false;
-      } else {
-        CalCoreMaterial *pCoreMaterial = m_calCoreModel.getCoreMaterial(materialId);
-        std::string strMatPath;
-        unsigned int pos = strFullPath.find_last_of("/");
-        if (pos != std::string::npos) {
-          strMatPath = strFullPath.substr(0, pos + 1);
-        }
-        // loop through all maps of the core material
-        int mapId;
-        for(mapId = 0; mapId < pCoreMaterial->getMapCount(); mapId++)
-        {
-          // get the filename of the texture
-          std::string strFilename;
-          strFilename = pCoreMaterial->getMapFilename(mapId);
-    
-          // load the texture from the file
-          GLuint textureId;
-          textureId = loadTexture(strMatPath + strFilename);
-    
-          // store the opengl texture id in the user data of the map
-          pCoreMaterial->setMapUserData(mapId, (Cal::UserData)textureId);
-        }
+      }
+      materialLoaded.emit(strData, materialId);
+      CalCoreMaterial *pCoreMaterial = m_calCoreModel.getCoreMaterial(materialId);
+      std::string strMatPath;
+      unsigned int pos = strFullPath.find_last_of("/");
+      if (pos != std::string::npos) {
+        strMatPath = strFullPath.substr(0, pos + 1);
+      }
+      // loop through all maps of the core material
+      int mapId;
+      for(mapId = 0; mapId < pCoreMaterial->getMapCount(); mapId++)
+      {
+        // get the filename of the texture
+        std::string strFilename;
+        strFilename = pCoreMaterial->getMapFilename(mapId);
+  
+        // load the texture from the file
+        GLuint textureId;
+        textureId = loadTexture(strMatPath + strFilename);
+  
+        // store the opengl texture id in the user data of the map
+        pCoreMaterial->setMapUserData(mapId, (Cal::UserData)textureId);
       }
     }
     else
