@@ -5,6 +5,7 @@ Makefile.in
 acinclude.m4
 aclocal.m4
 apogee-*.tar.gz
+autom4te-*.cache
 config.cache
 config.guess
 config.h
@@ -13,7 +14,7 @@ config.log
 config.status
 config.sub
 configure
-gui
+depcomp
 install-sh
 leak.out
 libtool
@@ -23,3 +24,4 @@ missing
 mkinstalldirs
 stamp-h
 stamp-h.in
+stamp-h1
