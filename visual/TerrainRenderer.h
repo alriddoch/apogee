@@ -19,6 +19,7 @@ class TerrainRenderer : public EntityRenderer
     unsigned short * const m_lineIndeces;
     float * const m_texCoords;
     GLuint m_textures[8]; //, m_texture2;
+    GLuint m_landscapeList;
     bool m_haveTerrain;
 
     void enableRendererState();

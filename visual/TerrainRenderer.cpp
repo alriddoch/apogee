@@ -113,26 +113,36 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
 void TerrainRenderer::drawMap(Mercator::Terrain & t)
 {
-    enableRendererState();
-    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+    if (!m_landscapeList) {
+        std::cerr << "Building list" << std::endl << std::flush;
+        m_landscapeList = glGenLists(1);
+        glNewList(m_landscapeList, GL_COMPILE);
 
-    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
-    for (; I != segs.end(); ++I) {
-        const Mercator::Terrain::Segmentcolumn & col = I->second;
-        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
-        for (; J != col.end(); ++J) {
-            glPushMatrix();
-            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-            Mercator::Segment * s = J->second;
-            if (!s->isValid()) {
-                s->populate();
-                s->populateSurfaces();
+        enableRendererState();
+        const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+
+        Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+        for (; I != segs.end(); ++I) {
+            const Mercator::Terrain::Segmentcolumn & col = I->second;
+            Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+            for (; J != col.end(); ++J) {
+                glPushMatrix();
+                glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+                Mercator::Segment * s = J->second;
+                if (!s->isValid()) {
+                    s->populate();
+                    s->populateSurfaces();
+                }
+                drawRegion(s);
+                glPopMatrix();
             }
-            drawRegion(s);
-            glPopMatrix();
         }
+        disableRendererState();
+        glEndList();
     }
-    disableRendererState();
+    if (m_landscapeList) {
+        glCallList(m_landscapeList);
+    }
 }
 
 void TerrainRenderer::drawSea(Mercator::Terrain & t)
@@ -209,7 +219,7 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     m_numLineIndeces(0),
     m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
     m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
-    m_haveTerrain(false)
+    m_landscapeList(0), m_haveTerrain(false)
 
 {
     m_textures[0] = Texture::get("granite.png");
