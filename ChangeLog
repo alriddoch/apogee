@@ -1,3 +1,12 @@
+2004-03-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Tweak camera position relative
+	  to characters, so a view from above doesn't collide with
+	  the characters so much.
+
+	* app/perigee.cpp, app/apogee.cpp: Return 0 from main, so code
+	  works without warnings when using SDL_main.
+
 2004-03-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp: Tweak the way the character list is handled.

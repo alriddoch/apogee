@@ -92,4 +92,6 @@ int main(int argc, char ** argv)
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;
+
+    return 0;
 }

@@ -40,12 +40,12 @@ void DemeterScene::viewPoint()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
 
-    glTranslatef(0.0f, 0.0f, -5.0f);
+    glTranslatef(0.0f, -1.0f, -5.0f);
 
     glRotatef(elevation-90.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 
-    glTranslatef(0.0f, 0.0f, -2.5f);
+    glTranslatef(0.0f, 0.0f, -2.0f);
 
     glTranslatef(-x_offset,-y_offset,-z_offset);
 
