@@ -13,12 +13,32 @@
 #include <GL/gl.h>
 #endif
 
-#ifndef GL_EXT_compiled_vertex_array
-typedef void (APIENTRY * PFNGLLOCKARRAYSEXTPROC) (GLint first, GLsizei count);
-typedef void (APIENTRY * PFNGLUNLOCKARRAYSEXTPROC) (void);
+#ifndef GL_ARB_multitexture
 
-extern PFNGLLOCKARRAYSEXTPROC glLockArraysExt;
-extern PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt;
+  typedef void (APIENTRY * PFNGLACTIVETEXTUREARBPROC) (GLenum texture);
+  extern PFNGLACTIVETEXTUREARBPROC glActiveTextureARB;
+
+#else // GL_ARB_multitexture
+
+  #ifndef GL_TEXTURE0
+    #define GL_TEXTURE0 GL_TEXTURE0_ARB
+    #define GL_TEXTURE1 GL_TEXTURE1_ARB
+  #endif // GL_TEXTURE0
+
+  #ifndef glActiveTexture
+    #define glActiveTexture glActiveTextureARB
+  #endif // glActiveTexture
+
+#endif // GL_ARB_multitexture
+
+#ifndef GL_EXT_compiled_vertex_array
+
+  typedef void (APIENTRY * PFNGLLOCKARRAYSEXTPROC) (GLint first, GLsizei count);
+  typedef void (APIENTRY * PFNGLUNLOCKARRAYSEXTPROC) (void);
+
+  extern PFNGLLOCKARRAYSEXTPROC glLockArraysExt;
+  extern PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt;
+
 #endif // GL_EXT_compiled_vertex_array
 
 extern bool have_GL_EXT_compiled_vertex_array;

@@ -1,5 +1,12 @@
 2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/GL.h: Improved handling of extensions.
+
+	* visual/TerrainRenderer.cpp: Add placeholder code for using
+	  alpha test to get clean edge on texture passes.
+
+2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/DemeterScene.cpp: Make the fog start much closer, to give
 	  a depth to the terrain.
 

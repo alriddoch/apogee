@@ -36,6 +36,8 @@ void TerrainRenderer::enableRendererState()
     glEnable(GL_NORMALIZE);
     glColor4f(1.f, 1.f, 1.f, 1.f);
     glEnableClientState(GL_NORMAL_ARRAY);
+    // glAlphaFunc(GL_GREATER, 0.5f);
+    // glEnable(GL_ALPHA_TEST);
 
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
