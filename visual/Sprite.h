@@ -1,6 +1,6 @@
 // This file may be redistributed and modified only under the terms of
 // the GNU General Public License (See COPYING for details).
-// Copyright (C) 2000-2003 Alistair Riddoch
+// Copyright (C) 2000-2004 Alistair Riddoch
 
 #ifndef APOGEE_VISUAL_SPRITE_H
 #define APOGEE_VISUAL_SPRITE_H
@@ -17,6 +17,9 @@ class Sprite {
     float m_w, m_h;
     float m_pw, m_ph;
     bool loadedp;
+    std::string m_filename;
+
+    bool loadData();
   public:
     Sprite() : m_w(0), m_h(0), m_pw(0), m_ph(0), loadedp(false) { }
 

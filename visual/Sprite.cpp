@@ -28,8 +28,14 @@ unsigned int Sprite::twoN(unsigned int size)
 
 bool Sprite::load(const std::string & filename)
 {
-    std::cout << "Sprite " << filename << std::endl << std::flush;
-    SDL_Surface * image = IMG_Load(filename.c_str());
+    m_filename = filename;
+    return loadData();
+}
+
+bool Sprite::loadData()
+{
+    std::cout << "Sprite " << m_filename << std::endl << std::flush;
+    SDL_Surface * image = IMG_Load(m_filename.c_str());
     if (image == NULL) {
         tex_id = Texture::getDefault();
         m_w = Texture::getDefaultWidth();
@@ -81,6 +87,9 @@ bool Sprite::load(const std::string & filename)
 void Sprite::draw()
 {
     if (!loadedp) { return; }
+    if (!glIsTexture(tex_id)) {
+        loadData();
+    }
     glBindTexture(GL_TEXTURE_2D, tex_id);
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.f,1.f,1.f);

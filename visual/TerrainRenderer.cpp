@@ -154,7 +154,9 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
         // Set up the first texture unit with the ground texture
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
+        GLuint tex = Texture::get(m_textures[texNo], true,
+                                  GL_LINEAR_MIPMAP_NEAREST);
+        glBindTexture(GL_TEXTURE_2D, tex);
 
         // Set up the second texture unit with the alpha texture
         // This is not required for the first pass, as the first pass
@@ -476,11 +478,12 @@ TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
     m_landscapeList(0), m_haveTerrain(false)
 
 {
-    m_textures[0] = Texture::get("granite.png", true, GL_LINEAR_MIPMAP_NEAREST);
-    m_textures[1] = Texture::get("sand.png", true, GL_LINEAR_MIPMAP_NEAREST);
-    m_textures[2] = Texture::get("rabbithill_grass_hh.png", true, GL_LINEAR_MIPMAP_NEAREST);
-    m_textures[3] = Texture::get("dark.png", true, GL_LINEAR_MIPMAP_NEAREST);
-    m_textures[4] = Texture::get("snow.png", true, GL_LINEAR_MIPMAP_NEAREST);
+    m_textures[0] = "granite.png";
+    m_textures[1] = "sand.png";
+    m_textures[2] = "rabbithill_grass_hh.png";
+    m_textures[3] = "dark.png";
+    m_textures[4] = "snow.png";
+    // m_textures[4] = "snow.png", true, GL_LINEAR_MIPMAP_NEAREST);
 
     int idx = -1;
     for (unsigned int i = 0; i < (segSize + 1) - 1; ++i) {
