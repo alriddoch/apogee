@@ -91,10 +91,10 @@ int main(int argc, char ** argv)
         } catch (...) {
             cout << "UNKNOWN EXCEPTION" << std::endl << std::flush;
         }
-        if (updated) {
+        //if (updated) {
             app->update();
-        }
-        usleep(10000L);
+        //}
+        SDL_Delay(500);
     }
     std::cout << "Quitting" << std::endl << std::flush;
     delete app;

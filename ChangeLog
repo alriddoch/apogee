@@ -1,3 +1,14 @@
+2001-12-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/IxClient.cpp: Brought perigee up to date with the bbox format
+
+	* app/IsoClient.cpp: Cleaned up button click processing.
+
+	* app/apogee.cpp: Make view update continuously.
+
+	* visual/Isometric.cpp: Cut down the excess debugging output, and
+	  add SDL timer support for the refresh delay.
+
 2001-12-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/GameClient.h:

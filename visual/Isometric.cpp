@@ -16,6 +16,10 @@
 #include "Sprite.h"
 #include "Model.h"
 
+#include <common/debug.h>
+
+static const bool debug_flag = false;
+
 Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght)
 {
     init();
@@ -23,7 +27,7 @@ Isometric::Isometric(int wdth, int hght) : Renderer(wdth, hght)
 
 void Isometric::init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE) != 0) { 
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE) != 0) { 
         std::cerr << "Failed to initialise video subsytem"
                   << std::endl << std::flush;
         throw RendererSDLinit();
@@ -366,12 +370,12 @@ void Isometric::drawEntity(Eris::Entity * ent)
     const Eris::Coord & pos = ent->getPosition();
     glTranslatef(pos.x, pos.y, pos.z);
     int numEnts = ent->getNumMembers();
-    cout << ent->getID() << " " << numEnts << " emts" << endl << flush;
+    debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
-        std::cout << ":" << e->getID() << e->getPosition() << ":"
-                  << e->getBBox().u << e->getBBox().v
-                  << std::endl << std::flush;
+        debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
+                        << e->getBBox().u << e->getBBox().v
+                        << std::endl << std::flush;);
         if (!e->isVisible()) { continue; }
         if ((*e->getInherits().begin()) == "farmer") {
             drawCal3DModel(model, e->getPosition());
