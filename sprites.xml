@@ -1,0 +1,479 @@
+<atlas>
+   <map>
+       <map name="header">
+           <string name="content">uclient sprite definitions</string>
+           <string name="version">0.15.0</string>
+       </map>
+       <map name="server">
+           <string name="hostname">media.worldforge.org</string>
+           <int name="port">6777</int>
+           <string name="baseurl">http://carom/content/</string>
+       </map>
+       <map name="sprites">
+
+           <map name="settler">
+		   <string name="artist">RedMan / Munin</string>
+		   <string name="comment">Female Paladin / Male Builder</string>
+               <list name="properties">
+                  <string>mode</string>
+               </list>
+               <list name="cal3d_models">
+                   <map>
+                       <string name="sex">female</string>
+                       <list name="meshes">
+                           <string>paladin_body.cmf</string>
+                           <string>paladin_cape.cmf</string>
+                           <string>paladin_loincloth.cmf</string>
+                       </list>
+                       <list name="materials">
+                           <string>paladin_cape.crf</string>
+                           <string>paladin_head.crf</string>
+                           <string>paladin_chest.crf</string>
+                           <string>paladin_gird.crf</string>
+                           <string>paladin_arm_left.crf</string>
+                           <string>paladin_arm_right.crf</string>
+                           <string>paladin_flesh.crf</string>
+                           <string>paladin_edge.crf</string>
+                           <string>paladin_stripe.crf</string>
+                           <string>paladin_loin_upper.crf</string>
+                           <string>paladin_loin_lower.crf</string>
+                           <string>paladin_legplate_right.crf</string>
+                           <string>paladin_legplate_left.crf</string>
+                           <string>paladin_leg_right.crf</string>
+                           <string>paladin_leg_left.crf</string>
+                           <string>paladin_legguard_right.crf</string>
+                           <string>paladin_legguard_left.crf</string>
+                           <string>paladin_shoe.crf</string>
+                           <string>paladin_ponytail.crf</string>
+                       </list>
+                   </map>
+               </list>
+
+               <list name="modes">
+		    <map>
+                       <string name="sex">female</string>	       
+                       <string name="filename">/media/media-2d/char-collection-redman/animations/paladin_female/paladin_female_1_idle_dw</string>
+                       <string name="suffix">.png</string>
+                       <int name="directions">8</int>
+		       <int name="first_frame">1</int>
+                       <int name="last_frame">15</int>
+                       <int name="loopable">0</int>
+                       <int name="idleAnimation">1</int>
+                       <int name="reversable">1</int>
+                       <string name="cal3d_animation">paladin_idle.caf</string>
+                    </map>
+		    
+		    <map>
+                       <string name="sex">male</string>	       
+		       <string name="filename">/media/media-2d/char-collection-munin/animations/male/male_idle2_ah</string>
+                       <string name="suffix">.png</string>
+                       <int name="directions">8</int>
+		       <int name="first_frame">1</int>
+                       <int name="last_frame">15</int>
+                       <int name="loopable">0</int>
+                       <int name="idleAnimation">1</int>
+                       <int name="reversable">0</int>
+                    </map>
+
+                    <map>
+                       <string name="mode">walking</string>
+                       <string name="sex">male</string>
+		       <string name="filename">/media/media-2d/char-collection-munin/animations/male/male_walk_ah</string>
+                       <string name="suffix">.png</string> 
+                       <int name="directions">8</int>
+                       <int name="first_frame">1</int>
+                       <int name="last_frame">15</int>
+                       <int name="skip">0</int>
+                    </map>
+               
+                    <map>
+                       <string name="mode">walking</string>
+                       <string name="sex">female</string>
+                       <string name="filename">/media/media-2d/char-collection-redman/animations/paladin_female/paladin_female_1_walk_dw</string>
+                       <string name="suffix">.png</string> 
+                       <int name="directions">8</int>
+                       <int name="first_frame">1</int>
+                       <int name="last_frame">15</int>
+                       <int name="skip">0</int>
+                       <string name="cal3d_animation">paladin_walk.caf</string>
+                    </map>
+
+                    <map>
+			    <string name="mode">running</string>
+                       <string name="sex">male</string>
+		       <string name="filename">/media/media-2d/char-collection-munin/animations/male/male_jog_ah</string>
+                       <string name="suffix">.png</string> 
+                       <int name="directions">8</int>
+                       <int name="first_frame">1</int>
+                       <int name="last_frame">15</int>
+                       <int name="skip">0</int>
+                    </map>
+                </list>
+            </map>
+
+           
+            <map name="oak">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/collection-zzorn/sprites/vegetation/trees/oak/oak_1_mature_merged_hh</string> 
+                  </map>
+               </list>
+            </map>
+
+            <map name="willow">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/collection-pato/tiles/isometric/vegetation/trees/tree_willow_immature_396x303_jmo</string> 
+                  </map>
+               </list>
+            </map>
+
+            <map name="hickory">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/collection-pato/tiles/isometric/vegetation/trees/tree_hickory_immature_v2_381x299_jmo</string> 
+                  </map>
+               </list>
+            </map>
+
+            <map name="acorn">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/collection-zzorn/sprites/vegetation/trees/oak/oak_acorns_one_10_hh</string> 
+                  </map>
+               </list>
+            </map>            
+
+            <map name="birch">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/sprites/vegetation/trees/birch/birch_02_mature_summer_hh</string> 
+                  </map>
+               </list>
+            </map>            
+
+            <map name="coin">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/sprites/treasures/coins_cambria_one</string> 
+                  </map>
+               </list>
+            </map>            
+
+            <map name="entity">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/collection-malcolm/magic-items/baubles/purple_rays_1_se_mw_</string> 
+                     <int name="directions">1</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">8</int>
+                     <int name="skip">0</int>
+                     <int name="loopable">1</int>
+                  </map>
+                  <map>
+                     <string name="mode">birth</string>
+                                 <string name="filename">/media/media-2d/collection-malcolm/magic-items/baubles/purple_rays_1_se_mw_</string> 
+                     <int name="directions">1</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">8</int>
+                     <int name="skip">0</int>
+                     <int name="loopable">1</int>
+                  </map>
+               </list>
+            </map>
+        
+           <map name="deer">
+               <string name="artist">Alain Bertrand &quot;Garg&quot;</string>
+		<string name="comment">no comment</string>
+               
+               <list name="properties">
+                   <string>mode</string>
+               </list>
+
+               <list name="modes">
+                   <map>
+                     <string name="mode">walking</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/deer/deer_ab_walk</string>        
+                     <string name="suffix">.png</string>
+                     <int name="directions">8</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">10</int>
+                     <int name="skip">0</int>
+                  </map>
+                   <map>
+                     <string name="suffix">_1.png</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/deer/deer_ab_walk</string>        
+                     <int name="directions">8</int>
+                  </map>
+               </list>
+           </map>
+
+           <map name="wolf">
+               <string name="artist">Pato</string>
+               <string name="comment">no comment</string>
+               
+               <list name="properties">
+                   <string>mode</string>
+               </list>
+               <list name="modes">
+                  <map>
+                     <string name="suffix">_1.png</string>
+                     <int name="directions">8</int>
+                     <string name="filename">/media/sprites/creatures/wolves/greywolf_AB_walk</string>
+                  </map>
+                  <map>
+                     <string name="mode">walking</string>
+                     <string name="filename">/media/sprites/creatures/wolves/greywolf_AB_walk</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">8</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">8</int>
+                     <int name="skip">0</int>
+                     <string name="sound">grass_footstep1</string>
+                     <list name="syncframes"><int>0</int><int>3</int></list>
+                  </map>                                        
+                  <map>
+                     <string name="mode">running</string>
+                     <string name="filename">/media/sprites/creatures/wolves/greywolf_AB_run</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">8</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">5</int>
+                     <int name="skip">0</int>
+                     <string name="sound">grass_footstep1</string>
+                     <list name="syncframes"><int>0</int><int>2</int></list>
+                  </map>
+                  <map>
+                     <string name="mode">touch</string>
+                     <string name="filename">/media/sprites/creatures/wolves/greywolf_AB_fidgit</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">8</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">4</int>
+                     <int name="skip">0</int>
+                     <string name="sound">wolf_snarling</string>
+                     <list name="syncframes"><int>0</int></list>
+                     <int name="loopable">1</int>
+                  </map>
+               </list>
+               
+            </map>                 
+
+            <map name="skeleton">
+               <string name="artist">Bloodsport</string>
+               <list name="properties">
+                   <string>mode</string>
+               </list>
+               <list name="modes">
+                   <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/skeleton_bs</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">20</int>
+                     <int name="skip">1</int>
+                     <string name="sound">skeleton_walking</string>
+                     <list name="syncframes"><int>0</int><int>5</int></list>
+                  </map>
+                  <map>
+                     <string name="mode">standing</string>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/skel_stand</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                  </map>     
+                   <map>
+                     <string name="mode">collapse</string>
+                     <string name="filename">/media/media-2d/char-collection-redman/animations/skeletonDeath/skeletonBS_death</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">15</int>
+                     <int name="loopable">0</int>
+                  </map>
+                   <map>
+                     <string name="mode">birth</string>
+                     <string name="filename">/media/media-2d/char-collection-redman/animations/skeletonSpawn/skeletonBS_spawn_SE_</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">1</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">31</int>
+                     <int name="skip">1</int>
+                     <int name="loopable">0</int>
+                  </map>
+               </list>
+            </map>
+            <map name="skull">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/skull</string> 
+                  </map>
+               </list>
+            </map>
+            <map name="pelvis">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/pelvis</string> 
+                  </map>
+               </list>
+            </map>
+            <map name="ribcage">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/ribcage</string> 
+                  </map>
+               </list>
+            </map>
+           <map name="shin">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/shin</string> 
+                  </map>
+               </list>
+            </map>
+           <map name="arm">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/arm</string> 
+                  </map>
+               </list>
+            </map>
+           <map name="thigh">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-redman/skeleton/thigh</string> 
+                  </map>
+               </list>
+            </map>
+
+
+            <map name="merchant">        
+               <string name="artist">Tom Austin</string>
+               <list name="properties">
+                   <string>mode</string>
+               </list>
+
+               <list name="modes">
+                  <map>
+                     <string name="suffix">_1.png</string>
+                     <int name="directions">1</int>
+                     <string name="filename">/media/sprites/creatures/humans/male/merchants/pig_seller_ta_wave_SE</string>
+                  </map>
+                  <map>
+                     <string name="mode">waving</string>
+                     <string name="filename">/media/sprites/creatures/humans/male/merchants/pig_seller_ta_wave_SE_</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">1</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">10</int>
+                     <int name="skip">0</int>
+                     <int name="loopable">0</int>
+                  </map>
+               </list>
+            </map>
+
+               <map name="crab">        
+               <string name="artist">Alain Bertrand</string>
+               <list name="properties">
+                   <string>mode</string>
+               </list>
+
+               <list name="modes">
+                  <map>
+                     <string name="mode">standing</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/crabAB/crabAB_stand</string>
+                  </map>
+                  <map>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/crabAB/crabAB_walking</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">10</int>
+                     <int name="skip">0</int>
+                     <string name="sound">grass_footstep1</string>
+                     <list name="syncframes"><int>0</int><int>2</int></list>
+                     <int name="loopable">1</int>
+                  </map>
+               </list>
+            </map>
+            
+            <map name="pig">
+                    <string name="artist">Alain Bertrand</string>
+                <list name="properties">
+                     <string>mode</string><string>size</string>
+                </list>
+                <list name="modes">
+                   <map>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/pig/pig_medium_AB_walking</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">10</int>
+                     <int name="skip">0</int>
+                     <int name="loopable">1</int>
+                   </map>
+                   <map>
+                     <string name="mode">birth</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/pig/pig_medium_AB_walking</string>
+                     <string name="suffix">_1.png</string>
+                     <int name="directions">5</int>
+                     <int name="loopable">1</int>
+                   </map>                   <map>
+                     <string name="mode">standing</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/pig/pig_medium_AB_walking</string>
+                     <string name="suffix">_1.png</string>
+                     <int name="directions">5</int>
+                     <int name="loopable">1</int>
+                   </map>
+                   <map>
+                     <string name="size">big</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/pig/fatpig_AB_walking</string>
+                     <string name="suffix">.png</string>
+                     <int name="directions">5</int>
+                     <int name="first_frame">1</int>
+                     <int name="last_frame">10</int>
+                     <int name="skip">0</int>
+                     <int name="loopable">1</int>
+                   </map>
+                   <map>
+                     <string name="mode">standing</string>
+                     <string name="size">big</string>
+                     <string name="filename">/media/media-2d/char-collection-garg/animations/pig/fatpig_AB_walking</string>
+                     <string name="suffix">_1.png</string>
+                     <int name="directions">5</int>
+                     <int name="loopable">1</int>
+                   </map>
+                </list>
+            </map>
+            
+            <map name="ham">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/sprites/food/ham_2_us_a</string>
+                  </map>
+               </list>
+            </map>            
+
+            <map name="sword">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/sprites/weapons/swords/sword1_rot</string>
+                  </map>
+               </list>
+            </map>            
+
+            <map name="sty">
+               <list name="modes">
+                  <map>
+                     <string name="filename">/media/sprites/buildings/stys/fence_study_ta_1_</string> 
+                     <int name="container">1</int>
+                     <int name="layers">2</int>
+                     <int name="contentLayer">1</int>
+                  </map>
+               </list>
+            </map>        
+           
+          </map>
+    </map>
+</atlas>
