@@ -222,9 +222,7 @@ bool Gui::event(SDL_Event & event)
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
-                (event.button.button & SDL_BUTTON_LEFT) &&
-                (event.button.state & SDL_PRESSED)) {
+            if (event.button.button == SDL_BUTTON_LEFT) {
                 std::cout << "Gui button pressed" << std::endl << std::flush;
                 inMotion = select(event.button.x, event.button.y);
                 focus = inMotion;
@@ -240,9 +238,7 @@ bool Gui::event(SDL_Event & event)
             }
             break;
         case SDL_MOUSEBUTTONUP:
-            if ((event.button.type & SDL_MOUSEBUTTONUP) &&
-                (event.button.button & SDL_BUTTON_LEFT)) {
-                // (event.button.state & SDL_RELEASED)) {
+            if (event.button.button == SDL_BUTTON_LEFT) {
                 if (inMotion != -1) {
                     widgmap::const_iterator I = widgets.find(inMotion);
                     if (I != widgets.end()) {

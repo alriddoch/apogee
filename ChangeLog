@@ -1,5 +1,18 @@
 2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/GameClient.h: Add members for storing time, place, and
+	  existance of an IG left click.
+
+	* app/IxClient.cpp: Add more complex handler for left clicks,
+	  the behavoir of which depends on how long the button is down
+	  and whether it moves. Remove checks for events that no
+	  longer belong here.
+
+	* app/IxClient.cpp, gui/Gui.cpp, app/IsoClient.cpp: Fix use
+	  of SDL_MOUSEBUTTON*. Get rid of excessive stupid checks.
+
+2003-11-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/EntityRenderer.cpp, visual/Sprite.cpp, visual/Renderer.h,
 	  visual/Renderer.cpp, visual/EntityRenderer.cpp: Fix include
 	  orders, and some compiler warnings.

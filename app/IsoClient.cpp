@@ -64,36 +64,33 @@ bool IsoClient::event(SDL_Event & event)
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
-                (event.button.state & SDL_PRESSED)) {
-                if ((event.button.button == SDL_BUTTON_MIDDLE) ||
-                    (event.button.button == SDL_BUTTON_RIGHT)) {
-                    oldx = event.button.x;
-                    oldy = event.button.y;
-                    oldRot = renderer.getRotation();
-                    oldElv = renderer.getElevation();
-                    oldScl = renderer.getScale();
-                }
-                if (event.button.button == SDL_BUTTON_LEFT && inGame) {
-                    Eris::Entity * we = m_world->getRootEntity();
-                    Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
-                                                                event.motion.y);
-                    if (e == we) {
-                        const int x = event.motion.x;
-                        const int y = renderer.getHeight() - event.motion.y;
-                        renderer.origin();
-                        const float z = renderer.getZ(x, y);
-                        // Check that the point clicked on is not in the far
-                        // distance
-                        if (z < 0.9) {
-                            moveCharacter(renderer.getWorldCoord(x, y, z));
-                        }
-                    } else {
-                        m_avatar->touch(e);
-                    }
-                }
-                return true;
+            if ((event.button.button == SDL_BUTTON_MIDDLE) ||
+                (event.button.button == SDL_BUTTON_RIGHT)) {
+                oldx = event.button.x;
+                oldy = event.button.y;
+                oldRot = renderer.getRotation();
+                oldElv = renderer.getElevation();
+                oldScl = renderer.getScale();
             }
+            if (event.button.button == SDL_BUTTON_LEFT && inGame) {
+                Eris::Entity * we = m_world->getRootEntity();
+                Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
+                                                            event.motion.y);
+                if (e == we) {
+                    const int x = event.motion.x;
+                    const int y = renderer.getHeight() - event.motion.y;
+                    renderer.origin();
+                    const float z = renderer.getZ(x, y);
+                    // Check that the point clicked on is not in the far
+                    // distance
+                    if (z < 0.9) {
+                        moveCharacter(renderer.getWorldCoord(x, y, z));
+                    }
+                } else {
+                    m_avatar->touch(e);
+                }
+            }
+            return true;
             break;
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {

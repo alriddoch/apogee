@@ -12,6 +12,8 @@
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 
+static const Uint32 maxClickTime = 300; // milliseconds
+
 IxClient::IxClient(Eris::Connection & con)
                    : GameClient(* new DemeterScene(*this), con),
                      m_use_mouse(true)
@@ -24,9 +26,6 @@ IxClient::~IxClient()
 
 bool IxClient::event(SDL_Event & event)
 {
-    static int oldy = 0;
-    static float oldScl = 0;
-
     bool eaten = gui->event(event);
 
     if (eaten) {
@@ -35,58 +34,64 @@ bool IxClient::event(SDL_Event & event)
 
     switch(event.type) {
         case SDL_MOUSEMOTION:
-            if (event.motion.state & SDL_BUTTON(3)) {
-                const int y = event.motion.y;
-                const int h = renderer.getHeight();
-                float newScl = ((float)(h + y - oldy) / h) * oldScl;
-                renderer.setScale(newScl);
-                return true;
+            if (clickDown == true) {
+                // What?
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
-                (event.button.state & SDL_PRESSED)) {
-                if ((event.button.button == SDL_BUTTON_MIDDLE) ||
-                    (event.button.button == SDL_BUTTON_RIGHT)) {
-                    oldy = event.button.y;
-                    oldScl = renderer.getScale();
-                }
-                if (event.button.button == SDL_BUTTON_LEFT && inGame) {
-                    Eris::Entity * we = m_world->getRootEntity();
-                    Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
-                                                                event.motion.y);
-                    if (e == we) {
-                        const int x = event.motion.x;
-                        const int y = renderer.getHeight() - event.motion.y;
-                        renderer.origin();
-                        const float z = renderer.getZ(x, y);
-                        // Check that the point clicked on is not in the far
-                        // distance
-                        if (z < 0.999) {
-                            moveCharacter(renderer.getWorldCoord(x, y, z));
-                        }
-                    } else {
-                        m_avatar->touch(e);
-                    }
-                }
+            if (event.button.button == SDL_BUTTON_LEFT && inGame) {
+                clickDown = true;
+                // FIXME It may be a bad idea to change these if clickDown was
+                // already true
+                clickDownX = event.motion.x;
+                clickDownY = event.motion.y;
+                clickDownTime = SDL_GetTicks();
                 return true;
             }
             break;
         case SDL_MOUSEBUTTONUP:
             if (event.button.button == SDL_BUTTON_LEFT) {
+                bool ret = false;
+                if (clickDown) {
+                    Uint16 period = SDL_GetTicks() - clickDownTime;
+                    clickDown = false;
+                    if (period < maxClickTime) {
+                        Eris::Entity * we = m_world->getRootEntity();
+                        Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
+                                                                    event.motion.y);
+                        if (e == we) {
+                            const int x = event.motion.x;
+                            const int y = renderer.getHeight() - event.motion.y;
+                            renderer.origin();
+                            const float z = renderer.getZ(x, y);
+                            // Check that the point clicked on is not in the far
+                            // distance
+                            if (z < 0.999) {
+                                moveCharacter(renderer.getWorldCoord(x, y, z));
+                            }
+                        } else {
+                            m_avatar->touch(e);
+                        }
+                    } else if (clickDownX == event.motion.x &&
+                               clickDownY == event.motion.y) {
+                        // Hold left button
+                        // Its not clear whether the users will cope with
+                        // anything else here.
+                    } else {
+                        // Drag left button
+                        // Drag thing around or into inventory
+                    }
+                    ret = true;
+                }
                 if (!m_use_mouse) {
                     int mx = renderer.getWidth() / 2,
                         my = renderer.getHeight() / 2;
                     SDL_WarpMouse(mx, my);
                 }
+                return ret;
             }
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
-                case SDLK_0:
-                    renderer.setElevation(0.0);
-                    renderer.setRotation(45.0);
-                    return true;
-                    break;
                 case SDLK_q:
                     m_use_mouse = m_use_mouse ? false : true;
                     if (!m_use_mouse) {

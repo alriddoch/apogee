@@ -38,6 +38,10 @@ class GameClient : public Application {
   protected:
     bool inGame;
     Compass * compassWidget;
+    bool clickDown;
+    Uint32 clickDownTime;
+    Uint16 clickDownX;
+    Uint16 clickDownY;
 
     void doWorld();
 
@@ -45,6 +49,8 @@ class GameClient : public Application {
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false),
+               compassWidget(NULL), clickDown(false),
+               clickDownTime(0), clickDownX(0), clickDownY(0),
                m_player(NULL), m_avatar(NULL), m_lobby(NULL), m_world(NULL),
                m_character(NULL) { }
     Eris::Player * m_player;
