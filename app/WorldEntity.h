@@ -37,10 +37,10 @@ class MovableEntity : public RenderableEntity
     }
 };
 
-class CharacterEntity : public MovableEntity
+class AutonomousEntity : public MovableEntity
 {
   public:
-    CharacterEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+    AutonomousEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
 };
 
@@ -63,7 +63,7 @@ class Application;
 class WEFactory : public Eris::Factory
 {
   private:
-    static Eris::TypeInfo * characterType;
+    static Eris::TypeInfo * autonomousType;
     static Eris::TypeInfo * terrainType;
     static Eris::TypeInfo * treeType;
   public:

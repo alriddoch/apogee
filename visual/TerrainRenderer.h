@@ -7,6 +7,8 @@
 
 #include "EntityRenderer.h"
 
+#include "GL.h"
+
 #include <Mercator/Terrain.h>
 
 class TerrainRenderer : public EntityRenderer
@@ -16,9 +18,12 @@ class TerrainRenderer : public EntityRenderer
     int m_numLineIndeces;
     unsigned int * const m_lineIndeces;
     float * const m_texCoords;
+    GLint m_texture, m_texture2;
+    bool m_haveTerrain;
 
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
+    void readTerrain();
   public:
     TerrainRenderer(Renderer &, Eris::Entity & e);
     virtual ~TerrainRenderer();

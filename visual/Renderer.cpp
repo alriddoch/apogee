@@ -450,34 +450,36 @@ void Renderer::draw3DBox(const WFMath::AxisBox<3> & bbox)
 
 void Renderer::drawEntity(Eris::Entity * ent)
 {
+    Point3D pos = ent->getPosition();
+    MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
+    if (me != NULL) {
+        debug( std::cout << ent->getVelocity() << " "
+                         << (worldTime - me->getTime()) << " " << pos; );
+        pos = pos + ent->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
+        debug( std::cout << "=" << pos << std::endl << std::flush; );
+    } else {
+        debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
+    }
+    glPushMatrix();
+    glTranslatef(pos.x(), pos.y(), pos.z());
+    orient(ent->getOrientation());
+    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
+    if (re != 0) {
+        re->m_drawer->render(*this);
+    }
+
     int numEnts = ent->getNumMembers();
     debug(std::cout << ent->getID() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
         if (!e->isVisible()) { continue; }
-        Point3D pos = e->getPosition();
-        MovableEntity * me = dynamic_cast<MovableEntity *>(e);
-        if (me != NULL) {
-            debug( std::cout << e->getVelocity() << " " << (worldTime - me->getTime()) << " " << pos; );
-            pos = pos + e->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
-            debug( std::cout << "=" << pos << std::endl << std::flush; );
-        } else {
-            debug(std::cout << "Eris::Entity \"" << e->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
-        }
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
-        glPushMatrix();
-        glTranslatef(pos.x(), pos.y(), pos.z());
-        orient(e->getOrientation());
-        RenderableEntity * re = dynamic_cast<RenderableEntity *>(e);
-        if (re != 0) {
-            re->m_drawer->render(*this);
-        }
         drawEntity(e);
-        glPopMatrix();
     }
+    glPopMatrix();
 }
 
 void Renderer::drawWorld(Eris::Entity * wrld)
@@ -492,6 +494,7 @@ void Renderer::drawWorld(Eris::Entity * wrld)
     drawEntity(wrld);
 }
 
+#if 0
 void Renderer::drawRegion(Mercator::Segment * map)
 {
     GLint texture = -1, texture2 = -1;
@@ -585,6 +588,7 @@ void Renderer::drawMap(Mercator::Terrain & t)
         }
     }
 }
+#endif
 
 void Renderer::drawSea(Mercator::Terrain & t)
 {
@@ -624,6 +628,26 @@ void Renderer::drawGui()
 
 void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
 {
+    Point3D pos = ent->getPosition();
+    MovableEntity * me = dynamic_cast<MovableEntity *>(ent);
+    if (me != NULL) {
+        debug( std::cout << ent->getVelocity() << " "
+                         << (worldTime - me->getTime()) << " " << pos; );
+        pos = pos + ent->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
+        debug( std::cout << "=" << pos << std::endl << std::flush; );
+    } else {
+        debug(std::cout << "Eris::Entity \"" << ent->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
+    }
+    glLoadName(++next);
+    name[next] = ent;
+    glPushMatrix();
+    glTranslatef(pos.x(), pos.y(), pos.z());
+    orient(ent->getOrientation());
+    RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
+    if (re != 0) {
+        re->m_drawer->select(*this);
+    }
+
     int numEnts = ent->getNumMembers();
     debug(std::cout << ent->getID() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
@@ -634,28 +658,9 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
             std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;
             continue;
         }
-        Point3D pos = e->getPosition();
-        MovableEntity * me = dynamic_cast<MovableEntity *>(e);
-        if (me != NULL) {
-            debug( std::cout << e->getVelocity() << " " << (worldTime - me->getTime())
-                             << " " << pos; );
-            pos = pos + e->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
-            debug( std::cout << "=" << pos << std::endl << std::flush; );
-        } else {
-            debug(std::cout << "Eris::Entity \"" << e->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
-        }
-        glLoadName(++next);
-        name[next] = e;
-        glPushMatrix();
-        glTranslatef(pos.x(), pos.y(), pos.z());
-        orient(e->getOrientation());
-        RenderableEntity * re = dynamic_cast<RenderableEntity *>(e);
-        if (re != 0) {
-            re->m_drawer->select(*this);
-        }
         selectEntity(e, name, next);
-        glPopMatrix();
     }
+    glPopMatrix();
 }
 
 Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & ground, int x, int y)
@@ -678,13 +683,9 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
 
     glInitNames();
     
-    glPushName(++nextName);
-    nameMap[nextName] = wrld;
+    glPushName(nextName);
     std::cout << "SELECTING" << std::endl << std::flush;
 
-    drawMap(ground);
-    std::cout << "DONE GROUND" << std::endl << std::flush;
-    
     selectEntity(wrld, nameMap, nextName);
 
     std::cout << "DONE ENITTIES" << std::endl << std::flush;

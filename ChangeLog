@@ -1,3 +1,17 @@
+2003-06-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Fill
+	  int rest of code required to handle rendering and selecting
+	  terrain.
+
+	* visual/Renderer.cpp: Re-write entity code so it recurses in
+	  a more sane way, and draws world using terrain renderer
+	  class. Comment out out terrain code.
+
+	* app/WorldEntity.h, app/WorldEntity.cpp, app/GameClient.h
+	  app/GameClient.cpp: Ground for changes in the way server handles
+	  characters. Add in terrain renderer to factory.
+
 2003-05-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.h, visual/Renderer.cpp: Add virtual destructor for

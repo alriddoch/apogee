@@ -2,10 +2,10 @@ Implement new Eris Entity class which carries pointer to associated terrain.
 Use same technique for a whole load of other rubbish to do with rendering.
 Perhaps a virtual method would help.
 
-Draw roads on the terrain using a similar technique to the hull one. Drawing vertically
-extended cuboids along the length of the roadwhich intersect with the terrain
-to create the stencil data, and then draw the whole terrain using this stencil
-to get the roads.
+Draw roads on the terrain using a similar technique to the hull one. Drawing
+vertically extended cuboids along the length of the roadwhich intersect with
+the terrain to create the stencil data, and then draw the whole terrain using
+this stencil to get the roads.
 
 Terrain is now working better. Need to tie new tilemap code to heightmap code,
 using triangle strips instead of those naughty quads.

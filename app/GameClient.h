@@ -13,7 +13,7 @@
 
 #include <Eris/Log.h>
 
-class CharacterEntity;
+class AutonomousEntity;
 
 namespace Eris {
   class Player;
@@ -50,7 +50,7 @@ class GameClient : public Application {
     Eris::Player * player;
     Eris::Lobby * lobby;
     Eris::World * world;
-    CharacterEntity * character;
+    AutonomousEntity * character;
 
     bool setup();
     bool update(float);

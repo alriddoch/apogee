@@ -133,7 +133,7 @@ bool GameClient::update(float secs)
     renderer.lightOff();
     // renderer.drawMap(map_database, map_height);
     renderer.origin();
-    renderer.drawMap(mterrain);
+    // renderer.drawMap(mterrain);
 
     doWorld();
 
@@ -351,7 +351,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
-    character = dynamic_cast<CharacterEntity*>(chr);
+    character = dynamic_cast<AutonomousEntity*>(chr);
 
 }
 
