@@ -1,3 +1,7 @@
+See if we can get on-the-fly skybox rendering working. Needs render-to-texture.
+Memory allocated by vertex buffers is now no longer required. Can scrap
+vertex and surface caches at least.
+
 Add some kind of check so render passes can be skipped for layers which just
 don't apply. This will involve a bbox check for the simple banded renderers,
 but a more complex trick for things like forest floor.
@@ -5,9 +9,6 @@ but a more complex trick for things like forest floor.
 
 Camera interface to renderers is now in, but not used. Implement it,
 and make use of it for terrain.
-
-Memory allocated by vertex buffers is now no longer required. Can scrap
-vertex and surface caches at least.
 
 Modify the interface to entity renderers so that we provide an indication
 of the camera position, so some kind of judgement can be made about how
