@@ -14,7 +14,11 @@
 class TerrainRenderer : public EntityRenderer
 {
   protected:
+    typedef std::map<int, GLuint> DisplayListColumn;
+    typedef std::map<int, DisplayListColumn> DisplayListStore;
+
     Mercator::Terrain m_terrain;
+    DisplayListStore m_displayLists;
     int m_numLineIndeces;
     unsigned short * const m_lineIndeces;
     float * const m_texCoords;
@@ -33,7 +37,7 @@ class TerrainRenderer : public EntityRenderer
     TerrainRenderer(Renderer &, Eris::Entity & e);
     virtual ~TerrainRenderer();
 
-    virtual void render(Renderer &);
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
     virtual void select(Renderer &);
 };
 

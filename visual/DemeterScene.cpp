@@ -23,7 +23,7 @@ DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
     init();
 }
 
-static const float maxViewDistance = 150.0f;
+static const float maxViewDistance = 250.0f;
 
 void DemeterScene::shapeView()
 {

@@ -223,7 +223,7 @@ void Renderer::drawEntity(Eris::Entity * ent)
     orient(ent->getOrientation());
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(ent);
     if (re != 0) {
-        re->m_drawer->render(*this);
+        re->m_drawer->render(*this, Vector3D());
     }
 
     int numEnts = ent->getNumMembers();

@@ -13,6 +13,10 @@ namespace Eris {
   class Entity;
 }
 
+namespace WFMath {
+  template<const int dim> class Vector;
+}
+
 class EntityRenderer : virtual public SigC::Object
 {
   public:
@@ -21,7 +25,7 @@ class EntityRenderer : virtual public SigC::Object
     EntityRenderer(Renderer &, Eris::Entity & e);
     virtual ~EntityRenderer();
 
-    virtual void render(Renderer &) = 0;
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos) = 0;
     virtual void select(Renderer &) = 0;
 };
 
@@ -38,7 +42,7 @@ class BBoxRenderer : public EntityRenderer
     BBoxRenderer(Renderer &, Eris::Entity & e);
     virtual ~BBoxRenderer();
 
-    virtual void render(Renderer &);
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
     virtual void select(Renderer &);
 };
 

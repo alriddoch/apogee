@@ -100,7 +100,7 @@ BBoxRenderer::~BBoxRenderer()
 {
 }
 
-void BBoxRenderer::render(Renderer &)
+void BBoxRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
 {
     if (m_ent.hasBBox()) {
         draw3DBox(m_ent.getBBox());

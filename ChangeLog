@@ -1,3 +1,20 @@
+2003-08-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Increase viewing distance to test
+	  terrain view code.
+
+	* visual/EntityRenderer.h, visual/EntityRenderer.cpp,
+	  visual/Cal3dRenderer.h, visual/Cal3dRenderer.cpp,
+	  visual/TerrainRenderer.h, visual/TerrainRenderer.cpp,
+	  visual/Renderer.cpp: Add additional argument to entity
+	  renderer interface giving relative camera position
+	  so that rendering decisions can be made based on camera pos.
+
+	* visual/TerrainRenderer.h, visual/TerrainRenderer.cpp: Remove single
+	  display list for whole terrain in preparation for display list per
+	  segment, and switch renderer to only drawing 2x2 segments around
+	  character.
+
 2003-08-12  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* Port codebase to Atlas-C++ 0.5 transitional, and eris 1.2 API.

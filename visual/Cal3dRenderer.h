@@ -21,7 +21,7 @@ class Cal3dRenderer : public EntityRenderer
     Cal3dRenderer(Renderer &, Eris::Entity & e);
     virtual ~Cal3dRenderer();
 
-    virtual void render(Renderer &);
+    virtual void render(Renderer &, const WFMath::Vector<3> & camPos);
     virtual void select(Renderer &);
 };
 

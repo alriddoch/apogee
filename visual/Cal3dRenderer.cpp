@@ -51,7 +51,7 @@ Cal3dRenderer::~Cal3dRenderer()
 {
 }
 
-void Cal3dRenderer::render(Renderer &)
+void Cal3dRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
 {
     drawCal3dModel(m_default);
 }

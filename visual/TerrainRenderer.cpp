@@ -113,36 +113,36 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
 void TerrainRenderer::drawMap(Mercator::Terrain & t)
 {
-    if (!m_landscapeList) {
-        std::cerr << "Building list" << std::endl << std::flush;
-        m_landscapeList = glGenLists(1);
-        glNewList(m_landscapeList, GL_COMPILE);
+    // m_landscapeList = glGenLists(1);
+    // glNewList(m_landscapeList, GL_COMPILE);
 
-        enableRendererState();
-        const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+    enableRendererState();
 
-        Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
-        for (; I != segs.end(); ++I) {
-            const Mercator::Terrain::Segmentcolumn & col = I->second;
-            Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
-            for (; J != col.end(); ++J) {
-                glPushMatrix();
-                glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-                Mercator::Segment * s = J->second;
-                if (!s->isValid()) {
-                    s->populate();
-                    s->populateSurfaces();
-                }
-                drawRegion(s);
-                glPopMatrix();
+    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+
+    // Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+    Mercator::Terrain::Segmentstore::const_iterator I = segs.lower_bound(-1);
+    Mercator::Terrain::Segmentstore::const_iterator K = segs.upper_bound(1);
+    for (; I != K; ++I) {
+        const Mercator::Terrain::Segmentcolumn & col = I->second;
+        // Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+        Mercator::Terrain::Segmentcolumn::const_iterator J = col.lower_bound(-1);
+        Mercator::Terrain::Segmentcolumn::const_iterator L = col.upper_bound(1);
+        for (; J != L; ++J) {
+            glPushMatrix();
+            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+            Mercator::Segment * s = J->second;
+            if (!s->isValid()) {
+                s->populate();
+                s->populateSurfaces();
             }
+            drawRegion(s);
+            glPopMatrix();
         }
-        disableRendererState();
-        glEndList();
     }
-    if (m_landscapeList) {
-        glCallList(m_landscapeList);
-    }
+    disableRendererState();
+
+    // glEndList();
 }
 
 void TerrainRenderer::drawSea(Mercator::Terrain & t)
@@ -262,7 +262,7 @@ TerrainRenderer::~TerrainRenderer()
 {
 }
 
-void TerrainRenderer::render(Renderer &)
+void TerrainRenderer::render(Renderer &, const WFMath::Vector<3> & camPos)
 {
     if (!m_haveTerrain) {
         readTerrain();
