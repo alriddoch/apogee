@@ -1,0 +1,40 @@
+diff -u -d -r1.6 Compass.cpp
+--- gui/Compass.cpp	27 Nov 2003 18:38:16 -0000	1.6
++++ gui/Compass.cpp	4 Dec 2003 15:29:16 -0000
+@@ -23,21 +23,21 @@
+     if (!Compass::compass_case.loaded()) {
+         std::string ccase;
+         if (global_conf->findItem(m_g.getSkinName(), "compass_case")) {
+-            ccase = global_conf->getItem(m_g.getSkinName(), "compass_case");
++            ccase = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_case");
+         }
+         compass_case.load(getMediaPath() + "/" + ccase);
+     }
+     if (!Compass::compass_needle.loaded()) {
+         std::string needle;
+         if (global_conf->findItem(m_g.getSkinName(), "compass_needle")) {
+-            needle = global_conf->getItem(m_g.getSkinName(), "compass_needle");
++            needle = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_needle");
+         }
+         compass_needle.load(getMediaPath() + "/" + needle);
+     }
+     if (!Compass::needle_shadow.loaded()) {
+         std::string shadow;
+         if (global_conf->findItem(m_g.getSkinName(), "compass_shadow")) {
+-            shadow = global_conf->getItem(m_g.getSkinName(), "compass_shadow");
++            shadow = (std::string)global_conf->getItem(m_g.getSkinName(), "compass_shadow");
+         }
+         needle_shadow.load(getMediaPath() + "/" + shadow);
+     }
+diff -u -d -r1.28 Gui.cpp
+--- gui/Gui.cpp	27 Nov 2003 18:38:16 -0000	1.28
++++ gui/Gui.cpp	4 Dec 2003 15:29:16 -0000
+@@ -47,7 +47,7 @@
+     // widgets[newName()] = w;
+ 
+     if (global_conf->findItem("apogee", "skin")) {
+-        skinName = global_conf->getItem("apogee", "skin");
++        skinName = (std::string)global_conf->getItem("apogee", "skin");
+         std::cout << "Got skin " << skinName << std::endl << std::flush;
+     } else {
+         std::cout << "No skin" << std::endl << std::flush;
