@@ -133,8 +133,6 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
 
-    glEnable(GL_BLEND);
-
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
         // Do a rough check to see if this pass applies to this segment
         if (!(*I)->m_shader.checkIntersect(**I)) {
