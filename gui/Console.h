@@ -15,7 +15,7 @@
 class Console : public Widget {
   private:
     std::string cmdLine;
-    int numLines;
+    unsigned int numLines;
     std::deque<std::string> lineContents;
   public:
     SigC::Signal1<void, const std::string &> lineEntered;

@@ -12,8 +12,10 @@
 
 #include <iostream>
 
+#if 0
 static int xoffset[] = {0, 80, -80, 160, -160, 240, -240 };
 static int yoffset[] = {0, -15, -15, -35, -35, -60, -60 };
+#endif
 
 ServerSelector::ServerSelector(Gui & g, int x, int y) : Widget(g, x, y),
     metaServer(* new Eris::Meta("metaserver.worldforge.org", 7) ),
