@@ -19,14 +19,14 @@ bool Client::setup()
     return 0;
 }
 
-int Client::update()
+bool Client::update()
 {
-    renderer->clear();
-    //renderer->drawCharacter();
-    renderer->draw2Dtest();
-    renderer->draw3Dtest();
-    renderer->flip();
-    return 0;
+    renderer.clear();
+    //renderer.drawCharacter();
+    renderer.draw2Dtest();
+    renderer.draw3Dtest();
+    renderer.flip();
+    return false;
 }
 
 bool Client::event(SDL_Event & event)

@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <coal/database.h>
 
+#include <world/Vector3D.h>
+
 class Sprite;
 
 class RendererException { };
@@ -15,11 +17,9 @@ class RendererSDLinit : public RendererException { };
 class Renderer {
   private:
     Renderer() { throw RendererException(); }
-    Renderer(int wdth, int hght) : screen(NULL), character(NULL), button(NULL),
-                                   elevation(30), rotation(45), scale(1)
-                 { init(wdth, hght); }
+    Renderer(int wdth, int hght);
 
-    void init(int, int);
+    void init();
     void shapeView();
 
     static Renderer * instance;
@@ -75,6 +75,9 @@ class Renderer {
     void draw3Dtest();
     void draw2Dtest();
     void draw3Dentity();
+    void draw3DBox(const Vector3D & coords,
+                   const Vector3D & bbox = Vector3D(),
+                   const Vector3D & bmedian = Vector3D());
     void drawCharacter(Sprite *, double, double);
     void drawMapRegion(CoalRegion &);
     void drawMapObject(CoalObject &);

@@ -3,9 +3,9 @@
 #include <SDL_image.h>
 #include <GL/gl.h>
 
-std::map<string, int> * Texture::texturedb = NULL;
+std::map<std::string, int> * Texture::texturedb = NULL;
 
-SDL_Surface * Texture::imageLoad(const string & filename)
+SDL_Surface * Texture::imageLoad(const std::string & filename)
 // This code was created by Jeff Molofee '99
 // (ported to SDL by Sam Lantinga '2000)
 //
@@ -15,8 +15,8 @@ SDL_Surface * Texture::imageLoad(const string & filename)
 
     image = IMG_Load(filename.c_str());
     if ( image == NULL ) {
-        cerr << "Unable to load" << filename.c_str() << ":"
-             << SDL_GetError() << endl << flush;
+        std::cerr << "Unable to load" << filename.c_str() << ":"
+                  << SDL_GetError() << std::endl << std::flush;
         return(NULL);
     }
     return imageTransform(image);
@@ -25,8 +25,8 @@ SDL_Surface * Texture::imageLoad(const string & filename)
 SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 {
     Uint8 *rowhi, *rowlo;
-    Uint8 *tmpbuf, tmpch;
-    int i, j;
+    Uint8 *tmpbuf;
+    int i;
 
     /* GL surfaces are upsidedown and RGB, not BGR :-) */
     tmpbuf = (Uint8 *)malloc(image->pitch);
@@ -58,16 +58,17 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 }
 
 
-int Texture::get(const string & filename)
+int Texture::get(const std::string & filename)
 {
     if (textures().find(filename) != textures().end()) {
         return textures()[filename];
     }
-    cout << "Loading new texture " << filename << endl << flush;
+    std::cout << "Loading new texture " << filename << std::endl << std::flush;
     SDL_Surface * image = imageLoad(filename);
 
     if (image == NULL) {
-        cerr << "Failed to load texture " << filename << endl << flush;
+        std::cerr << "Failed to load texture " << filename
+                  << std::endl << std::flush;
         return -1;
     }
 
@@ -80,12 +81,12 @@ int Texture::loadTexture(SDL_Surface * image)
 {
     int tex_id;
     int format;
-    int x, y;
     int bpp = image->format->BitsPerPixel;
 
     if(bpp != 24 && bpp != 32) {
         SDL_FreeSurface(image);
-        cerr << "Failed to load texture: wrong format " << endl << flush;
+        std::cerr << "Failed to load texture: wrong format "
+                  << std::endl << std::flush;
         return -1;
     }
 
@@ -97,9 +98,9 @@ int Texture::loadTexture(SDL_Surface * image)
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, format, image->w, image->h, 0,
                  format, GL_UNSIGNED_BYTE, image->pixels);
-    cout << image->w << " " << image->h << endl << flush;
+    std::cout << image->w << " " << image->h << std::endl << std::flush;
     if (glGetError() != 0) {
-        cerr << "BANFG" << endl << flush;
+        std::cerr << "BANFG" << std::endl << std::flush;
     }
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

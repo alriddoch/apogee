@@ -6,14 +6,25 @@
 #include "Texture.h"
 #include "Sprite.h"
 
+#include <world/Vector3D.h>
+
 Renderer * Renderer::instance = NULL;
 
-void Renderer::init(int wdth, int hght)
+Renderer::Renderer(int wdth, int hght) : screen(NULL), character(NULL),
+                                         button(NULL),
+                                         width(wdth), height(hght),
+                                         elevation(30), rotation(45),
+                                         scale(1), x_offset(0), y_offset(0)
 {
-    width = wdth;
-    height = hght;
+    init();
+}
+
+
+void Renderer::init()
+{
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE) != 0) { 
-        cerr << "Failed to initialise video subsytem" << endl << flush;
+        std::cerr << "Failed to initialise video subsytem"
+                  << std::endl << std::flush;
         throw RendererSDLinit();
     }
 
@@ -35,18 +46,17 @@ inline void Renderer::viewPoint()
     // this puts us into orthographic perspective
     double xscale = width * scale / meterSize;
     double yscale = height * scale / meterSize;
-    glOrtho(-xscale/2, xscale/2,
-            -yscale/2, yscale/2, -20.0, 20.0 );
+    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0, 20.0 );
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
-    GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
-    GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
-    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
-    glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
-    glEnable(GL_LIGHT1);
-    glEnable(GL_LIGHTING);
+    // GLfloat AmbientColor[] = {1, 0.5, 0.5, 1.0};
+    // GLfloat DiffuseColor[] = {0, 1, 0, 1.0};
+    // GLfloat LightPos[] = {xscale, yscale, 0.0, 1.0};
+    // glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
+    // glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
+    // glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
+    // glEnable(GL_LIGHT1);
+    // glEnable(GL_LIGHTING);
 }
 
 inline void Renderer::reorient()
@@ -91,8 +101,8 @@ void Renderer::shapeView()
         //SDL_FreeSurface(screen);
     //}
     if ((screen = SDL_SetVideoMode(width, height, 16,
-            SDL_OPENGLBLIT|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
-        cerr << "Failed to set video mode" << endl << flush;
+            SDL_OPENGL|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
+        std::cerr << "Failed to set video mode" << std::endl << std::flush;
         SDL_Quit();
         throw RendererSDLinit();
     }
@@ -120,7 +130,7 @@ void Renderer::draw2Dtest()
     lightOff();
     if (button == NULL) {
         button = IMG_Load("button_base.png");
-        // cerr << "Could not load test image" << endl << flush;
+        // std::cerr << "Could not load test image" << std::endl << std::flush;
     }
     SDL_Rect destRect = { width - button->w - 8, 32, button->w, button->h };
     for(int i=0; i < 8; i++) {
@@ -214,6 +224,82 @@ void Renderer::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
+void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
+                         const Vector3D & bmedian)
+{
+    Vector3D def(0.2,0.2,0.2);
+    const Vector3D & box = bbox ? bbox : def;
+    const Vector3D & median = bmedian ? bmedian : box;
+    lightOff();
+
+    origin();
+    glTranslatef(coords.X()+median.X(),
+                 coords.Y()+median.Y(),
+                 coords.Z()+median.Z());
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-box.X(),-box.Y(),-box.Z());
+    glVertex3f(box.X(),-box.Y(),-box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),box.Y(),-box.Z());
+    glVertex3f(box.X(),box.Y(),-box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),box.Y(),box.Z());
+    glVertex3f(box.X(),box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),-box.Y(),box.Z());
+    glVertex3f(box.X(),-box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),-box.Y(),-box.Z());
+    glVertex3f(-box.X(),-box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(box.X(),-box.Y(),-box.Z());
+    glVertex3f(box.X(),-box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),box.Y(),-box.Z());
+    glVertex3f(-box.X(),box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(box.X(),box.Y(),-box.Z());
+    glVertex3f(box.X(),box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),-box.Y(),-box.Z());
+    glVertex3f(-box.X(),box.Y(),-box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(box.X(),-box.Y(),-box.Z());
+    glVertex3f(box.X(),box.Y(),-box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(-box.X(),-box.Y(),box.Z());
+    glVertex3f(-box.X(),box.Y(),box.Z());
+    glEnd();
+
+    glBegin(GL_LINES);
+    glVertex3f(box.X(),-box.Y(),box.Z());
+    glVertex3f(box.X(),box.Y(),box.Z());
+    glEnd();
+
+    lightOn();
+}
+
 void Renderer::drawMapRegion(CoalRegion & map_region)
 {
     int tex_id = -1;
@@ -227,7 +313,8 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
             float r = fillGraphic->bkgdcolor.red;
             float g = fillGraphic->bkgdcolor.green;
             float b = fillGraphic->bkgdcolor.blue;
-            //cout << "[" << r << "," << g << "," << b << endl << flush;
+            //std::cout << "[" << r << "," << g << "," << b
+                      //<< std::endl << std::flush;
             glBegin(GL_POLYGON);                // start drawing a polygon
             glColor3f(r/100, g/100, b/100);
         } else {
@@ -240,12 +327,12 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
     glNormal3f(0, 0, 1);
     CoalShape & shape = map_region;
     for (unsigned int i = 0; i < shape.GetCoordCount (); i++) {
-        printf ("\t\t");
         const CoalCoord & coord = shape.GetCoord(i);
         float x = coord.GetX();
         float y = coord.GetY();
         float z = coord.GetZ();
-        //cout << "[" << x << "," << y << "z" << z << endl << flush;
+        //std::cout << "[" << x << "," << y << "z" << z << std::endl
+                  //<< std::flush;
         glTexCoord2f(x/16, y/16); glVertex3f(x, y, z);
     }
     glEnd();
@@ -262,18 +349,18 @@ void Renderer::drawMap(CoalDatabase & map_base)
     origin();
 
     glDepthMask(GL_FALSE);
-    int count = map_base.GetRegionCount ();
+    int count = map_base.GetRegionCount();
     for (int i = 0; i < count; i++) {
-        CoalRegion * region = (CoalRegion*)map_base.GetRegion (i);
+        CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
         if (region) {
             drawMapRegion(*region);
         }
     }
     glDepthMask(GL_TRUE);
 
-    count = map_base.GetObjectCount ();
+    count = map_base.GetObjectCount();
     for (int i = 0; i < count; i++) {
-        CoalObject * object = (CoalObject*)map_base.GetObject (i);
+        CoalObject * object = (CoalObject*)map_base.GetObject(i);
         if (object) {
             drawMapObject(*object);
         }

@@ -11,9 +11,9 @@ class Sprite {
     double m_w, m_h;
     double m_pw, m_ph;
   public:
-    Sprite() : tex_id(-1) { }
+    Sprite() : tex_id(-1), m_w(0), m_h(0), m_pw(0), m_ph(0) { }
 
-    bool load(const string & filename);
+    bool load(const std::string & filename);
     void draw();
     double w() { return m_w; }
     double h() { return m_h; }

@@ -8,20 +8,22 @@
 #include <math.h>
 #include <unistd.h>
 
+// This function has an arbitrary size limit of 4096x4096 for textures
+
 unsigned int Sprite::twoN(unsigned int size)
 {
-    for(int i = 0; i < 31; i++) {
+    for(int i = 0; i < 12; i++) {
         const unsigned int num = pow(2,i) - 1;
-        cout << i << " " << num << " " << endl << flush;
+        std::cout << i << " " << num << " " << std::endl << std::flush;
         if ((size & ~num) == 0) {
-            cout << "woot" << endl << flush;
+            std::cout << "woot" << std::endl << std::flush;
             return num + 1;
         }
     }
-    return pow(2,31);
+    return pow(2,12);
 }
 
-bool Sprite::load(const string & filename)
+bool Sprite::load(const std::string & filename)
 {
     SDL_Surface * image = IMG_Load(filename.c_str());
     if (image == NULL) {

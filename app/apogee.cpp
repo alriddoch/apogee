@@ -3,17 +3,41 @@
 #include <unistd.h>
 
 #include <visual/Renderer.h>
-//#include "Editor.h"
-#include "Client.h"
+#include <net/Connection.h>
+#include "Editor.h"
+//#include "Client.h"
+
+#include <world/World.h>
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
 
 int main(int argc, char ** argv)
 {
+    if (argc != 3) {
+        std::cout << "usage: " << argv[0] << " <host> <username>"
+                  << std::endl << std::flush;
+        return 1;
+    }
+
+    World world;
+
+    Connection con(world);
+
+    std::string host(argv[1]), user(argv[2]), password;
+
+    con.connect(host);
+
+    std::cout << "Password: ";
+    std::cin >> password;
+
+    con.login(user, password);
+    con.create_char("Al", "farmer");
+    con.look();
+
     Renderer * renderer = Renderer::Instance();
-    //Application * app = new Editor(renderer);
-    Application * app = new Client(renderer);
+    Application * app = new Editor(*renderer, world);
+    //Application * app = new Client(renderer);
 
     app->setup();
     app->update();
@@ -52,6 +76,7 @@ int main(int argc, char ** argv)
                     break;
             }
         }
+        updated = con.poll() || updated;
         if (updated) {
             app->update();
         }

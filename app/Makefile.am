@@ -9,4 +9,4 @@ apogee_SOURCES = \
                  LeakTracer.cc \
                  apogee.cpp
 
-apogee_LDADD = ../visual/libvisual.a
+apogee_LDADD = ../visual/libvisual.a ../net/libnet.a ../world/libworld.a

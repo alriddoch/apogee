@@ -12,19 +12,19 @@ class Sprite;
 class Editor: public Application {
   private:
     void grid();
+    void doWorld();
     void compass();
     void axis();
 
-    double grid_size;
-    bool m_grid;
     CoalDatabase map_database;
     Sprite * character;
   public:
-    Editor(Renderer * rend) : Application(rend) { }
-    //virtual ~Editor() { }
+    Editor(Renderer & rend, World & wrld) : Application(rend, wrld),
+                                            character(NULL) { }
+    virtual ~Editor() { }
 
     bool setup();
-    int update();
+    bool update();
     bool event(SDL_Event &);
 };
 
