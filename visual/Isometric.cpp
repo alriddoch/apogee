@@ -100,6 +100,7 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
         for (p=0; p<mesh->faces; ++p) {
           Lib3dsFace *f=&mesh->faceL[p];
           Lib3dsMaterial *mat=0;
+          GLint texture = -1;
           if (f->material[0]) {
             std::cout << "MATERIAL NAME: " << f->material
                       << std::endl << std::flush;
@@ -118,10 +119,12 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
               s=128.0;
             }
             glMaterialf(GL_FRONT, GL_SHININESS, s);
-            std::cout << "TEXTURE NAME: " << mat->texture1_map.name
-                      << std::endl << std::flush;
-          }
-          else {
+            if (mat->texture1_map.name[0]) {
+                std::cout << "TEXTURE NAME: " << mat->texture1_map.name
+                          << std::endl << std::flush;
+                texture = Texture::get(mat->texture1_map.name);
+            }
+          } else {
             Lib3dsRgba a={0.2, 0.2, 0.2, 1.0};
             Lib3dsRgba d={0.8, 0.8, 0.8, 1.0};
             Lib3dsRgba s={0.0, 0.0, 0.0, 1.0};
@@ -130,14 +133,24 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
             glMaterialfv(GL_FRONT, GL_SPECULAR, s);
           }
           {
+            if (texture != -1) {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, texture);
+            }
             int i;
             glBegin(GL_TRIANGLES);
               glNormal3fv(f->normal);
               for (i=0; i<3; ++i) {
                 glNormal3fv(normalL[3*p+i]);
+                if (texture != -1) {
+                    glTexCoord2fv(mesh->pointL[f->points[i]].pos);
+                }
                 glVertex3fv(mesh->pointL[f->points[i]].pos);
               }
             glEnd();
+            if (texture != -1) {
+                glDisable(GL_TEXTURE_2D);
+            }
           }
         }
 

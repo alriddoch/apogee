@@ -1,4 +1,8 @@
-2002-05-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2002-06-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Isometric.cpp: Hack in some dodgey texturing.
+
+2002-06-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Isometric.h, visual/Isometric.cpp: Experimental working
 	  support for a .3ds file loader using lib3ds.
