@@ -18,7 +18,7 @@
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
 
-using Atlas::Message::Object;
+using Atlas::Message::Element;
 
 int main(int argc, char ** argv)
 {

@@ -62,16 +62,16 @@ Eris::TypeInfo * WEFactory::treeType = 0;
 bool WEFactory::accept(const GameEntity&, Eris::World * w)
 {
     // if (autonomousType == 0) {
-        // autonomousType = w->getConnection()->getTypeInfoEngine()->findSafe("autonomous_entity");
+        // autonomousType = w->getConnection()->getTypeService()->getTypeByName("autonomous_entity");
         if (autonomousType == 0) {
-            autonomousType = w->getConnection()->getTypeInfoEngine()->findSafe("character");
+            autonomousType = w->getConnection()->getTypeService()->getTypeByName("character");
         }
     // }
     if (terrainType == 0) {
-        terrainType = w->getConnection()->getTypeInfoEngine()->findSafe("world");
+        terrainType = w->getConnection()->getTypeService()->getTypeByName("world");
     }
     if (treeType == 0) {
-        treeType = w->getConnection()->getTypeInfoEngine()->findSafe("tree");
+        treeType = w->getConnection()->getTypeService()->getTypeByName("tree");
     }
 
     return true;
@@ -80,7 +80,7 @@ bool WEFactory::accept(const GameEntity&, Eris::World * w)
 Eris::EntityPtr WEFactory::instantiate(const GameEntity & ge, Eris::World * w)
 {
     RenderableEntity * re = 0;
-    Eris::TypeInfoPtr type = w->getConnection()->getTypeInfoEngine()->getSafe(ge);
+    Eris::TypeInfoPtr type = w->getConnection()->getTypeService()->getTypeForAtlas(ge);
     if (type->safeIsA(autonomousType)) {
         re = new AutonomousEntity(ge,w);
         re->m_drawer = new Cal3dRenderer(m_app.renderer, *re);

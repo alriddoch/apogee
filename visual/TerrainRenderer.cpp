@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-typedef Atlas::Message::Object Element;
+using Atlas::Message::Element;
 
 static const int segSize = 64;
 
@@ -183,34 +183,34 @@ void TerrainRenderer::readTerrain()
         return;
     }
     const Element & terrain = m_ent.getProperty("terrain");
-    if (!terrain.IsMap()) {
+    if (!terrain.isMap()) {
         std::cerr << "Terrain is not a map" << std::endl << std::flush;
     }
-    const Element::MapType & tmap = terrain.AsMap();
+    const Element::MapType & tmap = terrain.asMap();
     Element::MapType::const_iterator I = tmap.find("points");
     int xmin = 0, xmax = 0, ymin = 0, ymax = 0;
-    if ((I == tmap.end()) || !I->second.IsList()) {
+    if ((I == tmap.end()) || !I->second.isList()) {
         std::cerr << "No terrain points" << std::endl << std::flush;
     }
-    const Element::ListType & plist = I->second.AsList();
+    const Element::ListType & plist = I->second.asList();
     Element::ListType::const_iterator J = plist.begin();
     for(; J != plist.end(); ++J) {
-        if (!J->IsList()) {
+        if (!J->isList()) {
             std::cout << "Non list in points" << std::endl << std::flush;
             continue;
         }
-        const Element::ListType & point = J->AsList();
+        const Element::ListType & point = J->asList();
         if (point.size() != 3) {
             std::cout << "point without 3 nums" << std::endl << std::flush;
             continue;
         }
-        int x = (int)point[0].AsNum();
-        int y = (int)point[1].AsNum();
+        int x = (int)point[0].asNum();
+        int y = (int)point[1].asNum();
         xmin = std::min(xmin, x);
         xmax = std::max(xmax, x);
         ymin = std::min(ymin, y);
         ymax = std::max(ymax, y);
-        m_terrain.setBasePoint(x, y, point[2].AsNum());
+        m_terrain.setBasePoint(x, y, point[2].asNum());
     }
 }
 

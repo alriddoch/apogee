@@ -18,7 +18,7 @@
 
 #include <sigc++/object_slot.h>
 
-using Atlas::Message::Object;
+using Atlas::Message::Element;
 
 IxClient::IxClient(Eris::Connection & con)
                    : GameClient(* new DemeterScene(*this), con),

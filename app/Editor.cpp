@@ -28,7 +28,7 @@
 
 using Atlas::Objects::Entity::GameEntity;
 
-using Atlas::Message::Object;
+using Atlas::Message::Element;
 
 void Editor::grid()
 {
@@ -213,10 +213,10 @@ void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
     std::cout << "Logged in" << std::endl << std::flush;
 
     GameEntity chrcter(GameEntity::Instantiate());
-    chrcter.SetParents(Atlas::Message::Object::ListType(1,"farmer"));
-    chrcter.SetName("Apogee Dubneal");
-    chrcter.SetAttr("description", "a perigee person");
-    chrcter.SetAttr("sex", "female");
+    chrcter.setParents(Atlas::Message::Element::ListType(1,"farmer"));
+    chrcter.setName("Apogee Dubneal");
+    chrcter.setAttr("description", "a perigee person");
+    chrcter.setAttr("sex", "female");
     world = player->createCharacter(chrcter);
 
     lobby->Talk.connect(SigC::slot(this, &Editor::lobbyTalk));

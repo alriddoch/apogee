@@ -30,9 +30,9 @@
 
 #include <cassert>
 
-using Atlas::Message::Object;
+using Atlas::Message::Element;
 
-typedef Atlas::Message::Object Element;
+typedef Atlas::Message::Element Element;
 
 using Atlas::Objects::Operation::Move;
 using Atlas::Objects::Entity::GameEntity;
@@ -54,13 +54,13 @@ Point3D & operator-=(Point3D & lhs, const Point3D & rhs)
 }
 
 #if 0
-Atlas::Message::Object Point3D::toAtlas() const
+Atlas::Message::Element Point3D::toAtlas() const
 {
-    Atlas::Message::Object::ListType ret(3);
+    Atlas::Message::Element::ListType ret(3);
     ret[0] = m_elem[0];
     ret[1] = m_elem[1];
     ret[2] = m_elem[2];
-    return Atlas::Message::Object(ret);
+    return Atlas::Message::Element(ret);
 }
 #endif
 
@@ -190,8 +190,8 @@ void GameClient::charSelector()
     Eris::CharacterList cl = player->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterList::const_iterator I = cl.begin(); I != cl.end(); ++I){
-        std::cout << "Selecting from " << I->GetId() << ":" << I->GetName() << std::endl << std::flush;
-        charList.insert(std::pair<std::string,std::string>(I->GetId(),I->GetName()));
+        std::cout << "Selecting from " << I->getId() << ":" << I->getName() << std::endl << std::flush;
+        charList.insert(std::pair<std::string,std::string>(I->getId(),I->getName()));
     }
     cs->addCharacters(charList);
     
@@ -203,10 +203,10 @@ void GameClient::createCharacter(const std::string & name,
 {
 
     GameEntity chrcter(GameEntity::Instantiate());
-    chrcter.SetParents(Atlas::Message::Object::ListType(1,type));
-    chrcter.SetName(name);
-    chrcter.SetAttr("description", "a perigee person");
-    chrcter.SetAttr("sex", "female");
+    chrcter.setParents(Atlas::Message::Element::ListType(1,type));
+    chrcter.setName(name);
+    chrcter.setAttr("description", "a perigee person");
+    chrcter.setAttr("sex", "female");
     world = player->createCharacter(chrcter)->getWorld();
 
     lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
@@ -332,13 +332,13 @@ void GameClient::moveCharacter(const Point3D & pos)
     
     Move m(Move::Instantiate());
 
-    Atlas::Message::Object::MapType marg;
+    Atlas::Message::Element::MapType marg;
     marg["id"] = character->getID();
     marg["loc"] = character->getContainer()->getID();
     marg["pos"] = coords.toAtlas();
     marg["velocity"] = Point3D(1,0,0).toAtlas();
-    m.SetArgs(Atlas::Message::Object::ListType(1, marg));
-    m.SetFrom(character->getID());
+    m.setArgs(Atlas::Message::Element::ListType(1, marg));
+    m.setFrom(character->getID());
 
     connection.send(m);
     

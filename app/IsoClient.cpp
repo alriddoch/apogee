@@ -30,7 +30,7 @@
 
 using Atlas::Objects::Entity::GameEntity;
 
-using Atlas::Message::Object;
+using Atlas::Message::Element;
 
 IsoClient::IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
 {
