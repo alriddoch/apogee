@@ -41,7 +41,7 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r,
         if (!m_default->onInit(Datapath() + "paladin.cfg")) {
             std::cerr << "Loading paladin model failed" << std::endl << std::flush;
         }
-        m_default->setLodLevel(0.3f);
+        m_default->setLodLevel(1.0f);
         m_default->onUpdate(0);
         r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
     }
