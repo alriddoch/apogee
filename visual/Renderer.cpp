@@ -485,9 +485,11 @@ void Renderer::drawWorld(Eris::Entity * wrld)
 
 void Renderer::drawRegion(Mercator::Segment * map)
 {
-    GLint texture = -1;
-    texture = Texture::get("rabbithill_grass_hh.png");
+    GLint texture = -1, texture2 = -1;
+    texture = Texture::get("granite.png");
+    texture2 = Texture::get("rabbithill_grass_hh.png");
     float * harray = new float[(segSize + 1) * (segSize + 1) * 3];
+    float * carray = new float[(segSize + 1) * (segSize + 1) * 4];
     int idx = -1, cdx = -1;
     for(int j = 0; j < (segSize + 1); ++j) {
         for(int i = 0; i < (segSize + 1); ++i) {
@@ -495,6 +497,10 @@ void Renderer::drawRegion(Mercator::Segment * map)
             harray[++idx] = i;
             harray[++idx] = j;
             harray[++idx] = h;
+            carray[++cdx] = 1.f;
+            carray[++cdx] = 1.f;
+            carray[++cdx] = 1.f;
+            carray[++cdx] = h;
         }
     }
     if (texture != -1) {
@@ -509,6 +515,16 @@ void Renderer::drawRegion(Mercator::Segment * map)
     }
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
+    if (texture2 != -1) {
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        glEnable(GL_BLEND);
+        glColorPointer(4, GL_FLOAT, 0, carray);
+        glEnableClientState(GL_COLOR_ARRAY);
+        glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
+                       GL_UNSIGNED_INT, m_lineIndeces);
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisable(GL_BLEND);
+    }
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
@@ -516,6 +532,7 @@ void Renderer::drawRegion(Mercator::Segment * map)
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);
     }
+    delete carray;
     delete harray;
 }
 
