@@ -21,7 +21,7 @@ void Pie::setup()
     }
 
     for(int i = 0; i < 10; ++i) {
-        PieSlice foo(m_g);
+        PieSlice foo(m_g, "test");
         m_slices.push_back(foo);
     }
 }
@@ -83,6 +83,7 @@ void Pie::click()
         for (;J != h.end(); ++J) {
             if (*J == I->getName()) {
                 I->press();
+                SliceSelected.emit(I->getId());
             }
         }
     }
@@ -98,4 +99,5 @@ void Pie::key(int, int)
 
 void Pie::addSlice(const std::string & name, const std::string & graphic)
 {
+    m_slices.push_back(PieSlice(m_g, name));
 }

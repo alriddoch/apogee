@@ -25,12 +25,18 @@ class PieSlice {
   private:
     GLuint m_name;
     bool m_pressed;
+    std::string m_id;
   public:
-    PieSlice(Gui & g) : m_name(g.newName()), m_pressed(false) {
-    }
+    PieSlice(Gui & g, const std::string & id) : m_name(g.newName()),
+                                                m_pressed(false),
+                                                m_id(id) { }
 
     GLuint getName() const {
         return m_name;
+    }
+
+    const std::string & getId() const {
+        return m_id;
     }
 
     void press() {
