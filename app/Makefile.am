@@ -1,4 +1,5 @@
-bin_PROGRAMS = apogee perigee
+EXTRA_PROGRAMS = apogee
+bin_PROGRAMS = perigee
 
 INCLUDES = $(GNOME_XML_CFLAGS) -I$(top_srcdir)
 

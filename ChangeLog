@@ -1,3 +1,10 @@
+2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Texture.h, visual/Texture.cpp: Add support for mipmaps.
+
+	* visual/TerrainRenderer.cpp: Use mipmaps in the terrain renderer
+	  for performance and visual effect.
+
 2003-08-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.cpp: Fix the texture coord pointer setup

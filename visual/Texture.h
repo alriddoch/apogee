@@ -7,6 +7,8 @@
 
 struct SDL_Surface;
 
+#include "GL.h"
+
 #include <string>
 #include <map>
 
@@ -28,9 +30,12 @@ class Texture {
     static unsigned int defaultTextureWidth;
     static unsigned int defaultTextureHeight;
   public:
-    static unsigned int loadTexture(struct SDL_Surface * image, bool wrap = true);
+    static unsigned int loadTexture(struct SDL_Surface * image,
+                                    bool wrap = true,
+                                    GLint filter = GL_LINEAR);
     static struct SDL_Surface * imageTransform(struct SDL_Surface * image);
-    static unsigned int get(const std::string & filename, bool wrap = true);
+    static unsigned int get(const std::string & filename, bool wrap = true,
+                            GLint filter = GL_LINEAR);
     static unsigned int getDefault();
 
     static unsigned int getDefaultWidth() { return defaultTextureWidth; }

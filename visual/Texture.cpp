@@ -5,6 +5,7 @@
 #include "Texture.h"
 
 #include "GL.h"
+#include "GLU.h"
 #include "default_texture.h"
 
 #include <SDL_image.h>
@@ -70,8 +71,9 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 }
 
 
-unsigned int Texture::get(const std::string & filename, bool wrap)
+unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
 {
+    printf("Texture::get filter is 0x%x\n", filter);
     std::map<std::string, unsigned int>::const_iterator I = textures().find(filename);
     if (I != textures().end()) {
         return I->second;
@@ -85,7 +87,7 @@ unsigned int Texture::get(const std::string & filename, bool wrap)
         return getDefault();
     }
 
-    unsigned int tex_id = loadTexture(image, wrap);
+    unsigned int tex_id = loadTexture(image, wrap, filter);
     textures()[filename] = tex_id;
     return tex_id;
 }
@@ -112,7 +114,7 @@ unsigned int Texture::getDefault()
     return defaultTexture;
 }
     
-unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap)
+unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
 {
     unsigned int tex_id;
     int format, fmt;
@@ -142,16 +144,27 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap)
     if (glGetError() != 0) {
         std::cerr << "BANFG" << std::endl << std::flush;
     }
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    // Mag filter is linear unless filter is nearest
+    GLint magFilter = (filter == GL_NEAREST) ? GL_NEAREST : GL_LINEAR;
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
+
     if (wrap) {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     } else {
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    }
+
+    if ((filter == GL_LINEAR_MIPMAP_NEAREST) ||
+        (filter == GL_LINEAR_MIPMAP_LINEAR)) {
+        std::cout << "BUILDING MIPMAPS" << std::endl << std::flush;
+        gluBuild2DMipmaps(GL_TEXTURE_2D, fmt, image->w, image->h, format,
+                          GL_UNSIGNED_BYTE, image->pixels);
+    } else {
+        printf("NOT BUILDING MIPMAPS cos filter is 0x%x\n", filter);
     }
 
     return tex_id;

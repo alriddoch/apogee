@@ -256,12 +256,12 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     m_landscapeList(0), m_haveTerrain(false)
 
 {
-    m_textures[0] = Texture::get("granite.png");
+    m_textures[0] = Texture::get("granite.png", true, GL_LINEAR_MIPMAP_NEAREST);
     // m_textures[1] = Texture::get("media/media_new/scratchpad/pato/textures/finished/ground_sand_256x256_00.png");
-    m_textures[1] = Texture::get("sand.png");
-    m_textures[2] = Texture::get("rabbithill_grass_hh.png");
-    m_textures[3] = Texture::get("dark.png");
-    m_textures[4] = Texture::get("snow.png");
+    m_textures[1] = Texture::get("sand.png", true, GL_LINEAR_MIPMAP_NEAREST);
+    m_textures[2] = Texture::get("rabbithill_grass_hh.png", true, GL_LINEAR_MIPMAP_NEAREST);
+    m_textures[3] = Texture::get("dark.png", true, GL_LINEAR_MIPMAP_NEAREST);
+    m_textures[4] = Texture::get("snow.png", true, GL_LINEAR_MIPMAP_NEAREST);
 
     int idx = -1;
     for (unsigned int i = 0; i < (segSize + 1) - 1; ++i) {
