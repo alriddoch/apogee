@@ -6,6 +6,7 @@
 #define APOGEE_GUI_PIE_H
 
 #include "Widget.h"
+#include "Gui.h"
 
 #include "visual/Sprite.h"
 
@@ -21,8 +22,28 @@
 #include <vector>
 
 class PieSlice {
+  private:
+    GLuint m_name;
+    bool m_pressed;
   public:
-    PieSlice() { }
+    PieSlice(Gui & g) : m_name(g.newName()), m_pressed(false) {
+    }
+
+    GLuint getName() const {
+        return m_name;
+    }
+
+    void press() {
+        m_pressed = true;
+    }
+
+    void unpress() {
+        m_pressed = false;
+    }
+
+    bool isPressed() const {
+        return m_pressed;
+    }
 };
 
 class Pie : public Widget {
@@ -31,6 +52,7 @@ class Pie : public Widget {
 
   protected:
     static Sprite m_sliceGraphic;
+    static Sprite m_slicePressedGraphic;
 
   public:
     SigC::Signal1<void, const std::string &> SliceSelected;

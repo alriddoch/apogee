@@ -7,6 +7,7 @@
 #include <iostream>
 
 Sprite Pie::m_sliceGraphic;
+Sprite Pie::m_slicePressedGraphic;
 
 Pie::~Pie()
 {
@@ -16,10 +17,11 @@ void Pie::setup()
 {
     if (!m_sliceGraphic.loaded()) {
         m_sliceGraphic.load("pieslice_32.png");
+        m_slicePressedGraphic.load("pieslice_32_inverted.png");
     }
 
     for(int i = 0; i < 10; ++i) {
-        PieSlice foo;
+        PieSlice foo(m_g);
         m_slices.push_back(foo);
     }
 }
@@ -28,21 +30,20 @@ void Pie::draw()
 {
     int numSlices = m_slices.size();
 
-    if (12 < numSlices) {
-        std::cout << "Can't handle a pie with more than 8 slices."
-                  << std::endl << std::flush;
-        return;
-    }
-
     float angle = 360.f / numSlices;
 
     glPushMatrix();
-    for(int i = 0; i < numSlices; ++i) {
+    std::vector<PieSlice>::const_iterator I = m_slices.begin();
+    for(int i = 0; I != m_slices.end(); ++I, ++i) {
         glPushMatrix();
         glRotatef(angle * i, 0.f, 0.f, 1.f);
         glTranslatef(60.f, 0.f, 0.f);
         glRotatef(angle * i, 0.f, 0.f, -1.f);
-        m_sliceGraphic.draw();
+        if (I->isPressed()) {
+            m_slicePressedGraphic.draw();
+        } else {
+            m_sliceGraphic.draw();
+        }
         glPopMatrix();
     }
 
@@ -51,11 +52,40 @@ void Pie::draw()
 
 void Pie::select()
 {
-    draw();
+    int numSlices = m_slices.size();
+
+    float angle = 360.f / numSlices;
+
+    glPushMatrix();
+    std::vector<PieSlice>::const_iterator I = m_slices.begin();
+    glPushName(1);
+    for(int i = 0; I != m_slices.end(); ++I, ++i) {
+        glLoadName(I->getName());
+        glPushMatrix();
+        glRotatef(angle * i, 0.f, 0.f, 1.f);
+        glTranslatef(60.f, 0.f, 0.f);
+        glRotatef(angle * i, 0.f, 0.f, -1.f);
+        m_sliceGraphic.draw();
+        glPopMatrix();
+    }
+    glPopName();
+
+    glPopMatrix();
 }
 
 void Pie::click()
 {
+    const hitlist & h = m_g.getHits();
+
+    std::vector<PieSlice>::iterator I = m_slices.begin();
+    for(; I != m_slices.end(); ++I) {
+        hitlist::const_iterator J = h.begin();
+        for (;J != h.end(); ++J) {
+            if (*J == I->getName()) {
+                I->press();
+            }
+        }
+    }
 }
 
 void Pie::release()

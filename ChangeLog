@@ -1,5 +1,9 @@
 2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Pie.cpp, gui/Pie.h: Add clicking on pie menus.
+
+2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/Pie.cpp: Trim parameters to get the menu we need.
 
 2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
