@@ -20,7 +20,7 @@ using Atlas::Message::Object;
 
 int main(int argc, char ** argv)
 {
-    Eris::Connection & con = * new Eris::Connection("perigee");
+    Eris::Connection & con = * new Eris::Connection("perigee", true);
 
     Renderer * renderer = DemeterScene::Instance();
     IxClient * app = new IxClient(*renderer, con);

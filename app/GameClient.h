@@ -7,6 +7,8 @@
 
 #include "Application.h"
 
+#include <Eris/Connection.h>
+
 namespace Eris {
   class Player;
   class Lobby;
@@ -38,7 +40,7 @@ class GameClient : public Application {
 
     void netConnected();
     void netFailure(std::string msg);
-    void connectionLog(std::string msg);
+    void connectionLog(Eris::LogLevel level, std::string msg);
     void netDisconnected();
 
     void login(const std::string &, const std::string &);

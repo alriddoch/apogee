@@ -69,7 +69,7 @@ void GameClient::netFailure(std::string msg)
                                   msg));
 }
 
-void GameClient::connectionLog(std::string msg)
+void GameClient::connectionLog(Eris::LogLevel level, std::string msg)
 {
     std::cout << "LOG: " << msg << std::endl << std::flush;
 }

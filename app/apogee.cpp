@@ -29,7 +29,7 @@ using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {
-    Eris::Connection & con = * new Eris::Connection("apogee");
+    Eris::Connection & con = * new Eris::Connection("apogee", true);
 
     Renderer * renderer = Isometric::Instance();
     IsoClient * app = new IsoClient(*renderer, con);
@@ -38,6 +38,8 @@ int main(int argc, char ** argv)
     con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));
     con.Disconnected.connect(SigC::slot(app, &IsoClient::netDisconnected));
     con.Log.connect(SigC::slot(app, &IsoClient::connectionLog));
+
+    con.setLogLevel(Eris::LOG_DEBUG);
 
     app->setup();
     app->update();
