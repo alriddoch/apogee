@@ -10,8 +10,8 @@
 
 const float PI = 3.14159f;
 const float FOG_RED = 0.5f;
-const float FOG_GREEN = 0.75f;
-const float FOG_BLUE = 1.0f;
+const float FOG_GREEN = 0.5f;
+const float FOG_BLUE = 0.5f;
 const float FOG_ALPHA = 0.0f;
 
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
@@ -23,7 +23,7 @@ DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
     init();
 }
 
-static const float maxViewDistance = 4500.0f;
+static const float maxViewDistance = 150.0f;
 
 void DemeterScene::shapeView()
 {
@@ -47,7 +47,7 @@ void DemeterScene::shapeView()
     glEnable(GL_FOG);
     glFogf(GL_FOG_MODE,GL_LINEAR);
     glFogfv(GL_FOG_COLOR,fogColor);
-    glFogf(GL_FOG_START,100.0f);
+    glFogf(GL_FOG_START,25.0f);
     glFogf(GL_FOG_END,maxViewDistance - 100.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
 }
@@ -70,6 +70,16 @@ void DemeterScene::viewPoint()
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
+
+    static GLfloat AmbientColor[] = {1.f, 0.f, 0.f, 1.f};
+    static GLfloat DiffuseColor[] = {0.f, 1.f, 0.f, 1.f};
+    static GLfloat LightPos[] = {10.f, 10.f, 10.f, 1.f};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, AmbientColor);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, DiffuseColor);
+    glLightfv(GL_LIGHT1, GL_POSITION,LightPos);
+    glDisable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    
     glTranslatef(0.0f, 0.0f, -5.0f);
 
     glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);

@@ -125,16 +125,18 @@ bool GameClient::update(float secs)
         renderer.setZoffset(offset.z());
     }
     renderer.clear();
-    renderer.lightOff();
 
     renderer.drawSky();
+
+    renderer.lightOn();
 
     renderer.origin();
 
     doWorld();
 
-    compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();
+
+    compassWidget->setAngle(-renderer.getRotation());
     renderer.drawGui();
     gui->draw();
     renderer.flip();
