@@ -14,9 +14,11 @@ struct SDL_Surface;
 
 class Texture {
   public:
-    typedef std::map<std::string, GLuint> TextureStore;
-  private:
-    Texture();
+    typedef std::map<std::string, Texture> TextureStore;
+
+  protected:
+
+    GLuint glHandle;
 
     static TextureStore & textures() {
         if (textureStore == 0) {
@@ -32,6 +34,8 @@ class Texture {
     static GLuint defaultTextureWidth;
     static GLuint defaultTextureHeight;
   public:
+    Texture();
+
     static GLuint loadTexture(struct SDL_Surface * image,
                               bool wrap = true,
                               GLint filter = GL_LINEAR);

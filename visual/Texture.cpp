@@ -18,6 +18,10 @@ bool Texture::defaultTextureLoaded;
 unsigned int Texture::defaultTextureWidth;
 unsigned int Texture::defaultTextureHeight;
 
+Texture::Texture()
+{
+}
+
 SDL_Surface * Texture::imageLoad(const std::string & filename)
 // This code was created by Jeff Molofee '99
 // (ported to SDL by Sam Lantinga '2000)
@@ -74,9 +78,15 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 
 unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
 {
-    std::map<std::string, unsigned int>::const_iterator I = textures().find(filename);
+    TextureStore::const_iterator I = textures().find(filename);
     if (I != textures().end()) {
-        return I->second;
+        GLuint h = I->second.glHandle;
+        if (!glIsTexture(h)) {
+            std::cout << "Texture for \"" << filename
+                      << "\" in store is no longer a texture in this context"
+                      << std::endl << std::flush;
+        }
+        return h;
     }
     std::cout << "Loading new texture " << filename << std::endl << std::flush;
     SDL_Surface * image = imageLoad(filename);
@@ -90,7 +100,7 @@ unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
     unsigned int tex_id = loadTexture(image, wrap, filter);
     SDL_FreeSurface(image);
 
-    textures()[filename] = tex_id;
+    textures()[filename].glHandle = tex_id;
     return tex_id;
 }
 

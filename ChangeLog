@@ -1,3 +1,9 @@
+2003-12-07  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Texture.h, visual/Texture.cpp: Quickly intruduce concept
+	  of Texture object in store, and add code to debug when and
+	  where textures break when modifying the context.
+
 2003-12-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Texture.cpp, visual/Texture.h: Type defs and type name
