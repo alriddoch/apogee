@@ -1,5 +1,9 @@
 FInd out why character entering buildings does not render.
 
+Make terrain work.
+
+Make light and sound work.
+
 Implement a worldforge client.
 
 Thoroughly test eris ingame code.

@@ -16,6 +16,7 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
+#include "Tile.h"
 
 #include <app/WorldEntity.h>
 
@@ -48,7 +49,7 @@ void Isometric::init()
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
-    model->setLodLevel(1.0f);
+    model->setLodLevel(0.01f);
 }
 
 inline void Isometric::viewScale(float scale_factor)
@@ -262,6 +263,7 @@ void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
 {
     glPushMatrix();
     glTranslatef(coords.X(), coords.Y(), coords.Z());
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
     orientation.asMatrix(orient);
     float omatrix[16];
@@ -414,6 +416,7 @@ void Isometric::drawWorld(Eris::Entity * wrld)
     drawEntity(wrld);
 }
 
+#if 0
 void Isometric::drawMapRegion(CoalRegion & map_region)
 {
     int tex_id = -1;
@@ -482,6 +485,81 @@ void Isometric::drawMap(CoalDatabase & map_base)
     }
 
 }
+#else
+
+void Isometric::drawMapRegion(CoalRegion & map_region)
+{
+    Tile * tile = NULL;
+    CoalFill * fill = map_region.GetFill();
+    if (fill != NULL) {
+        if ((fill->graphic != NULL) && (fill->graphic->filename.size() != 0)) {
+            tile = Tile::get(fill->graphic->filename);
+        }
+        glNormal3f(0, 0, 1);
+        CoalShape & shape = map_region;
+        if (shape.GetCoordCount() != 2) {
+            cout << "This don't look like a tile" << endl << flush;
+        } else {
+            //for (unsigned int i = 0; i < shape.GetCoordCount (); i++) {
+            glPushMatrix();
+            const CoalCoord & coord = shape.GetCoord(0);
+            float bx = coord.GetX();
+            float by = coord.GetY();
+            float bz = coord.GetZ();
+            glTranslatef(bx, by, bz);
+            if (tile != NULL) {
+                tile->draw();
+            } else {
+                CoalGraphic * fillGraphic = fill->graphic;
+                float r = fillGraphic->bkgdcolor.red;
+                float g = fillGraphic->bkgdcolor.green;
+                float b = fillGraphic->bkgdcolor.blue;
+                glBegin(GL_QUADS);                // start drawing a polygon
+                glColor3f(r/100, g/100, b/100);
+                glVertex3f(0.0f, 0.0f, 0.0f);
+                glVertex3f(1.0f, 0.0f, 0.0f);
+                glVertex3f(1.0f, 1.0f, 0.0f);
+                glVertex3f(0.0f, 1.0f, 0.0f);
+                glEnd();
+            }
+            glPopMatrix();
+        }
+    }
+}
+
+void Isometric::drawMapObject(CoalObject & map_object)
+{
+    
+}
+
+void Isometric::drawMap(CoalDatabase & map_base)
+{
+    origin();
+
+    glTranslatef(-100.0f, -100.0f, 0.0f);
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // glDepthMask(GL_FALSE);
+    // glDisable(GL_DEPTH_TEST);
+    int count = map_base.GetRegionCount();
+    for (int i = 0; i < count; i++) {
+        CoalRegion * region = (CoalRegion*)map_base.GetRegion(i);
+        if (region) {
+            drawMapRegion(*region);
+        }
+    }
+    // glDepthMask(GL_TRUE);
+    // glEnable(GL_DEPTH_TEST);
+
+    count = map_base.GetObjectCount();
+    for (int i = 0; i < count; i++) {
+        CoalObject * object = (CoalObject*)map_base.GetObject(i);
+        if (object) {
+            drawMapObject(*object);
+        }
+    }
+}
+#endif
 
 void Isometric::drawGui()
 {

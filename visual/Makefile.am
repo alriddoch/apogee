@@ -5,6 +5,7 @@ INCLUDES = -I..
 libvisual_a_SOURCES = \
                       Texture.cpp Texture.h \
                       Sprite.cpp Sprite.h \
+                      Tile.cpp Tile.h \
                       Renderer.cpp Renderer.h \
                       Isometric.cpp Isometric.h \
                       Matrix.cpp Matrix.h \

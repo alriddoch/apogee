@@ -49,9 +49,9 @@ void IsoClient::axis()
 
 bool IsoClient::setup()
 {
-    CoalBladeLoader loader (map_database);
-    loader.LoadMap ("blade2.xml");
-    CoalDebug debug;
+    CoalIsoLoader loader (map_database);
+    loader.LoadMap ("agrilan.map");
+    // CoalDebug debug;
     // debug.Dump (map_database);
 
     gui = new Gui(renderer);

@@ -6,6 +6,7 @@
 #define APOGEE_ISOCLIENT_H
 
 #include <coal/bladeloader.h>
+#include <coal/isoloader.h>
 
 #include <string>
 
