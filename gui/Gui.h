@@ -19,6 +19,8 @@ typedef std::list<GLuint> hitlist;
 
 class Gui {
   public:
+    typedef enum { SELECT_MISS, SELECT_CLICK, SELECT_DRAG } select_t;
+
     Renderer & renderer;
   private:
     GLuint selectBuf[512];

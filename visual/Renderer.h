@@ -109,6 +109,7 @@ class Renderer {
     // virtual void drawMap(Coal::Container &, HeightMap &) = 0;
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
+    void drawSea(Mercator::Terrain &);
     void drawGui();
 
     void select3DBox(const Point3D & coords,

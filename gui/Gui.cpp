@@ -96,6 +96,7 @@ void Gui::draw()
         }
     }
     glTranslatef(0.0f,0.0f,10.0f);
+    glEnable(GL_BLEND);
     I = widgets.begin();
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
@@ -105,6 +106,7 @@ void Gui::draw()
         w.draw();
         glPopMatrix();
     }
+    glDisable(GL_BLEND);
 
 #if USE_PUI
     puDisplay () ;

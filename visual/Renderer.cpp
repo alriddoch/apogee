@@ -542,6 +542,31 @@ void Renderer::drawMap(Mercator::Terrain & t)
     }
 }
 
+void Renderer::drawSea(Mercator::Terrain & t)
+{
+    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+
+    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+    glEnable(GL_BLEND);
+    for (; I != segs.end(); ++I) {
+        const Mercator::Terrain::Segmentcolumn & col = I->second;
+        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+        for (; J != col.end(); ++J) {
+            glPushMatrix();
+            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+            GLfloat vertices[] = { 0.f, 0.f, 0.f,
+                                   segSize, 0, 0.f,
+                                   segSize, segSize, 0.f,
+                                   0, segSize, 0.f };
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glColor4f(0.8f, 0.8f, 1.f, 0.6f);
+            glDrawArrays(GL_QUADS, 0, 4);
+            glPopMatrix();
+        }
+    }
+    glDisable(GL_BLEND);
+}
+
 void Renderer::drawGui()
 {
     glMatrixMode(GL_PROJECTION);

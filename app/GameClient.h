@@ -38,14 +38,15 @@ class Compass;
 class GameClient : public Application {
   protected:
     bool inGame;
+    bool haveTerrain;
     Mercator::Terrain mterrain;
     Compass * compassWidget;
 
     void doWorld();
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
-               Application(rend, con), inGame(false), player(NULL),
-               lobby(NULL), world(NULL), character(NULL) { }
+               Application(rend, con), inGame(false), haveTerrain(false),
+               player(NULL), lobby(NULL), world(NULL), character(NULL) { }
     Eris::Player * player;
     Eris::Lobby * lobby;
     Eris::World * world;
@@ -73,6 +74,8 @@ class GameClient : public Application {
     void roomEnter(Eris::Room *r);
     // void roomAppear(Eris::Room *r, std::string id);
     // void roomLeave(Eris::Room *r, std::string id);
+
+    void readTerrain(Eris::Entity * ent);
 
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);

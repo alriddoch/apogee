@@ -31,6 +31,8 @@
 
 using Atlas::Message::Object;
 
+typedef Atlas::Message::Object Element;
+
 using Atlas::Objects::Operation::Move;
 using Atlas::Objects::Entity::GameEntity;
 
@@ -66,19 +68,19 @@ const Point3D operator+(const Point3D & lhs, const Point3D & rhs)
 
 bool GameClient::setup()
 {
-    mterrain.setBasePoint(-1, -1, -8.f);
-    mterrain.setBasePoint(-1, 0, -6.f);
-    mterrain.setBasePoint(0, -1, -10.f);
-    mterrain.setBasePoint(0, 0, 0.f);
-    mterrain.setBasePoint(0, 1, 8.f);
-    mterrain.setBasePoint(1, 0, 4.f);
-    mterrain.setBasePoint(1, 1, 14.f);
-    mterrain.setBasePoint(1, -1, -4.f);
-    mterrain.setBasePoint(-1, 1, -4.f);
-    mterrain.refresh(0, 0);
-    mterrain.refresh(0, 1);
-    mterrain.refresh(1, 0);
-    mterrain.refresh(1, 1);
+    // mterrain.setBasePoint(-1, -1, -8.f);
+    // mterrain.setBasePoint(-1, 0, -6.f);
+    // mterrain.setBasePoint(0, -1, -10.f);
+    // mterrain.setBasePoint(0, 0, 0.f);
+    // mterrain.setBasePoint(0, 1, 8.f);
+    // mterrain.setBasePoint(1, 0, 4.f);
+    // mterrain.setBasePoint(1, 1, 14.f);
+    // mterrain.setBasePoint(1, -1, -4.f);
+    // mterrain.setBasePoint(-1, 1, -4.f);
+    // mterrain.refresh(0, 0);
+    // mterrain.refresh(0, 1);
+    // mterrain.refresh(1, 0);
+    // mterrain.refresh(1, 1);
 
     gui = new Gui(renderer);
     gui->setup();
@@ -117,6 +119,10 @@ bool GameClient::update(float secs)
 {
     renderer.update(secs);
     if (inGame) {
+        if (!haveTerrain) {
+            Eris::Entity * worldRoot = world->getRootEntity();
+            readTerrain(worldRoot);
+        }
         Point3D offset = getAbsCharPos();
         renderer.setXoffset(offset.x());
         renderer.setYoffset(offset.y());
@@ -130,6 +136,7 @@ bool GameClient::update(float secs)
 
     doWorld();
 
+    renderer.drawSea(mterrain);
     compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();
     renderer.drawGui();
@@ -273,6 +280,50 @@ void GameClient::netDisconnected()
 void GameClient::worldEntityCreate(Eris::Entity *r)
 {
     // std::cout << "Created character" << std::endl << std::flush;
+}
+
+void GameClient::readTerrain(Eris::Entity * ent)
+{
+    if (!ent->hasProperty("terrain")) {
+        std::cerr << "WOrld has no terrain" << std::endl << std::flush;
+        std::cerr << "World " << ent->getID() << std::endl << std::flush;
+        return;
+    }
+    const Element & terrain = ent->getProperty("terrain");
+    if (!terrain.IsMap()) {
+        std::cerr << "Terrain is not a map" << std::endl << std::flush;
+    }
+    const Element::MapType & tmap = terrain.AsMap();
+    Element::MapType::const_iterator I = tmap.find("points");
+    int xmin = 0, xmax = 0, ymin = 0, ymax = 0;
+    if ((I == tmap.end()) || !I->second.IsList()) {
+        std::cerr << "No terrain points" << std::endl << std::flush;
+    }
+    const Element::ListType & plist = I->second.AsList();
+    Element::ListType::const_iterator J = plist.begin();
+    for(; J != plist.end(); ++J) {
+        if (!J->IsList()) {
+            std::cout << "Non list in points" << std::endl << std::flush;
+            continue;
+        }
+        const Element::ListType & point = J->AsList();
+        if (point.size() != 3) {
+            std::cout << "point without 3 nums" << std::endl << std::flush;
+            continue;
+        }
+        int x = (int)point[0].AsNum();
+        int y = (int)point[1].AsNum();
+        xmin = std::min(xmin, x);
+        xmax = std::max(xmax, x);
+        ymin = std::min(ymin, y);
+        ymax = std::max(ymax, y);
+        mterrain.setBasePoint(x, y, point[2].AsNum());
+    }
+    for(int i = xmin; i < xmax; ++i) {
+        for(int j = ymin; j < ymax; ++j) {
+            mterrain.refresh(i, j);
+        }
+    }
 }
 
 void GameClient::worldEnter(Eris::Entity * chr)
