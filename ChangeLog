@@ -1,3 +1,13 @@
+2003-08-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/TerrainRenderer.cpp, visual/TerrainRenderer.h:
+	  Move calls to setup for terrain rendering into functions,
+	  and only call them once per frame.
+
+	* visual/TerrainRenderer.cpp: Make use of Mercator's vertex
+	  cache to avoid rebuilding vertex arrays. Disable 
+	  GL_EXT_compiled_vertex_array as it reduces performance.
+
 2003-08-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.cpp: Turn off depth write in subsequent

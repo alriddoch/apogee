@@ -21,6 +21,9 @@ class TerrainRenderer : public EntityRenderer
     GLuint m_textures[8]; //, m_texture2;
     bool m_haveTerrain;
 
+    void enableRendererState();
+    void disableRendererState();
+
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
     void drawSea(Mercator::Terrain &);

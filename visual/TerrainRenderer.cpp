@@ -21,25 +21,39 @@ typedef Atlas::Message::Object Element;
 
 static const int segSize = 64;
 
+void TerrainRenderer::enableRendererState()
+{
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_NORMALIZE);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
+    glColor4f(1.f, 1.f, 1.f, 1.f);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
+    glEnable(GL_BLEND);
+}
+
+void TerrainRenderer::disableRendererState()
+{
+    // Can we do this using the state stack
+    glDisable(GL_BLEND);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisable(GL_COLOR_MATERIAL);
+    glDisable(GL_NORMALIZE);
+    glDisable(GL_TEXTURE_2D);
+}
+
 void TerrainRenderer::drawRegion(Mercator::Segment * map)
 {
     glNormal3f(0.f, 0.f, 1.f);
-    static float * harray = 0;
-    float * narray = map->getNormals();
-    static int allocated_segSize = 0;
-    if (narray == 0) {
-        map->populateNormals();
-        narray = map->getNormals();
-    }
-    // Only re-allocate the vertex arrays if we are dealing with a different
-    // segment size.
-    if (segSize != allocated_segSize) {
-        if (harray != 0) {
-            delete [] harray;
-            harray = 0;
-        }
-        harray = new float[(segSize + 1) * (segSize + 1) * 3];
-        allocated_segSize = segSize;
+    float * harray = map->getVertexCache();
+    if (harray == 0) {
+        std::cout << "Creating vertex cache" << std::endl << std::flush;
+        harray = map->setVertexCache(new float[(segSize+1)*(segSize+1)*3]);
         int idx = -1;
         // Fill in the invarient vertices and colors, so we only do it once
         for(int j = 0; j < (segSize + 1); ++j) {
@@ -51,63 +65,55 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
             }
         }
     }
-    // Fill in the vertex Z coord, and alpha value, which vary
-    int idx = -1;
-    for(int j = 0; j < (segSize + 1); ++j) {
-        for(int i = 0; i < (segSize + 1); ++i) {
-            float h = map->get(i,j);
-            idx += 2;
-            harray[++idx] = h;
-        }
+    float * narray = map->getNormals();
+    if (narray == 0) {
+        std::cout << "Populating normals" << std::endl << std::flush;
+        map->populateNormals();
+        narray = map->getNormals();
     }
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_NORMALIZE);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_COLOR_MATERIAL);
-    glColor4f(1.f, 1.f, 1.f, 1.f);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
+    // Fill in the vertex Z coord, which varies
+    if (!map->isVertexCacheValid()) {
+        std::cout << "Populating vertex cache" << std::endl << std::flush;
+        int idx = -1;
+        for(int j = 0; j < (segSize + 1); ++j) {
+            for(int i = 0; i < (segSize + 1); ++i) {
+                float h = map->get(i,j);
+                idx += 2;
+                harray[++idx] = h;
+            }
+        }
+        map->setVertexCacheValid();
+    }
     glNormalPointer(GL_FLOAT, 0, narray);
     glVertexPointer(3, GL_FLOAT, 0, harray);
-    // if (have_GL_EXT_compiled_vertex_array) {
-        // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
-    // }
-    glEnable(GL_BLEND);
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
+
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
         glColorPointer(4, GL_FLOAT, 0, (*I)->getData());
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
+        // if (have_GL_EXT_compiled_vertex_array) {
+            // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
+        // }
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_INT, m_lineIndeces);
+        // if (have_GL_EXT_compiled_vertex_array) {
+            // glUnlockArraysEXT();
+        // }
 
         if (texNo == 0) {
             glDepthMask(GL_FALSE);
         }
-        // glBindTexture(GL_TEXTURE_2D, m_textures[2]);
-        // glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                       // GL_UNSIGNED_INT, m_lineIndeces);
     }
 
     glDepthMask(GL_TRUE);
-    glDisable(GL_BLEND);
 
-    // if (have_GL_EXT_compiled_vertex_array) {
-        // glUnlockArraysEXT();
-    // }
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisable(GL_NORMALIZE);
-    glDisable(GL_COLOR_MATERIAL);
-    glDisable(GL_TEXTURE_2D);
 }
 
 void TerrainRenderer::drawMap(Mercator::Terrain & t)
 {
+    enableRendererState();
     const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
 
     Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
@@ -126,6 +132,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
             glPopMatrix();
         }
     }
+    disableRendererState();
 }
 
 void TerrainRenderer::drawSea(Mercator::Terrain & t)
