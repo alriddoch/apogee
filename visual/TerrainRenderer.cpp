@@ -393,7 +393,7 @@ void TerrainRenderer::removeDisplayList(int x, int y)
 }
 
 void TerrainRenderer::readTerrainFrom(const std::string &,
-                                      const Atlas::Message::Element & terrain)
+                                      const Element & terrain)
 {
     if (!terrain.isMap()) {
         std::cerr << "Terrain is not a map" << std::endl << std::flush;
