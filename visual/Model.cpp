@@ -482,7 +482,7 @@ void Model::renderMesh(bool bWireframe, bool bLight)
         // set the vertex color if we have no lights
         if(!bLight)
         {
-          glColor4fv(materialColor);
+          // glColor4fv(materialColor);
         }
 
         // set the material specular color

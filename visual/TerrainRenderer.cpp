@@ -74,10 +74,13 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
                    GL_UNSIGNED_INT, m_lineIndeces);
 
     glBindTexture(GL_TEXTURE_2D, m_texture2);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_BLEND);
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
     glDisable(GL_BLEND);
+    glDisable(GL_COLOR_MATERIAL);
 
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
