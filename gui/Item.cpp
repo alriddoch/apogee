@@ -24,3 +24,6 @@ void Item::select()
     this->draw();
 }
 
+void Item::click()
+{
+}

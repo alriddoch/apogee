@@ -6,20 +6,24 @@
 #define APOGEE_GUI_ALERT_H
 
 #include "Item.h"
+#include "Button.h"
 #include <GL/gl.h>
 
 class Alert : public Item {
   private:
     std::string m_message;
-    GLuint messageName;
+    GLuint buttonName;
+    Button button;
 
   public:
     Alert(Gui & g, int x, int y, const std::string & message) : Item(g, x, y),
-                                           m_message(message) { }
+                                           m_message(message), 
+                                           button(g, x, y, "OK") { }
 
     virtual void setup();
     virtual void draw();
     virtual void select();
+    virtual void click();
 };
 
 #endif // APOGEE_GUI_ALERT_H

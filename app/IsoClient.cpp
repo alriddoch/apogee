@@ -129,7 +129,6 @@ bool IsoClient::event(SDL_Event & event)
     static int oldRot = 0;
     static int oldElv = 0;
     static float oldScl = 0;
-    cout << "APP:";
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if (event.motion.state & SDL_BUTTON(2)) {

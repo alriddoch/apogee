@@ -388,6 +388,8 @@ void DemeterScene::drawMap(CoalDatabase & map_base)
 {
     origin();
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     cameraAngle.z = -rotation * PI / 180;
     cameraAngle.x = -elevation * PI / 180;
     cout << elevation << "}{" << cameraAngle.x << endl << flush;

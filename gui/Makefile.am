@@ -3,4 +3,5 @@ noinst_LIBRARIES = libgui.a
 libgui_a_SOURCES = Gui.cpp Gui.h \
 		   Widget.cpp Widget.h \
 		   Item.cpp Item.h \
-		   Alert.cpp Alert.h
+		   Alert.cpp Alert.h \
+		   Button.cpp Button.h

@@ -18,6 +18,8 @@ class Sprite {
     bool load(const std::string & filename);
     bool load(const std::string & filename, const Renderer & renderer);
     void draw();
+
+    bool loaded() const { return (tex_id != -1); }
     float w() { return m_w; }
     float h() { return m_h; }
     float pw() { return m_pw; }

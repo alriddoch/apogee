@@ -3,3 +3,9 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include "Widget.h"
+
+void Widget::move(int x, int y)
+{
+    m_x += x;
+    m_y += y;
+}

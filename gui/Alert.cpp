@@ -7,19 +7,38 @@
 
 void Alert::setup()
 {
-    messageName = m_g.newName();
+    buttonName = m_g.newName();
+    button.setup();
 }
 
 void Alert::draw()
 {
     Item::draw();
-    glTranslatef(0.0f,0.0f,0.01f);
-    m_g.print("HELLO");
+    glTranslatef(-211.0f,54.0f,0.01f);
+    m_g.print(m_message.c_str());
+    glTranslatef(211.0f,-34.0f,0.0f);
+    button.draw();
+    glTranslatef(0.0f,-20.0f,0.0f);
 }
 
 void Alert::select()
 {
-    Item::draw();
-    glTranslatef(0.0f,0.0f,0.01f);
-    m_g.print("HELLO");
+    Item::select();
+    glTranslatef(0.0f,20.0f,0.01f);
+    glPushName(buttonName);
+    button.draw();
+    glPopName();
+    glTranslatef(0.0f,-20.0f,0.0f);
+}
+
+void Alert::click()
+{
+    const hitlist & h = m_g.getHits();
+
+    hitlist::const_iterator I = h.begin();
+    for (;I != h.end(); I++) {
+        if (buttonName == *I) {
+            m_obs = true;
+        }
+    }
 }

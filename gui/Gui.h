@@ -8,12 +8,14 @@
 #include <SDL.h>
 #include <GL/gl.h>
 #include <map>
+#include <list>
 
 class Sprite;
 class Renderer;
 class Widget;
 
 typedef std::map<int, Widget *> widgmap;
+typedef std::list<GLuint> hitlist;
 
 class Gui {
   private:
@@ -26,10 +28,12 @@ class Gui {
     int mx,my;
 
     widgmap widgets;
+    hitlist hitNames;
   public:
     Gui(Renderer & r);
 
     int newName() { return ++nameCount; }
+    const hitlist & getHits() { return hitNames; }
 
     bool setup();
     void draw();

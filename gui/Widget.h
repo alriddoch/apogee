@@ -6,6 +6,7 @@
 #define APOGEE_GUI_WIDGET_H
 
 class Gui;
+class Widget;
 
 class Widget {
   private:
@@ -13,18 +14,23 @@ class Widget {
 
   protected:
     Gui & m_g;
+    bool m_obs;
+    bool m_vis;
 
   public:
-    Widget(Gui & g, int x, int y) : m_x(x), m_y(y), m_g(g) { }
+    Widget(Gui & g, int x, int y) : m_x(x), m_y(y), m_g(g),
+                                    m_obs(false), m_vis(true) { }
 
     const int x() const { return m_x; }
     const int y() const { return m_y; }
+    const bool obsolete() const { return m_obs; }
+    const bool visible() const { return m_vis; }
 
-    void move(int x, int y) { m_x += x; m_y += y; }
-
+    virtual void move(int x, int y); //{ m_x += x; m_y += y; }
     virtual void setup() = 0;
     virtual void draw() = 0;
     virtual void select() = 0;
+    virtual void click() = 0;
 
 };
 

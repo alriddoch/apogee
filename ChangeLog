@@ -1,3 +1,27 @@
+2001-09-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Button.cpp, gui/Button.h: Added new button widget.
+
+	* gui/Widget.h, gui/Widget.cpp: Added obsolete and visible flags
+	  so widgets can be hidden or removed. Make move function virtual.
+	  Added click virtual method to transmit mouse clicks to widgets.
+
+	* gui/Item.h, gui/Item.cpp: Implemented click() to do nothing.
+
+	* gui/Gui.h: Added list for storing select hits, and accessor methods.
+
+	* gui/Gui.cpp: Made sure print() does not mess up the cursor position.
+	  Added handling of mouse release. Store all select hits in the hit
+	  list. Implement hiding of non-visible widgets, and removal of
+	  obsolete widgets. Make sure all widgets are setup() correctly.
+
+	* gui/Alert.h, gui/Alert.cpp: Implement click to close the alert
+	  when the button is pressed. Re-write select so it only draws the
+	  important visual elements. Fully implement drawing of a propper
+	  alert.
+
+	* visual/DemeterScene.cpp: Set blend function correctly.
+
 2001-09-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* gui/Alert.h, gui/Alert.cpp: New gui class for popup or alert

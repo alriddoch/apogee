@@ -21,6 +21,7 @@ class Item : public Widget {
     virtual void setup();
     virtual void draw();
     virtual void select();
+    virtual void click();
 };
 
 #endif // APOGEE_GUI_ITEM_H

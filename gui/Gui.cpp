@@ -19,12 +19,15 @@ Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1)
 bool Gui::setup()
 {
     Item * item = new Item(*this, 150, 150);
+    item->setup();
     if (item->load("bag.png")) { widgets[newName()] = item; }
 
     item = new Item(*this, 330, 30);
+    item->setup();
     if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
     
     item = new Alert(*this, 500, 60, "HELLO");
+    item->setup();
     if (item->load("media/media-2d/ui-collection-pegasus/ui_panels_text/panels_text_christal/pnl_text_christals_grey_1_up_462x90_us.png")) { widgets[newName()] = item; }
 
     textTexture = Texture::get("font.png");
@@ -62,6 +65,16 @@ void Gui::draw()
     widgmap::const_iterator I = widgets.begin();
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
+        if (w.obsolete()) {
+            widgets.erase(I->first);
+            delete &w;
+            break;
+        }
+    }
+    I = widgets.begin();
+    for (; I != widgets.end(); I++) {
+        Widget & w = *I->second;
+        if (!w.visible()) { continue; }
         glTranslated(w.x(),w.y(),0.0f);
         w.draw();
         glTranslated(-w.x(),-w.y(),0.1f);
@@ -87,14 +100,16 @@ GLint Gui::select(int x, int y)
     glInitNames();
 
     widgmap::const_iterator I = widgets.begin();
+    glPushName(I->first);
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
-        glTranslated(w.x(),w.y(),0.0f);
-        glPushName(I->first);
+        if (!w.visible()) { continue; }
+        glTranslated(w.x(),w.y(),0);
+        glLoadName(I->first);
         w.select();
-        glPopName();
-        glTranslated(-w.x(),-w.y(),0.1f);
+        glTranslated(-w.x(),-w.y(),0.1);
     }
+    glPopName();
 
     int hits = glRenderMode(GL_RENDER);
 
@@ -115,21 +130,26 @@ GLint Gui::select(int x, int y)
         ptr += (names + 2);
     }
     GLuint * nameItr = namePtr;
+    int closest = -1;
     cout << "The closest hit has " << noNames << " names: ";
+    hitNames.clear();
     for (int i = 0; i < noNames; i++,nameItr++) {
         cout << *nameItr;
         widgmap::const_iterator I = widgets.find(*nameItr);
         if (I != widgets.end()) {
-            return *nameItr;
+            cout << endl << flush;
+            closest = *nameItr;
+        } else {
+            hitNames.push_back(*nameItr);
         }
     }
     cout << endl << flush;
+    return closest;
 }
 
 bool Gui::event(SDL_Event & event)
 {
     bool update = false;
-    cout << "Gui event" << endl << flush;
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if ((event.motion.state & SDL_BUTTON(1)) && (inMotion != -1)) {
@@ -158,12 +178,27 @@ bool Gui::event(SDL_Event & event)
                 }
             }
             break;
+        case SDL_MOUSEBUTTONUP:
+            if ((event.button.type & SDL_MOUSEBUTTONUP) &&
+                (event.button.button & SDL_BUTTON_LEFT)) {
+                // (event.button.state & SDL_RELEASED)) {
+                if (inMotion != -1) {
+                    widgmap::const_iterator I = widgets.find(inMotion);
+                    if (I != widgets.end()) {
+                        I->second->click();
+                        update = true;
+                    }
+                }
+                inMotion = -1;
+            }
+            break;
     }
     return update;
 }
 
 void Gui::print(const char * str)
 {
+    glPushMatrix();
     glColor3f(0.0f, 0.0f, 0.0f);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glBindTexture(GL_TEXTURE_2D, textTexture);
@@ -171,4 +206,5 @@ void Gui::print(const char * str)
     glListBase(textBase-32);
     glCallLists(strlen(str),GL_BYTE,str);
     glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
 }
