@@ -370,28 +370,54 @@ void TerrainRenderer::readTerrain()
     const Element::MapType & tmap = terrain.asMap();
     Element::MapType::const_iterator I = tmap.find("points");
     int xmin = 0, xmax = 0, ymin = 0, ymax = 0;
-    if ((I == tmap.end()) || !I->second.isList()) {
+    if (I == tmap.end()) {
         std::cerr << "No terrain points" << std::endl << std::flush;
     }
-    const Element::ListType & plist = I->second.asList();
-    Element::ListType::const_iterator J = plist.begin();
-    for(; J != plist.end(); ++J) {
-        if (!J->isList()) {
-            std::cout << "Non list in points" << std::endl << std::flush;
-            continue;
+    if (I->second.isList()) {
+        // Legacy support for old list format.
+        const Element::ListType & plist = I->second.asList();
+        Element::ListType::const_iterator J = plist.begin();
+        for(; J != plist.end(); ++J) {
+            if (!J->isList()) {
+                std::cout << "Non list in points" << std::endl << std::flush;
+                continue;
+            }
+            const Element::ListType & point = J->asList();
+            if (point.size() != 3) {
+                std::cout << "point without 3 nums" << std::endl << std::flush;
+                continue;
+            }
+            int x = (int)point[0].asNum();
+            int y = (int)point[1].asNum();
+            xmin = std::min(xmin, x);
+            xmax = std::max(xmax, x);
+            ymin = std::min(ymin, y);
+            ymax = std::max(ymax, y);
+            m_terrain.setBasePoint(x, y, point[2].asNum());
         }
-        const Element::ListType & point = J->asList();
-        if (point.size() != 3) {
-            std::cout << "point without 3 nums" << std::endl << std::flush;
-            continue;
+    } else if (I->second.isMap()) {
+        const Element::MapType & plist = I->second.asMap();
+        Element::MapType::const_iterator J = plist.begin();
+        for(; J != plist.end(); ++J) {
+            if (!J->second.isList()) {
+                std::cout << "Non list in points" << std::endl << std::flush;
+                continue;
+            }
+            const Element::ListType & point = J->second.asList();
+            if (point.size() != 3) {
+                std::cout << "point without 3 nums" << std::endl << std::flush;
+                continue;
+            }
+            int x = (int)point[0].asNum();
+            int y = (int)point[1].asNum();
+            xmin = std::min(xmin, x);
+            xmax = std::max(xmax, x);
+            ymin = std::min(ymin, y);
+            ymax = std::max(ymax, y);
+            m_terrain.setBasePoint(x, y, point[2].asNum());
         }
-        int x = (int)point[0].asNum();
-        int y = (int)point[1].asNum();
-        xmin = std::min(xmin, x);
-        xmax = std::max(xmax, x);
-        ymin = std::min(ymin, y);
-        ymax = std::max(ymax, y);
-        m_terrain.setBasePoint(x, y, point[2].asNum());
+    } else {
+        std::cerr << "Terrain is the wrong type" << std::endl << std::flush;
     }
 }
 

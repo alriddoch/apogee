@@ -1,5 +1,13 @@
 2004-03-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Gui.cpp: Fix text colour now we use modulate rather than
+	  replace.
+
+	* visual/TerrainRenderer.cpp: Change to a new format for terrain
+	  points, keeping compatability with the older format for now.
+
+2004-03-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* gui/ServerSelector.h, gui/ServerSelector.cpp: Add a new
 	  widget to browse servers from the metaserver.
 

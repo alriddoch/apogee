@@ -265,7 +265,7 @@ bool Gui::event(SDL_Event & event)
 void Gui::print(const char * str)
 {
     glPushMatrix();
-    glColor3f(0.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE);
     glBindTexture(GL_TEXTURE_2D, textTexture);
     glEnable(GL_TEXTURE_2D);
