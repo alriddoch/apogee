@@ -24,52 +24,22 @@ namespace Mercator {
 
 class Isometric : public Renderer {
   private:
-    TileMap * tilemap;
-    Eris::TypeInfo * charType;
-    float worldTime;
     int frameCount;
     float time;
     float lastCount;
-    int m_numLineIndeces;
-    unsigned int * const m_lineIndeces;
-    float * const m_texCoords;
 
-    static const int segSize = 64;
-
-    void init();
-    void shapeView();
-    void draw3dsNode(Lib3dsNode * node);
-    void draw3dsFile(Lib3dsFile * node);
-    void drawRegion(Mercator::Segment *);
-
-    void Isometric::buildTileMap(Coal::Container &);
+    virtual void shapeView();
   public:
-    Lib3dsFile * treemodel;
-    unsigned long treemodel_list;
-
     explicit Isometric(Application & app, int wdth = 640, int hght = 480);
 
-    void drawCal3DModel(Model *, const Point3D & coords,
-                                const WFMath::Quaternion & orientation);
-    void draw3DBox(const Point3D & coords,
-                   const WFMath::AxisBox<3> & bbox);
-    void draw3DArea(const Point3D & coords,
-                    const Vector3D & bbox = Vector3D(),
-                    const Vector3D & bmedian = Vector3D());
-    void drawEntity(Eris::Entity * ent);
-    void drawWorld(Eris::Entity * wrld);
-    void drawMap(Coal::Container &, HeightMap &);
-    void drawMap(Mercator::Terrain &);
-    void drawGui();
-    void resize(int,int);
-    void clear();
+    // void draw3DArea(const Point3D & coords,
+                    // const Vector3D & bbox = Vector3D(),
+                    // const Vector3D & bmedian = Vector3D());
     void viewPoint();
     void reorient();
     void orient();
     void translate();
-    void origin();
-    void lightOn();
-    void lightOff();
+
     void update(float);
 
     const float meterSize() const { return 40.2492f; }

@@ -9,6 +9,8 @@
 
 #include <common/Vector3D.h>
 
+#include <Mercator/Terrain.h>
+
 #include <Eris/Log.h>
 
 class WorldEntity;
@@ -31,9 +33,15 @@ namespace Atlas {
  }
 }
 
+class Compass;
+
 class GameClient : public Application {
   protected:
     bool inGame;
+    Mercator::Terrain mterrain;
+    Compass * compassWidget;
+
+    void doWorld();
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false), player(NULL),
@@ -42,6 +50,9 @@ class GameClient : public Application {
     Eris::Lobby * lobby;
     Eris::World * world;
     WorldEntity * character;
+
+    bool setup();
+    bool update(float);
 
     void netConnected();
     void netFailure(const std::string & msg);

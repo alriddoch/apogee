@@ -22,14 +22,15 @@ using Atlas::Message::Object;
 
 IxClient::IxClient(Eris::Connection & con)
                    : GameClient(* new DemeterScene(*this), con),
-                     m_use_mouse(false),
-                     terrain_detail(true), terrain_over(false)
+                     m_use_mouse(false)
 {
 }
 
 IxClient::~IxClient()
 {
 }
+
+#if 0
 
 bool IxClient::setup()
 {
@@ -89,6 +90,8 @@ bool IxClient::update(float secs)
     renderer.flip();
     return false;
 }
+
+#endif
 
 bool IxClient::event(SDL_Event & event)
 {
@@ -154,10 +157,6 @@ bool IxClient::event(SDL_Event & event)
                     break;
                 case SDLK_q:
                     m_use_mouse = m_use_mouse ? false : true;
-                    return true;
-                    break;
-                case SDLK_w:
-                    terrain_over = terrain_over ? false : true;
                     return true;
                     break;
                 default:

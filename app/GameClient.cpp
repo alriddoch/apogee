@@ -11,6 +11,8 @@
 #include <gui/Option.h>
 #include <gui/CharSelector.h>
 #include <gui/Alert.h>
+#include <gui/Compass.h>
+
 
 #include <Eris/Player.h>
 #include <Eris/Lobby.h>
@@ -56,6 +58,79 @@ Atlas::Message::Object Point3D::toAtlas() const
 const Point3D operator+(const Point3D & lhs, const Point3D & rhs)
 {
     return Point3D(lhs[0] + rhs[0], lhs[1] + rhs[1], lhs[2] + rhs[2]);
+}
+
+bool GameClient::setup()
+{
+    mterrain.setBasePoint(-1, -1, -8.f);
+    mterrain.setBasePoint(-1, 0, -6.f);
+    mterrain.setBasePoint(0, -1, -10.f);
+    mterrain.setBasePoint(0, 0, 0.f);
+    mterrain.setBasePoint(0, 1, 8.f);
+    mterrain.setBasePoint(1, 0, 4.f);
+    mterrain.setBasePoint(1, 1, 14.f);
+    mterrain.setBasePoint(1, -1, -4.f);
+    mterrain.setBasePoint(-1, 1, -4.f);
+    mterrain.refresh(0, 0);
+    mterrain.refresh(0, 1);
+    mterrain.refresh(1, 0);
+    mterrain.refresh(1, 1);
+
+    gui = new Gui(renderer);
+    gui->setup();
+    // bag = new Sprite();
+    // bag->load("bag.png");
+
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,
+                                     renderer.getHeight()/2);
+    d->addField("host", "localhost");
+    d->addField("port", "6767");
+    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
+    gui->addWidget(d);
+
+    compassWidget = new Compass(*gui, 42, 10);
+    gui->addWidget(compassWidget);
+
+    return 0;
+}
+
+void GameClient::doWorld()
+{
+    if ((world == NULL) || !inGame) {
+        // std::cout << "No world" << std::endl << std::flush;
+        return;
+    }
+    Eris::Entity * root = world->getRootEntity();
+    if (root == NULL) {
+        std::cout << "No root" << std::endl << std::flush;
+        return;
+    }
+    renderer.drawWorld(root);
+}
+
+bool GameClient::update(float secs)
+{
+    renderer.update(secs);
+    if (inGame) {
+        Point3D offset = getAbsCharPos();
+        renderer.setXoffset(offset.x());
+        renderer.setYoffset(offset.y());
+        renderer.setZoffset(offset.z());
+    }
+    renderer.clear();
+    renderer.lightOff();
+    // renderer.drawMap(map_database, map_height);
+    renderer.drawMap(mterrain);
+    renderer.origin();
+
+    doWorld();
+
+    compassWidget->setAngle(-renderer.getRotation());
+    renderer.lightOff();
+    renderer.drawGui();
+    gui->draw();
+    renderer.flip();
+    return false;
 }
 
 void GameClient::lobbyTalk(Eris::Room *r, const std::string& nm,

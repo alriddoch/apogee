@@ -6,6 +6,7 @@
 #define APOGEE_RENDERER_H
 
 #include <common/Vector3D.h>
+#include <lib3ds/file.h>
 
 class Sprite;
 class Model;
@@ -26,23 +27,38 @@ class RendererSDLinit : public RendererException { };
 namespace Eris {
   class Entity;
   class Quaternion;
+  class TypeInfo;
 }
 
 namespace Mercator {
   class Terrain;
+  class Segment;
 }
 
 class Renderer {
   protected:
     Renderer(Application & app, int wdth, int hght);
 
+    static const int segSize = 64;
+
     virtual void shapeView() = 0;
+
+    void init();
+    void draw3dsFile(Lib3dsFile * node);
 
     struct SDL_Surface * screen;
     int width, height;
     float elevation, rotation;
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
+    int m_numLineIndeces;
+    unsigned int * const m_lineIndeces;
+    float * const m_texCoords;
+    Lib3dsFile * treemodel;
+    unsigned long treemodel_list;
+    Eris::TypeInfo * charType;
+    float worldTime;
+
   public:
     Application & application;
     Model * model;
@@ -77,24 +93,25 @@ class Renderer {
     float getZ(int, int);
     const Point3D getWorldCoord(int, int, float);
 
-    virtual void drawCal3DModel(Model *, const Point3D & coords,
-                                const WFMath::Quaternion &) = 0;
-    virtual void draw3DBox(const Point3D & coords,
-                           const WFMath::AxisBox<3> & bbox) = 0;
-    virtual void drawEntity(Eris::Entity * ent) = 0;
-    virtual void drawWorld(Eris::Entity * wrld) = 0;
-    virtual void drawMap(Coal::Container &, HeightMap &) = 0;
-    virtual void drawMap(Mercator::Terrain &) = 0;
-    virtual void drawGui() = 0;
-    virtual void resize(int,int) = 0;
-    virtual void clear() = 0;
+    void drawCal3DModel(Model *, const Point3D & coords,
+                                const WFMath::Quaternion &);
+    void draw3DBox(const Point3D & coords,
+                           const WFMath::AxisBox<3> & bbox);
+    void drawEntity(Eris::Entity * ent);
+    void drawWorld(Eris::Entity * wrld);
+    // virtual void drawMap(Coal::Container &, HeightMap &) = 0;
+    void drawRegion(Mercator::Segment *);
+    void drawMap(Mercator::Terrain &);
+    void drawGui();
+    void resize(int,int);
+    void clear();
     virtual void viewPoint() = 0;
     virtual void reorient() = 0;
     virtual void orient() = 0;
     virtual void translate() = 0;
-    virtual void origin() = 0;
-    virtual void lightOn() = 0;
-    virtual void lightOff() = 0;
+    virtual void origin();
+    void lightOn();
+    void lightOff();
     virtual void update(float) = 0;
 
     virtual const float meterSize() const = 0;

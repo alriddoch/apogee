@@ -35,27 +35,19 @@
 
 #include <iostream>
 
-#ifndef GL_EXT_compiled_vertex_array
-PFNGLLOCKARRAYSEXTPROC glLockArraysExt = 0;
-PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
-#endif // GL_EXT_compiled_vertex_array
-
 static const bool debug_flag = false;
 
 bool have_GL_EXT_compiled_vertex_array = false;
 
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght),
-                                           frameCount(0), time(0), lastCount(0),
-                                           tilemap(NULL), charType(NULL),
-                                           treemodel(NULL), treemodel_list(0),
-                                           m_numLineIndeces(0),
-                       m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
-                       m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3])
+                                           frameCount(0), time(0), lastCount(0)
 
 {
     init();
 }
+
+#if 0
 
 void Isometric::init()
 {
@@ -69,6 +61,7 @@ void Isometric::init()
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     this->shapeView();
@@ -87,7 +80,6 @@ void Isometric::init()
         glUnlockArraysExt = (PFNGLUNLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glUnlockArraysExt");
 #endif // GL_EXT_compiled_vertex_array
     }
-
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -242,6 +234,8 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
 
 }
 
+#endif
+
 void Isometric::update(float secs)
 {
     ++frameCount;
@@ -296,6 +290,8 @@ inline void Isometric::translate()
     glTranslatef(-x_offset,-y_offset,-z_offset);
 }
 
+#if 0
+
 // This function moves the render cursor to the origin and rotates the
 // axis to be inline with the worldforge axis
 inline void Isometric::origin()
@@ -305,15 +301,7 @@ inline void Isometric::origin()
     translate();
 }
 
-void Isometric::lightOn()
-{
-    glEnable(GL_LIGHTING);
-}
-
-void Isometric::lightOff()
-{
-    glDisable(GL_LIGHTING);
-}
+#endif
 
 void Isometric::shapeView()
 {
@@ -336,6 +324,18 @@ void Isometric::shapeView()
     glEnable(GL_BLEND);
     // glShadeModel(GL_SMOOTH);
     viewPoint();
+}
+
+#if 0
+
+void Isometric::lightOn()
+{
+    glEnable(GL_LIGHTING);
+}
+
+void Isometric::lightOff()
+{
+    glDisable(GL_LIGHTING);
 }
 
 void Isometric::drawCal3DModel(Model * m, const Point3D & coords,
@@ -532,6 +532,7 @@ void Isometric::drawMap(Coal::Container & map_base, HeightMap & map_height)
     // glEnable(GL_DEPTH_TEST);
 }
 
+
 void Isometric::drawRegion(Mercator::Segment * map)
 {
     GLint texture = -1;
@@ -588,6 +589,9 @@ void Isometric::drawMap(Mercator::Terrain & t)
         }
     }
 }
+#endif
+
+#if 0
 
 void Isometric::drawGui()
 {
@@ -612,3 +616,5 @@ void Isometric::clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
 
 }
+
+#endif

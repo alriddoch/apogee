@@ -32,13 +32,10 @@ using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
+#if 0
+
 bool IsoClient::setup()
 {
-    Coal::IsoLoader loader;
-    loader.loadMap ("moraf.map", &map_database);
-    // CoalDebug debug;
-    // debug.Dump (map_database);
-
     map_height.load("moraf_hm.png");
     mterrain.setBasePoint(-1, -1, -8.f);
     mterrain.setBasePoint(-1, 0, -6.f);
@@ -110,6 +107,8 @@ bool IsoClient::update(float secs)
     renderer.flip();
     return false;
 }
+
+#endif
 
 bool IsoClient::event(SDL_Event & event)
 {

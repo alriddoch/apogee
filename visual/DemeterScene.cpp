@@ -2,6 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#include "GL.h"
+
 #include "DemeterScene.h"
 #include "Texture.h"
 #include "Sprite.h"
@@ -21,8 +23,6 @@
 
 #include <iostream>
 
-// #define USE_DEMETER 1
-
 static const bool debug_flag = false;
 
 const float PI = 3.14159f;
@@ -32,11 +32,15 @@ const float FOG_BLUE = 1.0f;
 const float FOG_ALPHA = 0.0f;
 
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
-                                                 Renderer(app, wdth, hght),
-                                                 tilemap(NULL), charType(NULL)
+                                                 Renderer(app, wdth, hght)
 {
+    elevation = 10;
+    rotation = 45;
+
     init();
 }
+
+#if 0
 
 void DemeterScene::init()
 {
@@ -46,28 +50,29 @@ void DemeterScene::init()
         throw RendererSDLinit();
     }
 
-    //SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-    //SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
-    //SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_EnableUNICODE(1);
-    SDL_WM_SetCaption("perigee", "demeter");
-
-    // These should be turned on when running in production mode, but they
-    // make using a debugger really hard.
-    // SDL_WM_GrabInput(SDL_GRAB_ON);
-    // SDL_ShowCursor(0);
-
-#if USE_DEMETER
-    settings = Demeter::Settings::GetInstance();
-    settings->SetMediaPath("maps/");
-    settings->SetScreenWidth(width);
-    settings->SetScreenWidth(height);
-#endif
 
     this->shapeView();
+
+    std::string extensions = (char *)glGetString(GL_EXTENSIONS);
+
+    std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
+
+    if (extensions.find("GL_EXT_compiled_vertex_array") != std::string::npos) {
+        std::cout << "Found GL_EXT_compiled_vertex_array extension"
+                  << std::endl << std::flush;
+        have_GL_EXT_compiled_vertex_array = true;
+
+#ifndef GL_EXT_compiled_vertex_array
+        glLockArraysExt = (PFNGLLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glLockArraysExt");
+        glUnlockArraysExt = (PFNGLUNLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glUnlockArraysExt");
+#endif // GL_EXT_compiled_vertex_array
+    }
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -75,34 +80,9 @@ void DemeterScene::init()
     }
     model->setLodLevel(1.0f);
 
-    const int maxNumVisibleTriangles = 40000;
-
-#if USE_DEMETER
-    terrain = new Demeter::Terrain("moraf_hm.jpg", "moraf.jpg", "grass.png", 0.78125, 0.03125, maxNumVisibleTriangles);
-    terrain->SetMaximumVisibleBlockSize(64);
-    // terrain->SetCommonTextureRepeats(50.0f);
-
-    cout << "Loaded Terrain " << terrain->GetWidth() << " : "
-         << terrain->GetHeight()
-         << endl << flush;
-#endif
-
-    // x_offset = -4.0f;
-    // y_offset = -4.0f;
-    // z_offset = 2.0f;
-
-    elevation = 10;
-    rotation = 45;
-
-    // GLfloat ambientColor[] = {1, 1, 1, 1.0};
-    // GLfloat diffuseColor[] = {0, 1, 0, 1.0};
-    // GLfloat lightPosition[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-// 
-    // glLightfv(GL_LIGHT0, GL_AMBIENT, ambientColor);
-    // glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseColor);
-    // glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-
 }
+
+#endif
 
 void DemeterScene::update(float secs)
 {
@@ -119,11 +99,7 @@ void DemeterScene::shapeView()
         SDL_Quit();
         throw RendererSDLinit();
     }
-
-#if USE_DEMETER
-    settings->SetScreenWidth(width);
-    settings->SetScreenWidth(height);
-#endif
+    SDL_WM_SetCaption("perigee", "perspective");
 
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.75f, 1.0f, 0.0f);
@@ -147,6 +123,7 @@ void DemeterScene::shapeView()
     viewPoint();
 }
 
+#if 0
 inline void DemeterScene::viewScale(float scale_factor)
 {
     // const float maxViewDistance = 4500.0f;
@@ -160,6 +137,7 @@ inline void DemeterScene::viewScale(float scale_factor)
     // glMatrixMode(GL_MODELVIEW);
     glScalef(scale_factor, scale_factor, scale_factor);
 }
+#endif
 
 inline void DemeterScene::viewPoint()
 {
@@ -186,6 +164,7 @@ inline void DemeterScene::viewPoint()
 
 inline void DemeterScene::reorient()
 {
+    // FIXME See orient(); we are not its inverse. Is this a problem?
     glRotatef(-rotation, 0.0, 0.0, 1.0);
     glRotatef(90-elevation, 1.0, 0.0, 0.0);
 }
@@ -201,6 +180,8 @@ inline void DemeterScene::translate()
 {
     glTranslatef(-x_offset,-y_offset,-z_offset);
 }
+
+#if 0
 
 // This function moves the render cursor to the origin and rotates the
 // axis to be inline with the worldforge axis
@@ -377,3 +358,5 @@ void DemeterScene::clear()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear The Screen
 
 }
+
+#endif
