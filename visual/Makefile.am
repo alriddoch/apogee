@@ -6,8 +6,6 @@ libvisual_a_SOURCES = \
                       HeightMap.cpp HeightMap.h \
                       Texture.cpp Texture.h \
                       Sprite.cpp Sprite.h \
-                      Tile.cpp Tile.h \
-                      TileMap.cpp TileMap.h \
                       Renderer.cpp Renderer.h \
                       EntityRenderer.cpp EntityRenderer.h \
                       Cal3dRenderer.cpp Cal3dRenderer.h \

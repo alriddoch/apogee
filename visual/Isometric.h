@@ -7,8 +7,6 @@
 
 #include "Renderer.h"
 
-class TileMap;
-
 class Isometric : public Renderer {
   private:
     virtual void shapeView();
