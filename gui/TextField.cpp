@@ -5,6 +5,8 @@
 #include "TextField.h"
 #include "Gui.h"
 
+#include <iostream>
+
 Sprite TextField::graphic;
 
 TextField::~TextField()
@@ -54,7 +56,7 @@ void TextField::key(int sym,int mod)
             }
             break;
         default:
-            cout << "WEIRD keypress" << endl << flush;
+            std::cout << "WEIRD keypress" << std::endl << std::flush;
             break;
     };
 }

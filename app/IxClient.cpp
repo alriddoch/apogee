@@ -53,7 +53,7 @@ void IxClient::doWorld()
         Eris::Entity * ent = root->getMember(i);
         std::cout << ":" << ent->getID() << ent->getPosition() << ":"
                   << ent->getBBox().v << std::endl << std::flush;
-        renderer.draw3DBox(ent->getPosition(), ent->getBBox());
+        renderer.draw3DBox(Vector3D(ent->getPosition()), ent->getBBox());
     }
 #if 0
     const World::edict & ents = world.getWorld();

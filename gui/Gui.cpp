@@ -31,7 +31,7 @@ bool Gui::setup()
 
     textTexture = Texture::get("font.png");
     if (textTexture == -1) {
-        cerr << "Failed to load font texture" << endl << flush;
+        std::cerr << "Failed to load font texture" << std::endl << std::flush;
         return false;
     }
     textBase = glGenLists(256);
@@ -114,7 +114,7 @@ GLint Gui::select(int x, int y)
 
     int hits = glRenderMode(GL_RENDER);
 
-    cout << "Got " << hits << " hits" << endl << flush;
+    std::cout << "Got " << hits << " hits" << std::endl << std::flush;
     if (hits < 1) { return -1; }
 
     GLuint * ptr = &selectBuf[0];
@@ -122,7 +122,7 @@ GLint Gui::select(int x, int y)
     GLuint * namePtr;
     for (int i = 0; i < hits; i++) {
         int names = *(ptr++);
-        cout << "{" << *ptr << "}";
+        std::cout << "{" << *ptr << "}";
         if (*ptr < minDepth) {
             noNames = names;
             minDepth = *ptr;
@@ -132,19 +132,19 @@ GLint Gui::select(int x, int y)
     }
     GLuint * nameItr = namePtr;
     int closest = -1;
-    cout << "The closest hit has " << noNames << " names: ";
+    std::cout << "The closest hit has " << noNames << " names: ";
     hitNames.clear();
     for (int i = 0; i < noNames; i++,nameItr++) {
-        cout << *nameItr;
+        std::cout << *nameItr;
         widgmap::const_iterator I = widgets.find(*nameItr);
         if (I != widgets.end()) {
-            cout << endl << flush;
+            std::cout << std::endl << std::flush;
             closest = *nameItr;
         } else {
             hitNames.push_back(*nameItr);
         }
     }
-    cout << endl << flush;
+    std::cout << std::endl << std::flush;
     return closest;
 }
 
@@ -154,14 +154,14 @@ bool Gui::event(SDL_Event & event)
     switch(event.type) {
         case SDL_MOUSEMOTION:
             if ((event.motion.state & SDL_BUTTON(1)) && (inMotion != -1)) {
-                cout << "MOVE IT" << endl << flush;
+                std::cout << "MOVE IT" << std::endl << std::flush;
                 int dx = event.motion.x - mx;
                 int dy = my - event.motion.y;
                 mx = event.motion.x;
                 my = event.motion.y;
                 widgmap::const_iterator I = widgets.find(inMotion);
                 if (I != widgets.end()) {
-                    cout << "moving " << dx << " " << dy << endl << flush;
+                    std::cout << "moving " << dx << " " << dy << std::endl << std::flush;
                     I->second->move(dx,dy);
                     update = true;
                 }
@@ -171,7 +171,7 @@ bool Gui::event(SDL_Event & event)
             if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
                 (event.button.button & SDL_BUTTON_LEFT) &&
                 (event.button.state & SDL_PRESSED)) {
-                cout << "Gui button pressed" << endl << flush;
+                std::cout << "Gui button pressed" << std::endl << std::flush;
                 inMotion = select(event.button.x, event.button.y);
                 focus = inMotion;
                 if (inMotion != -1) {
@@ -235,7 +235,7 @@ void Gui::addWidget(Widget * w)
 int Gui::keyToAscii(int key, int mod)
 {
     if ((mod & (KMOD_LCTRL | KMOD_RCTRL | KMOD_LALT | KMOD_RALT)) != 0) {
-        cout << "ctrl or alt pressed" << endl << flush;
+        std::cout << "ctrl or alt pressed" << std::endl << std::flush;
         return -1;
     }
     int val = -1;

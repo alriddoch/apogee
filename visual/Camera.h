@@ -21,7 +21,7 @@ Boston, MA  02111-1307, USA.
 #ifndef _CAMERA_DEMETER_VIEWER_H_
 #define _CAMERA_DEMETER_VIEWER_H_
 
-#include <Terrain.h>
+#include <Demeter/Terrain.h>
 
 // This is a quick & dirty camera that is functional enough for viewing terrains - real applications
 // will usually need something more industrial...

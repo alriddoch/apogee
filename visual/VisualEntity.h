@@ -31,9 +31,9 @@ class VisualEntity
     VisualEntity * ref() const { return m_ref; }
     VisualEntity * & ref() { return m_ref; }
 
-    void update(float usecs) {
-        m_pos += m_velocity * usecs / 1000000;
-    }
+    // void update(float usecs) {
+        // m_pos += m_velocity * usecs / 1000000;
+    // }
 };
 
 #endif // APOGEE_VISUAL_VISUALENTITY_H

@@ -21,7 +21,7 @@ Boston, MA  02111-1307, USA.
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-#include <Terrain.h>
+#include <Demeter/Terrain.h>
 
 // Stripped down matrix taken mostly from David Eberly's excellent matrix class. See his book
 // "3D Game Engine Design" for a complete implementation of this class.

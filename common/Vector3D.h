@@ -8,8 +8,9 @@
 #include <Atlas/Message/Object.h>
 #include <Eris/Types.h>
 
-#include <math.h>
-#include <algo.h>
+#include <cmath>
+#include <algorithm>
+#include <iostream>
 
 using std::cos;
 using std::sin;
@@ -25,10 +26,10 @@ class Vector3D : protected Eris::Coord {
     static const int cZ = 2;
 
     Vector3D() : Coord(0, 0, 0), _set(false) { }
-    Vector3D(double size) : Coord(size, size, size), _set(true) { }
+    explicit Vector3D(double size) : Coord(size, size, size), _set(true) { }
     Vector3D(double x, double y, double z) : Coord(x, y, z), _set(true) { }
-    Vector3D(const Eris::Coord & coord) : Coord(coord), _set(true) { }
-    Vector3D(const Object::ListType & vector) : Coord(vector), _set(true) { }
+    explicit Vector3D(const Eris::Coord & coord) : Coord(coord), _set(true) { }
+    explicit Vector3D(const Object::ListType & vector) : Coord(vector), _set(true) { }
 
     double X() const { return x; }
     double Y() const { return y; }
@@ -198,15 +199,15 @@ class Vector3D : protected Eris::Coord {
     }
 
 
-    friend ostream & operator<<(ostream& s, const Eris::Coord& v);
-    friend ostream & operator<<(ostream& s, const Vector3D& v);
+    friend std::ostream & operator<<(std::ostream& s, const Eris::Coord& v);
+    friend std::ostream & operator<<(std::ostream& s, const Vector3D& v);
 };
 
-inline ostream & operator<<(ostream& s, const Eris::Coord& v) {
+inline std::ostream & operator<<(std::ostream& s, const Eris::Coord& v) {
     return s << "[" << v.x << "," << v.y << "," << v.z << "]";
 }
 
-inline ostream & operator<<(ostream& s, const Vector3D& v) {
+inline std::ostream & operator<<(std::ostream& s, const Vector3D& v) {
     if (!v._set) {
         return s << "[NS]";
     }

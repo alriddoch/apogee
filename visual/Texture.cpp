@@ -7,6 +7,8 @@
 #include <SDL_image.h>
 #include <GL/gl.h>
 
+#include <iostream>
+
 std::map<std::string, int> * Texture::texturedb = NULL;
 
 SDL_Surface * Texture::imageLoad(const std::string & filename)

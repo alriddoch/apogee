@@ -432,7 +432,7 @@ void Model::renderMesh(bool bWireframe, bool bLight)
 
   // set the global OpenGL states
   //glEnable(GL_DEPTH_TEST);
-  glShadeModel(GL_SMOOTH);
+  // glShadeModel(GL_SMOOTH);
 
   // set the lighting mode if necessary
   if(bLight)
@@ -592,7 +592,7 @@ void Model::onRender()
 {
   // set global OpenGL states
   //glEnable(GL_DEPTH_TEST);
-  glShadeModel(GL_SMOOTH);
+  // glShadeModel(GL_SMOOTH);
 
   // check if we need to render the skeleton
   //if(theMenu.isSkeleton())

@@ -8,7 +8,7 @@
 #include "Renderer.h"
 #include "Camera.h"
 
-#include <Terrain.h>
+#include <Demeter/Terrain.h>
 
 class DemeterScene : public Renderer {
   private:

@@ -153,8 +153,8 @@ const Vector3D GameClient::getAbsCharPos()
         return Vector3D();
     }
     float now = SDL_GetTicks();
-    Vector3D pos = character->getPosition();
-    pos = pos + Vector3D(character->getVelocity()) * ((now - character->getTime())/1000.0f);
+    Vector3D pos = Vector3D(character->getPosition());
+    pos = pos + Vector3D(character->getVelocity()) * (double)((now - character->getTime())/1000.0f);
     Eris::Entity * root = world->getRootEntity();
     for(Eris::Entity * ref = character->getContainer();
         ref != NULL && ref != root;

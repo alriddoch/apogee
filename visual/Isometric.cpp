@@ -382,11 +382,11 @@ void Isometric::drawEntity(Eris::Entity * ent)
     debug(cout << ent->getID() << " " << numEnts << " emts" << endl << flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
-        Vector3D pos = e->getPosition();
+        Vector3D pos = Vector3D(e->getPosition());
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
             debug( cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos; );
-            pos = pos + Vector3D(e->getVelocity()) * ((worldTime - we->getTime())/1000.0f);
+            pos = pos + Vector3D(e->getVelocity()) * (double)((worldTime - we->getTime())/1000.0f);
             debug( cout << "=" << pos << endl << flush; );
         } else {
             cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << endl << flush;

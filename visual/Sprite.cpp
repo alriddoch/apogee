@@ -27,7 +27,7 @@ unsigned int Sprite::twoN(unsigned int size)
 
 bool Sprite::load(const std::string & filename)
 {
-    cout << "Sprite " << filename << endl << flush;
+    std::cout << "Sprite " << filename << std::endl << std::flush;
     SDL_Surface * image = IMG_Load(filename.c_str());
     if (image == NULL) {
         return false;
