@@ -1,7 +1,7 @@
 dnl PKG_CHECK_MODULES(GSTUFF, gtk+-2.0 >= 1.3 glib = 1.3.4, action-if, action-not)
 dnl defines GSTUFF_LIBS, GSTUFF_CFLAGS, see pkg-config man page
 dnl also defines GSTUFF_PKG_ERRORS on error
-AC_DEFUN(PKG_CHECK_MODULES, [
+AC_DEFUN([PKG_CHECK_MODULES], [
   succeeded=no
 
   if test -z "$PKG_CONFIG"; then
@@ -53,7 +53,6 @@ AC_DEFUN(PKG_CHECK_MODULES, [
   fi
 ])
 
-
 # Configure paths for SDL
 # Sam Lantinga 9/21/99
 # stolen from Manish Singh
@@ -64,7 +63,7 @@ AC_DEFUN(PKG_CHECK_MODULES, [
 dnl AM_PATH_SDL([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
 dnl Test for SDL, and define SDL_CFLAGS and SDL_LIBS
 dnl
-AC_DEFUN(AM_PATH_SDL,
+AC_DEFUN([AM_PATH_SDL],
 [dnl 
 dnl Get the cflags and libraries from the sdl-config script
 dnl
@@ -89,7 +88,8 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
   fi
 
   AC_REQUIRE([AC_CANONICAL_TARGET])
-  AC_PATH_PROG(SDL_CONFIG, sdl-config, no)
+  PATH="$prefix/bin:$prefix/usr/bin:$PATH"
+  AC_PATH_PROG(SDL_CONFIG, sdl-config, no, [$PATH])
   min_sdl_version=ifelse([$1], ,0.11.0,$1)
   AC_MSG_CHECKING(for SDL - version >= $min_sdl_version)
   no_sdl=""
@@ -113,7 +113,7 @@ AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run 
       CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
       LIBS="$LIBS $SDL_LIBS"
 dnl
-dnl Now check if the installed SDL is sufficiently new. (Also sanity
+dnl Now check if the installed SDL is sufficiently new. Also sanity
 dnl checks the results of sdl-config to some extent
 dnl
       rm -f conf.sdltest
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 
 dnl worldforge check for libz, libpng, SDL and SDL_image
 dnl the flags are returned in WF_SDL_IMAGE_CFLAGS and WF_SDL_IMAGE_LIBS
-AC_DEFUN(WF_CHECK_SDL_IMAGE,[dnl
+AC_DEFUN([WF_CHECK_SDL_IMAGE],[dnl
 
 AC_LANG_PUSH([C])
 
@@ -356,7 +356,7 @@ AC_LANG_POP([C])
 dnl worldforge check for the GL and GLU libraries,
 dnl the -l flags are added directly to LIBS
 
-AC_DEFUN(WF_CHECK_GL_LIBS,[dnl
+AC_DEFUN([WF_CHECK_GL_LIBS],[dnl
 
 AC_LANG_PUSH(C)
 
