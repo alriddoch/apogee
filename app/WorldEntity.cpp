@@ -19,7 +19,7 @@
 using Atlas::Objects::Entity::GameEntity;
 
 RenderableEntity::RenderableEntity(const GameEntity &ge,
-                             Eris::World * w) : Eris::Entity(ge, w)
+                             Eris::World * w) : Eris::Entity(ge, w), m_drawer(0)
 {
 }
 

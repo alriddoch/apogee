@@ -49,6 +49,7 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
                                          width(wdth), height(hght),
                                          elevation(30), rotation(45),
                                          scale(1), x_offset(0), y_offset(0),
+                                         z_offset(0),
                                          m_numLineIndeces(0),
                        m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
                        m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
@@ -141,12 +142,12 @@ void Renderer::init()
     for(int j = 0; j < (segSize + 1); ++j) {
         for(int i = 0; i < (segSize + 1); ++i) {
             m_texCoords[++tidx] = ((float)i)/8;
-            std::cout << m_texCoords[tidx] << ":";
+            // std::cout << m_texCoords[tidx] << ":";
             m_texCoords[++tidx] = ((float)j)/8;
-            std::cout << m_texCoords[tidx] << ":";
+            // std::cout << m_texCoords[tidx] << ":";
         }
     }
-    std::cout << std::endl << std::flush;
+    // std::cout << std::endl << std::flush;
 }
 
 
