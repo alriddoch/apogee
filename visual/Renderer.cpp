@@ -214,7 +214,7 @@ void Renderer::origin()
     glLoadIdentity();
     projection();
     viewPoint();
-    glEnable(GL_CULL_FACE);
+    // glEnable(GL_CULL_FACE);
 }
 
 void Renderer::orient(const WFMath::Quaternion & orientation)
