@@ -16,7 +16,7 @@ static int xoffset[] = {0, 80, -80, 160, -160, 240, -240 };
 static int yoffset[] = {0, -15, -15, -35, -35, -60, -60 };
 
 ServerSelector::ServerSelector(Gui & g, int x, int y) : Widget(g, x, y),
-    metaServer(* new Eris::Meta("", "metaserver.worldforge.org", 7) ),
+    metaServer(* new Eris::Meta("metaserver.worldforge.org", 7) ),
     connect(g, x, y, "connect"),
     refresh(g, x, y, "refresh"),
     specify(g, x, y, "specify"),
@@ -80,8 +80,10 @@ void ServerSelector::draw()
 
     if (++rot > 359) { rot = 0; }
 
+#warning FIXME Waiting on sane API to implement metaserver
+#if 0
     std::map<GLuint, const Eris::ServerInfo*>::const_iterator I;
-    for(unsigned i = 0; i < metaServer.numServers(); ++i) {
+    for(unsigned i = 0; i < metaServer.getGameServerCount(); ++i) {
         const Eris::ServerInfo & svr = metaServer.getInfoForServer(i);
         glPushMatrix();
         glTranslatef(xoffset[i], yoffset[i], 0.0f);
@@ -108,6 +110,7 @@ void ServerSelector::draw()
         glPopAttrib();
         glPopMatrix();
     }
+#endif
 }
 
 void ServerSelector::select()
@@ -127,6 +130,8 @@ void ServerSelector::select()
     filter.draw();
     glPopMatrix();
 
+#warning FIXME Waiting on sane API to implement metaserver
+#if 0
     names.clear();
     for(unsigned i = 0; i < metaServer.numServers(); ++i) {
         const Eris::ServerInfo & svr = metaServer.getInfoForServer(i);
@@ -147,6 +152,7 @@ void ServerSelector::select()
         glPopMatrix();
     }
     glPopName();
+#endif
 }
 
 void ServerSelector::click()

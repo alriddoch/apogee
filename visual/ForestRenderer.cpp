@@ -53,7 +53,7 @@ void ForestRenderer::render(Renderer & r, const PosType & camPos)
     }
 
     // FIXME Assumes direct parent is terrain
-    Eris::Entity * pe = m_ent.getContainer();
+    Eris::Entity * pe = m_ent.getLocation();
     RenderableEntity * re = dynamic_cast<RenderableEntity *>(pe);
     assert(re != 0);
 

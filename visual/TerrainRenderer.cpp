@@ -24,6 +24,8 @@
 #include <iostream>
 
 using Atlas::Message::Element;
+using Atlas::Message::MapType;
+using Atlas::Message::ListType;
 
 static const bool debug_flag = false;
 static const int segSize = 64;
@@ -200,10 +202,17 @@ using Mercator::Terrain;
 void TerrainRenderer::drawMap(Mercator::Terrain & t,
                               const PosType & camPos)
 {
+#if 0
     long lowXBound = lrintf(camPos[0] / segSize) - 2,
          upXBound = lrintf(camPos[0] / segSize) + 1,
          lowYBound = lrintf(camPos[1] / segSize) - 2,
          upYBound = lrintf(camPos[1] / segSize) + 1;
+#else
+    long lowXBound = lrintf(camPos[0] / segSize) - 10,
+         upXBound = lrintf(camPos[0] / segSize) + 10,
+         lowYBound = lrintf(camPos[1] / segSize) - 10,
+         upYBound = lrintf(camPos[1] / segSize) + 10;
+#endif
 
     enableRendererState();
 
@@ -383,27 +392,28 @@ void TerrainRenderer::removeDisplayList(int x, int y)
     }
 }
 
-void TerrainRenderer::readTerrainFrom(const Atlas::Message::Element & terrain)
+void TerrainRenderer::readTerrainFrom(const std::string &,
+                                      const Atlas::Message::Element & terrain)
 {
     if (!terrain.isMap()) {
         std::cerr << "Terrain is not a map" << std::endl << std::flush;
     }
-    const Element::MapType & tmap = terrain.asMap();
-    Element::MapType::const_iterator I = tmap.find("points");
+    const MapType & tmap = terrain.asMap();
+    MapType::const_iterator I = tmap.find("points");
     int xmin = 0, xmax = 0, ymin = 0, ymax = 0;
     if (I == tmap.end()) {
         std::cerr << "No terrain points" << std::endl << std::flush;
     }
     if (I->second.isList()) {
         // Legacy support for old list format.
-        const Element::ListType & plist = I->second.asList();
-        Element::ListType::const_iterator J = plist.begin();
+        const ListType & plist = I->second.asList();
+        ListType::const_iterator J = plist.begin();
         for(; J != plist.end(); ++J) {
             if (!J->isList()) {
                 std::cout << "Non list in points" << std::endl << std::flush;
                 continue;
             }
-            const Element::ListType & point = J->asList();
+            const ListType & point = J->asList();
             if (point.size() != 3) {
                 std::cout << "point without 3 nums" << std::endl << std::flush;
                 continue;
@@ -417,14 +427,14 @@ void TerrainRenderer::readTerrainFrom(const Atlas::Message::Element & terrain)
             m_terrain.setBasePoint(x, y, point[2].asNum());
         }
     } else if (I->second.isMap()) {
-        const Element::MapType & plist = I->second.asMap();
-        Element::MapType::const_iterator J = plist.begin();
+        const MapType & plist = I->second.asMap();
+        MapType::const_iterator J = plist.begin();
         for(; J != plist.end(); ++J) {
             if (!J->second.isList()) {
                 std::cout << "Non list in points" << std::endl << std::flush;
                 continue;
             }
-            const Element::ListType & point = J->second.asList();
+            const ListType & point = J->second.asList();
             if (point.size() != 3) {
                 std::cout << "point without 3 nums" << std::endl << std::flush;
                 continue;
@@ -458,14 +468,15 @@ void TerrainRenderer::readTerrainFrom(const Atlas::Message::Element & terrain)
 
 bool TerrainRenderer::readTerrain()
 {
-    if (!m_ent.hasProperty("terrain")) {
+    if (!m_ent.hasAttr("terrain")) {
         std::cerr << "World entity has no terrain" << std::endl << std::flush;
-        std::cerr << "World entity id " << m_ent.getID() << std::endl
+        std::cerr << "World entity id " << m_ent.getId() << std::endl
                   << std::flush;
         return false;
     }
-    const Element & terrain = m_ent.getProperty("terrain");
-    readTerrainFrom(terrain);
+#warning Wastefull return by value
+    const Element terrain = m_ent.valueOfAttr("terrain");
+    readTerrainFrom("terrain", terrain);
     return true;
 }
 
@@ -542,7 +553,7 @@ void TerrainRenderer::render(Renderer & r, const PosType & camPos)
 {
     if (!m_haveTerrain) {
         if (readTerrain()) {
-            m_ent.observeProperty("terrain", SigC::slot(*this, &TerrainRenderer::readTerrainFrom));
+            m_ent.observe("terrain", SigC::slot(*this, &TerrainRenderer::readTerrainFrom));
         }
         m_haveTerrain = true;
     }

@@ -1,3 +1,14 @@
+2004-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* Tag for transition to Eris 1.3, Atlas-C++ 0.6
+
+	* app/GameClient.cpp, app/GameClient.h, app/IsoClient.cpp,
+	  app/IxClient.cpp, app/WorldEntity.cpp, app/WorldEntity.h,
+	  app/perigee.cpp, gui/ServerSelector.cpp, visual/DemeterScene.cpp,
+	  visual/ForestRenderer.cpp, visual/Renderer.cpp, visual/Renderer.h,
+	  visual/TerrainRenderer.cpp, visual/TerrainRenderer.h:
+	  Convert to using Eris 1.3 API.
+
 2004-04-08  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/DemeterScene.cpp, visual/Isometric.cpp:

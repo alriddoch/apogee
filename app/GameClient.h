@@ -11,26 +11,20 @@
 
 #include <Eris/Log.h>
 
+#include <Atlas/Objects/ObjectsFwd.h>
+
 class AutonomousEntity;
 
 namespace Eris {
   class Player;
   class Avatar;
   class Lobby;
-  class World;
+  class View;
   class Room;
   class Entity;
   class Coord;
   class Connection;
   class ServerInfo;
-}
-
-namespace Atlas {
- namespace Objects {
-  namespace Entity {
-   class Player;
-  }
- }
 }
 
 class Compass;
@@ -54,12 +48,12 @@ class GameClient : public Application {
                Application(rend, con), inGame(false),
                compassWidget(NULL), clickDown(false),
                clickDownTime(0), clickDownX(0), clickDownY(0),
-               m_player(NULL), m_avatar(NULL), m_lobby(NULL), m_world(NULL),
+               m_player(NULL), m_avatar(NULL), m_lobby(NULL), m_view(NULL),
                m_character(NULL) { }
     Eris::Player * m_player;
     Eris::Avatar * m_avatar;
     Eris::Lobby * m_lobby;
-    Eris::World * m_world;
+    Eris::View * m_view;
     AutonomousEntity * m_character;
 
     bool setup();
@@ -81,7 +75,7 @@ class GameClient : public Application {
     void takeCharacter(const std::string &);
 
     void lobbyTalk(Eris::Room *r, const std::string& nm, const std::string& t);
-    void loginComplete(const Atlas::Objects::Entity::Player &p);
+    void loginComplete();
 
     void charCreator();
     void charListSync();
@@ -94,7 +88,7 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 
-    void charMoved(const PosType &);
+    void charMoved(Eris::Entity *);
     void entitySay(const std::string &, Eris::Entity * e);
 
     void moveCharacter(const PosType & pos, bool run = false);

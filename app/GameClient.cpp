@@ -16,9 +16,10 @@
 #include <gui/Pie.h>
 #include <gui/Console.h>
 
+#include <Eris/Connection.h>
 #include <Eris/Player.h>
 #include <Eris/Lobby.h>
-#include <Eris/World.h>
+#include <Eris/View.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 #include <Eris/ServerInfo.h>
@@ -26,8 +27,8 @@
 
 #include <wfmath/atlasconv.h>
 
-#include <Atlas/Objects/Entity/GameEntity.h>
-#include <Atlas/Objects/Operation/Move.h>
+#include <Atlas/Objects/Entity.h>
+#include <Atlas/Objects/Operation.h>
 
 #include <sigc++/object_slot.h>
 #include <sigc++/bind.h>
@@ -51,6 +52,8 @@ bool GameClient::setup()
     if (!renderer.init()) {
         return false;
     }
+
+    m_player = new Eris::Player(&connection);
 
     gui = new Gui(renderer);
     gui->setup();
@@ -110,16 +113,16 @@ void GameClient::doWorld()
     if (!inGame) {
         return;
     }
-    assert(m_world != 0);
-    Eris::Entity * root = m_world->getRootEntity();
+    assert(m_view != 0);
+    Eris::Entity * root = m_view->getTopLevel();
     assert(root != 0);
     renderer.drawWorld(root);
 }
 
 bool GameClient::update(float secs)
 {
-    if (m_world != 0) {
-        m_world->tick();
+    if (m_view != 0) {
+        // m_view->tick();
     }
 
     renderer.update(secs);
@@ -154,7 +157,7 @@ void GameClient::lobbyTalk(Eris::Room *r, const std::string& nm,
     std::cout << "TALK: " << t << std::endl << std::flush;
 }
 
-void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
+void GameClient::loginComplete()
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
@@ -196,7 +199,7 @@ void GameClient::charSelector()
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterMap::const_iterator I = cm.begin(); I != cm.end(); ++I) {
         const std::string & id = I->first;
-        const std::string & name = I->second.getName();
+        const std::string & name = I->second->getName();
         std::cout << "Selecting from " << id << ":" << name
                   << std::endl << std::flush;
         charList.insert(std::pair<std::string,std::string>(id, name));
@@ -209,12 +212,14 @@ void GameClient::charSelector()
 
 void GameClient::connectWorldSignals()
 {
-    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
+#warning FIXME No lobby talk yet
+    // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    m_world->registerFactory(new WEFactory(*connection.getTypeService(),
+    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+#warning FIXME We need World::Entered replacement
+    // m_view->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
+    Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
                                            renderer));
 }
 
@@ -223,12 +228,12 @@ void GameClient::createCharacter(const std::string & name,
 {
 
     GameEntity chrcter;
-    chrcter.setParents(Atlas::Message::Element::ListType(1,type));
-    chrcter.setName(name);
-    chrcter.setAttr("description", "a perigee person");
-    chrcter.setAttr("sex", "female");
+    chrcter->setParents(std::list<std::string>(1,type));
+    chrcter->setName(name);
+    chrcter->setAttr("description", "a perigee person");
+    chrcter->setAttr("sex", "female");
     m_avatar = m_player->createCharacter(chrcter);
-    m_world = m_avatar->getWorld();
+    m_view = m_avatar->getView();
 
     connectWorldSignals();
 }
@@ -237,8 +242,8 @@ void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
     m_avatar = m_player->takeCharacter(chrcter);
-    m_world = m_avatar->getWorld();
-    std::cout << "Character taken, world = " << m_world << std::endl << std::flush;
+    m_view = m_avatar->getView();
+    std::cout << "Character taken, world = " << m_view << std::endl << std::flush;
 
     connectWorldSignals();
 }
@@ -287,18 +292,16 @@ void GameClient::loginCancel()
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
-    m_player = new Eris::Player(&connection);
     m_player->login(name, password);
-    m_lobby = Eris::Lobby::instance();
-    m_lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_player->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    // m_lobby = Eris::Lobby::instance();
 }
 
 void GameClient::create(const std::string & name, const std::string & password)
 {
-    m_player = new Eris::Player(&connection);
     m_player->createAccount(name, "", password);
-    m_lobby = Eris::Lobby::instance();
-    m_lobby->LoggedIn.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_player->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    // m_lobby = Eris::Lobby::instance();
 }
 
 void GameClient::netDisconnected()
@@ -326,7 +329,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
 
 }
 
-void GameClient::charMoved(const PosType &)
+void GameClient::charMoved(Eris::Entity *)
 {
     std::cout << "Char moved" << std::endl << std::flush;
 }
@@ -352,9 +355,9 @@ void GameClient::moveCharacter(const PosType & pos, bool run)
     }
 
     PosType coords(pos);
-    Eris::Entity * ref = m_character->getContainer();
+    Eris::Entity * ref = m_character->getLocation();
     Eris::Entity * r;
-    while ((r = ref->getContainer()) != NULL) {
+    while ((r = ref->getLocation()) != NULL) {
         // FIXME Incorrect usage. Needs real orientation.
         coords = coords.toLocalCoords(ref->getPosition(), WFMath::Quaternion().identity());
         ref = r;
@@ -362,15 +365,15 @@ void GameClient::moveCharacter(const PosType & pos, bool run)
     
     Move m;
 
-    Atlas::Message::Element::MapType marg;
-    marg["id"] = m_character->getID();
-    marg["loc"] = m_character->getContainer()->getID();
+    Atlas::Message::MapType marg;
+    marg["id"] = m_character->getId();
+    marg["loc"] = m_character->getLocation()->getId();
     marg["pos"] = coords.toAtlas();
     if (!run) {
         marg["velocity"] = VelType(1,0,0).toAtlas();
     }
-    m.setArgs(Atlas::Message::Element::ListType(1, marg));
-    m.setFrom(m_character->getID());
+    m->setArgsAsList(Atlas::Message::ListType(1, marg));
+    m->setFrom(m_character->getId());
 
     connection.send(m);
     
@@ -384,15 +387,15 @@ const PosType GameClient::getAbsCharPos()
     float now = SDL_GetTicks();
     PosType pos = m_character->getPosition();
     pos = pos + m_character->getVelocity() * (double)((now - m_character->getTime())/1000.0f);
-    Eris::Entity * root = m_world->getRootEntity();
-    Eris::Entity * ref = m_character->getContainer();
+    Eris::Entity * root = m_view->getTopLevel();
+    Eris::Entity * ref = m_character->getLocation();
     if (ref != 0) {
         RenderableEntity * re = dynamic_cast<RenderableEntity *>(ref);
         if (re != 0) {
             re->constrainChild(*m_character, pos);;
         }
     }
-    for(; ref != NULL && ref != root; ref = ref->getContainer()) {
+    for(; ref != NULL && ref != root; ref = ref->getLocation()) {
         std::cout << pos << ", " << ref->getPosition() << std::endl << std::flush;
         // FIXME Incorrect usage. Needs real orientation.
         pos = pos.toParentCoords(ref->getPosition(), WFMath::Quaternion().identity());

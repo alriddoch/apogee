@@ -50,7 +50,7 @@ Renderer::~Renderer()
 
 bool Renderer::init()
 {
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK|SDL_INIT_NOPARACHUTE) != 0) { 
+    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK) != 0) { 
         std::cerr << "Failed to initialise video subsytem"
                   << std::endl << std::flush;
         return false;
@@ -239,7 +239,7 @@ void Renderer::update(float secs)
     time += secs;
     // std::cout << "SECS " << secs << ":" << lastCount << std::endl << std::flush;
     if ((time - lastCount) > 1.f) {
-        // std::cout << frameCount << " frames per second" << std::endl << std::flush;
+        std::cout << frameCount << " frames per second" << std::endl << std::flush;
         lastCount = time;
         frameCount = 0;
     }
@@ -291,7 +291,7 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
             pe->constrainChild(*me, pos);;
         }
     } else {
-        debug(std::cout << "Eris::Entity \"" << ent->getID()
+        debug(std::cout << "Eris::Entity \"" << ent->getId()
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
@@ -316,13 +316,13 @@ void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
         return;
     }
 
-    int numEnts = ent->getNumMembers();
-    debug(std::cout << ent->getID() << " " << numEnts << " emts"
+    int numEnts = ent->numContained();
+    debug(std::cout << ent->getId() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
-        Eris::Entity * e = ent->getMember(i);
+        Eris::Entity * e = ent->getContained(i);
         if (!e->isVisible()) { continue; }
-        // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
+        // debug(std::cout << ":" << e->getId() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
         drawEntity(e, re, camPos);
@@ -364,7 +364,7 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
             pe->constrainChild(*me, pos);;
         }
     } else {
-        debug(std::cout << "Eris::Entity \"" << ent->getID()
+        debug(std::cout << "Eris::Entity \"" << ent->getId()
                         << "\" is not a MovableEntity"
                         << std::endl << std::flush;);
     }
@@ -391,14 +391,14 @@ void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
         return;
     }
 
-    int numEnts = ent->getNumMembers();
-    debug(std::cout << ent->getID() << " " << numEnts << " emts"
+    int numEnts = ent->numContained();
+    debug(std::cout << ent->getId() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
-        Eris::Entity * e = ent->getMember(i);
-        debug(std::cout << "DOING " << e->getID() << std::endl << std::flush;);
+        Eris::Entity * e = ent->getContained(i);
+        debug(std::cout << "DOING " << e->getId() << std::endl << std::flush;);
         if (!e->isVisible()) {
-            debug(std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;);
+            debug(std::cout << "SKIPPING " << e->getId() << std::endl << std::flush;);
             continue;
         }
         selectEntity(e, re, camPos, name, next);
@@ -466,7 +466,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
         std::cerr << "ERROR: Got invalid hit" << std::endl << std::flush;
         return 0;
     }
-    std::cout << "CLICKED on " << I->second->getID() << std::endl << std::flush;
+    std::cout << "CLICKED on " << I->second->getId() << std::endl << std::flush;
     return I->second;
 }
 

@@ -9,7 +9,7 @@
 #include <gui/Gui.h>
 #include <gui/Console.h>
 
-#include <Eris/World.h>
+#include <Eris/View.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 
@@ -57,7 +57,7 @@ bool IxClient::event(SDL_Event & event)
                     Uint16 period = SDL_GetTicks() - clickDownTime;
                     clickDown = false;
                     if (period < maxClickTime) {
-                        Eris::Entity * we = m_world->getRootEntity();
+                        Eris::Entity * we = m_view->getTopLevel();
                         Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
                                                                     event.motion.y);
                         if (e == we) {

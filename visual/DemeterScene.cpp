@@ -20,7 +20,7 @@ DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
     m_iconName = "perspective";
 }
 
-static const float maxViewDistance = 250.0f;
+// static const float maxViewDistance = 1500.0f;
 
 void DemeterScene::projection()
 {

@@ -46,7 +46,7 @@ class TerrainRenderer : public EntityRenderer
     void drawShadow(const WFMath::Point<2> & pos, float radius = 1.f);
 
     void removeDisplayList(int x, int y);
-    void readTerrainFrom(const Atlas::Message::Element &);
+    void readTerrainFrom(const std::string &, const Atlas::Message::Element &);
     bool readTerrain();
   public:
     TerrainRenderer(Renderer &, RenderableEntity & e);
