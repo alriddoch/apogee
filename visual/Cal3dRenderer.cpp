@@ -33,32 +33,47 @@ void Cal3dRenderer::selectCal3dModel(Model * m)
 
 void Cal3dRenderer::update(float secs)
 {
-    m_default->onUpdate(secs);
+    m_model->onUpdate(secs);
 }
 
-Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
+Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) :
+                             EntityRenderer(r, e), m_model(0)
 {
     if (m_default == 0) {
         m_default = new Model();
-        if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
+        if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/cally/cally.cfg")) {
             std::cerr << "Loading paladin model failed" << std::endl << std::flush;
         }
         m_default->setLodLevel(1.0f);
         m_default->onUpdate(0);
-        r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
     }
+    m_model = m_default;
+    r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
 }
 
 Cal3dRenderer::~Cal3dRenderer()
 {
 }
 
+void Cal3dRenderer::load(const std::string & file)
+{
+    Model * model = new Model();
+    if (!model->onInit(getMediaPath() + "/" + file)) {
+        std::cerr << "Loading cal3d model " << file << " failed"
+                  << std::endl << std::flush;
+        return;
+    }
+    model->setLodLevel(1.0f);
+    model->onUpdate(0);
+    m_model = model;
+}
+
 void Cal3dRenderer::render(Renderer &, const WFMath::Point<3> & camPos)
 {
-    drawCal3dModel(m_default);
+    drawCal3dModel(m_model);
 }
 
 void Cal3dRenderer::select(Renderer &, const WFMath::Point<3> & camPos)
 {
-    selectCal3dModel(m_default);
+    selectCal3dModel(m_model);
 }

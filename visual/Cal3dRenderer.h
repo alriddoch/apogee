@@ -7,12 +7,15 @@
 
 #include "EntityRenderer.h"
 
+#include <string>
+
 class Model;
 
 class Cal3dRenderer : public EntityRenderer
 {
   protected:
     static Model * m_default;
+    Model * m_model;
 
     void drawCal3dModel(Model * m);
     void selectCal3dModel(Model * m);
@@ -20,6 +23,8 @@ class Cal3dRenderer : public EntityRenderer
   public:
     Cal3dRenderer(Renderer &, Eris::Entity & e);
     virtual ~Cal3dRenderer();
+
+    virtual void load(const std::string &);
 
     virtual void render(Renderer &, const WFMath::Point<3> & camPos);
     virtual void select(Renderer &, const WFMath::Point<3> & camPos);

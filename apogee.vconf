@@ -15,3 +15,6 @@ button_down = "button_down.png"
 [cal3d]
 
 paladin = "media/media_new/3d_skeletons/paladin/paladin.cfg"
+settler = "media/media_new/3d_skeletons/paladin/paladin.cfg"
+pig = "media/media_new/3d_skeletons/pig/fat_pig/Pig01_entityforge."
+skeleton = "media/media_new/3d_skeletons//.cfg"
