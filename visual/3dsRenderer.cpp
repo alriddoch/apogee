@@ -132,99 +132,98 @@ void m3dsRenderer::draw3dsFile()
 
 void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
 {
-  {
-    Lib3dsNode *p;
-    for (p=node->childs; p!=0; p=p->next) {
+    for (Lib3dsNode * p=node->childs; p!=0; p=p->next) {
       draw3dsNode(p);
     }
-  }
-  if (node->type==LIB3DS_OBJECT_NODE) {
+
+    if (node->type != LIB3DS_OBJECT_NODE) {
+      return;
+    }
+
     if (strcmp(node->name,"$$$DUMMY")==0) {
       return;
     }
 
     if (!node->user.d) {
-      Lib3dsMesh *mesh=lib3ds_file_mesh_by_name(m_model, node->name);
-      ASSERT(mesh);
-      if (!mesh) {
-        return;
-      }
+        Lib3dsMesh *mesh=lib3ds_file_mesh_by_name(m_model, node->name);
+        ASSERT(mesh);
+        if (!mesh) {
+          return;
+        }
+        std::cout << "Node" << std::endl << std::flush;
 
-      node->user.d=glGenLists(1);
-      glNewList(node->user.d, GL_COMPILE);
+        node->user.d=glGenLists(1);
+        glNewList(node->user.d, GL_COMPILE);
 
-      {
-        unsigned p;
-        // Lib3dsVector *normalL=(Lib3dsVector*)malloc(3*sizeof(Lib3dsVector)*mesh->faces);
         Lib3dsVector * normalL= new Lib3dsVector[3*mesh->faces];
 
-        {
-          Lib3dsMatrix M;
-          lib3ds_matrix_copy(M, mesh->matrix);
-          lib3ds_matrix_inv(M);
-          glMultMatrixf(&M[0][0]);
-        }
+        Lib3dsMatrix M;
+        lib3ds_matrix_copy(M, mesh->matrix);
+        lib3ds_matrix_inv(M);
+        glMultMatrixf(&M[0][0]);
+
         lib3ds_mesh_calculate_normals(mesh, normalL);
 
-        for (p=0; p<mesh->faces; ++p) {
+        glBegin(GL_TRIANGLES);
+
+        Lib3dsMaterial *mat=0;
+        GLuint texture = 0;
+        for (unsigned p = 0; p < mesh->faces; ++p) {
           Lib3dsFace *f=&mesh->faceL[p];
-          Lib3dsMaterial *mat=0;
-          GLuint texture = 0;
           if (f->material[0]) {
-            mat=lib3ds_file_material_by_name(m_model, f->material);
+            Lib3dsMaterial * m = lib3ds_file_material_by_name(m_model,
+                                                              f->material);
+            if (m != 0) {
+              if (m != mat) {
+                std::cout << "Material " << m << " : \"" << f->material << "\""
+                          << std::endl << std::flush;
+                mat = m;
+                glEnd();
+                glMaterialfv(GL_FRONT, GL_AMBIENT, mat->ambient);
+                glMaterialfv(GL_FRONT, GL_DIFFUSE, mat->diffuse);
+                glMaterialfv(GL_FRONT, GL_SPECULAR, mat->specular);
+                float s = pow(2, 10.0*mat->shininess);
+                if (s>128.0) {
+                  s=128.0;
+                }
+                glMaterialf(GL_FRONT, GL_SHININESS, s);
+                if (mat->texture1_map.name[0]) {
+                  std::cout << "TEXTURE NAME: " << mat->texture1_map.name
+                            << std::endl << std::flush;
+                  texture = Texture::get(mat->texture1_map.name);
+                  glEnable(GL_TEXTURE_2D);
+                  glBindTexture(GL_TEXTURE_2D, texture);
+                } else {
+                  glDisable(GL_TEXTURE_2D);
+                }
+                glBegin(GL_TRIANGLES);
+              }
+            } else {
+              mat = 0;
+              static const Lib3dsRgba a = {0.2f, 0.2f, 0.2f, 1.0f};
+              static const Lib3dsRgba d = {0.8f, 0.8f, 0.8f, 1.0f};
+              static const Lib3dsRgba s = {0.0f, 0.0f, 0.0f, 1.0f};
+              glEnd();
+              glMaterialfv(GL_FRONT, GL_AMBIENT, a);
+              glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
+              glMaterialfv(GL_FRONT, GL_SPECULAR, s);
+              glDisable(GL_TEXTURE_2D);
+              glBegin(GL_TRIANGLES);
+            }
           }
 
-          if (mat) {
-            static GLfloat a[4]={0,0,0,1};
-            float s;
-            glMaterialfv(GL_FRONT, GL_AMBIENT, mat->ambient);
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, mat->diffuse);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, mat->specular);
-            s = pow(2, 10.0*mat->shininess);
-            if (s>128.0) {
-              s=128.0;
-            }
-            glMaterialf(GL_FRONT, GL_SHININESS, s);
-            if (mat->texture1_map.name[0]) {
-                std::cout << "TEXTURE NAME: " << mat->texture1_map.name
-                          << std::endl << std::flush;
-                texture = Texture::get(mat->texture1_map.name);
-            }
-          }
-          else {
-            Lib3dsRgba a={0.2, 0.2, 0.2, 1.0};
-            Lib3dsRgba d={0.8, 0.8, 0.8, 1.0};
-            Lib3dsRgba s={0.0, 0.0, 0.0, 1.0};
-            glMaterialfv(GL_FRONT, GL_AMBIENT, a);
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, s);
-          }
-          {
-            if (texture != 0) {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, texture);
-            }
-            int i;
-            glBegin(GL_TRIANGLES);
-              glNormal3fv(f->normal);
-              for (i=0; i<3; ++i) {
-                glNormal3fv(normalL[3*p+i]);
-                if (texture != -1) {
-                    glTexCoord2fv(mesh->texelL[f->points[i]]);
-                }
-                glVertex3fv(mesh->pointL[f->points[i]].pos);
-              }
-            glEnd();
-            if (texture != 0) {
-                glDisable(GL_TEXTURE_2D);
-            }
+          for (unsigned i = 0; i < 3; ++i) {
+            glNormal3fv(normalL[3*p+i]);
+            // How to flag this?
+            glTexCoord2fv(mesh->texelL[f->points[i]]);
+            glVertex3fv(mesh->pointL[f->points[i]].pos);
           }
         }
+        glEnd();
 
         free(normalL);
-      }
 
-      glEndList();
+        glEndList();
     }
 
     if (node->user.d) {
@@ -238,7 +237,6 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
       /*glutSolidSphere(50.0, 20,20);*/
       glPopMatrix();
     }
-  }
 }
 
 m3dsRenderer::m3dsRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)

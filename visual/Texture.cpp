@@ -143,8 +143,10 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
     glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w, image->h, 0,
                  format, GL_UNSIGNED_BYTE, image->pixels);
     std::cout << image->w << " " << image->h << std::endl << std::flush;
-    if (glGetError() != 0) {
-        std::cerr << "BANFG" << std::endl << std::flush;
+    GLenum er = glGetError();
+    if (er != 0) {
+        std::cerr << "BAD TEXTURE: \"" << gluErrorString(er) << "\""
+                  << std::endl << std::flush;
     }
 
     // Mag filter is linear unless filter is nearest

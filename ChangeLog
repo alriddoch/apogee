@@ -1,5 +1,12 @@
 2003-12-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/3dsRenderer.cpp: Clean up and optimise 3ds renderer,
+	  getting rid of painfull state changes, and C scoping artifacts.
+
+	* visual/Texture.cpp: Report errors with loaded textures.
+
+2003-12-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/widgets.cpp, visual/widgets.h: Purge useless redundant code.
 
 	* visual/GL.h: Switch to using sage for OpenGL extensions.
