@@ -6,9 +6,12 @@
 
 #include "GL.h"
 #include "Texture.h"
+#include "Renderer.h"
 
 #include "common/debug.h"
 #include "common/system.h"
+
+#include <wfmath/quaternion.h>
 
 #include <lib3ds/mesh.h>
 #include <lib3ds/node.h>
@@ -28,7 +31,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
     // This must be true, or we might crash
-    assert(mesh->texels >= mesh->points);
+    // assert(mesh->texels >= mesh->points);
            
     float * points = new float[3 * mesh->points];
     float * normals = new float[3 * mesh->points];
@@ -39,6 +42,8 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
 
     for (unsigned p = 0; p < mesh->points; ++p) {
       memcpy(&points[p*3], &mesh->pointL[p].pos[0], 3 * sizeof(float));
+    }
+    for (unsigned p = 0; p < mesh->texels; ++p) {
       memcpy(&texcoords[p*2], &mesh->texelL[p][0], 2 * sizeof(float));
     }
     for (unsigned p = 0; p < mesh->faces; ++p) {
@@ -126,12 +131,12 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     glEndList();
 }
 
-void m3dsRenderer::draw3dsFile()
+void m3dsRenderer::draw3dsFile(Renderer & r)
 {
     Lib3dsNode * p = m_model->nodes;
     if (p != 0) {
         for (; p != 0; p = p->next) {
-            draw3dsNode(p);
+            draw3dsNode(r, p);
         }
     } else {
         for (Lib3dsMesh * mesh = m_model->meshes; mesh!=0; mesh=mesh->next) {
@@ -158,10 +163,10 @@ void m3dsRenderer::draw3dsMesh(Lib3dsMesh * mesh)
     glCallList(vb->bobject);
 }
 
-void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
+void m3dsRenderer::draw3dsNode(Renderer & r, Lib3dsNode * node)
 {
     for (Lib3dsNode * p=node->childs; p!=0; p=p->next) {
-      draw3dsNode(p);
+      draw3dsNode(r, p);
     }
 
     if (node->type != LIB3DS_OBJECT_NODE) {
@@ -193,9 +198,33 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
     VertexBuffer * vb = (VertexBuffer*)node->user.p;
 
     glPushMatrix();
-    d=&node->data.object;
     glMultMatrixf(&node->matrix[0][0]);
+    d=&node->data.object;
+    // FIXME This has been fiddled by re-ordering the transformations
+    // until the desired effect was achieved. I have almost no idea
+    // what I really should have done.
+#if 0
+    glTranslatef(-node->data.object.pos[0],
+                 -node->data.object.pos[1],
+                 -node->data.object.pos[2]);
+    r.orient(WFMath::Quaternion(d->rot[3], d->rot[0], d->rot[1], d->rot[2]));
+    std::cout << "ROTATE: " << -node->data.object.rot[0] << ","
+              << -node->data.object.rot[1] << ","
+              << -node->data.object.rot[2] << ","
+              << -node->data.object.rot[3] << std::endl << std::flush;
+#endif
     glTranslatef(-d->pivot[0], -d->pivot[1], -d->pivot[2]);
+    debug(std::cout << "TRANSLATE: "
+                    << -node->data.object.pos[0] << ","
+                    << -node->data.object.pos[1] << ","
+                    << -node->data.object.pos[2] << std::endl << std::flush;);
+    glScalef(node->data.object.scl[0],
+             node->data.object.scl[1],
+             node->data.object.scl[2]);
+    debug(std::cout << "SCALE: "
+                    << node->data.object.scl[0] << ","
+                    << node->data.object.scl[1] << ","
+                    << node->data.object.scl[2] << std::endl << std::flush;);
     if (!glIsList(vb->bobject)) {
         std::cout << "display list for 3ds model is no longer a display list in this context" << std::endl << std::flush;
     }
@@ -224,7 +253,7 @@ void m3dsRenderer::load(const std::string & filename)
     }
 }
 
-void m3dsRenderer::render(Renderer &, const PosType &)
+void m3dsRenderer::render(Renderer & r, const PosType &)
 {
     if (m_model != 0) {
         glPushMatrix();
@@ -236,7 +265,7 @@ void m3dsRenderer::render(Renderer &, const PosType &)
         glEnable(GL_NORMALIZE);
         glAlphaFunc(GL_GREATER, 0.2f);
         // glScalef(5.f, 5.f, 5.f);
-        draw3dsFile();
+        draw3dsFile(r);
         glDisable(GL_NORMALIZE);
         glDisable(GL_ALPHA_TEST);
         // glDisable(GL_BLEND);

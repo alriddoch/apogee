@@ -30,9 +30,9 @@ class m3dsRenderer : public EntityRenderer
     Lib3dsFile * m_model;
 
     void compileVertexBuffer(Lib3dsMesh *, VertexBuffer *);
-    void draw3dsNode(Lib3dsNode *);
+    void draw3dsNode(Renderer&, Lib3dsNode *);
     void draw3dsMesh(Lib3dsMesh *);
-    void draw3dsFile();
+    void draw3dsFile(Renderer&);
   public:
     m3dsRenderer(Renderer &, Eris::Entity & e);
     virtual ~m3dsRenderer();

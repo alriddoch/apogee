@@ -1,5 +1,13 @@
 2004-01-12  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/3dsRenderer.h, visual/3dsRenderer.cpp: Fix 3ds renderer
+	  so it handles models without texels, and add some of the per-node
+	  transforms that seem to be needed for munin's boat.
+
+	* Add boat model to config file.
+
+2004-01-12  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/WorldEntity.h, app/WorldEntity.cpp,
 	  visual/Renderer.cpp, app/GameClient.cpp:
 	  Modify interface to RenderableEntity to deal with entities
