@@ -1,3 +1,7 @@
+2001-11-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp: Updated account creation for new Eris API.
+
 2001-11-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/GameClient.h: Added new local Entity class

@@ -30,8 +30,7 @@ void GameClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
-    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/
-2);
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
     d->addField("name", "Apogee Dubneal");
     d->addField("type", "farmer");
     d->oButtonSignal.connect(SigC::slot(this, &GameClient::createCharacter));
@@ -90,9 +89,10 @@ void GameClient::netConnected()
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
-    player = new Eris::Player();
-    lobby = player->login(&connection, name, password);
+    player = new Eris::Player(&connection);
+    lobby = Eris::Lobby::instance();
     lobby->LoggedIn.connect(SigC::slot(this, &GameClient::loginComplete));
+    player->login(name, password);
 }
 
 void GameClient::netDisconnected()
