@@ -234,7 +234,8 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
     glMultMatrixf(&orient[0][0]);
 }
 
-void Renderer::drawEntity(Eris::Entity * ent, const Vector3D & cp)
+void Renderer::drawEntity(Eris::Entity * ent, RenderableEntity * pe,
+                          const Vector3D & cp)
 {
     assert(ent != 0);
 
@@ -246,12 +247,8 @@ void Renderer::drawEntity(Eris::Entity * ent, const Vector3D & cp)
                          << (worldTime - me->getTime()) << " " << pos; );
         pos = pos + ent->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
         debug( std::cout << "=" << pos << std::endl << std::flush; );
-        Eris::Entity * pe = ent->getContainer();
         if (pe != 0) {
-            RenderableEntity * re = dynamic_cast<RenderableEntity *>(pe);
-            if (re != 0) {
-                re->constrainChild(pos);;
-            }
+            pe->constrainChild(pos);;
         }
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID()
@@ -285,7 +282,7 @@ void Renderer::drawEntity(Eris::Entity * ent, const Vector3D & cp)
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
-        drawEntity(e, camPos);
+        drawEntity(e, re, camPos);
     }
     glPopMatrix();
 }
@@ -295,7 +292,7 @@ void Renderer::drawWorld(Eris::Entity * wrld)
     worldTime = SDL_GetTicks();
     Vector3D camPos(x_offset, y_offset, z_offset);
 
-    drawEntity(wrld, camPos);
+    drawEntity(wrld, 0, camPos);
 }
 
 void Renderer::drawGui()
@@ -309,7 +306,8 @@ void Renderer::drawGui()
     glDisable(GL_CULL_FACE);
 }
 
-void Renderer::selectEntity(Eris::Entity * ent, const Vector3D & cp,
+void Renderer::selectEntity(Eris::Entity * ent, RenderableEntity * pe,
+                            const Vector3D & cp,
                             SelectMap & name, GLuint & next)
 {
     Vector3D pos = ent->getPosition();
@@ -319,12 +317,8 @@ void Renderer::selectEntity(Eris::Entity * ent, const Vector3D & cp,
                          << (worldTime - me->getTime()) << " " << pos; );
         pos = pos + ent->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
         debug( std::cout << "=" << pos << std::endl << std::flush; );
-        Eris::Entity * pe = ent->getContainer();
         if (pe != 0) {
-            RenderableEntity * re = dynamic_cast<RenderableEntity *>(pe);
-            if (re != 0) {
-                re->constrainChild(pos);;
-            }
+            pe->constrainChild(pos);;
         }
     } else {
         debug(std::cout << "Eris::Entity \"" << ent->getID()
@@ -361,7 +355,7 @@ void Renderer::selectEntity(Eris::Entity * ent, const Vector3D & cp,
             debug(std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;);
             continue;
         }
-        selectEntity(e, camPos, name, next);
+        selectEntity(e, re, camPos, name, next);
     }
     glPopMatrix();
 }
@@ -391,7 +385,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
 
     Vector3D camPos(x_offset, y_offset, z_offset);
 
-    selectEntity(wrld, camPos, nameMap, nextName);
+    selectEntity(wrld, 0, camPos, nameMap, nextName);
 
     debug(std::cout << "DONE ENITTIES" << std::endl << std::flush;);
     glPopName();
