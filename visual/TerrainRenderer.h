@@ -41,6 +41,8 @@ class TerrainRenderer : public EntityRenderer
     TerrainRenderer(Renderer &, Eris::Entity & e);
     virtual ~TerrainRenderer();
 
+    void load(const std::string &) { }
+
     virtual void render(Renderer &, const PosType & camPos);
     virtual void select(Renderer &, const PosType & camPos);
 };
