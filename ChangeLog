@@ -1,4 +1,4 @@
-2004-01-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+2004-01-05  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.cpp: Verify populating height data
 	  and surface data separatly.
