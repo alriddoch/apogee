@@ -224,7 +224,7 @@ bool Model::onInit(const std::string& strFilename)
 
     // get the key
     std::string strKey;
-    strKey = strBuffer.substr(pos, strBuffer.find_first_of(" =\t\n\r", pos));
+    strKey = strBuffer.substr(pos, strBuffer.find_first_of(" =\t\n\r", pos) - pos);
     pos += strKey.size();
 
     // get the '=' character
@@ -240,7 +240,7 @@ bool Model::onInit(const std::string& strFilename)
 
     // get the data
     std::string strData;
-    strData = strBuffer.substr(pos);
+    strData = strBuffer.substr(pos, strBuffer.find_first_of("\n\r", pos) - pos);
 
     // handle the model creation
     if(strKey == "scale")
@@ -354,7 +354,7 @@ bool Model::onInit(const std::string& strFilename)
   int meshId;
   for(meshId = 0; meshId < m_calCoreModel.getCoreMeshCount(); meshId++)
   {
-    m_calModel.getRenderer()->attachMesh(meshId);
+    m_calModel.attachMesh(meshId);
   }
 
   // set the material set of the whole model
@@ -643,7 +643,7 @@ void Model::setLodLevel(float lodLevel)
   m_lodLevel = lodLevel;
 
   // set the new lod level in the cal model renderer
-  m_calModel.getRenderer()->setLodLevel(m_lodLevel);
+  m_calModel.setLodLevel(m_lodLevel);
 }
 
 //----------------------------------------------------------------------------//
