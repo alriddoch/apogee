@@ -1,3 +1,10 @@
+2001-09-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Model.cpp, visual/Model.h: Updated to latest versions from
+	  the cally demo 2 to use cal3d 0.6.
+
+	* app/Editor.cpp: Updated to latest demo data for cal3d.
+
 2001-09-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/DemeterScene.cpp: Fixed cal3d model rendering so it is

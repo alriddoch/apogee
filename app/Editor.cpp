@@ -53,7 +53,7 @@ bool Editor::setup()
     character->load("swinesherd_female_1_us_E_0.png",renderer);
 
     model = new Model();
-    if (!model->onInit(Datapath() + "paladin.dat")) {
+    if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
     return 0;

@@ -8,8 +8,12 @@
 // any later version.                                                         //
 //----------------------------------------------------------------------------//
 
-#ifndef VISUAL_MODEL_H
-#define VISUAL_MODEL_H
+#ifndef MODEL_H
+#define MODEL_H
+
+//----------------------------------------------------------------------------//
+// Includes                                                                   //
+//----------------------------------------------------------------------------//
 
 #include <cal3d/cal3d.h>
 #include <GL/glu.h>
@@ -17,6 +21,7 @@
 static inline std::string Datapath() {
     return "./data/";
 }
+
 
 //----------------------------------------------------------------------------//
 // Class declaration                                                          //
@@ -43,7 +48,7 @@ protected:
   int m_textureCount;
   float m_motionBlend[3];
   float m_renderScale;
-  float m_renderOffset;
+  float m_lodLevel;
 
 // constructors/destructor
 public:
@@ -53,18 +58,20 @@ public:
 // member functions
 public:
   void executeAction(int action);
+  float getLodLevel();
   void getMotionBlend(float *pMotionBlend);
-  float getRenderOffset();
   float getRenderScale();
   int getState();
   bool onInit(const std::string& strFilename);
   void onRender();
   void onShutdown();
   void onUpdate(float elapsedSeconds);
+  void setLodLevel(float lodLevel);
   void setMotionBlend(float *pMotionBlend, float delay);
   void setState(int state, float delay);
 
 protected:
+  GLuint loadTexture(const std::string& strFilename);
   void renderMesh(bool bWireframe, bool bLight);
   void renderSkeleton();
 };
