@@ -197,6 +197,17 @@ void GameClient::charSelector()
     gui->addWidget(cs);
 }
 
+
+void GameClient::connectWorldSignals()
+{
+    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
+    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
+
+    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_world->registerFactory(new WEFactory(*this));
+}
+
 void GameClient::createCharacter(const std::string & name,
                                  const std::string & type)
 {
@@ -209,12 +220,7 @@ void GameClient::createCharacter(const std::string & name,
     m_avatar = m_player->createCharacter(chrcter);
     m_world = m_avatar->getWorld();
 
-    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
-
-    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    m_world->registerFactory(new WEFactory(*this));
+    connectWorldSignals();
 }
 
 void GameClient::takeCharacter(const std::string & chrcter)
@@ -224,12 +230,7 @@ void GameClient::takeCharacter(const std::string & chrcter)
     m_world = m_avatar->getWorld();
     std::cout << "Character taken, world = " << m_world << std::endl << std::flush;
 
-    m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
-
-    m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    m_world->registerFactory(new WEFactory(*this));
+    connectWorldSignals();
 }
 
 void GameClient::roomEnter(Eris::Room *r)

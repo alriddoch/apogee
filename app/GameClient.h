@@ -40,6 +40,8 @@ class GameClient : public Application {
     Compass * compassWidget;
 
     void doWorld();
+
+    void connectWorldSignals();
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false),
