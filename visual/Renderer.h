@@ -8,6 +8,8 @@
 #include <common/Vector3D.h>
 #include <lib3ds/file.h>
 
+#include "GL.h"
+
 class Sprite;
 class Model;
 class HeightMap;
@@ -36,6 +38,8 @@ namespace Mercator {
 }
 
 class Renderer {
+  public:
+    typedef std::map<GLuint, Eris::Entity *> SelectMap;
   protected:
     Renderer(Application & app, int wdth, int hght);
 
@@ -106,6 +110,10 @@ class Renderer {
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
     void drawGui();
+
+    void selectEntity(Eris::Entity * ent, SelectMap & names, int & next);
+    Eris::Entity * selectWorld(Eris::Entity * wrld);
+
     void resize(int,int);
     void clear();
     virtual void viewPoint() = 0;

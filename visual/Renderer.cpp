@@ -479,6 +479,42 @@ void Renderer::drawGui()
     // glDisable(GL_CULL_FACE);
 }
 
+void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, int & next)
+{
+    // FIXME Copy from drawEnttiy, but carefully consider how to render
+    // things.
+}
+
+Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld)
+{
+    GLuint selectBuf[512];
+    GLuint nextName = 0;
+    SelectMap nameMap;
+
+    glSelectBuffer(512,selectBuf);
+    glRenderMode(GL_SELECT);
+
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT,viewport);
+    gluPickMatrix(x, renderer.getHeight() - y, 5, 5, viewport);
+
+    origin();
+
+    glInitNames();
+    
+    selectEntity(wrld, nameMap, nextName);
+
+    int hits = glRenderMode(GL_RENDER);
+
+    if (hits < 1) {
+        return 0;
+    }
+
+    // Analyze the results
+
+    return 0;
+}
+
 void Renderer::resize(int wdth, int hght)
 {
     width = wdth;
