@@ -9,6 +9,8 @@
 #include "Item.h"
 #include "Compass.h"
 
+#include "font.h"
+
 #include <visual/Sprite.h>
 #include <visual/Renderer.h>
 
@@ -54,13 +56,20 @@ bool Gui::setup()
     b->setLegend("Say Hello");
 #endif
 
-    textTexture = Texture::get("font.png");
-    if (textTexture == -1) {
+    // textTexture = Texture::get("font.png");
+    glGenTextures(1, &textTexture);
+    glBindTexture(GL_TEXTURE_2D, textTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, texture_font_internalFormat,
+                 texture_font_width, texture_font_height, 0,
+                 texture_font_format, GL_UNSIGNED_BYTE, texture_font_pixels);
+    if (glGetError() != 0) {
         std::cerr << "Failed to load font texture" << std::endl << std::flush;
         return false;
     }
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     textBase = glGenLists(256);
-    glBindTexture(GL_TEXTURE_2D, textTexture);
     for(int loop=0; loop<256; loop++) {
         float cx=(float)(loop%16)/16.0f;             // X Position Of Current Character
         float cy=(float)(loop/16)/16.0f;             // Y Position Of Current Character
