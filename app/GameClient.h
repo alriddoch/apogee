@@ -43,6 +43,10 @@ class GameClient : public Application {
     void doWorld();
 
     void connectWorldSignals();
+
+    void worldEntityCreate(Eris::Entity *r);
+    void worldEnter(Eris::Entity *);
+    void gotAvatar(Eris::Avatar *);
   public:
     GameClient(Renderer & rend, Eris::Connection & con) :
                Application(rend, con), inGame(false),
@@ -84,9 +88,6 @@ class GameClient : public Application {
     void roomEnter(Eris::Room *r);
     // void roomAppear(Eris::Room *r, std::string id);
     // void roomLeave(Eris::Room *r, std::string id);
-
-    void worldEntityCreate(Eris::Entity *r);
-    void worldEnter(Eris::Avatar *);
 
     void charMoved();
     void entitySay(const std::string &, Eris::Entity * e);

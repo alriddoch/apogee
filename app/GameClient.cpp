@@ -216,7 +216,7 @@ void GameClient::connectWorldSignals()
     // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::gotAvatar));
     Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
                                            renderer));
 }
@@ -313,19 +313,23 @@ void GameClient::worldEntityCreate(Eris::Entity *e)
     e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
 }
 
-void GameClient::worldEnter(Eris::Avatar * a)
+void GameClient::worldEnter(Eris::Entity * chr)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
-    m_avatar = a;
-    m_view = m_avatar->getView();
-    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    Eris::Entity * chr = m_avatar->getEntity();
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
     m_character = dynamic_cast<AutonomousEntity*>(chr);
 
     consoleWidget->lineEntered.connect(SigC::slot(*m_avatar,&Eris::Avatar::say));
 
+}
+
+void GameClient::gotAvatar(Eris::Avatar * a)
+{
+    m_avatar = a;
+    m_view = m_avatar->getView();
+    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
+    m_avatar->GotCharacterEntity.connect(SigC::slot(*this,&GameClient::worldEnter));
 }
 
 void GameClient::charMoved()

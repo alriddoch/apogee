@@ -1,5 +1,16 @@
 2005-01-08  Al Riddoch  <alriddoch@zepler.org>
 
+	* app/WorldEntity.h, app/WorldEntity.cpp: Modify messy slot code
+	  to use the native sigc++ 2.0 API if its available. Eliminates
+	  some nasty casts, and stops some crashes. Remove asserts and
+	  replace with checks, as getTypeByName() can return NULL.
+
+	* app/GameClient.h, app/GameClient.cpp: Separate out handlers
+	  for AvatarSuccess and GotCharacterEntity, as they can no
+	  no longer be handled at the same time.
+
+2005-01-08  Al Riddoch  <alriddoch@zepler.org>
+
 	* gui/Gui.cpp, gui/Compass.cpp: Get rid of nasty casts when using
 	  varconf.
 
