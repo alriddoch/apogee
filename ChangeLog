@@ -1,5 +1,10 @@
 2005-02-02  Al Riddoch  <alriddoch@zepler.org>
 
+	* visual/Model.cpp: Handle action animations as well as loops.
+	  Report syntax errors more cleanly.
+
+2005-02-02  Al Riddoch  <alriddoch@zepler.org>
+
 	* visual/Model.cpp: Fail cleanly if we try to render a cal3d model
 	  with nothing loaded.
 

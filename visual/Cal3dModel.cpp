@@ -294,6 +294,11 @@ bool Cal3dModel::onInit(const std::string& strFilename)
 
       animationCount++;
     }
+    else if(strKey == "animation_action")
+    {
+      // FIXME - load an animation action.
+      // Probably the cally demo can help us out here.
+    }
     else if(strKey == "mesh")
     {
       // load core mesh
@@ -341,7 +346,9 @@ bool Cal3dModel::onInit(const std::string& strFilename)
     }
     else
     {
-      std::cerr << strFilename << "(" << line << "): Invalid syntax." << std::endl;
+      std::cerr << strFilename << "(" << line
+                << "): Invalid syntax. Unknown key [" << strKey << "]"
+                << std::endl;
       return false;
     }
   }
