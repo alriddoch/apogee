@@ -64,7 +64,7 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 }
 
 
-int Texture::get(const std::string & filename)
+int Texture::get(const std::string & filename, bool wrap)
 {
     if (textures().find(filename) != textures().end()) {
         return textures()[filename];
@@ -78,12 +78,12 @@ int Texture::get(const std::string & filename)
         return -1;
     }
 
-    int tex_id = loadTexture(image);
+    int tex_id = loadTexture(image, wrap);
     if (tex_id != -1) { textures()[filename] = tex_id; }
     return tex_id;
 }
     
-int Texture::loadTexture(SDL_Surface * image)
+int Texture::loadTexture(SDL_Surface * image, bool wrap)
 {
     int tex_id;
     int format, fmt;
@@ -119,8 +119,13 @@ int Texture::loadTexture(SDL_Surface * image)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    if (wrap) {
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    } else {
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    }
 
     return tex_id;
 }

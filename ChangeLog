@@ -1,3 +1,10 @@
+2003-06-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Texture.h, visual/Texture.cpp: Add argument to texture loader,
+	  to specify that texture should not wrap.
+
+	* visual/Renderer.cpp: Load skybox as non-wrapping textures.
+
 2003-06-11  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.h, visual/Renderer.cpp: Quick and dirty skybox.

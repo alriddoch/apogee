@@ -24,9 +24,9 @@ class Texture {
 
     static std::map<std::string, int> * texturedb;
   public:
-    static int loadTexture(struct SDL_Surface * image);
+    static int loadTexture(struct SDL_Surface * image, bool wrap = true);
     static struct SDL_Surface * imageTransform(struct SDL_Surface * image);
-    static int get(const std::string & filename);
+    static int get(const std::string & filename, bool wrap = true);
 };
 
 #endif // APOGEE_VISUAL_TEXTURE_H
