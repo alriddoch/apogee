@@ -5,7 +5,7 @@
 #ifndef APOGEE_ISOCLIENT_H
 #define APOGEE_ISOCLIENT_H
 
-#include <coal/database.h>
+#include <coal/container.h>
 
 #include <visual/HeightMap.h>
 
@@ -20,7 +20,7 @@ class IsoClient : public GameClient {
   private:
     void doWorld();
 
-    CoalDatabase map_database;
+    Coal::Container map_database;
     HeightMap map_height;
     Compass * compassWidget;
   public:

@@ -13,6 +13,10 @@ namespace Eris {
   class TypeInfo;
 }
 
+namespace Coal {
+  class Container;
+}
+
 class Isometric : public Renderer {
   private:
     Model * model;
@@ -26,7 +30,7 @@ class Isometric : public Renderer {
     void init();
     void shapeView();
 
-    void Isometric::buildTileMap(CoalDatabase &);
+    void Isometric::buildTileMap(Coal::Container &);
   public:
     static Renderer * Instance(int width = 640, int height = 480) {
         if (instance == NULL) {
@@ -44,7 +48,7 @@ class Isometric : public Renderer {
                     const Vector3D & bmedian = Vector3D());
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
-    void drawMap(CoalDatabase &, HeightMap &);
+    void drawMap(Coal::Container &, HeightMap &);
     void drawGui();
     void resize(int,int);
     void clear();

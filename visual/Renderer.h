@@ -11,9 +11,9 @@ class Sprite;
 class Model;
 class HeightMap;
 
-class CoalRegion;
-class CoalObject;
-class CoalDatabase;
+namespace Coal {
+  class Container;
+}
 
 extern "C" void SDL_GL_SwapBuffers();
 extern "C" void SDL_Quit();
@@ -93,7 +93,7 @@ class Renderer {
                            const WFMath::AxisBox<3> & bbox) = 0;
     virtual void drawEntity(Eris::Entity * ent) = 0;
     virtual void drawWorld(Eris::Entity * wrld) = 0;
-    virtual void drawMap(CoalDatabase &, HeightMap &) = 0;
+    virtual void drawMap(Coal::Container &, HeightMap &) = 0;
     virtual void drawGui() = 0;
     virtual void resize(int,int) = 0;
     virtual void clear() = 0;

@@ -18,6 +18,8 @@
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 
+#include <coal/isoloader.h>
+
 #include <sigc++/object_slot.h>
 
 #include <SDL.h>
@@ -26,16 +28,14 @@
 
 #include <math.h>
 
-#include <coal/isoloader.h>
-
 using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
 bool IsoClient::setup()
 {
-    CoalIsoLoader loader (map_database);
-    loader.LoadMap ("moraf.map");
+    Coal::IsoLoader loader;
+    loader.loadMap ("moraf.map", &map_database);
     // CoalDebug debug;
     // debug.Dump (map_database);
 
@@ -59,21 +59,6 @@ bool IsoClient::setup()
     return 0;
 }
 
-#if 0
-void IsoClient::doEntity(Eris::Entity * ent)
-{
-    int numEnts = ent->getNumMembers();
-    cout << numEnts << " emts" << endl << flush;
-    for (int i = 0; i < numEnts; i++) {
-        Eris::Entity * e = ent->getMember(i);
-        std::cout << ":" << e->getID() << e->getPosition() << ":"
-                  << e->getBBox() << std::endl << std::flush;
-        renderer.draw3DBox(e->getPosition(), e->getBBox());
-        doEntity(e);
-    }
-}
-#endif
-
 void IsoClient::doWorld()
 {
     if ((world == NULL) || (!inGame)) {
@@ -86,19 +71,6 @@ void IsoClient::doWorld()
         return;
     }
     renderer.drawWorld(root);
-#if 0
-    const World::edict & ents = world.getWorld();
-
-    World::edict::const_iterator I;
-    for (I = ents.begin(); I != ents.end(); I++) {
-        std::cout << ":" << I->first << I->second->getPos() << ":"
-                  << I->second->getBbox() << I->second->getBmedian()
-                  << std::endl << std::flush;
-        renderer.draw3DBox(I->second->getXyz(),
-                           I->second->getBbox(),
-                           I->second->getBmedian());
-    }
-#endif
 }
 
 bool IsoClient::update(float secs)
@@ -121,7 +93,6 @@ bool IsoClient::update(float secs)
     renderer.lightOff();
     renderer.drawGui();
     gui->draw();
-    // renderer.draw2Dtest();
     renderer.flip();
     return false;
 }

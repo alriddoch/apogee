@@ -8,7 +8,9 @@
 class Tile;
 class HeightMap;
 
-class CoalDatabase;
+namespace Coal {
+  class Container;
+}
 
 #include <map>
 
@@ -30,7 +32,7 @@ class TileMap {
         return NULL;
     }
 
-    void build(CoalDatabase & map_base);
+    void build(Coal::Container & map_base);
     void draw(HeightMap & map_height, int, int);
 };
 

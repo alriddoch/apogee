@@ -32,8 +32,8 @@ IxClient::~IxClient()
 
 bool IxClient::setup()
 {
-    CoalIsoLoader loader(map_database);
-    loader.LoadMap("moraf.map");
+    Coal::IsoLoader loader;
+    loader.loadMap("moraf.map", &map_database);
 
     map_height.load("moraf_hm.png");
 
@@ -63,27 +63,7 @@ void IxClient::doWorld()
         cout << "No root" << endl << flush;
         return;
     }
-    int numEnts = root->getNumMembers();
-    cout << numEnts << " root" << endl << flush;
-    for (int i = 0; i < numEnts; i++) {
-        Eris::Entity * ent = root->getMember(i);
-        //std::cout << ":" << ent->getID() << ent->getPosition() << ":"
-                  //<< ent->getBBox().v << std::endl << std::flush;
-        renderer.draw3DBox(ent->getPosition(), ent->getBBox());
-    }
-#if 0
-    const World::edict & ents = world.getWorld();
-
-    World::edict::const_iterator I;
-    for (I = ents.begin(); I != ents.end(); I++) {
-        std::cout << ":" << I->first << I->second->getPos() << ":"
-                  << I->second->getBbox() << I->second->getBmedian()
-                  << std::endl << std::flush;
-        renderer.draw3DBox(I->second->getXyz(),
-                           I->second->getBbox(),
-                           I->second->getBmedian());
-    }
-#endif
+    renderer.drawWorld(root);
 }
 
 bool IxClient::update(float secs)

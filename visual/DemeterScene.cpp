@@ -2,18 +2,16 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include <coal/database.h>
-
-#include <iostream>
-
-#include <SDL_image.h>
-
 #include "DemeterScene.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
 #include "Matrix.h"
 #include "TileMap.h"
+
+#include <SDL_image.h>
+
+#include <iostream>
 
 const float PI = 3.14159f;
 const float FOG_RED = 0.5f;
@@ -259,7 +257,7 @@ void DemeterScene::draw3DBox(const Point3D & coords,
     glPopMatrix();
 }
 
-void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
+void DemeterScene::drawMap(Coal::Container & map_base, HeightMap & map_height)
 {
     if (tilemap == NULL) {
         tilemap = new TileMap();

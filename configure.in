@@ -63,9 +63,9 @@ AC_CHECK_LIB(cal3d,main)
 AC_CHECK_LIB(wfmath,main)
 AC_CHECK_LIB(eris,main)
 AC_CHECK_LIB(Demeter,main)
-AC_CHECK_LIB(ccxx,main)
-AC_CHECK_LIB(ccstd,main)
-AC_CHECK_LIB(ccio,main)
+AC_CHECK_LIB(plibul,main)
+AC_CHECK_LIB(plibfnt,main)
+AC_CHECK_LIB(plibpu,main)
 
 dnl Generate files
 AC_OUTPUT([

@@ -2,18 +2,16 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include <coal/database.h>
-
-#include <iostream>
-
-#include <SDL_image.h>
-
 #include "Renderer.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
 
+#include <SDL_image.h>
+
 #include <GL/glu.h>
+
+#include <iostream>
 
 Renderer * Renderer::instance = NULL;
 

@@ -5,13 +5,13 @@
 #ifndef APOGEE_IXCLIENT_H
 #define APOGEE_IXCLIENT_H
 
-#include <coal/bladeloader.h>
+#include "GameClient.h"
 
 #include <visual/HeightMap.h>
 
-#include <string>
+#include <coal/container.h>
 
-#include "GameClient.h"
+#include <string>
 
 class Sprite;
 class Model;
@@ -21,7 +21,7 @@ class IxClient : public GameClient {
   private:
     void doWorld();
 
-    CoalDatabase map_database;
+    Coal::Container map_database;
     HeightMap map_height;
     Compass * compassWidget;
 

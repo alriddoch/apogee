@@ -4,20 +4,28 @@
 
 #include "Gui.h"
 
-#include <visual/Sprite.h>
-#include <visual/Renderer.h>
-
-#include <GL/glu.h>
-
 #include "Alert.h"
 #include "Dialogue.h"
 #include "Item.h"
 #include "Compass.h"
 
+#include <visual/Sprite.h>
+#include <visual/Renderer.h>
+
+#include <plib/pu.h>
+
+#include <GL/glu.h>
+
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {
 
 }
+
+void button_cb ( puObject * )
+{
+  fprintf ( stderr, "Hello World.\n" ) ;
+}
+
 
 bool Gui::setup()
 {
@@ -28,6 +36,17 @@ bool Gui::setup()
     // Widget * w = new Alert(*this, 500, 60, "This program is currently under test");
     // w->setup();
     // widgets[newName()] = w;
+
+    puInit();
+
+    puSetDefaultStyle ( PUSTYLE_SMALL_SHADED ) ;                           
+    puSetDefaultFonts ( PUFONT_HELVETICA_10, PUFONT_HELVETICA_10 ) ;
+
+
+    puSetWindowSize(renderer.getWidth(), renderer.getHeight());
+
+    puOneShot *b = new puOneShot(50, 50, 200, 80);
+    b->setLegend("Say Hello");
 
     textTexture = Texture::get("font.png");
     if (textTexture == -1) {
@@ -79,6 +98,9 @@ void Gui::draw()
         w.draw();
         glTranslated(-w.x(),-w.y(),0.1f);
     }
+
+    puDisplay () ;
+
 }
 
 GLint Gui::select(int x, int y)

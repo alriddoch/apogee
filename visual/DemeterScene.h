@@ -49,7 +49,7 @@ class DemeterScene : public Renderer {
                             const Vector3D & bmedian = Vector3D()) { }
     void drawEntity(Eris::Entity * ent) { }
     void drawWorld(Eris::Entity * wrld) { }
-    void drawMap(CoalDatabase &, HeightMap &);
+    void drawMap(Coal::Container &, HeightMap &);
     void drawGui();
     void resize(int,int);
     void clear();

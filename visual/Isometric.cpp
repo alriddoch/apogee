@@ -2,16 +2,6 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include <coal/database.h>
-#include <coal/region.h>
-
-#include <Eris/Entity.h>
-#include <Eris/TypeInfo.h>
-
-#include <iostream>
-
-#include <SDL_image.h>
-
 #include "Isometric.h"
 #include "HeightMap.h"
 #include "Texture.h"
@@ -23,6 +13,13 @@
 #include <app/WorldEntity.h>
 
 #include <common/debug.h>
+
+#include <Eris/Entity.h>
+#include <Eris/TypeInfo.h>
+
+#include <SDL_image.h>
+
+#include <iostream>
 
 static const bool debug_flag = false;
 
@@ -53,6 +50,11 @@ void Isometric::init()
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
     model->setLodLevel(1.0f);
+
+    int textureUnits = -23;
+    glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, &textureUnits);
+    std::cout << "TEXTURE UNITS AVAILABLE: " << textureUnits
+              << std::endl << std::flush;
 }
 
 void Isometric::update(float secs)
@@ -149,8 +151,14 @@ void Isometric::drawCal3DModel(Model * m, const Point3D & coords,
     glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
-    Eris::Quaternion(orientation).asMatrix(orient);
-    float omatrix[16];
+    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            orient[i][j] = omatrix.elem(i,j);
+        }
+    }
+    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
+    orient[3][3] = 1.0f;
     glMultMatrixf(&orient[0][0]);
     glScalef(0.025f, 0.025f, 0.025f);
     m->onRender();
@@ -301,13 +309,13 @@ void Isometric::drawWorld(Eris::Entity * wrld)
     drawEntity(wrld);
 }
 
-void Isometric::buildTileMap(CoalDatabase & map_base)
+void Isometric::buildTileMap(Coal::Container & map_base)
 {
     tilemap = new TileMap();
     tilemap->build(map_base);
 }
 
-void Isometric::drawMap(CoalDatabase & map_base, HeightMap & map_height)
+void Isometric::drawMap(Coal::Container & map_base, HeightMap & map_height)
 {
     if (tilemap == NULL) {
         buildTileMap(map_base);

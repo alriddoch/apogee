@@ -1,3 +1,23 @@
+2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/IsoClient.cpp, app/IsoClient.h, app/IxClient.cpp,
+	  app/IxClient.h, visual/DemeterScene.cpp, visual/DemeterScene.h,
+	  visual/Isometric.cpp, visual/Isometric.h, visual/Renderer.cpp,
+	  visual/Renderer.h, visual/TileMap.cpp, visual/TileMap.h:
+	  Catch up with latest devel coal.
+
+	* app/IsoClient.cpp, app/IxClient.cpp, app/IxClient.h,
+	  visual/Isometric.cpp: Remove old obsolete code, and remove
+	  unnecessary differences between the two clients.
+
+	* gui/Gui.cpp: Experiment with plib ui code.
+
+	* visual/HeightMap.cpp, visual/HeightMap.h: Switch to using libpng
+	  for heightmap data loading.
+
+	* visual/Isometric.cpp: Re-write rotation matrix code to use wfmath
+	  types instead of Eris types.
+
 2002-04-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/perigee.cpp, app/apogee.cpp: Updated for latest eris
