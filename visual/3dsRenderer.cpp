@@ -36,8 +36,8 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     float * points = new float[3 * mesh->points];
     float * normals = new float[3 * mesh->points];
     float * texcoords = new float[2 * mesh->points];
-    unsigned * indices = new unsigned[3 * mesh->faces];
-    unsigned * iptr = indices - 1;
+    GLushort * indices = new GLushort[3 * mesh->faces];
+    GLushort * iptr = indices - 1;
     // lib3ds_mesh_calculate_normals(mesh, normalL);
 
     for (unsigned p = 0; p < mesh->points; ++p) {
@@ -49,7 +49,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
     for (unsigned p = 0; p < mesh->faces; ++p) {
       Lib3dsFace * f = &mesh->faceL[p];
       for (unsigned i = 0; i < 3; ++i) {
-        unsigned idx = f->points[i];
+        GLushort idx = f->points[i];
         memcpy(&normals[idx * 3], f->normal, sizeof(Lib3dsVector));
         *++iptr = idx;
       }
@@ -82,7 +82,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
                       << std::endl << std::flush;
             mat = m;
             std::cout << "DRAW " << p << ": " << begin << std::endl << std::flush;
-            glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_INT,
+            glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
                            &indices[begin * 3]);
             begin = p;
             glMaterialfv(GL_FRONT, GL_AMBIENT, mat->ambient);
@@ -106,7 +106,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
         } else {
           mat = 0;
           std::cout << "NDRAW " << p << ": " << begin << std::endl << std::flush;
-          glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_INT,
+          glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_SHORT,
                          &indices[begin * 3]);
           begin = p;
           static const Lib3dsRgba a = {0.2f, 0.2f, 0.2f, 1.0f};
@@ -120,7 +120,7 @@ void m3dsRenderer::compileVertexBuffer(Lib3dsMesh *mesh, VertexBuffer * vb)
       }
 
     }
-    glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3, GL_UNSIGNED_INT,
+    glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3, GL_UNSIGNED_SHORT,
                          &indices[begin * 3]);
     std::cout << "FDRAW " << mesh->faces << ": " << begin << std::endl << std::flush;
     glDisable(GL_TEXTURE_2D);
