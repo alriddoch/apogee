@@ -4,7 +4,7 @@
 
 #include <visual/DemeterScene.h>
 // #include <net/Connection.h>
-#include "Editor.h"
+#include "IxClient.h"
 //#include "Client.h"
 
 // #include <world/World.h>
@@ -36,13 +36,13 @@ int main(int argc, char ** argv)
     Eris::Connection & con = * new Eris::Connection("perigee");
 
     Renderer * renderer = DemeterScene::Instance();
-    Editor * app = new Editor(*renderer, con);
+    IxClient * app = new IxClient(*renderer, con);
 
     con.connect(host, 6767);
 
-    con.Failure.connect(SigC::slot(app, &Editor::netFailure));
-    con.Connected.connect(SigC::slot(app, &Editor::netConnected));
-    con.Disconnected.connect(SigC::slot(app, &Editor::netDisconnected));
+    con.Failure.connect(SigC::slot(app, &IxClient::netFailure));
+    con.Connected.connect(SigC::slot(app, &IxClient::netConnected));
+    con.Disconnected.connect(SigC::slot(app, &IxClient::netDisconnected));
 
     app->setup();
     app->update();
@@ -84,17 +84,8 @@ int main(int argc, char ** argv)
         }
         int dx, dy;
         SDL_GetRelativeMouseState(&dx, &dy);
-        cout << "[" << dx << ":" << dy << endl << flush;
         if ((dx != 0) && (dy != 0)) {
-            int newRot = renderer->getRotation() + dx;
-            while (newRot >= 360) { newRot -= 360; };
-            renderer->setRotation(newRot);
-
-            int newElv = renderer->getElevation() + dy;
-            if (newElv < -90) { newElv = -90; }
-            if (newElv > 90) { newElv = 90; }
-            renderer->setElevation(newElv);
-
+            app->mouse(dx, dy);
             updated = true;
         }
 

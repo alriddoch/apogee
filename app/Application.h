@@ -20,6 +20,7 @@ class Application : public SigC::Object {
     virtual bool setup() { return 0; };
     virtual bool update() = 0;
     virtual bool event(SDL_Event &) = 0;
+    virtual void mouse(int,int) = 0;
 };
 
 #endif // APOGEE_APPLICATION_H

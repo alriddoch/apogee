@@ -11,7 +11,7 @@ apogee_LDADD = ../visual/libvisual.a ../gui/libgui.a
 
 perigee_SOURCES = \
                  Application.h \
-                 Editor.cpp Editor.h \
+                 IxClient.cpp IxClient.h \
                  perigee.cpp
 
 perigee_LDADD = ../visual/libvisual.a ../gui/libgui.a

@@ -72,5 +72,6 @@ dnl Generate files
 AC_OUTPUT([
 	Makefile
 	visual/Makefile
+	gui/Makefile
 	app/Makefile
 ])

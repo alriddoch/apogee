@@ -2,7 +2,7 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include "Editor.h"
+#include "IxClient.h"
 
 #include <visual/Renderer.h>
 #include <visual/Sprite.h>
@@ -28,22 +28,22 @@ using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
-void Editor::grid()
+void IxClient::grid()
 {
     widgets::grid(renderer);
 }
 
-void Editor::compass()
+void IxClient::compass()
 {
     widgets::compass(renderer);
 }
 
-void Editor::axis()
+void IxClient::axis()
 {
     widgets::axis(renderer);
 }
 
-bool Editor::setup()
+bool IxClient::setup()
 {
     CoalBladeLoader loader (map_database);
     loader.LoadMap ("blade2.xml");
@@ -59,7 +59,7 @@ bool Editor::setup()
     return 0;
 }
 
-void Editor::doWorld()
+void IxClient::doWorld()
 {
     if (world == NULL) {
         cout << "No world" << endl << flush;
@@ -93,7 +93,7 @@ void Editor::doWorld()
 #endif
 }
 
-bool Editor::update()
+bool IxClient::update()
 {
     renderer.clear();
     renderer.lightOn();
@@ -111,7 +111,7 @@ bool Editor::update()
     return false;
 }
 
-bool Editor::event(SDL_Event & event)
+bool IxClient::event(SDL_Event & event)
 {
     static int oldx = 0;
     static int oldy = 0;
@@ -163,7 +163,7 @@ bool Editor::event(SDL_Event & event)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
                 case SDLK_0:
-                    renderer.setElevation(30);
+                    renderer.setElevation(0);
                     renderer.setRotation(45);
                     return true;
                     break;
@@ -189,7 +189,7 @@ bool Editor::event(SDL_Event & event)
     return false;
 }
 
-void Editor::mouse(int dx, int dy)
+void IxClient::mouse(int dx, int dy)
 {
     int newRot = renderer.getRotation() + dx;
     while (newRot >= 360) { newRot -= 360; };
@@ -201,12 +201,12 @@ void Editor::mouse(int dx, int dy)
     renderer.setElevation(newElv);
 }
 
-void Editor::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
+void IxClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
 {
     std::cout << "TALK: " << t << std::endl << std::flush;
 }
 
-void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
+void IxClient::loginComplete(const Atlas::Objects::Entity::Player &p)
 {
     std::cout << "Logged in" << std::endl << std::flush;
 
@@ -217,43 +217,43 @@ void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
     chrcter.SetAttr("sex", "female");
     world = player->createCharacter(chrcter);
 
-    lobby->Talk.connect(SigC::slot(this, &Editor::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this, &Editor::roomEnter));
+    lobby->Talk.connect(SigC::slot(this, &IxClient::lobbyTalk));
+    lobby->Entered.connect(SigC::slot(this, &IxClient::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(this, &Editor::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this, &Editor::worldEnter));
+    world->EntityCreate.connect(SigC::slot(this, &IxClient::worldEntityCreate));
+    world->Entered.connect(SigC::slot(this, &IxClient::worldEnter));
 }
 
-void Editor::roomEnter(Eris::Room *r)
+void IxClient::roomEnter(Eris::Room *r)
 {
     std::cout << "Enter room" << std::endl << std::flush;
 }
 
-void Editor::netFailure(std::string msg)
+void IxClient::netFailure(std::string msg)
 {
     std::cout << "Got connection failure: " << msg << std::endl << std::flush;
 }
 
-void Editor::netConnected()
+void IxClient::netConnected()
 {
     std::cout << "Connected to server!" << std::endl << std::flush;
 
     player = new Eris::Player();
     lobby = player->login(&connection, "ajr", "hel");
-    lobby->LoggedIn.connect(SigC::slot(this, &Editor::loginComplete));
+    lobby->LoggedIn.connect(SigC::slot(this, &IxClient::loginComplete));
 }
 
-void Editor::netDisconnected()
+void IxClient::netDisconnected()
 {
     std::cout << "Disconnected from the server" << std::endl << std::flush;
 }
 
-void Editor::worldEntityCreate(Eris::Entity *r)
+void IxClient::worldEntityCreate(Eris::Entity *r)
 {
     std::cout << "Created character" << std::endl << std::flush;
 }
 
-void Editor::worldEnter(Eris::Entity *r)
+void IxClient::worldEnter(Eris::Entity *r)
 {
     std::cout << "Enter world" << std::endl << std::flush;
 }

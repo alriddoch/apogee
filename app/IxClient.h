@@ -28,7 +28,7 @@ namespace Eris {
  class Entity;
 }
 
-class Editor: public Application {
+class IxClient: public Application {
   private:
     void grid();
     void doWorld();
@@ -40,13 +40,13 @@ class Editor: public Application {
     Model * model;
     Eris::Connection & connection;
   public:
-    Editor(Renderer & rend, Eris::Connection & con) : Application(rend),
+    IxClient(Renderer & rend, Eris::Connection & con) : Application(rend),
                                                       character(NULL),
                                                       connection(con),
                                                       player(NULL),
                                                       lobby(NULL),
                                                       world(NULL) { }
-    virtual ~Editor() { }
+    virtual ~IxClient() { }
 
     bool setup();
     bool update();

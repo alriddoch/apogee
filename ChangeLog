@@ -1,5 +1,13 @@
 2001-09-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/IxClient.h, app/IxClient.cpp, app/perigee.cpp:
+	  Created new Client application class for perspective client.
+
+	* app/perigee.cpp, app/IxClient.cpp: Moved handling of mouse
+	  movement into an application method.
+
+2001-09-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/perigee.cpp, visual/DemeterScene.cpp: Grab mouse cursor, and
 	  make mouse control view directly.
 

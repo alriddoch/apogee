@@ -51,6 +51,7 @@ class IsoClient: public Application {
     bool setup();
     bool update();
     bool event(SDL_Event &);
+    void mouse(int,int) { }
 
     void netConnected();
     void netFailure(std::string msg);
