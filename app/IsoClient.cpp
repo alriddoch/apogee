@@ -145,8 +145,8 @@ bool IsoClient::event(SDL_Event & event)
 {
     static int oldx = 0;
     static int oldy = 0;
-    static int oldRot = 0;
-    static int oldElv = 0;
+    static float oldRot = 0;
+    static float oldElv = 0;
     static float oldScl = 0;
     switch(event.type) {
         case SDL_MOUSEMOTION:
@@ -155,14 +155,14 @@ bool IsoClient::event(SDL_Event & event)
                 //int h = renderer.getHeight();
                 const int x = event.motion.x;
                 const int y = event.motion.y;
-                int newRot = ((x - oldx) * 360) / renderer.getWidth();
+                float newRot = ((x - oldx) * 360.0) / renderer.getWidth();
                 if (oldy > renderer.getHeight()/2) {
                     newRot = oldRot + newRot;
                 } else {
                     newRot = oldRot - newRot;
                 }
                 while (newRot >= 360) { newRot -= 360; };
-                int newElv = ((y - oldy) * 90) / renderer.getHeight();
+                float newElv = ((y - oldy) * 90.0) / renderer.getHeight();
                 newElv = oldElv + newElv;
                 if (newElv < 0) { newElv = 0; }
                 if (newElv > 90) { newElv = 90; }
@@ -205,8 +205,8 @@ bool IsoClient::event(SDL_Event & event)
         case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
                 case SDLK_0:
-                    renderer.setElevation(30);
-                    renderer.setRotation(45);
+                    renderer.setElevation(30.0);
+                    renderer.setRotation(45.0);
                     return true;
                     break;
                 case SDLK_UP:

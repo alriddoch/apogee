@@ -38,7 +38,7 @@ class Renderer {
 
     struct SDL_Surface * screen;
     int width, height;
-    int elevation, rotation;
+    float elevation, rotation;
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
   public:
@@ -66,11 +66,11 @@ class Renderer {
 
     int getHeight() { return height; }
 
-    int setRotation(int rot) { int tmp=rotation; rotation = rot; return tmp; }
-    int getRotation() { return rotation; }
+    float setRotation(float rot) { float tmp=rotation; rotation = rot; return tmp; }
+    float getRotation() { return rotation; }
 
-    int setElevation(int elv) {int tmp=elevation; elevation = elv; return tmp; }
-    int getElevation() { return elevation; }
+    float setElevation(float elv) {float tmp=elevation; elevation = elv; return tmp; }
+    float getElevation() { return elevation; }
 
     float setScale(float scl) {float tmp=scale; scale = scl; return tmp; }
     float getScale() { return scale; }
