@@ -1,3 +1,10 @@
+2003-01-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/GL.h, visual/Isometric.cpp, app/IsoClient.cpp,
+	  visual/Isometric.h, visual/Model.cpp:
+	  Detect and make use of GL_EXT_compiled_vertex_array
+	  when drawing cal3d meshes.
+
 2003-01-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp, app/IsoClient.cpp, app/IxClient.cpp,

@@ -2,6 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#include "GL.h"
+
 #include "Isometric.h"
 #include "HeightMap.h"
 #include "Texture.h"
@@ -30,10 +32,18 @@
 
 #include <iostream>
 
+#ifndef GL_EXT_compiled_vertex_array
+PFNGLLOCKARRAYSEXTPROC glLockArraysExt = 0;
+PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysExt = 0;
+#endif // GL_EXT_compiled_vertex_array
+
 static const bool debug_flag = false;
+
+bool have_GL_EXT_compiled_vertex_array = false;
 
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght),
+                                           frameCount(0), time(0), lastCount(0),
                                            tilemap(NULL), charType(NULL),
                                            treemodel(NULL), treemodel_list(0)
 {
@@ -55,6 +65,22 @@ void Isometric::init()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     this->shapeView();
+
+    std::string extensions = (char *)glGetString(GL_EXTENSIONS);
+
+    std::cout << "EXTENSIONS: " << extensions << std::endl << std::flush;
+
+    if (extensions.find("GL_EXT_compiled_vertex_array") != std::string::npos) {
+        std::cout << "Found GL_EXT_compiled_vertex_array extension"
+                  << std::endl << std::flush;
+        have_GL_EXT_compiled_vertex_array = true;
+
+#ifndef GL_EXT_compiled_vertex_array
+        glLockArraysExt = (PFNGLLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glLockArraysExt");
+        glUnlockArraysExt = (PFNGLUNLOCKARRAYSEXTPROC)SDL_GL_GetProcAddress("glUnlockArraysExt");
+#endif // GL_EXT_compiled_vertex_array
+    }
+
 
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
@@ -186,6 +212,15 @@ void Isometric::draw3dsFile(Lib3dsFile * node)
 
 void Isometric::update(float secs)
 {
+    ++frameCount;
+    time += secs;
+    // std::cout << "SECS " << secs << ":" << lastCount << std::endl << std::flush;
+    if ((time - lastCount) > 1.f) {
+        std::cout << frameCount << " frames per second" << std::endl << std::flush;
+        lastCount = time;
+        frameCount = 0;
+    }
+
     model->onUpdate(secs);
 }
 

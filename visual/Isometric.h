@@ -23,6 +23,9 @@ class Isometric : public Renderer {
     TileMap * tilemap;
     Eris::TypeInfo * charType;
     float worldTime;
+    int frameCount;
+    float time;
+    float lastCount;
 
     void init();
     void shapeView();
