@@ -104,8 +104,8 @@ void Gui::draw()
             break;
         }
     }
-    glTranslatef(0.0f,0.0f,10.0f);
     glEnable(GL_BLEND);
+    glDisable(GL_DEPTH_TEST);
     I = widgets.begin();
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
@@ -115,6 +115,7 @@ void Gui::draw()
         w.draw();
         glPopMatrix();
     }
+    glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
 #if USE_PUI
@@ -147,6 +148,7 @@ GLint Gui::select(int x, int y)
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
         if (!w.visible()) { continue; }
+        glTranslatef(0.f, 0.f, 0.1f);
         glPushMatrix();
         glTranslatef(w.x() < 0 ? (renderer.getWidth() + w.x()) : w.x(), w.y(), 0.0f);
         glLoadName(I->first);

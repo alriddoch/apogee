@@ -39,7 +39,6 @@ void CharSelector::draw()
     int i = 0;
     WFMath::Quaternion rot(1,0,0,0);
     for(I = charNames.begin(); I != charNames.end() && i < 7; ++I, ++i) {
-        std::cout << "Drawing " << I->second.first << std::endl << std::flush;
         glPushMatrix();
         glTranslatef(xoffset[i], yoffset[i], 0.0f);
         m_g.print(I->second.second.c_str());
@@ -48,7 +47,10 @@ void CharSelector::draw()
             glScalef(1.2f, 1.2f, 1.2f);
         }
         glRotatef(-90,1,0,0);
+        glPushAttrib(GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
         m_g.renderer.model->onRender();
+        glPopAttrib();
         glPopMatrix();
     }
 }
@@ -67,7 +69,6 @@ void CharSelector::select()
     std::map<GLuint, std::pair<std::string, std::string> >::const_iterator I;
     int i = 0;
     for(I = charNames.begin(); I != charNames.end() && i < 7; ++I, ++i) {
-        std::cout << "Drawing " << I->second.first << std::endl << std::flush;
         glPushMatrix();
         glTranslatef(xoffset[i], yoffset[i], 0.0f);
         glLoadName(I->first);

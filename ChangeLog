@@ -1,5 +1,10 @@
 2003-05-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Gui.cpp, gui/CharSelector.cpp: Disable depth test during gui
+	  render, to avoid interfering with game view.
+
+2003-05-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.h, app/GameClient.cpp: Allow creating new accounts
 	  if the login dialogue is cancelled.
 
