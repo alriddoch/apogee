@@ -5,7 +5,7 @@ AM_CONFIG_HEADER(config.h)
 
 dnl Initialise automake
 
-AM_INIT_AUTOMAKE(apogee, 0.0.0)
+AM_INIT_AUTOMAKE(apogee, 0.0.1)
 
 dnl Need libtool
 
@@ -60,6 +60,7 @@ AC_CHECK_LIB(coal,main)
 AC_CHECK_LIB(coalblade,main)
 AC_CHECK_LIB(coaliso,main)
 AC_CHECK_LIB(skstream,main)
+AC_CHECK_LIB(cal3d,main)
 
 dnl Generate files
 AC_OUTPUT([

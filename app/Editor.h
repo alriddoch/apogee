@@ -8,6 +8,7 @@
 #include "Application.h"
 
 class Sprite;
+class Model;
 
 class Editor: public Application {
   private:
@@ -18,6 +19,7 @@ class Editor: public Application {
 
     CoalDatabase map_database;
     Sprite * character;
+    Model * model;
   public:
     Editor(Renderer & rend, World & wrld) : Application(rend, wrld),
                                             character(NULL) { }

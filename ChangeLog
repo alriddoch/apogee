@@ -1,3 +1,12 @@
+2001-07-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Model.h, visual/Model.cpp: Added model class from cal3d
+	  demo app.
+
+	* visual/Renderer.h, visual/Renderer.cpp, app/Editor.h, app/Editor.cpp:
+	  Added code to draw an animated paladin model on the main view
+	  using cal3d.
+
 2001-07-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* net/Connection.h, net/Connection.cpp: Added Atlas connection

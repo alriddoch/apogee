@@ -6,6 +6,7 @@
 
 #include <visual/Renderer.h>
 #include <visual/Sprite.h>
+#include <visual/Model.h>
 
 #include <world/World.h>
 
@@ -112,6 +113,10 @@ bool Editor::setup()
     character = new Sprite();
     character->load("swinesherd_female_1_us_E_0.png");
 
+    model = new Model();
+    if (!model->onInit(Datapath() + "paladin.dat")) {
+        std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+    }
     return 0;
 }
 
@@ -133,10 +138,12 @@ void Editor::doWorld()
 bool Editor::update()
 {
     renderer.clear();
-    // renderer.drawMap(map_database);
+    renderer.drawMap(map_database);
     grid();
     // renderer.draw3Dentity();
     // renderer.drawCharacter(character, 1, 2);
+    model->onUpdate(0.1);
+    renderer.drawCal3DModel(model);
     doWorld();
     compass();
     axis();

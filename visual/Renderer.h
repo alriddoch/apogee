@@ -9,6 +9,7 @@
 #include <world/Vector3D.h>
 
 class Sprite;
+class Model;
 
 class RendererException { };
 
@@ -75,6 +76,7 @@ class Renderer {
     void draw3Dtest();
     void draw2Dtest();
     void draw3Dentity();
+    void drawCal3DModel(Model *);
     void draw3DBox(const Vector3D & coords,
                    const Vector3D & bbox = Vector3D(),
                    const Vector3D & bmedian = Vector3D());
@@ -83,6 +85,7 @@ class Renderer {
     void drawMapObject(CoalObject &);
     void drawMap(CoalDatabase &);
     void resize(int,int);
+    void viewScale(double);
     void viewPoint();
     void reorient();
     void orient();

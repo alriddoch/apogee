@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "Sprite.h"
+#include "Model.h"
 
 #include <world/Vector3D.h>
 
@@ -35,6 +36,16 @@ void Renderer::init()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     shapeView();
+}
+
+inline void Renderer::viewScale(double scale_factor)
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    double xscale = width * scale * scale_factor / meterSize;
+    double yscale = height * scale * scale_factor / meterSize;
+    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -20.0 * scale_factor, 20.0 * scale_factor );
+    glMatrixMode(GL_MODELVIEW);
 }
 
 inline void Renderer::viewPoint()
@@ -222,6 +233,13 @@ void Renderer::draw3Dentity()
     glTexCoord2f(1, 0); glVertex3f(5, 0, 4.8);
     glEnd();
     glDisable(GL_TEXTURE_2D);
+}
+
+void Renderer::drawCal3DModel(Model * m)
+{
+    viewScale(40);
+    m->onRender();
+    viewScale(1);
 }
 
 void Renderer::draw3DBox(const Vector3D & coords, const Vector3D & bbox,
