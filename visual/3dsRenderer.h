@@ -5,19 +5,30 @@
 #ifndef APOGEE_M3DS_RENDERER_H
 #define APOGEE_M3DS_RENDERER_H
 
+#include "GL.h"
+
 #include "EntityRenderer.h"
 
 #include <lib3ds/file.h>
 
 #include <string>
 
+#define BUF_VERTEX 0
+#define BUF_TCOORD 1
+#define BUF_NORMAL 2
+
+class VertexBuffer
+{
+  public:
+    float * buffers[3];
+    GLuint bobject;
+};
+
 class m3dsRenderer : public EntityRenderer
 {
   protected:
     Lib3dsFile * m_model;
-    unsigned long m_model_list;
 
-    void draw3dsModel();
     void draw3dsFile();
     void draw3dsNode(Lib3dsNode *);
   public:
