@@ -16,8 +16,6 @@ DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
 
     m_windowName = "perigee";
     m_iconName = "perspective";
-
-    init();
 }
 
 static const float maxViewDistance = 250.0f;

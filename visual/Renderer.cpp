@@ -56,12 +56,12 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::init()
+bool Renderer::init()
 {
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_NOPARACHUTE) != 0) { 
         std::cerr << "Failed to initialise video subsytem"
                   << std::endl << std::flush;
-        throw RendererSDLinit();
+        return false;
     }
 
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
@@ -127,6 +127,7 @@ void Renderer::init()
     std::cout << "DEPTH BITS AVAILABLE: " << depthbits
               << std::endl << std::flush;
 
+    return true;
 }
 
 void Renderer::shapeView()
@@ -140,7 +141,6 @@ void Renderer::shapeView()
     if ((screen = SDL_SetVideoMode(width, height, 0, flags)) == NULL) {
         std::cerr << "Failed to set video mode" << std::endl << std::flush;
         SDL_Quit();
-        throw RendererSDLinit();
     }
     SDL_WM_SetCaption(m_windowName, m_iconName);
 

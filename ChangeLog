@@ -1,5 +1,16 @@
 2003-10-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.h, visual/Renderer.cpp,
+	  visual/Isometric.cpp, visual/DemeterScene.cpp: Get rid of exception
+	  and recode renderer setup so it can return failure as an error
+	  code.
+
+	* app/perigee.cpp, app/apogee.cpp, app/GameClient.cpp: Move
+	  code to init() the renderer, and set up the Eris connection
+	  into a single place in the GameClient class.
+
+2003-10-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TileMap.h, visual/TileMap.cpp, visual/Tile.h,
 	  visual/Tile.cpp, visual/HeightMap.h, visual/HeightMap.cpp:
 	  Remove obsolete files from the build

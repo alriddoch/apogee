@@ -31,14 +31,13 @@ int main(int argc, char ** argv)
 
     IsoClient * app = new IsoClient(con);
 
-    con.Failure.connect(SigC::slot(*app, &IsoClient::netFailure));
-    con.Connected.connect(SigC::slot(*app, &IsoClient::netConnected));
-    con.Disconnected.connect(SigC::slot(*app, &IsoClient::netDisconnected));
-    Eris::Logged.connect(SigC::slot(*app, &IsoClient::connectionLog));
-
     Eris::setLogLevel(Eris::LOG_DEBUG);
 
-    app->setup();
+    if (!app->setup()) {
+        std::cerr << "Couldn't open display" << std::endl << std::flush;
+        return 1;
+    }
+
     app->update(0);
 
     bool done = false;

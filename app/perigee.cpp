@@ -26,11 +26,11 @@ int main(int argc, char ** argv)
 
     IxClient * app = new IxClient(con);
 
-    con.Failure.connect(SigC::slot(*app, &IxClient::netFailure));
-    con.Connected.connect(SigC::slot(*app, &IxClient::netConnected));
-    con.Disconnected.connect(SigC::slot(*app, &IxClient::netDisconnected));
+    if (!app->setup()) {
+        std::cerr << "Couldn't open display" << std::endl << std::flush;
+        return 1;
+    }
 
-    app->setup();
     app->update(0);
 
     bool done = false;

@@ -71,19 +71,14 @@ const Point3D operator+(const Point3D & lhs, const Point3D & rhs)
 
 bool GameClient::setup()
 {
-    // mterrain.setBasePoint(-1, -1, -8.f);
-    // mterrain.setBasePoint(-1, 0, -6.f);
-    // mterrain.setBasePoint(0, -1, -10.f);
-    // mterrain.setBasePoint(0, 0, 0.f);
-    // mterrain.setBasePoint(0, 1, 8.f);
-    // mterrain.setBasePoint(1, 0, 4.f);
-    // mterrain.setBasePoint(1, 1, 14.f);
-    // mterrain.setBasePoint(1, -1, -4.f);
-    // mterrain.setBasePoint(-1, 1, -4.f);
-    // mterrain.refresh(0, 0);
-    // mterrain.refresh(0, 1);
-    // mterrain.refresh(1, 0);
-    // mterrain.refresh(1, 1);
+    connection.Failure.connect(SigC::slot(*this, &GameClient::netFailure));
+    connection.Connected.connect(SigC::slot(*this, &GameClient::netConnected));
+    connection.Disconnected.connect(SigC::slot(*this, &GameClient::netDisconnected));
+    Eris::Logged.connect(SigC::slot(*this, &GameClient::connectionLog));
+
+    if (!renderer.init()) {
+        return false;
+    }
 
     gui = new Gui(renderer);
     gui->setup();
@@ -104,7 +99,7 @@ bool GameClient::setup()
 
     // gui->addWidget(new Console(*gui, 4, 4));
 
-    return 0;
+    return true;
 }
 
 void GameClient::doWorld()

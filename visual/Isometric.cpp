@@ -11,8 +11,6 @@ Isometric::Isometric(Application & app, int wdth, int hght) :
 {
     m_windowName = "apogee";
     m_iconName = "isometric";
-
-    init();
 }
 
 static const float maxViewDistance = 250.0f;

@@ -14,10 +14,6 @@
 class Model;
 class Application;
 
-class RendererException { };
-
-class RendererSDLinit : public RendererException { };
-
 namespace Eris {
   class Entity;
   class Quaternion;
@@ -34,8 +30,6 @@ class Renderer {
     static const float maxViewDistance = 250.0f;
 
     void shapeView();
-
-    void init();
 
     struct SDL_Surface * screen;
     SDL_Rect ** videoModes;
@@ -57,6 +51,8 @@ class Renderer {
     Model * model;
 
     virtual ~Renderer();
+
+    bool init();
 
     void flip() {
         SDL_GL_SwapBuffers();
