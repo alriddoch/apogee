@@ -4,6 +4,10 @@
 
 #include "WorldEntity.h"
 
+#include "Application.h"
+
+#include "visual/Cal3dRenderer.h"
+
 #include <Eris/World.h>
 #include <Eris/Connection.h>
 #include <Eris/TypeInfo.h>
@@ -46,7 +50,7 @@ TreeEntity::TreeEntity(const GameEntity &ge,
 {
 }
 
-WEFactory::WEFactory()
+WEFactory::WEFactory(Application & a) : m_app(a)
 {
 }
 
@@ -72,15 +76,20 @@ bool WEFactory::accept(const GameEntity&, Eris::World * w)
 Eris::EntityPtr WEFactory::instantiate(const GameEntity & ge,
                                        Eris::World * w)
 {
+    RenderableEntity * re = 0;
     Eris::TypeInfoPtr type = w->getConnection()->getTypeInfoEngine()->getSafe(ge);
     if (type->safeIsA(characterType)) {
-        return new CharacterEntity(ge,w);
+        re = new CharacterEntity(ge,w);
+        re->m_drawer = new Cal3dRenderer(m_app.renderer, *re);
+    } else if (type->safeIsA(terrainType)) {
+        re = new TerrainEntity(ge,w);
+    } else if (type->safeIsA(treeType)) {
+        re = new TreeEntity(ge,w);
+    } else {
+        re = new RenderableEntity(ge, w);
     }
-    if (type->safeIsA(terrainType)) {
-        return new TerrainEntity(ge,w);
+    if (re->m_drawer == 0) {
+        re->m_drawer = new BBoxRenderer(m_app.renderer, *re);
     }
-    if (type->safeIsA(treeType)) {
-        return new TreeEntity(ge,w);
-    }
-    return new RenderableEntity(ge, w);
+    return re;
 }

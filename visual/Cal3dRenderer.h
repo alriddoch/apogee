@@ -12,10 +12,12 @@ class Model;
 class Cal3dRenderer : public EntityRenderer
 {
   protected:
+    static Model * m_default;
+
     void drawCal3dModel(Model * m);
     void selectCal3dModel(Model * m);
   public:
-    Cal3dRenderer(Eris::Entity & e);
+    Cal3dRenderer(Renderer &, Eris::Entity & e);
     virtual ~Cal3dRenderer();
 
     virtual void render(Renderer &);

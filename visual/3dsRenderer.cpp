@@ -119,7 +119,7 @@ void m3dsRenderer::draw3dsModel()
 
 }
 
-m3dsRenderer::m3dsRenderer(Eris::Entity & e) : EntityRenderer(e)
+m3dsRenderer::m3dsRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
 {
 }
 

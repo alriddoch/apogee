@@ -58,6 +58,8 @@ class TreeEntity : public RenderableEntity
 
 };
 
+class Application;
+
 class WEFactory : public Eris::Factory
 {
   private:
@@ -65,7 +67,9 @@ class WEFactory : public Eris::Factory
     static Eris::TypeInfo * terrainType;
     static Eris::TypeInfo * treeType;
   public:
-    WEFactory();
+    Application & m_app;
+
+    explicit WEFactory(Application & a);
     
     virtual bool accept(const Atlas::Objects::Entity::GameEntity &, Eris::World *);
     virtual Eris::EntityPtr instantiate(const Atlas::Objects::Entity::GameEntity &, Eris::World *);

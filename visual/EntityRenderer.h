@@ -16,7 +16,7 @@ class EntityRenderer
   public:
     Eris::Entity & m_ent;
 
-    EntityRenderer(Eris::Entity & e);
+    EntityRenderer(Renderer &, Eris::Entity & e);
     virtual ~EntityRenderer();
 
     virtual void render(Renderer &) = 0;
@@ -33,7 +33,7 @@ class BBoxRenderer : public EntityRenderer
     void draw3DBox(const WFMath::AxisBox<3> & bbox);
     void select3DBox(const WFMath::AxisBox<3> & bbox);
   public:
-    BBoxRenderer(Eris::Entity & e);
+    BBoxRenderer(Renderer &, Eris::Entity & e);
     virtual ~BBoxRenderer();
 
     virtual void render(Renderer &);

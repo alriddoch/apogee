@@ -10,7 +10,7 @@
 
 #include <wfmath/axisbox.h>
 
-EntityRenderer::EntityRenderer(Eris::Entity & e) : m_ent(e)
+EntityRenderer::EntityRenderer(Renderer & r, Eris::Entity & e) : m_ent(e)
 {
 }
 
@@ -92,7 +92,7 @@ void BBoxRenderer::select3DBox(const WFMath::AxisBox<3> & bbox)
     }
 }
 
-BBoxRenderer::BBoxRenderer(Eris::Entity & e) : EntityRenderer(e)
+BBoxRenderer::BBoxRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
 {
 }
 

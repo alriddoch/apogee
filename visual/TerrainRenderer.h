@@ -20,7 +20,7 @@ class TerrainRenderer : public EntityRenderer
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
   public:
-    TerrainRenderer(Eris::Entity & e);
+    TerrainRenderer(Renderer &, Eris::Entity & e);
     virtual ~TerrainRenderer();
 
     virtual void render(Renderer &);

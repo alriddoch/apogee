@@ -6,6 +6,8 @@
 
 #include "Model.h"
 
+Model * Cal3dRenderer::m_default = 0;
+
 void Cal3dRenderer::drawCal3dModel(Model * m)
 {
     glPushMatrix();
@@ -24,8 +26,16 @@ void Cal3dRenderer::selectCal3dModel(Model * m)
     glPopMatrix();
 }
 
-Cal3dRenderer::Cal3dRenderer(Eris::Entity & e) : EntityRenderer(e)
+Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
 {
+    if (m_default == 0) {
+        m_default = new Model();
+        if (!m_default->onInit(Datapath() + "paladin.cfg")) {
+            std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+        }
+        m_default->setLodLevel(1.0f);
+        m_default->onUpdate(0);
+    }
 }
 
 Cal3dRenderer::~Cal3dRenderer()
@@ -34,8 +44,10 @@ Cal3dRenderer::~Cal3dRenderer()
 
 void Cal3dRenderer::render(Renderer &)
 {
+    drawCal3dModel(m_default);
 }
 
 void Cal3dRenderer::select(Renderer &)
 {
+    selectCal3dModel(m_default);
 }

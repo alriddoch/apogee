@@ -17,7 +17,7 @@ class m3dsRenderer : public EntityRenderer
 
     void draw3dsModel();
   public:
-    m3dsRenderer(Eris::Entity & e);
+    m3dsRenderer(Renderer &, Eris::Entity & e);
     virtual ~m3dsRenderer();
 
     virtual void render(Renderer &);

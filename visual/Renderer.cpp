@@ -5,6 +5,7 @@
 #include "GL.h"
 
 #include "Renderer.h"
+#include "EntityRenderer.h"
 #include "Texture.h"
 #include "Sprite.h"
 #include "Model.h"
@@ -446,14 +447,18 @@ void Renderer::drawEntity(Eris::Entity * ent)
         Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         glPushMatrix();
         glTranslatef(pos.x(), pos.y(), pos.z());
-        if (type->safeIsA(charType)) {
-            drawCal3DModel(model, e->getOrientation());
-        } else {
-            if (e->hasBBox()) {
-                draw3DBox(e->getBBox());
-            }
-            drawEntity(e);
+        RenderableEntity * re = dynamic_cast<RenderableEntity *>(e);
+        if (re != 0) {
+            re->m_drawer->render(*this);
         }
+        // if (type->safeIsA(charType)) {
+            // drawCal3DModel(model, e->getOrientation());
+        // } else {
+            // if (e->hasBBox()) {
+                // draw3DBox(e->getBBox());
+            // }
+            drawEntity(e);
+        // }
         glPopMatrix();
     }
 }

@@ -214,7 +214,7 @@ void GameClient::createCharacter(const std::string & name,
 
     world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
     world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    world->registerFactory(new WEFactory());
+    world->registerFactory(new WEFactory(*this));
 }
 
 void GameClient::takeCharacter(const std::string & chrcter)
@@ -228,7 +228,7 @@ void GameClient::takeCharacter(const std::string & chrcter)
 
     world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
     world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    world->registerFactory(new WEFactory());
+    world->registerFactory(new WEFactory(*this));
 }
 
 void GameClient::roomEnter(Eris::Room *r)

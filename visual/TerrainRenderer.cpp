@@ -105,8 +105,8 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
     }
 }
 
-TerrainRenderer::TerrainRenderer(Eris::Entity & e) :
-    EntityRenderer(e), m_numLineIndeces(0),
+TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
+    EntityRenderer(r, e), m_numLineIndeces(0),
     m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
     m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3])
 
