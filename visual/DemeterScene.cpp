@@ -59,7 +59,8 @@ void DemeterScene::init()
     const int maxNumVisibleTriangles = 40000;
 
     // terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
-    terrain = new Demeter::Terrain("LlanoElev.jpg", "LlanoTex.jpg", "grass.png", 30, 3, maxNumVisibleTriangles);
+    // terrain = new Demeter::Terrain("LlanoElev.jpg", "LlanoTex.jpg", "grass.png", 30, 3, maxNumVisibleTriangles);
+    terrain = new Demeter::Terrain("moraf_hm.jpg", "moraf.jpg", "grass.png", 0.78125, 1, maxNumVisibleTriangles);
     terrain->SetMaximumVisibleBlockSize(64);
     // terrain->SetCommonTextureRepeats(50.0f);
 
@@ -207,59 +208,6 @@ void DemeterScene::lightOff()
     // glDisable(GL_LIGHT0);
 }
 
-void DemeterScene::drawCharacter(Sprite * character, float x, float y)
-{
-    origin();
-    glTranslatef(x,y,0.0f);
-    reorient();
-    character->draw();
-}
-
-void DemeterScene::draw3Dentity()
-{
-    origin();
-    glTranslatef(4,4,0.0);
-    // Lets draw a building
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/buildings/wall_sandstone_red_1_orig.png"));
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS);
-
-    glNormal3f(0, -1, 0);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0, 0, 0);
-    glTexCoord2f(0, 1); glVertex3f(0, 0, 5);
-    glTexCoord2f(1, 1); glVertex3f(5, 0, 5);
-    glTexCoord2f(1, 0); glVertex3f(5, 0, 0);
-
-    glNormal3f(-1, 0, 0);
-    glTexCoord2f(0, 0); glVertex3f(0, 5, 0);
-    glTexCoord2f(0, 1); glVertex3f(0, 5, 5);
-    glTexCoord2f(1, 1); glVertex3f(0, 0, 5);
-    glTexCoord2f(1, 0); glVertex3f(0, 0, 0);
- 
-    glNormal3f(1, 0, 0);
-    glTexCoord2f(1, 0); glVertex3f(0, 5, 0);
-    glTexCoord2f(1, 1); glVertex3f(0, 5, 5);
-    glTexCoord2f(0, 1); glVertex3f(5, 5, 5);
-    glTexCoord2f(0, 0); glVertex3f(5, 5, 0);
- 
-    glNormal3f(0, 1, 0);
-    glTexCoord2f(1, 0); glVertex3f(5, 5, 0);
-    glTexCoord2f(1, 1); glVertex3f(5, 5, 5);
-    glTexCoord2f(0, 1); glVertex3f(5, 0, 5);
-    glTexCoord2f(0, 0); glVertex3f(5, 0, 0);
-
-    glEnd();
-    glBindTexture(GL_TEXTURE_2D, Texture::get("media/media-3d/collection-pegasus/textures_512x512/floor/wood_massiv_1_orig.png"));
-    glBegin(GL_QUADS);
-    glNormal3f(0, 0, 1);
-    glTexCoord2f(0, 0); glVertex3f(0, 0, 4.8);
-    glTexCoord2f(0, 1); glVertex3f(0, 5, 4.8);
-    glTexCoord2f(1, 1); glVertex3f(5, 5, 4.8);
-    glTexCoord2f(1, 0); glVertex3f(5, 0, 4.8);
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-}
-
 void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
                                   const WFMath::Quaternion & orientation)
 {
@@ -275,7 +223,6 @@ void DemeterScene::drawCal3DModel(Model * m, const Point3D & coords,
 void DemeterScene::draw3DBox(const Point3D & coords,
                              const WFMath::AxisBox<3> & bbox)
 {
-    lightOff();
 
     glPushMatrix();
     // origin();
@@ -364,7 +311,6 @@ void DemeterScene::draw3DBox(const Point3D & coords,
     //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
-    lightOn();
     glPopMatrix();
 }
 
@@ -382,7 +328,7 @@ void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
 
     tilemap->draw(map_height, x_offset, y_offset);
 
-#if 0
+#if 1
     cameraAngle.z = -rotation * PI / 180;
     cameraAngle.x = -elevation * PI / 180;
     cout << elevation << "}{" << cameraAngle.x << endl << flush;
@@ -414,7 +360,7 @@ void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
     const float threshold = 12.0f;
     terrain->SetDetailThreshold(threshold);
     terrain->ModelViewMatrixChanged();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     terrain->Render();
 
 #endif // 0

@@ -24,10 +24,12 @@ class IxClient : public GameClient {
     CoalDatabase map_database;
     HeightMap map_height;
     Compass * compassWidget;
+
+    bool terrain_detail;
+    bool terrain_over;
   public:
-    IxClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con)
-                                                        { }
-    virtual ~IxClient() { }
+    IxClient(Renderer & rend, Eris::Connection & con);
+    virtual ~IxClient();
 
     bool setup();
     bool update(float);

@@ -20,6 +20,16 @@
 
 using Atlas::Message::Object;
 
+IxClient::IxClient(Renderer & rend, Eris::Connection & con)
+                   : GameClient(rend, con),
+                     terrain_detail(true), terrain_over(false)
+{
+}
+
+IxClient::~IxClient()
+{
+}
+
 bool IxClient::setup()
 {
     CoalIsoLoader loader(map_database);
@@ -86,7 +96,7 @@ bool IxClient::update(float secs)
         renderer.setZoffset(offset.z());
     }
     renderer.clear();
-    renderer.lightOn();
+    // renderer.lightOn();
     renderer.drawMap(map_database, map_height);
     renderer.origin();
 
@@ -142,6 +152,12 @@ bool IxClient::event(SDL_Event & event)
                     break;
                 case SDLK_RIGHT:
                     renderer.setXoffset(renderer.getXoffset() + 1);
+                    break;
+                case SDLK_q:
+                    terrain_detail = terrain_detail ? false : true;
+                    break;
+                case SDLK_w:
+                    terrain_over = terrain_over ? false : true;
                     break;
                 default:
                     return false;
