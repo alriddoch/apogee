@@ -24,7 +24,7 @@
 // Class declaration                                                          //
 //----------------------------------------------------------------------------//
 
-class Model
+class Cal3dModel
 {
 // misc
 public:
@@ -49,8 +49,8 @@ protected:
 
 // constructors/destructor
 public:
-	Model();
-	virtual ~Model();
+	Cal3dModel();
+	virtual ~Cal3dModel();
 
 // member functions
 public:

@@ -9,16 +9,16 @@
 
 #include <string>
 
-class Model;
+class Cal3dModel;
 
 class Cal3dRenderer : public EntityRenderer
 {
   protected:
-    static Model * m_default;
-    Model * m_model;
+    static Cal3dModel * m_default;
+    Cal3dModel * m_model;
 
-    void drawCal3dModel(Model * m);
-    void selectCal3dModel(Model * m);
+    void drawCal3dModel(Cal3dModel * m);
+    void selectCal3dModel(Cal3dModel * m);
     void update(float);
   public:
     Cal3dRenderer(Renderer &, Eris::Entity & e);

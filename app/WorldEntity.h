@@ -12,6 +12,7 @@
 
 namespace Eris {
   class TypeInfo;
+  class TypeService;
 }
 
 class EntityRenderer;
@@ -86,7 +87,7 @@ class RendererFactory : public RenderFactory
     }
 };
 
-class Application;
+class Renderer;
 
 class WEFactory : public Eris::Factory
 {
@@ -99,9 +100,9 @@ class WEFactory : public Eris::Factory
 
     RendererMap m_renderFactories;
   public:
-    Application & m_app;
+    Renderer & m_renderer;
 
-    explicit WEFactory(Application & a);
+    explicit WEFactory(Eris::TypeService &, Renderer &);
     virtual ~WEFactory();
     
     virtual bool accept(const Atlas::Objects::Entity::GameEntity &, Eris::World *);

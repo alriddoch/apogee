@@ -11,7 +11,7 @@
 #include "common/system.h"
 
 DemeterScene::DemeterScene(Application & app, int wdth, int hght) :
-                                           Renderer(app, wdth, hght)
+                                           Renderer(wdth, hght)
 {
     elevation = 10;
     rotation = 45;

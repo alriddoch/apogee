@@ -173,7 +173,8 @@ void GameClient::connectWorldSignals()
 
     m_world->EntityCreate.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
     m_world->Entered.connect(SigC::slot(*this,&GameClient::worldEnter));
-    m_world->registerFactory(new WEFactory(*this));
+    m_world->registerFactory(new WEFactory(*connection.getTypeService(),
+                                           renderer));
 }
 
 void GameClient::createCharacter(const std::string & name,

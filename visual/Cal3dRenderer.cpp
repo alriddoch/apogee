@@ -11,9 +11,9 @@
 
 #include <sigc++/object_slot.h>
 
-Model * Cal3dRenderer::m_default = 0;
+Cal3dModel * Cal3dRenderer::m_default = 0;
 
-void Cal3dRenderer::drawCal3dModel(Model * m)
+void Cal3dRenderer::drawCal3dModel(Cal3dModel * m)
 {
     float scale = 0.008f / m->getRenderScale();
     glPushMatrix();
@@ -24,7 +24,7 @@ void Cal3dRenderer::drawCal3dModel(Model * m)
     glPopMatrix();
 }
 
-void Cal3dRenderer::selectCal3dModel(Model * m)
+void Cal3dRenderer::selectCal3dModel(Cal3dModel * m)
 {
     float scale = 0.008f / m->getRenderScale();
     glPushMatrix();
@@ -45,7 +45,7 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) :
 {
     m_drawContents = false;
     if (m_default == 0) {
-        m_default = new Model();
+        m_default = new Cal3dModel();
         if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/cally/cally.cfg")) {
             std::cerr << "Loading paladin model failed" << std::endl << std::flush;
         }
@@ -62,7 +62,7 @@ Cal3dRenderer::~Cal3dRenderer()
 
 void Cal3dRenderer::load(const std::string & file)
 {
-    Model * model = new Model();
+    Cal3dModel * model = new Cal3dModel();
     if (!model->onInit(getMediaPath() + "/" + file)) {
         std::cerr << "Loading cal3d model " << file << " failed"
                   << std::endl << std::flush;

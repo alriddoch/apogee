@@ -11,7 +11,6 @@
 #include "Model.h"
 
 #include <app/WorldEntity.h>
-#include <app/Application.h>
 
 #include <common/debug.h>
 #include <common/system.h>
@@ -31,8 +30,7 @@ static const float FOG_GREEN = 0.5f;
 static const float FOG_BLUE = 0.5f;
 static const float FOG_ALPHA = 0.0f;
 
-Renderer::Renderer(Application & app, int wdth, int hght) : 
-                                         screen(NULL),
+Renderer::Renderer(int wdth, int hght) : screen(NULL),
                                          width(wdth), height(hght),
                                          fullscreen(false),
                                          window_width(wdth),
@@ -42,8 +40,7 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
                                          z_offset(0),
                                          frameCount(0), time(0), lastCount(0),
                                          m_windowName("<default>"),
-                                         m_iconName("<default>"),
-                                         application(app)
+                                         m_iconName("<default>")
 {
 }
 
@@ -109,7 +106,7 @@ bool Renderer::init()
     std::cout << "DEPTH BITS AVAILABLE: " << depthbits
               << std::endl << std::flush;
 
-    model = new Model();
+    model = new Cal3dModel();
     if (!model->onInit(getMediaPath() + "/media/media_new/3d_skeletons/paladin/paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }

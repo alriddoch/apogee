@@ -4,8 +4,6 @@
 
 #include "WorldEntity.h"
 
-#include "Application.h"
-
 #include "visual/Cal3dRenderer.h"
 #include "visual/3dsRenderer.h"
 #include "visual/TerrainRenderer.h"
@@ -19,6 +17,8 @@
 #include <varconf/Config.h>
 
 #include <sigc++/object_slot.h>
+
+#include <SDL/SDL.h>
 
 #include <cassert>
 
@@ -79,15 +79,14 @@ RenderFactory::~RenderFactory()
 {
 }
 
-WEFactory::WEFactory(Application & a) : m_app(a)
+WEFactory::WEFactory(Eris::TypeService & ts, Renderer & r) : m_renderer(r)
 {
     const varconf::sec_map & cal3d_list = global_conf->getSection("cal3d");
-    Eris::TypeService * ts = a.connection.getTypeService();
     varconf::sec_map::const_iterator I = cal3d_list.begin();
     for(; I != cal3d_list.end(); ++I) {
         const std::string filename = I->second;
         RenderFactory * rf = new RendererFactory<Cal3dRenderer>(filename);
-        Eris::TypeInfo * ti = ts->getTypeByName(I->first);
+        Eris::TypeInfo * ti = ts.getTypeByName(I->first);
         assert(ti != 0);
         m_renderFactories.insert(std::make_pair(ti, rf));
     }
@@ -97,7 +96,7 @@ WEFactory::WEFactory(Application & a) : m_app(a)
     for(; I != m3ds_list.end(); ++I) {
         const std::string filename = I->second;
         RenderFactory * rf = new RendererFactory<m3dsRenderer>(filename);
-        Eris::TypeInfo * ti = ts->getTypeByName(I->first);
+        Eris::TypeInfo * ti = ts.getTypeByName(I->first);
         assert(ti != 0);
         m_renderFactories.insert(std::make_pair(ti, rf));
     }
@@ -139,7 +138,7 @@ Eris::EntityPtr WEFactory::instantiate(const GameEntity & ge, Eris::World * w)
         re = new AutonomousEntity(ge,w);
     } else if (type->safeIsA(terrainType)) {
         re = new TerrainEntity(ge,w);
-        re->m_drawer = new TerrainRenderer(m_app.renderer, *re);
+        re->m_drawer = new TerrainRenderer(m_renderer, *re);
     } else if (type->safeIsA(treeType)) {
         re = new TreeEntity(ge,w);
     } else {
@@ -148,10 +147,10 @@ Eris::EntityPtr WEFactory::instantiate(const GameEntity & ge, Eris::World * w)
     if (re->m_drawer == 0) {
         RendererMap::const_iterator I = m_renderFactories.find(type);
         if (I != m_renderFactories.end()) {
-            re->m_drawer = I->second->newRenderer(m_app.renderer, *re);
+            re->m_drawer = I->second->newRenderer(m_renderer, *re);
         } else {
             // FIXME Ascend the type tree to try and find a rough match?
-            re->m_drawer = new BBoxRenderer(m_app.renderer, *re);
+            re->m_drawer = new BBoxRenderer(m_renderer, *re);
         }
     }
     return re;

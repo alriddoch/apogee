@@ -7,7 +7,7 @@
 #include "Isometric.h"
 
 Isometric::Isometric(Application & app, int wdth, int hght) :
-                                           Renderer(app, wdth, hght)
+                                           Renderer(wdth, hght)
 {
     m_windowName = "apogee";
     m_iconName = "isometric";

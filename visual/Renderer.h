@@ -15,7 +15,7 @@
 
 #include <map>
 
-class Model;
+class Cal3dModel;
 class Application;
 class RenderableEntity;
 
@@ -29,7 +29,7 @@ class Renderer {
   public:
     typedef std::map<GLuint, Eris::Entity *> SelectMap;
   protected:
-    Renderer(Application & app, int wdth, int hght);
+    Renderer(int wdth, int hght);
 
     static const float maxViewDistance = 250.0f;
 
@@ -51,8 +51,7 @@ class Renderer {
     char * m_iconName;
 
   public:
-    Application & application;
-    Model * model;
+    Cal3dModel * model;
 
     virtual ~Renderer();
 

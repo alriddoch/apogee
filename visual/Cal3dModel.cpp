@@ -25,15 +25,15 @@
 // Static member variables initialization                                     //
 //----------------------------------------------------------------------------//
 
-const int Model::STATE_IDLE = 0;
-const int Model::STATE_FANCY = 1;
-const int Model::STATE_MOTION = 2;
+const int Cal3dModel::STATE_IDLE = 0;
+const int Cal3dModel::STATE_FANCY = 1;
+const int Cal3dModel::STATE_MOTION = 2;
 
 //----------------------------------------------------------------------------//
 // Constructors                                                               //
 //----------------------------------------------------------------------------//
 
-Model::Model()
+Cal3dModel::Cal3dModel()
 {
   m_state = STATE_IDLE;
   m_motionBlend[0] = 0.6f;
@@ -49,7 +49,7 @@ Model::Model()
 // Destructor                                                                 //
 //----------------------------------------------------------------------------//
 
-Model::~Model()
+Cal3dModel::~Cal3dModel()
 {
 }
 
@@ -57,7 +57,7 @@ Model::~Model()
 // Execute an action of the model                                             //
 //----------------------------------------------------------------------------//
 
-void Model::executeAction(int action)
+void Cal3dModel::executeAction(int action)
 {
   switch(action)
   {
@@ -74,7 +74,7 @@ void Model::executeAction(int action)
 // Get the lod level of the model                                             //
 //----------------------------------------------------------------------------//
 
-float Model::getLodLevel()
+float Cal3dModel::getLodLevel()
 {
   return m_lodLevel;
 }
@@ -83,7 +83,7 @@ float Model::getLodLevel()
 // Get the motion blend factors state of the model                            //
 //----------------------------------------------------------------------------//
 
-void Model::getMotionBlend(float *pMotionBlend)
+void Cal3dModel::getMotionBlend(float *pMotionBlend)
 {
   pMotionBlend[0] = m_motionBlend[0];
   pMotionBlend[1] = m_motionBlend[1];
@@ -94,7 +94,7 @@ void Model::getMotionBlend(float *pMotionBlend)
 // Get the render scale of the model                                          //
 //----------------------------------------------------------------------------//
 
-float Model::getRenderScale()
+float Cal3dModel::getRenderScale()
 {
   return m_renderScale;
 }
@@ -103,7 +103,7 @@ float Model::getRenderScale()
 // Get the animation state of the model                                       //
 //----------------------------------------------------------------------------//
 
-int Model::getState()
+int Cal3dModel::getState()
 {
   return m_state;
 }
@@ -112,7 +112,7 @@ int Model::getState()
 // Load and create a texture from a given file                                //
 //----------------------------------------------------------------------------//
 
-GLuint Model::loadTexture(const std::string& strFilename)
+GLuint Cal3dModel::loadTexture(const std::string& strFilename)
 {
   GLuint texture = Texture::get(strFilename, false, GL_LINEAR_MIPMAP_NEAREST);
   if (texture != Texture::getDefault()) {
@@ -181,7 +181,7 @@ GLuint Model::loadTexture(const std::string& strFilename)
 // Initialize the model                                                       //
 //----------------------------------------------------------------------------//
 
-bool Model::onInit(const std::string& strFilename)
+bool Cal3dModel::onInit(const std::string& strFilename)
 {
   // open the model configuration file
   std::ifstream file;
@@ -421,7 +421,7 @@ bool Model::onInit(const std::string& strFilename)
 // Render the skeleton of the model                                           //
 //----------------------------------------------------------------------------//
 
-void Model::renderSkeleton()
+void Cal3dModel::renderSkeleton()
 {
   // draw the bone lines
   float lines[1024][2][3];
@@ -463,7 +463,7 @@ void Model::renderSkeleton()
 // Render the mesh of the model                                               //
 //----------------------------------------------------------------------------//
 
-void Model::renderMesh(bool bWireframe, bool bLight)
+void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
 {
   // get the renderer of the model
   CalRenderer *pCalRenderer;
@@ -632,7 +632,7 @@ glEnd();
   pCalRenderer->endRendering();
 }
 
-void Model::selectMesh()
+void Cal3dModel::selectMesh()
 {
   // get the renderer of the model
   CalRenderer *pCalRenderer;
@@ -691,7 +691,7 @@ void Model::selectMesh()
 // Render the model                                                           //
 //----------------------------------------------------------------------------//
 
-void Model::onRender()
+void Cal3dModel::onRender()
 {
   // set global OpenGL states
   //glEnable(GL_DEPTH_TEST);
@@ -714,7 +714,7 @@ void Model::onRender()
   // glDisable(GL_DEPTH_TEST);
 }
 
-void Model::onSelect()
+void Cal3dModel::onSelect()
 {
     selectMesh();
 }
@@ -722,7 +722,7 @@ void Model::onSelect()
 // Update the model                                                           //
 //----------------------------------------------------------------------------//
 
-void Model::onUpdate(float elapsedSeconds)
+void Cal3dModel::onUpdate(float elapsedSeconds)
 {
   // update the model
   m_calModel.update(elapsedSeconds);
@@ -732,7 +732,7 @@ void Model::onUpdate(float elapsedSeconds)
 // Shut the model down                                                        //
 //----------------------------------------------------------------------------//
 
-void Model::onShutdown()
+void Cal3dModel::onShutdown()
 {
   // destroy the model instance
   m_calModel.destroy();
@@ -745,7 +745,7 @@ void Model::onShutdown()
 // Set the lod level of the model                                             //
 //----------------------------------------------------------------------------//
 
-void Model::setLodLevel(float lodLevel)
+void Cal3dModel::setLodLevel(float lodLevel)
 {
   m_lodLevel = lodLevel;
 
@@ -757,7 +757,7 @@ void Model::setLodLevel(float lodLevel)
 // Set the motion blend factors state of the model                            //
 //----------------------------------------------------------------------------//
 
-void Model::setMotionBlend(float *pMotionBlend, float delay)
+void Cal3dModel::setMotionBlend(float *pMotionBlend, float delay)
 {
   m_motionBlend[0] = pMotionBlend[0];
   m_motionBlend[1] = pMotionBlend[1];
@@ -776,7 +776,7 @@ void Model::setMotionBlend(float *pMotionBlend, float delay)
 // Set a new animation state within a given delay                             //
 //----------------------------------------------------------------------------//
 
-void Model::setState(int state, float delay)
+void Cal3dModel::setState(int state, float delay)
 {
   // check if this is really a new state
   if(state != m_state)
