@@ -22,7 +22,7 @@ using Atlas::Message::Object;
 
 IxClient::IxClient(Eris::Connection & con)
                    : GameClient(* new DemeterScene(*this), con),
-                     m_use_mouse(false)
+                     m_use_mouse(true)
 {
 }
 

@@ -1,5 +1,9 @@
 2003-04-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/IxClient.cpp: Default to mouse in gui mode.
+
+2003-04-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/perigee.cpp: Remove debug output.
 
 	* visual/Renderer.cpp: Some minor rendering optimisations.
