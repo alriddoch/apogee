@@ -17,7 +17,7 @@
 #include <gui/Console.h>
 
 #include <Eris/Connection.h>
-#include <Eris/Player.h>
+#include <Eris/Account.h>
 #include <Eris/Lobby.h>
 #include <Eris/View.h>
 #include <Eris/Entity.h>
@@ -53,7 +53,7 @@ bool GameClient::setup()
         return false;
     }
 
-    m_player = new Eris::Player(&connection);
+    m_account = new Eris::Account(&connection);
 
     gui = new Gui(renderer);
     gui->setup();
@@ -189,9 +189,9 @@ void GameClient::charCreator()
 void GameClient::charListSync()
 {
     std::cout << "charListSync" << std::endl << std::flush;
-    assert(m_player != NULL);
-    m_player->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
-    m_player->refreshCharacterInfo();
+    assert(m_account != NULL);
+    m_account->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
+    m_account->refreshCharacterInfo();
 }
 
 void GameClient::charSelector()
@@ -200,7 +200,7 @@ void GameClient::charSelector()
     CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
     cs->selectSignal.connect(SigC::slot(*this, &GameClient::takeCharacter));
     cs->createSignal.connect(SigC::slot(*this, &GameClient::charCreator));
-    const Eris::CharacterMap & cm = m_player->getCharacters();
+    const Eris::CharacterMap & cm = m_account->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterMap::const_iterator I = cm.begin(); I != cm.end(); ++I) {
         const std::string & id = I->first;
@@ -235,7 +235,7 @@ void GameClient::createCharacter(const std::string & name,
     chrcter->setName(name);
     chrcter->setAttr("description", "a perigee person");
     chrcter->setAttr("sex", "female");
-    m_avatar = m_player->createCharacter(chrcter);
+    m_avatar = m_account->createCharacter(chrcter);
 
     connectWorldSignals();
 }
@@ -243,7 +243,7 @@ void GameClient::createCharacter(const std::string & name,
 void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
-    m_avatar = m_player->takeCharacter(chrcter);
+    m_avatar = m_account->takeCharacter(chrcter);
     m_view = m_avatar->getView();
     std::cout << "Character taken, world = " << m_view << std::endl << std::flush;
 
@@ -294,15 +294,15 @@ void GameClient::loginCancel()
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
-    m_player->login(name, password);
-    m_player->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_account->login(name, password);
+    m_account->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
     // m_lobby = Eris::Lobby::instance();
 }
 
 void GameClient::create(const std::string & name, const std::string & password)
 {
-    m_player->createAccount(name, "", password);
-    m_player->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_account->createAccount(name, "", password);
+    m_account->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
     // m_lobby = Eris::Lobby::instance();
 }
 

@@ -16,7 +16,7 @@
 class AutonomousEntity;
 
 namespace Eris {
-  class Player;
+  class Account;
   class Avatar;
   class Lobby;
   class View;
@@ -48,9 +48,9 @@ class GameClient : public Application {
                Application(rend, con), inGame(false),
                compassWidget(NULL), clickDown(false),
                clickDownTime(0), clickDownX(0), clickDownY(0),
-               m_player(NULL), m_avatar(NULL), m_lobby(NULL), m_view(NULL),
+               m_account(NULL), m_avatar(NULL), m_lobby(NULL), m_view(NULL),
                m_character(NULL) { }
-    Eris::Player * m_player;
+    Eris::Account * m_account;
     Eris::Avatar * m_avatar;
     Eris::Lobby * m_lobby;
     Eris::View * m_view;
