@@ -1,5 +1,11 @@
 2004-10-25  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/WorldEntity.cpp, app/WorldEntity.h: Update Factory
+	  classes to take account of the changes in the way
+	  Eris::Entity is constructed.
+
+2004-10-25  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/WorldEntity.cpp:
 	  Put in conditional compilation based on sigc++ version
 	  to ensure we work with gtkmm 2.0 and 2.4.
