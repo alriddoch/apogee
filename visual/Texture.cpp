@@ -45,7 +45,8 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
     tmpbuf = (Uint8 *)malloc(image->pitch);
     if ( tmpbuf == NULL ) {
         fprintf(stderr, "Out of memory\n");
-        return(NULL);
+        // Can't get buffer, so we just return the image untransformed
+        return image;
     }
     rowhi = (Uint8 *)image->pixels;
     rowlo = rowhi + (image->h * image->pitch) - image->pitch;
