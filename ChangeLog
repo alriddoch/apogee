@@ -1,5 +1,10 @@
 2004-01-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Texture.cpp: Endian fix for texture formats. Should now
+	  work right on OS-X.
+
+2004-01-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/DemeterScene.cpp: Fix setting texture coordinate array
 	  mode in skybox renderer.
 

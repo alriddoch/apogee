@@ -130,7 +130,11 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
         return getDefault();
     }
 
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
     if (image->format->Rshift > image->format->Bshift) {
+#else // SDL_BYTEORDER == SDL_LIL_ENDIAN
+    if (image->format->Rshift < image->format->Bshift) {
+#endif // SDL_BYTEORDER == SDL_LIL_ENDIAN
         format = (bpp == 24) ? GL_BGR : GL_BGRA;
     } else {
         format = (bpp == 24) ? GL_RGB : GL_RGBA;
