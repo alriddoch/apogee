@@ -139,14 +139,23 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
     } else {
         format = (bpp == 24) ? GL_RGB : GL_RGBA;
     }
-    fmt = (bpp == 24) ? 3 : 4;
+    // FIXME The internal format seems to be very performance critical
+    fmt = (bpp == 24) ? GL_RGB4 : GL_RGBA4;
 
     /* load the texture into OGL */
     glGenTextures(1, &tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w, image->h, 0,
-                 format, GL_UNSIGNED_BYTE, image->pixels);
+
+    if ((filter == GL_LINEAR_MIPMAP_NEAREST) ||
+        (filter == GL_LINEAR_MIPMAP_LINEAR)) {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, fmt, image->w, image->h, format,
+                          GL_UNSIGNED_BYTE, image->pixels);
+    } else {
+        glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w, image->h, 0,
+                     format, GL_UNSIGNED_BYTE, image->pixels);
+    }
+
     std::cout << image->w << " " << image->h << std::endl << std::flush;
     GLenum er = glGetError();
     if (er != 0) {
@@ -167,11 +176,6 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     }
 
-    if ((filter == GL_LINEAR_MIPMAP_NEAREST) ||
-        (filter == GL_LINEAR_MIPMAP_LINEAR)) {
-        gluBuild2DMipmaps(GL_TEXTURE_2D, fmt, image->w, image->h, format,
-                          GL_UNSIGNED_BYTE, image->pixels);
-    }
 
     return tex_id;
 }

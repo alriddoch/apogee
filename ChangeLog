@@ -1,5 +1,11 @@
 2004-03-19  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Texture.cpp: Switch to lower quality internal format
+	  for texture, for a big performance improvement. Handle mipmaps
+	  better.
+
+2004-03-19  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/ForestRenderer.cpp, visual/3dsRenderer.cpp: Cleanup and
 	  optimise 3ds rendering code in a desperate attempt to improve
 	  the framerate.
