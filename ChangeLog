@@ -1,3 +1,11 @@
+2005-01-08  Al Riddoch  <alriddoch@zepler.org>
+
+	* gui/Gui.cpp, gui/Compass.cpp: Get rid of nasty casts when using
+	  varconf.
+
+	* app/GameClient.h, app/GameClient.cpp: Update Avatar logic
+	  to take account of new Eris API.
+
 2004-11-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* gui/Console.h, gui/ServerSelector.cpp: Fix a couple of trivial

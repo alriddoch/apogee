@@ -63,7 +63,7 @@ void Gui::initFont()
 bool Gui::setup()
 {
     if (global_conf->findItem("apogee", "skin")) {
-        skinName = (std::string)global_conf->getItem("apogee", "skin");
+        skinName = global_conf->getItem("apogee", "skin").as_string();
         std::cout << "Got skin " << skinName << std::endl << std::flush;
     } else {
         std::cout << "No skin" << std::endl << std::flush;

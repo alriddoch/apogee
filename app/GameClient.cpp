@@ -216,7 +216,7 @@ void GameClient::connectWorldSignals()
     // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
-    m_avatar->GotCharacterEntity.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::worldEnter));
     Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
                                            renderer));
 }
@@ -230,7 +230,7 @@ void GameClient::createCharacter(const std::string & name,
     chrcter->setName(name);
     chrcter->setAttr("description", "a perigee person");
     chrcter->setAttr("sex", "female");
-    m_avatar = m_account->createCharacter(chrcter);
+    m_account->createCharacter(chrcter);
 
     connectWorldSignals();
 }
@@ -238,9 +238,7 @@ void GameClient::createCharacter(const std::string & name,
 void GameClient::takeCharacter(const std::string & chrcter)
 {
     std::cout << "takeCharacter" << std::endl << std::flush;
-    m_avatar = m_account->takeCharacter(chrcter);
-    m_view = m_avatar->getView();
-    std::cout << "Character taken, world = " << m_view << std::endl << std::flush;
+    m_account->takeCharacter(chrcter);
 
     connectWorldSignals();
 }
@@ -315,10 +313,11 @@ void GameClient::worldEntityCreate(Eris::Entity *e)
     e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
 }
 
-void GameClient::worldEnter(Eris::Entity * e)
+void GameClient::worldEnter(Eris::Avatar * a)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
+    m_avatar = a;
     m_view = m_avatar->getView();
     m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
     Eris::Entity * chr = m_avatar->getEntity();
