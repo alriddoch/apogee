@@ -11,18 +11,17 @@
 
 #include "font.h"
 
-#include "common/configuration.h"
+#include "visual/Sprite.h"
+#include "visual/Renderer.h"
+#include "visual/GLU.h"
 
-#include <visual/Sprite.h>
-#include <visual/Renderer.h>
+#include "common/configuration.h"
 
 #if USE_PUI
 #include <plib/pu.h>
 #endif
 
 #include <varconf/Config.h>
-
-#include <GL/glu.h>
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {

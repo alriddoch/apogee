@@ -5,9 +5,9 @@
 #ifndef APOGEE_RENDERER_H
 #define APOGEE_RENDERER_H
 
-#include "common/Vector3D.h"
-
 #include "GL.h"
+
+#include "common/Vector3D.h"
 
 #include <SDL/SDL.h>
 

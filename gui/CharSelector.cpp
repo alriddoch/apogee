@@ -5,8 +5,8 @@
 #include "CharSelector.h"
 #include "Gui.h"
 
-#include <visual/Model.h>
-#include <visual/Renderer.h>
+#include "visual/Model.h"
+#include "visual/Renderer.h"
 
 #include <wfmath/quaternion.h>
 #include <wfmath/point.h>
