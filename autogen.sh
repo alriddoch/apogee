@@ -8,7 +8,7 @@ echo aclocal...
 
 libtoolize --force --copy
 
-aclocal
+aclocal -I /usr/local/share/aclocal
 
 autoheader
 
