@@ -145,6 +145,18 @@ void Renderer::shapeView()
     glFogf(GL_FOG_END,maxViewDistance - 15.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
 
+    if (glIsTexture(17)) {
+        std::cout << "17 is a texture" << std::endl << std::flush;
+    } else {
+        std::cout << "17 is NOT a texture" << std::endl << std::flush;
+    }
+
+    if (glIsTexture(23)) {
+        std::cout << "23 is a texture" << std::endl << std::flush;
+    } else {
+        std::cout << "23 is NOT a texture" << std::endl << std::flush;
+    }
+
 }
 
 float Renderer::getZ(int x, int y)
