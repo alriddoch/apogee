@@ -550,7 +550,7 @@ void Isometric::drawRegion(Mercator::Segment * map)
     if (texture != -1) {
         glEnable(GL_TEXTURE_2D);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, 0, harray);
+        glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
         glBindTexture(GL_TEXTURE_2D, texture);
     }
     glVertexPointer(3, GL_FLOAT, 0, harray);
