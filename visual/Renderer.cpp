@@ -7,7 +7,6 @@
 #include "Renderer.h"
 #include "EntityRenderer.h"
 #include "Texture.h"
-#include "Sprite.h"
 #include "Model.h"
 
 #include <app/WorldEntity.h>
@@ -18,16 +17,6 @@
 #include <Eris/Entity.h>
 #include <Eris/TypeInfo.h>
 #include <Eris/Connection.h>
-
-#include <Mercator/Terrain.h>
-#include <Mercator/Segment.h>
-
-#include <lib3ds/mesh.h>
-#include <lib3ds/node.h>
-#include <lib3ds/material.h>
-#include <lib3ds/matrix.h>
-#include <lib3ds/vector.h>
-#include <lib3ds/light.h>
 
 #include <SDL_image.h>
 
@@ -53,10 +42,6 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
                                          elevation(30), rotation(45),
                                          scale(1), x_offset(0), y_offset(0),
                                          z_offset(0),
-                                         m_numLineIndeces(0),
-                       m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
-                       m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
-                                         treemodel(0), treemodel_list(0), charType(0),
                                          frameCount(0), time(0), lastCount(0),
                                          application(app)
 
@@ -140,38 +125,6 @@ void Renderer::init()
     std::cout << "DEPTH BITS AVAILABLE: " << depthbits
               << std::endl << std::flush;
 
-    // treemodel = lib3ds_file_load("oak.3ds");
-    if (!treemodel) {
-        std::cerr << "Unable to load oak.3ds model file"
-                  << std::endl << std::flush;
-    } else {
-        lib3ds_file_eval(treemodel,0);
-    }
-
-    int idx = -1;
-    for (int i = 0; i < (segSize + 1) - 1; ++i) {
-        for (int j = 0; j < (segSize + 1); ++j) {
-            m_lineIndeces[++idx] = j * (segSize + 1) + i;
-            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
-        }
-        if (++i >= (segSize + 1) - 1) { break; }
-        for (int j = (segSize + 1) - 1; j >= 0; --j) {
-            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
-            m_lineIndeces[++idx] = j * (segSize + 1) + i;
-        }
-    }
-    m_numLineIndeces = ++idx;
-
-    int tidx = -1;
-    for(int j = 0; j < (segSize + 1); ++j) {
-        for(int i = 0; i < (segSize + 1); ++i) {
-            m_texCoords[++tidx] = ((float)i)/8;
-            // std::cout << m_texCoords[tidx] << ":";
-            m_texCoords[++tidx] = ((float)j)/8;
-            // std::cout << m_texCoords[tidx] << ":";
-        }
-    }
-    // std::cout << std::endl << std::flush;
 }
 
 
@@ -211,108 +164,6 @@ void Renderer::lightOff()
 {
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glDisable(GL_LIGHTING);
-}
-
-void Renderer::draw3dsFile(Lib3dsFile * node)
-{
-  int num_meshes = 0;
-  if (!treemodel_list) {
-    Lib3dsMesh *mesh;
-    for (mesh=node->meshes; mesh!=0; mesh=mesh->next) {
-      std::cout << "Mesh no. " << ++num_meshes << std::endl << std::flush;
-
-      treemodel_list=glGenLists(1);
-      glNewList(treemodel_list, GL_COMPILE);
-
-      {
-        unsigned p;
-        Lib3dsVector *normalL = (Lib3dsVector *)malloc(3*sizeof(Lib3dsVector)*mesh->faces);
-
-        {
-          Lib3dsMatrix M;
-          lib3ds_matrix_copy(M, mesh->matrix);
-          lib3ds_matrix_inv(M);
-          glMultMatrixf(&M[0][0]);
-        }
-        lib3ds_mesh_calculate_normals(mesh, normalL);
-
-        std::cout << "COMPILING MODEL WITH " << mesh->faces << " faces and " << mesh->texels << " texels" << std::endl << std::flush;
-        for (p = 0; p < mesh->faces; ++p) {
-          Lib3dsFace *f=&mesh->faceL[p];
-          Lib3dsMaterial *mat=0;
-          GLint texture = -1;
-          if (f->material[0]) {
-            std::cout << "MATERIAL NAME: " << f->material
-                      << std::endl << std::flush;
-            mat=lib3ds_file_material_by_name(treemodel, f->material);
-          }else{
-            mat=node->materials;
-          }
-          if (mat) {
-            static GLfloat a[4]={0,0,0,1};
-            float s;
-            glMaterialfv(GL_FRONT, GL_AMBIENT, a);
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, mat->diffuse);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, mat->specular);
-            s = pow(2, 10.0*mat->shininess);
-            if (s>128.0) {
-              s=128.0;
-            }
-            glMaterialf(GL_FRONT, GL_SHININESS, s);
-            if (mat->texture1_map.name[0]) {
-                std::cout << "TEXTURE NAME: " << mat->texture1_map.name
-                          << std::endl << std::flush;
-                texture = Texture::get(mat->texture1_map.name);
-            }
-          } else {
-            Lib3dsRgba a={0.2, 0.2, 0.2, 1.0};
-            Lib3dsRgba d={0.8, 0.8, 0.8, 1.0};
-            Lib3dsRgba s={0.0, 0.0, 0.0, 1.0};
-            glMaterialfv(GL_FRONT, GL_AMBIENT, a);
-            glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, s);
-          }
-          {
-            if (texture != -1) {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, texture);
-            }
-            int i;
-            glBegin(GL_TRIANGLES);
-              glNormal3fv(f->normal);
-              for (i=0; i<3; ++i) {
-                glNormal3fv(normalL[3*p+i]);
-                if (texture != -1) {
-                    glTexCoord2fv(mesh->texelL[f->points[i]]);
-                }
-                glVertex3fv(mesh->pointL[f->points[i]].pos);
-              }
-            glEnd();
-            if (texture != -1) {
-                glDisable(GL_TEXTURE_2D);
-            }
-          }
-        }
-
-        free(normalL);
-      }
-
-      glEndList();
-    }
-  }
-
-    if (treemodel_list) {
-      // Lib3dsObjectData *d;
-
-      glPushMatrix();
-      // d=&node->data.object;
-      // glMultMatrixf(&node->matrix[0][0]);
-      // glTranslatef(-d->pivot[0], -d->pivot[1], -d->pivot[2]);
-      glScalef(0.1f, 0.1f, 0.1f);
-      glCallList(treemodel_list);
-      /*glutSolidSphere(50.0, 20,20);*/
-      glPopMatrix();
-    }
 }
 
 void Renderer::update(float secs)
@@ -356,119 +207,6 @@ void Renderer::orient(const WFMath::Quaternion & orientation)
     glMultMatrixf(&orient[0][0]);
 }
 
-#if 0
-void Renderer::selectCal3DModel(Model * m, const WFMath::Quaternion & orientation)
-{
-    glPushMatrix();
-    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    float orient[4][4];
-    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 3; j++) {
-            orient[i][j] = omatrix.elem(i,j);
-        }
-    }
-    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
-    orient[3][3] = 1.0f;
-    glMultMatrixf(&orient[0][0]);
-    glScalef(0.025f, 0.025f, 0.025f);
-    m->onSelect();
-    glPopMatrix();
-}
-
-void Renderer::drawCal3DModel(Model * m, const WFMath::Quaternion & orientation)
-{
-    glPushMatrix();
-    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-    float orient[4][4];
-    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
-    for(int i = 0; i < 3; i++) {
-        for(int j = 0; j < 3; j++) {
-            orient[i][j] = omatrix.elem(i,j);
-        }
-    }
-    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
-    orient[3][3] = 1.0f;
-    glMultMatrixf(&orient[0][0]);
-    glScalef(0.025f, 0.025f, 0.025f);
-    m->onRender();
-    glPopMatrix();
-}
-
-/*
- * This is the vertex layout used by the 2 3Dbox functions.
- *
- *
- *                                   6
- *
- *
- *                         7                    5
- *
- *
- *                                   4
- *
- *
- *
- *                                   2
- *
- *
- *                         3                    1
- *
- *
- *                                   0
- */
-
-void Renderer::select3DBox(const WFMath::AxisBox<3> & bbox)
-{
-    GLfloat vertices[] = {
-        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
-        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
-        bbox.highCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
-        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
-        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
-        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
-        bbox.highCorner().x(), bbox.highCorner().y(), bbox.highCorner().z(),
-        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.highCorner().z() 
-    };
-    static const GLuint indices[] = { 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6,
-                                      3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, 8);
-    }
-    glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, indices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
-}
-
-void Renderer::draw3DBox(const WFMath::AxisBox<3> & bbox)
-{
-    GLfloat vertices[] = {
-        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
-        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
-        bbox.highCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
-        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.lowCorner().z(),
-        bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
-        bbox.highCorner().x(), bbox.lowCorner().y(), bbox.highCorner().z(),
-        bbox.highCorner().x(), bbox.highCorner().y(), bbox.highCorner().z(),
-        bbox.lowCorner().x(), bbox.highCorner().y(), bbox.highCorner().z() 
-    };
-    static const GLuint indices[] = { 0, 1, 3, 2, 7, 6, 4, 5, 0, 4, 1, 5,
-                                      3, 7, 2, 6, 0, 3, 1, 2, 4, 7, 5, 6 };
-
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertexPointer(3, GL_FLOAT, 0, vertices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, 8);
-    }
-    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, indices);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
-}
-#endif
-
 void Renderer::drawEntity(Eris::Entity * ent)
 {
     Point3D pos = ent->getPosition();
@@ -505,134 +243,9 @@ void Renderer::drawEntity(Eris::Entity * ent)
 
 void Renderer::drawWorld(Eris::Entity * wrld)
 {
-    // draw3dsFile(treemodel);
-
     worldTime = SDL_GetTicks();
-    if (charType == NULL) {
-        charType = application.connection.getTypeInfoEngine()->findSafe("character");
-    }
+
     drawEntity(wrld);
-}
-
-#if 0
-void Renderer::drawRegion(Mercator::Segment * map)
-{
-    GLint texture = -1, texture2 = -1;
-    texture = Texture::get("granite.png");
-    texture2 = Texture::get("rabbithill_grass_hh.png");
-    static float * harray = 0;
-    static float * carray = 0;
-    static int allocated_segSize = 0;
-    // Only re-allocate the vertex arrays if we are dealing with a different
-    // segment size.
-    if (segSize != allocated_segSize) {
-        if (harray != 0) {
-            delete [] harray;
-            delete [] carray;
-            harray = 0;
-            carray = 0;
-        }
-        harray = new float[(segSize + 1) * (segSize + 1) * 3];
-        carray = new float[(segSize + 1) * (segSize + 1) * 4];
-        allocated_segSize = segSize;
-        int idx = -1, cdx = -1;
-        // Fill in the invarient vertices and colors, so we only do it once
-        for(int j = 0; j < (segSize + 1); ++j) {
-            for(int i = 0; i < (segSize + 1); ++i) {
-                // float h = map->get(i,j);
-                harray[++idx] = i;
-                harray[++idx] = j;
-                harray[++idx] = 0.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 1.f;
-                carray[++cdx] = 0.f;
-            }
-        }
-    }
-    // Fill in the vertex Z coord, and alpha value, which vary
-    int idx = -1, cdx = -1;
-    for(int j = 0; j < (segSize + 1); ++j) {
-        for(int i = 0; i < (segSize + 1); ++i) {
-            float h = map->get(i,j);
-            idx += 2;
-            harray[++idx] = h;
-            cdx += 3;
-            carray[++cdx] = (h > 0.4f) ? 1.f : 0.f;
-        }
-    }
-    if (texture != -1) {
-        glEnable(GL_TEXTURE_2D);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-        glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
-        glColorPointer(4, GL_FLOAT, 0, carray);
-        glBindTexture(GL_TEXTURE_2D, texture);
-    }
-    glVertexPointer(3, GL_FLOAT, 0, harray);
-    if (have_GL_EXT_compiled_vertex_array) {
-        glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
-    }
-    glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                   GL_UNSIGNED_INT, m_lineIndeces);
-    if ((texture != -1) && (texture2 != -1)) {
-        glBindTexture(GL_TEXTURE_2D, texture2);
-        glEnable(GL_BLEND);
-        glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                       GL_UNSIGNED_INT, m_lineIndeces);
-        glDisable(GL_BLEND);
-    }
-    if (have_GL_EXT_compiled_vertex_array) {
-        glUnlockArraysEXT();
-    }
-    if (texture != -1) {
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisable(GL_TEXTURE_2D);
-    }
-}
-
-void Renderer::drawMap(Mercator::Terrain & t)
-{
-    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
-
-    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
-    for (; I != segs.end(); ++I) {
-        const Mercator::Terrain::Segmentcolumn & col = I->second;
-        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
-        for (; J != col.end(); ++J) {
-            glPushMatrix();
-            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-            drawRegion(J->second);
-            glPopMatrix();
-        }
-    }
-}
-#endif
-
-void Renderer::drawSea(Mercator::Terrain & t)
-{
-    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
-
-    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
-    glEnable(GL_BLEND);
-    for (; I != segs.end(); ++I) {
-        const Mercator::Terrain::Segmentcolumn & col = I->second;
-        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
-        for (; J != col.end(); ++J) {
-            glPushMatrix();
-            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-            GLfloat vertices[] = { 0.f, 0.f, 0.f,
-                                   segSize, 0, 0.f,
-                                   segSize, segSize, 0.f,
-                                   0, segSize, 0.f };
-            glVertexPointer(3, GL_FLOAT, 0, vertices);
-            glColor4f(0.8f, 0.8f, 1.f, 0.6f);
-            glDrawArrays(GL_QUADS, 0, 4);
-            glPopMatrix();
-        }
-    }
-    glDisable(GL_BLEND);
 }
 
 void Renderer::drawSky()

@@ -1,5 +1,10 @@
 2003-07-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.h, visual/Renderer.cpp: Remove legacy code and
+	  interface that has been moved into the entity renderer classes.
+
+2003-07-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/DemeterScene.cpp: Back off changes to fog mode.
 
 	* visual/Cal3dRenderer.cpp: Set default lod back to full.

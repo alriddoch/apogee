@@ -6,20 +6,13 @@
 #define APOGEE_RENDERER_H
 
 #include <common/Vector3D.h>
-#include <lib3ds/file.h>
 
 #include "GL.h"
 
 #include <SDL/SDL.h>
 
-class Sprite;
 class Model;
-class HeightMap;
 class Application;
-
-namespace Coal {
-  class Container;
-}
 
 extern "C" void SDL_GL_SwapBuffers();
 extern "C" void SDL_Quit();
@@ -34,11 +27,6 @@ namespace Eris {
   class TypeInfo;
 }
 
-namespace Mercator {
-  class Terrain;
-  class Segment;
-}
-
 class Renderer {
   public:
     typedef std::map<GLuint, Eris::Entity *> SelectMap;
@@ -50,7 +38,6 @@ class Renderer {
     virtual void shapeView() = 0;
 
     void init();
-    void draw3dsFile(Lib3dsFile * node);
 
     struct SDL_Surface * screen;
     SDL_Rect ** videoModes;
@@ -60,12 +47,6 @@ class Renderer {
     float elevation, rotation;
     float scale, x_offset, y_offset, z_offset;
     Eris::Entity * focus;
-    int m_numLineIndeces;
-    unsigned int * const m_lineIndeces;
-    float * const m_texCoords;
-    Lib3dsFile * treemodel;
-    unsigned long treemodel_list;
-    Eris::TypeInfo * charType;
     float worldTime;
     int frameCount;
     float time;
@@ -107,19 +88,11 @@ class Renderer {
     float getZ(int, int);
     const Point3D getWorldCoord(int, int, float);
 
-    void drawCal3DModel(Model *, const WFMath::Quaternion &);
-    void draw3DBox(const WFMath::AxisBox<3> & bbox);
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
-    // virtual void drawMap(Coal::Container &, HeightMap &) = 0;
-    void drawRegion(Mercator::Segment *);
-    void drawMap(Mercator::Terrain &);
-    void drawSea(Mercator::Terrain &);
     void drawSky();
     void drawGui();
 
-    void select3DBox(const WFMath::AxisBox<3> & bbox);
-    void selectCal3DModel(Model *, const WFMath::Quaternion &);
     void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);
     Eris::Entity * selectWorld(Eris::Entity *, int, int);
 
