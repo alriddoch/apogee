@@ -1,5 +1,12 @@
 2003-05-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Renderer.cpp: Re-worked terrain renderer to avoid allocating
+	  a new vertex array for each segment, and minimalise the
+	  initialisation of the arrays for each segment. Re-work the
+	  second pass to take more advantage of locked arrays.
+
+2003-05-16  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.cpp: Add a second pass to the terrain renderer, with
 	  a different texture.
 

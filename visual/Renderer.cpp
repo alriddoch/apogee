@@ -488,25 +488,53 @@ void Renderer::drawRegion(Mercator::Segment * map)
     GLint texture = -1, texture2 = -1;
     texture = Texture::get("granite.png");
     texture2 = Texture::get("rabbithill_grass_hh.png");
-    float * harray = new float[(segSize + 1) * (segSize + 1) * 3];
-    float * carray = new float[(segSize + 1) * (segSize + 1) * 4];
+    static float * harray = 0;
+    static float * carray = 0;
+    static int allocated_segSize = 0;
+    // Only re-allocate the vertex arrays if we are dealing with a different
+    // segment size.
+    if (segSize != allocated_segSize) {
+        if (harray != 0) {
+            delete [] harray;
+            delete [] carray;
+            harray = 0;
+            carray = 0;
+        }
+        harray = new float[(segSize + 1) * (segSize + 1) * 3];
+        carray = new float[(segSize + 1) * (segSize + 1) * 4];
+        allocated_segSize = segSize;
+        int idx = -1, cdx = -1;
+        // Fill in the invarient vertices and colors, so we only do it once
+        for(int j = 0; j < (segSize + 1); ++j) {
+            for(int i = 0; i < (segSize + 1); ++i) {
+                // float h = map->get(i,j);
+                harray[++idx] = i;
+                harray[++idx] = j;
+                harray[++idx] = 0.f;
+                carray[++cdx] = 1.f;
+                carray[++cdx] = 1.f;
+                carray[++cdx] = 1.f;
+                carray[++cdx] = 0.f;
+            }
+        }
+    }
+    // Fill in the vertex Z coord, and alpha value, which vary
     int idx = -1, cdx = -1;
     for(int j = 0; j < (segSize + 1); ++j) {
         for(int i = 0; i < (segSize + 1); ++i) {
             float h = map->get(i,j);
-            harray[++idx] = i;
-            harray[++idx] = j;
+            idx += 2;
             harray[++idx] = h;
-            carray[++cdx] = 1.f;
-            carray[++cdx] = 1.f;
-            carray[++cdx] = 1.f;
+            cdx += 3;
             carray[++cdx] = h;
         }
     }
     if (texture != -1) {
         glEnable(GL_TEXTURE_2D);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
+        glColorPointer(4, GL_FLOAT, 0, carray);
         glBindTexture(GL_TEXTURE_2D, texture);
     }
     glVertexPointer(3, GL_FLOAT, 0, harray);
@@ -515,14 +543,11 @@ void Renderer::drawRegion(Mercator::Segment * map)
     }
     glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                    GL_UNSIGNED_INT, m_lineIndeces);
-    if (texture2 != -1) {
+    if ((texture != -1) && (texture2 != -1)) {
         glBindTexture(GL_TEXTURE_2D, texture2);
         glEnable(GL_BLEND);
-        glColorPointer(4, GL_FLOAT, 0, carray);
-        glEnableClientState(GL_COLOR_ARRAY);
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_INT, m_lineIndeces);
-        glDisableClientState(GL_COLOR_ARRAY);
         glDisable(GL_BLEND);
     }
     if (have_GL_EXT_compiled_vertex_array) {
@@ -530,10 +555,9 @@ void Renderer::drawRegion(Mercator::Segment * map)
     }
     if (texture != -1) {
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glDisableClientState(GL_COLOR_ARRAY);
         glDisable(GL_TEXTURE_2D);
     }
-    delete carray;
-    delete harray;
 }
 
 void Renderer::drawMap(Mercator::Terrain & t)
