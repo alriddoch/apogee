@@ -5,18 +5,37 @@
 #ifndef APOGEE_GUI_PIE_H
 #define APOGEE_GUI_PIE_H
 
-#include "PieSlice.h"
+#include "Widget.h"
+
+#include "visual/Sprite.h"
+
+#include <GL/gl.h>
+#include <sigc++/object.h>
+#if SIGC_MAJOR_VERSION == 1 && SIGC_MINOR_VERSION == 0
+#include <sigc++/basic_signal.h>
+#else
+#include <sigc++/signal.h>
+#endif
+
+#include <string>
+#include <vector>
+
+class PieSlice {
+  public:
+    PieSlice() { }
+};
 
 class Pie : public Widget {
   private:
-    std::set<PieSlice> m_slices;
+    std::vector<PieSlice> m_slices;
 
   protected:
+    static Sprite m_sliceGraphic;
 
   public:
-    SigC::Signal<void, const std::string &> SliceSelected;
+    SigC::Signal1<void, const std::string &> SliceSelected;
 
-    Pie(Gui & g, int x, int y) : Widget(g, x. y) { }
+    Pie(Gui & g, int x, int y) : Widget(g, x, y) { }
 
     virtual ~Pie();
 
@@ -29,3 +48,5 @@ class Pie : public Widget {
 
     void addSlice(const std::string & name, const std::string & graphic);
 };
+
+#endif // APOGEE_GUI_PIE_H

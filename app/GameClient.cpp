@@ -12,6 +12,7 @@
 #include <gui/CharSelector.h>
 #include <gui/Alert.h>
 #include <gui/Compass.h>
+#include <gui/Pie.h>
 
 
 #include <Eris/Player.h>
@@ -90,6 +91,8 @@ bool GameClient::setup()
 
     compassWidget = new Compass(*gui, 42, 10);
     gui->addWidget(compassWidget);
+
+    gui->addWidget(new Pie(*gui, 50, 30));
 
     return 0;
 }

@@ -9,4 +9,5 @@ libgui_a_SOURCES = Gui.cpp Gui.h \
 		   TextField.cpp TextField.h \
 		   Dialogue.cpp Dialogue.h \
 		   Option.cpp Option.h \
+		   Pie.cpp Pie.h \
 		   CharSelector.cpp CharSelector.h

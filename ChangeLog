@@ -1,3 +1,9 @@
+2003-04-02  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Pie.h, gui/Pie.cpp: Add Pie menu widget.
+
+	* app/GameClient.cpp: Add a test Pie menu.
+
 2003-02-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.h, visual/Renderer.cpp, visual/Isometric.h,
