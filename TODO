@@ -1,3 +1,13 @@
+Modify the interface to entity renderers so that we provide an indication
+of the camera position, so some kind of judgement can be made about how
+much detail, and how the entity should be rendered. Make use of this
+interface in the terrain renderer.
+
+Add a 2D int map for storing display lists for terrain segments. Then
+when we iterate over the apropriate area of terrain, we can query the
+display list cache. Then we should no longer need the vertex cache, and
+should be able to flush the surface buffers too.
+
 Turn off depth write for subsequent passes in multi-pass.
 
 Use short for index arrays, especially for terrain code.
