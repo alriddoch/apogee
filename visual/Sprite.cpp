@@ -68,7 +68,7 @@ bool Sprite::load(const std::string & filename)
         SDL_FreeSurface(texImage);
         return false;
     }
-    tex_id = Texture::loadTexture(image);
+    tex_id = Texture::loadTexture(image, false);
     m_w = sprite_w;
     m_h = sprite_h;
     m_pw = (float)sprite_w / textur_w;

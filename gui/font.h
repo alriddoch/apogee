@@ -1,7 +1,7 @@
 #ifndef TEXTURE_font_
 #define TEXTURE_font_
 
-static const GLint texture_font_internalFormat = GL_ALPHA;
+static const GLint texture_font_internalFormat = GL_ALPHA4;
 
 static const GLenum texture_font_format = GL_ALPHA;
 

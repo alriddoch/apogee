@@ -1,5 +1,14 @@
 2004-03-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/font.h: Reduce alpha depth for the font texture.
+
+	* visual/Sprite.cpp: Disable texture wrap for sprites.
+
+	* visual/Texture.cpp: Reduce alpha depth to 1 bit for standard
+	  textures.
+
+2004-03-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Reduce the depth of the terrain alpha
 	  texture.
 

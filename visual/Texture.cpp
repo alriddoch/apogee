@@ -140,7 +140,7 @@ unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap, GLint filter)
         format = (bpp == 24) ? GL_RGB : GL_RGBA;
     }
     // FIXME The internal format seems to be very performance critical
-    fmt = (bpp == 24) ? GL_RGB4 : GL_RGBA4;
+    fmt = (bpp == 24) ? GL_RGB4 : GL_RGB5_A1;
 
     /* load the texture into OGL */
     glGenTextures(1, &tex_id);
