@@ -48,8 +48,31 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
         }
         std::cout << "Node" << std::endl << std::flush;
 
-        Lib3dsVector * normalL= new Lib3dsVector[3 * mesh->faces];
-        lib3ds_mesh_calculate_normals(mesh, normalL);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        // This must be true, or we might crash
+        assert(mesh->texels >= mesh->points);
+           
+        float * points = new float[3 * mesh->points];
+        float * normals = new float[3 * mesh->points];
+        float * texcoords = new float[2 * mesh->points];
+        unsigned * indices = new unsigned[3 * mesh->faces];
+        unsigned * iptr = indices - 1;
+        // lib3ds_mesh_calculate_normals(mesh, normalL);
+
+        for (unsigned p = 0; p < mesh->points; ++p) {
+          memcpy(&points[p*3], &mesh->pointL[p].pos[0], 3 * sizeof(float));
+          memcpy(&texcoords[p*2], &mesh->texelL[p][0], 2 * sizeof(float));
+        }
+        for (unsigned p = 0; p < mesh->faces; ++p) {
+          Lib3dsFace * f = &mesh->faceL[p];
+          for (unsigned i = 0; i < 3; ++i) {
+            unsigned idx = f->points[i];
+            memcpy(&normals[idx * 3], f->normal, sizeof(Lib3dsVector));
+            *++iptr = idx;
+          }
+        }
 
         VertexBuffer * vb = new VertexBuffer();
         node->user.p = (void*)vb;
@@ -62,10 +85,14 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
         lib3ds_matrix_inv(M);
         glMultMatrixf(&M[0][0]);
 
-        glBegin(GL_TRIANGLES);
+        glVertexPointer(3, GL_FLOAT, 0, points);
+        glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+        glNormalPointer(GL_FLOAT, 0, normals);
 
         Lib3dsMaterial *mat=0;
         GLuint texture = 0;
+        unsigned begin = 0;
+
         for (unsigned p = 0; p < mesh->faces; ++p) {
           Lib3dsFace *f=&mesh->faceL[p];
           if (f->material[0]) {
@@ -76,7 +103,10 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
                 std::cout << "Material " << m << " : \"" << f->material << "\""
                           << std::endl << std::flush;
                 mat = m;
-                glEnd();
+                std::cout << "DRAW " << p << ": " << begin << std::endl << std::flush;
+                glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_INT,
+                               &indices[begin * 3]);
+                begin = p;
                 glMaterialfv(GL_FRONT, GL_AMBIENT, mat->ambient);
                 glMaterialfv(GL_FRONT, GL_DIFFUSE, mat->diffuse);
                 glMaterialfv(GL_FRONT, GL_SPECULAR, mat->specular);
@@ -88,38 +118,37 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
                 if (mat->texture1_map.name[0]) {
                   std::cout << "TEXTURE NAME: " << mat->texture1_map.name
                             << std::endl << std::flush;
-                  texture = Texture::get(mat->texture1_map.name);
+                  texture = Texture::get(mat->texture1_map.name, false, GL_LINEAR_MIPMAP_NEAREST);
                   glEnable(GL_TEXTURE_2D);
                   glBindTexture(GL_TEXTURE_2D, texture);
                 } else {
                   glDisable(GL_TEXTURE_2D);
                 }
-                glBegin(GL_TRIANGLES);
               }
             } else {
               mat = 0;
+              std::cout << "NDRAW " << p << ": " << begin << std::endl << std::flush;
+              glDrawElements(GL_TRIANGLES, (p - begin) * 3, GL_UNSIGNED_INT,
+                             &indices[begin * 3]);
+              begin = p;
               static const Lib3dsRgba a = {0.2f, 0.2f, 0.2f, 1.0f};
               static const Lib3dsRgba d = {0.8f, 0.8f, 0.8f, 1.0f};
               static const Lib3dsRgba s = {0.0f, 0.0f, 0.0f, 1.0f};
-              glEnd();
               glMaterialfv(GL_FRONT, GL_AMBIENT, a);
               glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
               glMaterialfv(GL_FRONT, GL_SPECULAR, s);
               glDisable(GL_TEXTURE_2D);
-              glBegin(GL_TRIANGLES);
             }
           }
 
-          for (unsigned i = 0; i < 3; ++i) {
-            glNormal3fv(normalL[3*p+i]);
-            // How to flag this?
-            glTexCoord2fv(mesh->texelL[f->points[i]]);
-            glVertex3fv(mesh->pointL[f->points[i]].pos);
-          }
         }
-        glEnd();
+        glDrawElements(GL_TRIANGLES, (mesh->faces - begin) * 3, GL_UNSIGNED_INT,
+                             &indices[begin * 3]);
+        std::cout << "FDRAW " << mesh->faces << ": " << begin << std::endl << std::flush;
 
-        free(normalL);
+        delete [] points;
+        delete [] normals;
+        delete [] texcoords;
 
         glEndList();
     }
@@ -133,7 +162,6 @@ void m3dsRenderer::draw3dsNode(Lib3dsNode * node)
       glMultMatrixf(&node->matrix[0][0]);
       glTranslatef(-d->pivot[0], -d->pivot[1], -d->pivot[2]);
       glCallList(vb->bobject);
-      /*glutSolidSphere(50.0, 20,20);*/
       glPopMatrix();
     }
 }
@@ -160,16 +188,18 @@ void m3dsRenderer::render(Renderer &, const PosType &)
 {
     if (m_model != 0) {
         glPushMatrix();
-        glEnable(GL_BLEND);
+        // Nasty artefacts. To make ALPHA look okay, need to do 2 passes,
+        // second with alpha enabled, depth write disabled, and GL_LESS
+        // Alpha test turned on.
+        // glEnable(GL_BLEND);
         glEnable(GL_ALPHA_TEST);
         glEnable(GL_NORMALIZE);
         glAlphaFunc(GL_GREATER, 0.2f);
         glScalef(5.f, 5.f, 5.f);
-        // draw3dsModel();
         draw3dsFile();
         glDisable(GL_NORMALIZE);
         glDisable(GL_ALPHA_TEST);
-        glDisable(GL_BLEND);
+        // glDisable(GL_BLEND);
         glPopMatrix();
     }
 }

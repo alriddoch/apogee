@@ -114,7 +114,7 @@ int Model::getState()
 
 GLuint Model::loadTexture(const std::string& strFilename)
 {
-  GLuint texture = Texture::get(strFilename);
+  GLuint texture = Texture::get(strFilename, false, GL_LINEAR_MIPMAP_NEAREST);
   if (texture != Texture::getDefault()) {
     return texture;
   }
