@@ -112,7 +112,11 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
         for (; J != col.end(); ++J) {
             glPushMatrix();
             glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
-            drawRegion(J->second);
+            Mercator::Segment * s = J->second;
+            if (!s->isValid()) {
+                s->populate();
+            }
+            drawRegion(s);
             glPopMatrix();
         }
     }
@@ -155,11 +159,6 @@ void TerrainRenderer::readTerrain()
         ymin = std::min(ymin, y);
         ymax = std::max(ymax, y);
         m_terrain.setBasePoint(x, y, point[2].AsNum());
-    }
-    for(int i = xmin; i < xmax; ++i) {
-        for(int j = ymin; j < ymax; ++j) {
-            m_terrain.refresh(i, j);
-        }
     }
 }
 
