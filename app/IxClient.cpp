@@ -59,18 +59,23 @@ bool IxClient::event(SDL_Event & event)
                     oldy = event.button.y;
                     oldScl = renderer.getScale();
                 }
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    const int x = event.motion.x;
-                    const int y = renderer.getHeight() - event.motion.y;
-                    renderer.origin();
-                    const float z = renderer.getZ(x, y);
-                    // Check that the point clicked on is not in the far
-                    // distance
-                    std::cout << "LEFT CLICK" << x << ":" << y << " "
-                              << z << std::endl << std::flush;
-                    if (z < 0.999) {
-                        std::cout << "Lets move" << std::endl << std::flush;
-                        moveCharacter(renderer.getWorldCoord(x, y, z));
+                if (event.button.button == SDL_BUTTON_LEFT && inGame) {
+                    Eris::Entity * we = world->getRootEntity();
+                    Eris::Entity * e = renderer.selectWorld(we, mterrain,
+                                                            event.motion.x,
+                                                            event.motion.y);
+                    if (e == we) {
+                        const int x = event.motion.x;
+                        const int y = renderer.getHeight() - event.motion.y;
+                        renderer.origin();
+                        const float z = renderer.getZ(x, y);
+                        // Check that the point clicked on is not in the far
+                        // distance
+                        if (z < 0.999) {
+                            moveCharacter(renderer.getWorldCoord(x, y, z));
+                        }
+                    } else {
+                        // We clicked on something other than the world.
                     }
                 }
                 return true;

@@ -26,6 +26,8 @@
 
 #include <sigc++/object_slot.h>
 
+#include <cassert>
+
 using Atlas::Message::Object;
 
 using Atlas::Objects::Operation::Move;
@@ -99,15 +101,12 @@ bool GameClient::setup()
 
 void GameClient::doWorld()
 {
-    if ((world == NULL) || !inGame) {
-        // std::cout << "No world" << std::endl << std::flush;
+    if (!inGame) {
         return;
     }
+    assert(world != 0);
     Eris::Entity * root = world->getRootEntity();
-    if (root == NULL) {
-        std::cout << "No root" << std::endl << std::flush;
-        return;
-    }
+    assert(root != 0);
     renderer.drawWorld(root);
 }
 
@@ -270,7 +269,7 @@ void GameClient::netDisconnected()
 
 void GameClient::worldEntityCreate(Eris::Entity *r)
 {
-    std::cout << "Created character" << std::endl << std::flush;
+    // std::cout << "Created character" << std::endl << std::flush;
 }
 
 void GameClient::worldEnter(Eris::Entity * chr)

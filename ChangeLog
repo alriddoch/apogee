@@ -1,5 +1,12 @@
 2003-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/GameClient.cpp: Clean up checking in game state.
+
+	* app/IsoClient.cpp, app/IxClient.cpp: Clean up left click
+	  handling to make propper use of the new selection code.
+
+2003-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.cpp, visual/Renderer.h: Add function for
 	  rendering bboxes as cuboids for selection. Implemnt results
 	  for select, and returnt the entity that has been clicked on.
@@ -20,8 +27,8 @@
 	* visual/Renderer.cpp, visual/Renderer.h: Implement selecting, though
 	  interpreting results is not yet there.
 
-	* app/GameClient.cpp: Clean up the way origin is used when rendering the
-	  world.
+	* app/GameClient.cpp: Clean up the way origin is used when rendering
+	  the world.
 
 	* app/IsoClient.cpp: Hook in to test the new select code.
 

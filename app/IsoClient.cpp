@@ -94,17 +94,23 @@ bool IsoClient::event(SDL_Event & event)
                     oldElv = renderer.getElevation();
                     oldScl = renderer.getScale();
                 }
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    renderer.selectWorld(world->getRootEntity(), mterrain,
-                                         event.motion.x, event.motion.y);
-                    const float x = event.motion.x;
-                    const float y = renderer.getHeight() - event.motion.y;
-                    renderer.origin();
-                    const float z = renderer.getZ(x, y);
-                    // Check that the point clicked on is not in the far
-                    // distance
-                    if (z < 0.9) {
-                        moveCharacter(renderer.getWorldCoord(x, y, z));
+                if (event.button.button == SDL_BUTTON_LEFT && inGame) {
+                    Eris::Entity * we = world->getRootEntity();
+                    Eris::Entity * e = renderer.selectWorld(we, mterrain,
+                                                            event.motion.x,
+                                                            event.motion.y);
+                    if (e == we) {
+                        const float x = event.motion.x;
+                        const float y = renderer.getHeight() - event.motion.y;
+                        renderer.origin();
+                        const float z = renderer.getZ(x, y);
+                        // Check that the point clicked on is not in the far
+                        // distance
+                        if (z < 0.9) {
+                            moveCharacter(renderer.getWorldCoord(x, y, z));
+                        }
+                    } else {
+                        // We clicked on something other than the world.
                     }
                 }
                 return true;
