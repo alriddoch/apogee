@@ -7,6 +7,8 @@ dnl Initialise automake
 
 AM_INIT_AUTOMAKE(apogee, 0.0.1)
 
+AM_MAINTAINER_MODE
+
 dnl Need libtool
 
 AM_PROG_LIBTOOL

@@ -15,7 +15,7 @@ WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge)
     updateTime = SDL_GetTicks();
 }
 
-void WorldEntity::movedSignal(Eris::Entity *, Eris::Coord)
+void WorldEntity::movedSignal(const Eris::Coord &)
 {
     updateTime = SDL_GetTicks();
 }

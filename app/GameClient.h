@@ -42,14 +42,14 @@ class GameClient : public Application {
     WorldEntity * character;
 
     void netConnected();
-    void netFailure(std::string msg);
-    void connectionLog(Eris::LogLevel level, std::string msg);
+    void netFailure(const std::string & msg);
+    void connectionLog(Eris::LogLevel level, const std::string & msg);
     void netDisconnected();
 
     void login(const std::string &, const std::string &);
     void createCharacter(const std::string &, const std::string &);
 
-    void lobbyTalk(Eris::Room *r, std::string nm, std::string t);
+    void lobbyTalk(Eris::Room *r, const std::string& nm, const std::string& t);
     void loginComplete(const Atlas::Objects::Entity::Player &p);
 
     void roomEnter(Eris::Room *r);
@@ -59,7 +59,7 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 
-    void charMoved(Eris::Entity *, Eris::Coord);
+    void charMoved(const Eris::Coord &);
 
     void moveCharacter(const Vector3D & pos);
     const Vector3D getAbsCharPos();

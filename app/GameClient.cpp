@@ -25,7 +25,8 @@ using Atlas::Message::Object;
 using Atlas::Objects::Operation::Move;
 using Atlas::Objects::Entity::GameEntity;
 
-void GameClient::lobbyTalk(Eris::Room *r, std::string nm, std::string t)
+void GameClient::lobbyTalk(Eris::Room *r, const std::string& nm,
+                                          const std::string& t)
 {
     std::cout << "TALK: " << t << std::endl << std::flush;
 }
@@ -65,7 +66,7 @@ void GameClient::roomEnter(Eris::Room *r)
     std::cout << "Enter room" << std::endl << std::flush;
 }
 
-void GameClient::netFailure(std::string msg)
+void GameClient::netFailure(const std::string & msg)
 {
     std::cout << "Got connection failure: " << msg << std::endl << std::flush;
     gui->addWidget(new Alert(*gui,renderer.getWidth()/2,
@@ -73,7 +74,7 @@ void GameClient::netFailure(std::string msg)
                                   msg));
 }
 
-void GameClient::connectionLog(Eris::LogLevel level, std::string msg)
+void GameClient::connectionLog(Eris::LogLevel level, const std::string & msg)
 {
     std::cout << "LOG: " << msg << std::endl << std::flush;
 }
@@ -121,7 +122,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
 
 }
 
-void GameClient::charMoved(Eris::Entity*, Eris::Coord)
+void GameClient::charMoved(const Eris::Coord &)
 {
     std::cout << "Char moved" << std::endl << std::flush;
 }
