@@ -55,16 +55,12 @@ void DemeterScene::viewPoint()
 
 void DemeterScene::drawSky()
 {
-    // static GLuint skyList = 0;
-    // if (!skyList) {
-        // skyList = glGenLists(1);
-        // glNewList(skyList, GL_COMPILE);
+    static GLuint skyList = 0;
+    if (!skyList || !glIsList(skyList)) {
+        skyList = glGenLists(1);
+        glNewList(skyList, GL_COMPILE);
     
-        static GLint t_front = -1,
-                     t_back = -1,
-                     t_left = -1,
-                     t_right = -1,
-                     t_up = -1;
+        GLuint t_front, t_back, t_left, t_right, t_up;
         static const float vertices[] = { -1, -1, -1,
                                      1, -1, -1,
                                      1,  1, -1,
@@ -103,21 +99,12 @@ void DemeterScene::drawSky()
         static const GLubyte right[] = { 2, 1, 5, 6 };
         static const GLubyte up[] = { 7, 6, 5, 4 };
         // static GLubyte down[] = { 0, 1, 2, 3 };
-        if (t_front == -1) {
-            t_front = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
-            t_back = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
-            t_left = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png", false);
-            t_right = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png", false);
-            t_up = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png", false);
-        }
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        projection();
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
-        glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+        t_front = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);
+        t_back = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_back.png", false);
+        t_left = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_left.png", false);
+        t_right = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_right.png", false);
+        t_up = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_up.png", false);
 
         glDepthMask(GL_FALSE);
         glColor3f(1.f, 1.f, 1.f);
@@ -147,7 +134,15 @@ void DemeterScene::drawSky()
  
         glDepthMask(GL_TRUE);
 
-        // glEndList();
-    // }
-    // glCallList(skyList);
+        glEndList();
+    }
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    projection();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(elevation-90, 1.0f, 0.0f, 0.0f);
+    glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+
+    glCallList(skyList);
 }

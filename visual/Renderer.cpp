@@ -77,6 +77,7 @@ bool Renderer::init()
             printf("  %d x %d\n", videoModes[i]->w, videoModes[i]->h);
         }
     }
+    fflush(stdout);
     // These should be turned on when running in production mode, but they
     // make using a debugger really hard and are only required in the perspective
     // client

@@ -72,12 +72,12 @@ unsigned int Texture::get(const std::string & filename, bool wrap, GLint filter)
     TextureStore::const_iterator I = textures().find(filename);
     if (I != textures().end()) {
         GLuint h = I->second.glHandle;
-        if (!glIsTexture(h)) {
-            std::cout << "Texture for \"" << filename
-                      << "\" in store is no longer a texture in this context"
-                      << std::endl << std::flush;
+        if (glIsTexture(h)) {
+            return h;
         }
-        return h;
+        std::cout << "Texture for \"" << filename
+                  << "\" in store is no longer a texture in this context"
+                  << std::endl << std::flush;
     }
     std::cout << "Loading new texture " << filename << std::endl << std::flush;
     SDL_Surface * image = imageLoad(filename);
