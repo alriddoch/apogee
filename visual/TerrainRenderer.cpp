@@ -297,16 +297,21 @@ void TerrainRenderer::drawShadow(const WFMath::Point<2> & pos, float radius)
     GLushort * iptr = indices - 1;
     int numind = 0;
     for(GLuint i = 0; i < diameter; ++i) {
-        for(GLuint j = 0; j <= diameter; ++j) {
-            *++iptr = j * size + i;
-            *++iptr = j * size + i + 1;
-            numind += 2;
-        }
-        if (++i >= diameter) { break; }
-        for(GLshort j = diameter; j >= 0; --j) {
-            *++iptr = j * size + i + 1;
-            *++iptr = j * size + i;
-            numind += 2;
+        // This ensures that we are drawing the same triangles
+        // in the same order as they are done in the original terrain
+        // passes
+        if ((i + nx) & 1) {
+            for(GLshort j = diameter; j >= 0; --j) {
+                *++iptr = j * size + i + 1;
+                *++iptr = j * size + i;
+                numind += 2;
+            }
+        } else {
+            for(GLuint j = 0; j <= diameter; ++j) {
+                *++iptr = j * size + i;
+                *++iptr = j * size + i + 1;
+                numind += 2;
+            }
         }
     }
     glVertexPointer(3, GL_FLOAT, 0, vertices);
@@ -371,15 +376,18 @@ TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
 
     int idx = -1;
     for (unsigned int i = 0; i < (segSize + 1) - 1; ++i) {
-        for (unsigned int j = 0; j < (segSize + 1); ++j) {
-            m_lineIndeces[++idx] = j * (segSize + 1) + i;
-            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
+        if (i & 1) {
+            for (int j = (segSize + 1) - 1; j >= 0; --j) {
+                m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
+                m_lineIndeces[++idx] = j * (segSize + 1) + i;
+            }
+        } else {
+            for (unsigned int j = 0; j < (segSize + 1); ++j) {
+                m_lineIndeces[++idx] = j * (segSize + 1) + i;
+                m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
+            }
         }
-        if (++i >= (segSize + 1) - 1) { break; }
-        for (int j = (segSize + 1) - 1; j >= 0; --j) {
-            m_lineIndeces[++idx] = j * (segSize + 1) + i + 1;
-            m_lineIndeces[++idx] = j * (segSize + 1) + i;
-        }
+        // if (++i >= (segSize + 1) - 1) { break; }
     }
     m_numLineIndeces = ++idx;
 
