@@ -97,7 +97,7 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
             // glLockArraysEXT(0, (segSize + 1) * (segSize + 1));
         // }
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
-                       GL_UNSIGNED_INT, m_lineIndeces);
+                       GL_UNSIGNED_SHORT, m_lineIndeces);
         // if (have_GL_EXT_compiled_vertex_array) {
             // glUnlockArraysEXT();
         // }
@@ -207,7 +207,7 @@ void TerrainRenderer::readTerrain()
 TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
     EntityRenderer(r, e), m_terrain(Mercator::Terrain::SHADED),
     m_numLineIndeces(0),
-    m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
+    m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
     m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
     m_haveTerrain(false)
 
