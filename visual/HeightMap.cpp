@@ -8,6 +8,8 @@
 
 #include <SDL_image.h>
 
+#include <iostream>
+
 HeightMap::HeightMap() : m_heightImage(NULL), m_buffer(NULL), m_pitch(0)
 {
 }
