@@ -1,5 +1,10 @@
 2004-03-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.cpp, visual/3dsRenderer.cpp:
+	  Handle rebuilding lists after a screen resize.
+
+2004-03-24  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Texture.cpp, visual/DemeterScene.cpp:
 	  Sort out texture reloading for the sky box.
 

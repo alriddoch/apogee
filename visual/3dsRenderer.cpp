@@ -173,16 +173,18 @@ void m3dsRenderer::draw3dsFile(Renderer & r)
 
 void m3dsRenderer::draw3dsMesh(Lib3dsMesh * mesh)
 {
-    if (!mesh->user.p) {
-        debug(std::cout << "Drawing as mesh" << std::endl << std::flush;);
-        VertexBuffer * vb = new VertexBuffer();
-        mesh->user.p = (void*)vb;
+    VertexBuffer * vb = (VertexBuffer*)mesh->user.p;
 
+    if (!vb) {
+        debug(std::cout << "Drawing as mesh" << std::endl << std::flush;);
+        vb = new VertexBuffer();
+        mesh->user.p = (void*)vb;
+        compileVertexBuffer(mesh, vb);
+    } else if (!glIsList(vb->bobject)) {
         compileVertexBuffer(mesh, vb);
     }
    
-    VertexBuffer * vb = (VertexBuffer*)mesh->user.p;
-
+    // FIXME Remove this test
     if (!glIsList(vb->bobject)) {
         std::cout << "display list for 3ds model is no longer a display list in this context" << std::endl << std::flush;
     }

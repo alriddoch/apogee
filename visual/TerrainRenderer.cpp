@@ -221,7 +221,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                                            M->second;
             DisplayListColumn::const_iterator N = dcol.find(J->first);
             GLuint display_list;
-            if (N != dcol.end()) {
+            if (N != dcol.end() && glIsList(N->second)) {
                 debug(std::cout << "Using display list for "
                                 << I->first << ", " << J->first
                                 << std::endl << std::flush;);
@@ -257,6 +257,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                 dcol[J->first] = display_list;
             }
 
+            // FIXME Remove this test
             if (!glIsList(display_list)) {
                 std::cout << "Display list for terrain segment " << I->first
                           << "," << J->first
