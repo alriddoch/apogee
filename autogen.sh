@@ -37,6 +37,6 @@ echo autoconf...
 
 autoconf
 
-./configure --enable-maintainer-mode $@
+./configure --prefix=/opt/worldforge --enable-maintainer-mode=yes --enable-debug=yes $@
 
 exit 0

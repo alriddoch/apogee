@@ -5,6 +5,8 @@
 #include "Alert.h"
 #include "Gui.h"
 
+#include "common/system.h"
+
 Sprite Alert::background;
 
 Alert::~Alert()
@@ -14,7 +16,7 @@ Alert::~Alert()
 void Alert::setup()
 {
     if (!Alert::background.loaded()) {
-        background.load("media/media-2d/collection-alriddoch/ui/panels/pnl_greystone_scored_1_up_462x90_ajr.png");
+        background.load(getMediaPath() + "/media/media-2d/collection-alriddoch/ui/panels/pnl_greystone_scored_1_up_462x90_ajr.png");
     }
 
     buttonName = m_g.newName();

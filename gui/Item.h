@@ -17,7 +17,9 @@ class Item : public Widget {
     Item(Gui & g, int x, int y) : Widget(g,x,y) { }
     virtual ~Item();
 
-    bool load(const char *);
+    bool load(const std::string & fname) {
+        return graphic.load(fname);
+    }
 
     virtual void setup();
     virtual void draw();

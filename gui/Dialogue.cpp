@@ -5,6 +5,8 @@
 #include "Dialogue.h"
 #include "Gui.h"
 
+#include "common/system.h"
+
 #include <algorithm>
 
 Sprite Dialogue::background;
@@ -16,7 +18,7 @@ Dialogue::~Dialogue()
 void Dialogue::setup()
 {
     if (!Dialogue::background.loaded()) {
-        background.load("media/media-2d/collection-alriddoch/ui/panels/pnl_greystone_scored_1_up_462x90_ajr.png");
+        background.load(getMediaPath() + "/media/media-2d/collection-alriddoch/ui/panels/pnl_greystone_scored_1_up_462x90_ajr.png");
     }
 
     cButtonName = m_g.newName();

@@ -1,3 +1,12 @@
+2003-11-17  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* common/system.cpp, common/system.h: Add new function for handling
+	  getting the system dependant prefix for the media path.
+
+	* gui/Alert.cpp, gui/Button.cpp, gui/Dialogue.cpp, gui/Item.cpp,
+	  gui/Item.h, gui/Option.cpp, gui/TextField.cpp: Start switching
+	  thing to using the common prefix for loading media.
+
 2003-10-23  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.h, visual/Renderer.cpp,

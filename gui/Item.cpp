@@ -8,11 +8,6 @@ Item::~Item()
 {
 }
 
-bool Item::load(const char * filename)
-{
-    return graphic.load(filename);
-}
-
 void Item::setup()
 {
     // This is where we would enumerate 

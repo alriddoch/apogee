@@ -5,6 +5,8 @@
 #include "TextField.h"
 #include "Gui.h"
 
+#include "common/system.h"
+
 #include <iostream>
 
 Sprite TextField::graphic;
@@ -16,7 +18,7 @@ TextField::~TextField()
 void TextField::setup()
 {
     if (!TextField::graphic.loaded()) {
-        graphic.load("media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
+        graphic.load(getMediaPath() + "/media/media-2d/collection-alriddoch/ui/buttons/button_horiz_greystone_scored_1_dn_115x25_ajr.png");
     }
 }
 
