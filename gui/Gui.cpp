@@ -9,23 +9,27 @@
 
 #include <GL/glu.h>
 
-const int bagName = 1;
+#include "Item.h"
 
-Gui::Gui(Renderer & r) : bag(NULL), renderer(r)
+Gui::Gui(Renderer & r) : renderer(r), nameCount(0)
 {
 
 }
 
 bool Gui::setup()
 {
-    bag = new Sprite();
-    bag->load("bag.png");
+    Item * bag = new Item(50, 50);
+    if (!bag->load("bag.png")) { return false; }
+    widgets[newName()] = bag;
     return true;
 }
 
 void Gui::draw()
 {
-    bag->draw();
+    widgmap::const_iterator I = widgets.begin();
+    for (; I != widgets.end(); I++) {
+        I->second->draw();
+    }
 }
 
 void Gui::select(int x, int y)
@@ -46,9 +50,12 @@ void Gui::select(int x, int y)
     glMatrixMode(GL_MODELVIEW);
     glInitNames();
 
-    glPushName(bagName);
-    bag->draw();
-    glPopName();
+    widgmap::const_iterator I = widgets.begin();
+    for (; I != widgets.end(); I++) {
+        glPushName(I->first);
+        I->second->select();
+        glPopName();
+    }
 
     int hits = glRenderMode(GL_RENDER);
 

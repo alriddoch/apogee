@@ -1,3 +1,5 @@
 noinst_LIBRARIES = libgui.a
 
-libgui_a_SOURCES = Gui.cpp Gui.h
+libgui_a_SOURCES = Gui.cpp Gui.h \
+		   Widget.cpp Widget.h \
+		   Item.cpp Item.h

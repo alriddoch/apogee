@@ -7,16 +7,23 @@
 
 #include <SDL.h>
 #include <GL/gl.h>
+#include <map>
 
 class Sprite;
 class Renderer;
+class Widget;
+
+typedef std::map<int, Widget *> widgmap;
 
 class Gui {
   private:
-    Sprite * bag;
     GLuint selectBuf[512];
     Renderer & renderer;
-    // Sprite * belt;
+    int nameCount;
+
+    widgmap widgets;
+
+    int newName() { return ++nameCount; }
   public:
     Gui(Renderer & r);
 
