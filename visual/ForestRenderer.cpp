@@ -8,14 +8,17 @@
 
 #include "Renderer.h"
 
+#include "app/WorldEntity.h"
+
 #include <Mercator/Plant.h>
 
 #include <Eris/Entity.h>
 
 #include <iostream>
+#include <cassert>
 
-ForestRenderer::ForestRenderer(Renderer & r, Eris::Entity & e):
-      BBoxRenderer(r, e)
+ForestRenderer::ForestRenderer(Renderer & r, RenderableEntity & e):
+      m3dsRenderer(r, e)
 {
 }
 
@@ -23,18 +26,34 @@ ForestRenderer::~ForestRenderer()
 {
 }
 
-void ForestRenderer::drawTree(float height)
+void ForestRenderer::drawTree(Renderer & r, float height)
 {
-    float width = height / 10.f;
-    draw3DBox(WFMath::AxisBox<3>(WFMath::Point<3>(0,0,0),
-                                 WFMath::Point<3>(width, width, height)));
+    float scale = height / 5;
+    glScalef(scale, scale, scale);
+    draw3dsFile(r);
+    // float width = height / 10.f;
+    // draw3DBox(WFMath::AxisBox<3>(WFMath::Point<3>(0,0,0),
+                                 // WFMath::Point<3>(width, width, height)));
 }
 
 void ForestRenderer::render(Renderer & r, const PosType & camPos)
 {
+    glEnable(GL_ALPHA_TEST);
+    glEnable(GL_NORMALIZE);
+    glAlphaFunc(GL_GREATER, 0.2f);
+
+    if (m_model == 0) {
+        return;
+    }
+
     if (!m_forest.getArea().isValid()) {
         m_forest.setVolume(m_ent.getBBox());
     }
+
+    // FIXME Assumes direct parent is terrain
+    Eris::Entity * pe = m_ent.getContainer();
+    RenderableEntity * re = dynamic_cast<RenderableEntity *>(pe);
+    assert(re != 0);
 
     const Mercator::Forest::PlantStore & ps = m_forest.getPlants();
 
@@ -48,13 +67,20 @@ void ForestRenderer::render(Renderer & r, const PosType & camPos)
         for(; J != I->second.end(); ++J) {
             const Mercator::Plant & p = J->second;
             const WFMath::Point<2> & d = p.getDisplacement();
+            const WFMath::Point<3> & forestPos = m_ent.getPosition();
+            WFMath::Point<3> pos(I->first + d.x() + forestPos.x(),
+                                 J->first + d.y() + forestPos.y(), forestPos.z());
+            re->constrainChild(m_ent, pos);
             glPushMatrix();
-            glTranslatef(d.x() + I->first, d.y() + J->first, 0.f);
+            glTranslatef(pos.x() - forestPos.x(), pos.y() - forestPos.y(), pos.z() - forestPos.z());
             r.orient(p.getOrientation());
-            drawTree(p.getHeight());
+            drawTree(r, p.getHeight());
             glPopMatrix();
         }
     }
+
+    glDisable(GL_NORMALIZE);
+    glDisable(GL_ALPHA_TEST);
 }
 
 void ForestRenderer::select(Renderer & r, const PosType & camPos)

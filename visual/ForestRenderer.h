@@ -5,24 +5,24 @@
 #ifndef APOGEE_FOREST_RENDERER_H
 #define APOGEE_FOREST_RENDERER_H
 
-#include "EntityRenderer.h"
+#include "3dsRenderer.h"
 
 #include <Mercator/Forest.h>
 
 #include <string>
 
-class ForestRenderer : public BBoxRenderer
+class ForestRenderer : public m3dsRenderer
 {
   public:
     Mercator::Forest m_forest;
   protected:
 
-    void drawTree(float height);
+    void drawTree(Renderer &, float height);
   public:
-    ForestRenderer(Renderer &, Eris::Entity & e);
+    ForestRenderer(Renderer &, RenderableEntity & e);
     virtual ~ForestRenderer();
 
-    void load(const std::string &) { }
+    // void load(const std::string &) { }
 
     virtual void render(Renderer &, const PosType & camPos);
     virtual void select(Renderer &, const PosType & camPos);

@@ -38,7 +38,7 @@ class TerrainRenderer : public EntityRenderer
     void drawShadow(const WFMath::Point<2> & pos, float radius = 1.f);
     void readTerrain();
   public:
-    TerrainRenderer(Renderer &, Eris::Entity & e);
+    TerrainRenderer(Renderer &, RenderableEntity & e);
     virtual ~TerrainRenderer();
 
     void load(const std::string &) { }

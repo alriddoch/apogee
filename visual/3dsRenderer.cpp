@@ -232,7 +232,7 @@ void m3dsRenderer::draw3dsNode(Renderer & r, Lib3dsNode * node)
     glPopMatrix();
 }
 
-m3dsRenderer::m3dsRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
+m3dsRenderer::m3dsRenderer(Renderer & r, RenderableEntity & e) : EntityRenderer(r, e)
 {
 }
 

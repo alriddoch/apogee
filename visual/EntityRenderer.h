@@ -10,18 +10,15 @@
 #include <sigc++/object.h>
 
 class Renderer;
-
-namespace Eris {
-  class Entity;
-}
+class RenderableEntity;
 
 class EntityRenderer : virtual public SigC::Object
 {
   public:
-    Eris::Entity & m_ent;
+    RenderableEntity & m_ent;
     bool m_drawContents;
 
-    EntityRenderer(Renderer &, Eris::Entity & e);
+    EntityRenderer(Renderer &, RenderableEntity & e);
     virtual ~EntityRenderer();
 
     bool drawContents() const { return m_drawContents; }
@@ -40,7 +37,7 @@ class BBoxRenderer : public EntityRenderer
     void draw3DBox(const WFMath::AxisBox<3> & bbox);
     void select3DBox(const WFMath::AxisBox<3> & bbox);
   public:
-    BBoxRenderer(Renderer &, Eris::Entity & e);
+    BBoxRenderer(Renderer &, RenderableEntity & e);
     virtual ~BBoxRenderer();
 
     virtual void render(Renderer &, const PosType & camPos);

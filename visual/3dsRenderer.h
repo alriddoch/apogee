@@ -34,7 +34,7 @@ class m3dsRenderer : public EntityRenderer
     void draw3dsMesh(Lib3dsMesh *);
     void draw3dsFile(Renderer&);
   public:
-    m3dsRenderer(Renderer &, Eris::Entity & e);
+    m3dsRenderer(Renderer &, RenderableEntity & e);
     virtual ~m3dsRenderer();
 
     void load(const std::string &);

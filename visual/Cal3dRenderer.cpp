@@ -40,7 +40,7 @@ void Cal3dRenderer::update(float secs)
     m_model->onUpdate(secs);
 }
 
-Cal3dRenderer::Cal3dRenderer(Renderer & r, Eris::Entity & e) :
+Cal3dRenderer::Cal3dRenderer(Renderer & r, RenderableEntity & e) :
                              EntityRenderer(r, e), m_model(0)
 {
     m_drawContents = false;

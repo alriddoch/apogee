@@ -6,11 +6,11 @@
 
 #include "EntityRenderer.h"
 
-#include <Eris/Entity.h>
+#include "app/WorldEntity.h"
 
 #include <wfmath/axisbox.h>
 
-EntityRenderer::EntityRenderer(Renderer & r, Eris::Entity & e) : m_ent(e),
+EntityRenderer::EntityRenderer(Renderer & r, RenderableEntity & e) : m_ent(e),
                                              m_drawContents(true)
 {
 }
@@ -81,7 +81,7 @@ void BBoxRenderer::select3DBox(const WFMath::AxisBox<3> & bbox)
     glDrawElements(GL_QUADS, 24, GL_UNSIGNED_INT, indices);
 }
 
-BBoxRenderer::BBoxRenderer(Renderer & r, Eris::Entity & e) : EntityRenderer(r, e)
+BBoxRenderer::BBoxRenderer(Renderer & r, RenderableEntity & e) : EntityRenderer(r, e)
 {
 }
 

@@ -8,9 +8,9 @@
 #include "Texture.h"
 #include "GLU.h"
 
-#include "common/debug.h"
+#include "app/WorldEntity.h"
 
-#include <Eris/Entity.h>
+#include "common/debug.h"
 
 #include <Mercator/Segment.h>
 #include <Mercator/FillShader.h>
@@ -395,7 +395,7 @@ void TerrainRenderer::readTerrain()
     }
 }
 
-TerrainRenderer::TerrainRenderer(Renderer & r, Eris::Entity & e) :
+TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
     EntityRenderer(r, e), m_terrain(Terrain::SHADED),
     m_numLineIndeces(0),
     m_lineIndeces(new unsigned short[(segSize + 1) * (segSize + 1) * 2]),
