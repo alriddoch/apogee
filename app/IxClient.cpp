@@ -106,11 +106,26 @@ bool IxClient::event(SDL_Event & event)
             break;
         case SDL_MOUSEBUTTONDOWN:
             if ((event.button.type & SDL_MOUSEBUTTONDOWN) &&
-                ((event.button.button & SDL_BUTTON_MIDDLE) ||
-                 (event.button.button & SDL_BUTTON_RIGHT)) &&
                 (event.button.state & SDL_PRESSED)) {
-                oldy = event.button.y;
-                oldScl = renderer.getScale();
+                if ((event.button.button == SDL_BUTTON_MIDDLE) ||
+                    (event.button.button == SDL_BUTTON_RIGHT)) {
+                    oldy = event.button.y;
+                    oldScl = renderer.getScale();
+                }
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    const int x = event.motion.x;
+                    const int y = renderer.getHeight() - event.motion.y;
+                    renderer.origin();
+                    const float z = renderer.getZ(x, y);
+                    // Check that the point clicked on is not in the far
+                    // distance
+                    std::cout << "LEFT CLICK" << x << ":" << y << " "
+                              << z << std::endl << std::flush;
+                    if (z < 0.999) {
+                        std::cout << "Lets move" << std::endl << std::flush;
+                        moveCharacter(renderer.getWorldCoord(x, y, z));
+                    }
+                }
                 // return false;
             }
             break;

@@ -24,18 +24,12 @@ class DemeterScene : public Renderer {
 
     Demeter::Terrain * terrain;
     Demeter::Settings * settings;
-    Demeter::Vector cameraPosition;
-    Demeter::Vector cameraAngle;
-    Demeter::Vector lookAt;
-    Demeter::Vector lookUp;
 
     Model * model;
     TileMap * tilemap;
     Eris::TypeInfo * charType;
     float worldTime;
 
-    Camera camera;
-    
     float z_offset;
 
     void init();

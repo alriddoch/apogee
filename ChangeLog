@@ -1,5 +1,12 @@
 2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/IxClient.cpp: Add code for moving to perigee.
+
+	* visual/DemeterScene.cpp, visual/DemeterScene.h: Make demeter code
+	  optional and disable by default. Clean up unnecessary camera code.
+
+2002-04-26  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/IxClient.cpp: Fix event code so keypress events get to
 	  the gui.
 

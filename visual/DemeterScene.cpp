@@ -20,6 +20,8 @@
 
 #include <iostream>
 
+// #define USE_DEMETER 1
+
 static const bool debug_flag = false;
 
 const float PI = 3.14159f;
@@ -71,11 +73,15 @@ void DemeterScene::init()
 
     const int maxNumVisibleTriangles = 40000;
 
-    // terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
-    // terrain = new Demeter::Terrain("LlanoElev.jpg", "LlanoTex.jpg", "grass.png", 30, 3, maxNumVisibleTriangles);
+#if USE_DEMETER
     terrain = new Demeter::Terrain("moraf_hm.jpg", "moraf.jpg", "grass.png", 0.78125, 0.03125, maxNumVisibleTriangles);
     terrain->SetMaximumVisibleBlockSize(64);
     // terrain->SetCommonTextureRepeats(50.0f);
+
+    cout << "Loaded Terrain " << terrain->GetWidth() << " : "
+         << terrain->GetHeight()
+         << endl << flush;
+#endif
 
     x_offset = -4.0f;
     y_offset = -4.0f;
@@ -83,16 +89,6 @@ void DemeterScene::init()
 
     elevation = 10;
     rotation = 45;
-    cout << "Loaded Terrain " << terrain->GetWidth() << " : "
-         << terrain->GetHeight()
-         << endl << flush;
-    cameraPosition.x = terrain->GetWidth() / 2.0f + x_offset;//- 400.0f;
-    cameraPosition.y = terrain->GetHeight() / 2.0f + y_offset;//- 351.0f;
-    cameraPosition.z = z_offset;
-    camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
-    cameraAngle.x = 0.0f;
-    cameraAngle.y = 0.0f;
-    cameraAngle.z = 0.0f;
 
     // GLfloat ambientColor[] = {1, 1, 1, 1.0};
     // GLfloat diffuseColor[] = {0, 1, 0, 1.0};
@@ -112,9 +108,7 @@ void DemeterScene::update(float secs)
 void DemeterScene::shapeView()
 {
     const float maxViewDistance = 4500.0f;
-    //if (screen != NULL) {
-        //SDL_FreeSurface(screen);
-    //}
+
     if ((screen = SDL_SetVideoMode(width, height, 16,
             SDL_OPENGL|SDL_DOUBLEBUF|SDL_RESIZABLE)) == NULL) {
         std::cerr << "Failed to set video mode" << std::endl << std::flush;
@@ -351,7 +345,7 @@ void DemeterScene::drawMap(Coal::Container & map_base, HeightMap & map_height)
 
     tilemap->draw(map_height, x_offset, y_offset);
 
-#if 1
+#if USE_DEMETER
     glTranslatef(0.0f, 0.0f, -4.0f);
 
     const float threshold = 12.0f;
@@ -371,7 +365,7 @@ void DemeterScene::drawGui()
     glOrtho(0, width, 0, height, -20.0f, 20.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
-    glClear(GL_DEPTH_BUFFER_BIT);
+    // glClear(GL_DEPTH_BUFFER_BIT);
     // glDisable(GL_CULL_FACE);
 }
 
