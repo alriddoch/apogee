@@ -5,6 +5,10 @@ skin = "mason_skin"
 
 [mason_skin]
 
+compass_case = "media/media_new/themes/apogee/moraf/compass_case.png"
+compass_needle = "media/media_new/themes/apogee/moraf/compass_needle.png"
+compass_shadow = "media/media_new/themes/apogee/moraf/compass_needle_shadow.png"
+
 button_up = "button_up.png"
 button_down = "button_down.png"
 

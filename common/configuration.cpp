@@ -10,8 +10,6 @@ varconf::Config * global_conf;
 
 std::string etc_directory = ETCDIR;
 
-std::string skin;
-
 bool loadConfig(int argc, char ** argv)
 {
     global_conf = varconf::Config::inst();
@@ -67,10 +65,6 @@ bool loadConfig(int argc, char ** argv)
     global_conf->getCmdline(argc, argv);
 
     // Config is now loaded. Now set the values of some globals.
-
-    if (global_conf->findItem("apogee", "skin")) {
-        skin = global_conf->getItem("apogee","skin");
-    }
 
     return false;
 }

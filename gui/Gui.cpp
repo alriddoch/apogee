@@ -11,12 +11,16 @@
 
 #include "font.h"
 
+#include "common/configuration.h"
+
 #include <visual/Sprite.h>
 #include <visual/Renderer.h>
 
 #if USE_PUI
 #include <plib/pu.h>
 #endif
+
+#include <varconf/Config.h>
 
 #include <GL/glu.h>
 
@@ -42,6 +46,13 @@ bool Gui::setup()
     // Widget * w = new Alert(*this, 500, 60, "This program is currently under test");
     // w->setup();
     // widgets[newName()] = w;
+
+    if (global_conf->findItem("apogee", "skin")) {
+        skinName = global_conf->getItem("apogee", "skin");
+        std::cout << "Got skin " << skinName << std::endl << std::flush;
+    } else {
+        std::cout << "No skin" << std::endl << std::flush;
+    }
 
 #if USE_PUI
     puInit();

@@ -12,7 +12,6 @@ namespace varconf {
 }
 
 extern varconf::Config * global_conf;
-extern std::string skin;
 
 bool loadConfig(int argc, char ** argv);
 

@@ -6,6 +6,9 @@
 #include "Gui.h"
 
 #include "common/system.h"
+#include "common/configuration.h"
+
+#include <varconf/Config.h>
 
 Sprite Compass::compass_case;
 Sprite Compass::compass_needle;
@@ -18,13 +21,25 @@ Compass::~Compass()
 void Compass::setup()
 {
     if (!Compass::compass_case.loaded()) {
-        compass_case.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_case.png");
+        std::string ccase;
+        if (global_conf->findItem(m_g.getSkinName(), "compass_case")) {
+            ccase = global_conf->getItem(m_g.getSkinName(), "compass_case");
+        }
+        compass_case.load(getMediaPath() + "/" + ccase);
     }
     if (!Compass::compass_needle.loaded()) {
-        compass_needle.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_needle.png");
+        std::string needle;
+        if (global_conf->findItem(m_g.getSkinName(), "compass_needle")) {
+            needle = global_conf->getItem(m_g.getSkinName(), "compass_needle");
+        }
+        compass_needle.load(getMediaPath() + "/" + needle);
     }
     if (!Compass::needle_shadow.loaded()) {
-        needle_shadow.load(getMediaPath() + "/media/media_new/themes/apogee/moraf/compass_needle_shadow.png");
+        std::string shadow;
+        if (global_conf->findItem(m_g.getSkinName(), "compass_shadow")) {
+            shadow = global_conf->getItem(m_g.getSkinName(), "compass_shadow");
+        }
+        needle_shadow.load(getMediaPath() + "/" + shadow);
     }
 }
 

@@ -11,6 +11,7 @@
 
 #include <map>
 #include <list>
+#include <string>
 
 class Sprite;
 class Renderer;
@@ -35,11 +36,13 @@ class Gui {
     widgmap widgets;
     hitlist hitNames;
     int focus;
+    std::string skinName;
   public:
     Gui(Renderer & r);
 
     int newName() { return ++nameCount; }
     const hitlist & getHits() { return hitNames; }
+    const std::string & getSkinName() const { return skinName; }
 
     bool setup();
     void draw();
