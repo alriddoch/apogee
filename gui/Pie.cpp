@@ -18,7 +18,7 @@ void Pie::setup()
         m_sliceGraphic.load("pieslice_32.png");
     }
 
-    for(int i = 0; i < 5; ++i) {
+    for(int i = 0; i < 10; ++i) {
         PieSlice foo;
         m_slices.push_back(foo);
     }
@@ -38,9 +38,10 @@ void Pie::draw()
 
     glPushMatrix();
     for(int i = 0; i < numSlices; ++i) {
-        glRotatef(angle, 0.f, 0.f, 1.f);
         glPushMatrix();
-        glTranslatef(40.f, 0.f, 0.f);
+        glRotatef(angle * i, 0.f, 0.f, 1.f);
+        glTranslatef(60.f, 0.f, 0.f);
+        glRotatef(angle * i, 0.f, 0.f, -1.f);
         m_sliceGraphic.draw();
         glPopMatrix();
     }
