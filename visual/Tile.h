@@ -2,8 +2,8 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#ifndef EQUATOR_TILE_H
-#define EQUATOR_TILE_H
+#ifndef APOGEE_VISUAL_TILE_H
+#define APOGEE_VISUAL_TILE_H
 
 struct SDL_Surface;
 
@@ -48,4 +48,4 @@ class Tile {
     float ph() { return m_ph; }
 };
 
-#endif // EQUATOR_TILE_H
+#endif // APOGEE_VISUAL_TILE_H
