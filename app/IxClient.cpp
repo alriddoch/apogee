@@ -61,9 +61,8 @@ bool IxClient::event(SDL_Event & event)
                 }
                 if (event.button.button == SDL_BUTTON_LEFT && inGame) {
                     Eris::Entity * we = world->getRootEntity();
-                    Eris::Entity * e = renderer.selectWorld(we, mterrain,
-                                                            event.motion.x,
-                                                            event.motion.y);
+                    Eris::Entity * e = renderer.selectWorld(we, event.motion.x,
+                                                                event.motion.y);
                     if (e == we) {
                         const int x = event.motion.x;
                         const int y = renderer.getHeight() - event.motion.y;

@@ -117,7 +117,7 @@ class Renderer {
     void select3DBox(const WFMath::AxisBox<3> & bbox);
     void selectCal3DModel(Model *, const WFMath::Quaternion &);
     void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);
-    Eris::Entity * selectWorld(Eris::Entity *, Mercator::Terrain &, int, int);
+    Eris::Entity * selectWorld(Eris::Entity *, int, int);
 
     void resize(int,int);
     void clear();

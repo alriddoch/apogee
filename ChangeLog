@@ -1,3 +1,14 @@
+2003-06-10  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp, app/GameClient.h, app/IsoClient.cpp,
+	  app/IxClient.cpp, 
+	  Remove old terrain demo code.
+
+	* visual/EntityRenderer.cpp: Temporarily disable debug bbox renderer.
+
+	* visual/Renderer.cpp: Remove demo tree renderer. Re-work fullscreen
+	  res calculation, so it picks the next one up, not the next one down.
+
 2003-06-09  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/EntityRenderer.cpp: Only draw an entities bounding box if

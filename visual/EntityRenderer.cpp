@@ -103,13 +103,13 @@ BBoxRenderer::~BBoxRenderer()
 void BBoxRenderer::render(Renderer &)
 {
     if (m_ent.hasBBox()) {
-        draw3DBox(m_ent.getBBox());
+        // draw3DBox(m_ent.getBBox());
     }
 }
 
 void BBoxRenderer::select(Renderer &)
 {
     if (m_ent.hasBBox()) {
-        select3DBox(m_ent.getBBox());
+        // select3DBox(m_ent.getBBox());
     }
 }

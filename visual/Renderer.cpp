@@ -125,7 +125,7 @@ void Renderer::init()
     std::cout << "DEPTH BITS AVAILABLE: " << depthbits
               << std::endl << std::flush;
 
-    treemodel = lib3ds_file_load("oak.3ds");
+    // treemodel = lib3ds_file_load("oak.3ds");
     if (!treemodel) {
         std::cerr << "Unable to load oak.3ds model file"
                   << std::endl << std::flush;
@@ -489,8 +489,7 @@ void Renderer::drawEntity(Eris::Entity * ent)
 
 void Renderer::drawWorld(Eris::Entity * wrld)
 {
-    draw3dsFile(treemodel);
-
+    // draw3dsFile(treemodel);
 
     worldTime = SDL_GetTicks();
     if (charType == NULL) {
@@ -658,9 +657,9 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
                     << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
-        std::cout << "DOING " << e->getID() << std::endl << std::flush;
+        debug(std::cout << "DOING " << e->getID() << std::endl << std::flush;);
         if (!e->isVisible()) {
-            std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;
+            debug(std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;);
             continue;
         }
         selectEntity(e, name, next);
@@ -668,7 +667,7 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
     glPopMatrix();
 }
 
-Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & ground, int x, int y)
+Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, int x, int y)
 {
     GLuint selectBuf[512];
     GLuint nextName = 0;
@@ -689,16 +688,16 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
     glInitNames();
     
     glPushName(nextName);
-    std::cout << "SELECTING" << std::endl << std::flush;
+    debug(std::cout << "SELECTING" << std::endl << std::flush;);
 
     selectEntity(wrld, nameMap, nextName);
 
-    std::cout << "DONE ENITTIES" << std::endl << std::flush;
+    debug(std::cout << "DONE ENITTIES" << std::endl << std::flush;);
     glPopName();
 
     int hits = glRenderMode(GL_RENDER);
 
-    std::cout << "DONE POST " << hits << std::endl << std::flush;
+    debug(std::cout << "DONE POST " << hits << std::endl << std::flush;);
     if (hits < 1) {
         return 0;
     }
@@ -708,7 +707,7 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & gr
     GLuint * namePtr;
     for (int i = 0; i < hits; ++i) {
         int names = *(ptr++);
-        std::cout << "{" << *ptr << "}";
+        debug(std::cout << "{" << *ptr << "}";);
         if (*ptr < minDepth) {
             noNames = names;
             minDepth = *ptr;
@@ -748,12 +747,12 @@ void Renderer::toggleFullscreen()
     assert(width > 0);
 
     static const int resolutions[] = {
-        1600, 1200,
-        1280, 1024,
-        1024, 768,
-        800, 600,
-        640, 480,
         320, 200,
+        640, 480,
+        800, 600,
+        1024, 768,
+        1280, 1024,
+        1600, 1200,
         0, 0
     };
     int new_width, new_height;
@@ -763,10 +762,10 @@ void Renderer::toggleFullscreen()
         window_width = width;
         window_height = height;
         const int * res;
-        for(res = &resolutions[0]; *res > width ; res += 2);
+        for(res = &resolutions[0]; *res <= width ; res += 2);
         if ((*res) < 1) {
-            new_width = 320;
-            new_height = 200;
+            new_width = 1600;
+            new_height = 1200;
         } else {
             new_width = *res;
             new_height = *++res;
