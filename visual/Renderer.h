@@ -28,6 +28,10 @@ namespace Eris {
   class Quaternion;
 }
 
+namespace Mercator {
+  class Terrain;
+}
+
 class Renderer {
   protected:
     Renderer(Application & app, int wdth, int hght);
@@ -80,6 +84,7 @@ class Renderer {
     virtual void drawEntity(Eris::Entity * ent) = 0;
     virtual void drawWorld(Eris::Entity * wrld) = 0;
     virtual void drawMap(Coal::Container &, HeightMap &) = 0;
+    virtual void drawMap(Mercator::Terrain &) = 0;
     virtual void drawGui() = 0;
     virtual void resize(int,int) = 0;
     virtual void clear() = 0;

@@ -38,6 +38,7 @@ class DemeterScene : public Renderer {
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
     void drawMap(Coal::Container &, HeightMap &);
+    void drawMap(Mercator::Terrain &);
     void drawGui();
     void resize(int,int);
     void clear();

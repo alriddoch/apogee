@@ -40,6 +40,19 @@ bool IsoClient::setup()
     // debug.Dump (map_database);
 
     map_height.load("moraf_hm.png");
+    mterrain.setBasePoint(-1, -1, -8.f);
+    mterrain.setBasePoint(-1, 0, -6.f);
+    mterrain.setBasePoint(0, -1, -10.f);
+    mterrain.setBasePoint(0, 0, 0.f);
+    mterrain.setBasePoint(0, 1, 8.f);
+    mterrain.setBasePoint(1, 0, 4.f);
+    mterrain.setBasePoint(1, 1, 14.f);
+    mterrain.setBasePoint(1, -1, -4.f);
+    mterrain.setBasePoint(-1, 1, -4.f);
+    mterrain.refresh(0, 0);
+    mterrain.refresh(0, 1);
+    mterrain.refresh(1, 0);
+    mterrain.refresh(1, 1);
 
     gui = new Gui(renderer);
     gui->setup();
@@ -83,8 +96,9 @@ bool IsoClient::update(float secs)
         renderer.setZoffset(offset.z());
     }
     renderer.clear();
-    renderer.lightOn();
-    renderer.drawMap(map_database, map_height);
+    renderer.lightOff();
+    // renderer.drawMap(map_database, map_height);
+    renderer.drawMap(mterrain);
     renderer.origin();
 
     doWorld();

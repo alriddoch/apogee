@@ -21,6 +21,9 @@
 #include <Eris/TypeInfo.h>
 #include <Eris/Connection.h>
 
+#include <Mercator/Terrain.h>
+#include <Mercator/Segment.h>
+
 #include <lib3ds/mesh.h>
 #include <lib3ds/node.h>
 #include <lib3ds/material.h>
@@ -45,7 +48,11 @@ Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(app, wdth, hght),
                                            frameCount(0), time(0), lastCount(0),
                                            tilemap(NULL), charType(NULL),
-                                           treemodel(NULL), treemodel_list(0)
+                                           treemodel(NULL), treemodel_list(0),
+                                           m_numLineIndeces(0),
+                       m_lineIndeces(new unsigned int[segSize * segSize * 2]),
+                       m_texCoords(new float[segSize * segSize * 3])
+
 {
     init();
 }
@@ -104,6 +111,31 @@ void Isometric::init()
     } else {
         lib3ds_file_eval(treemodel,0);
     }
+
+    int idx = -1;
+    for (int i = 0; i < segSize - 1; ++i) {
+        for (int j = 0; j < segSize; ++j) {
+            m_lineIndeces[++idx] = j * segSize + i;
+            m_lineIndeces[++idx] = j * segSize + i + 1;
+        }
+        if (++i >= segSize - 1) { break; }
+        for (int j = segSize - 1; j >= 0; --j) {
+            m_lineIndeces[++idx] = j * segSize + i + 1;
+            m_lineIndeces[++idx] = j * segSize + i;
+        }
+    }
+    m_numLineIndeces = ++idx;
+
+    int tidx = -1;
+    for(int j = 0; j < segSize; ++j) {
+        for(int i = 0; i < segSize; ++i) {
+            m_texCoords[++tidx] = ((float)i)/8;
+            std::cout << m_texCoords[tidx] << ":";
+            m_texCoords[++tidx] = ((float)j)/8;
+            std::cout << m_texCoords[tidx] << ":";
+        }
+    }
+    std::cout << std::endl << std::flush;
 }
 
 void Isometric::draw3dsFile(Lib3dsFile * node)
@@ -498,6 +530,63 @@ void Isometric::drawMap(Coal::Container & map_base, HeightMap & map_height)
 
     // glDepthMask(GL_TRUE);
     // glEnable(GL_DEPTH_TEST);
+}
+
+void Isometric::drawRegion(Mercator::Segment * map)
+{
+    GLint texture = -1;
+    texture = Texture::get("rabbithill_grass_hh.png");
+    float * harray = new float[segSize * segSize * 3];
+    int idx = -1, cdx = -1;
+    for(int j = 0; j < segSize; ++j) {
+        for(int i = 0; i < segSize; ++i) {
+            float h = map->get(i,j);
+            harray[++idx] = i;
+            harray[++idx] = j;
+            harray[++idx] = h;
+        }
+    }
+    glEnableClientState(GL_VERTEX_ARRAY);
+    if (texture != -1) {
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(2, GL_FLOAT, 0, harray);
+        glBindTexture(GL_TEXTURE_2D, texture);
+    }
+    glVertexPointer(3, GL_FLOAT, 0, harray);
+    // if (have_GL_EXT_compiled_vertex_array) {
+        // glLockArraysEXT(0, segSize * segSize);
+    // }
+    glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
+                   GL_UNSIGNED_INT, m_lineIndeces);
+    // if (have_GL_EXT_compiled_vertex_array) {
+        // glUnlockArraysEXT();
+    // }
+    if (texture != -1) {
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glDisable(GL_TEXTURE_2D);
+    }
+    glDisableClientState(GL_VERTEX_ARRAY);
+    delete harray;
+}
+
+void Isometric::drawMap(Mercator::Terrain & t)
+{
+    origin();
+
+    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+
+    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+    for (; I != segs.end(); ++I) {
+        const Mercator::Terrain::Segmentcolumn & col = I->second;
+        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+        for (; J != col.end(); ++J) {
+            glPushMatrix();
+            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+            drawRegion(J->second);
+            glPopMatrix();
+        }
+    }
 }
 
 void Isometric::drawGui()

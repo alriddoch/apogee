@@ -5,14 +5,16 @@
 #ifndef APOGEE_ISOCLIENT_H
 #define APOGEE_ISOCLIENT_H
 
-#include <coal/container.h>
+#include "GameClient.h"
 
 #include <visual/Isometric.h>
 #include <visual/HeightMap.h>
 
-#include <string>
+#include <coal/container.h>
 
-#include "GameClient.h"
+#include <Mercator/Terrain.h>
+
+#include <string>
 
 class Sprite;
 class Compass;
@@ -23,6 +25,7 @@ class IsoClient : public GameClient {
 
     Coal::Container map_database;
     HeightMap map_height;
+    Mercator::Terrain mterrain;
     Compass * compassWidget;
   public:
     IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)

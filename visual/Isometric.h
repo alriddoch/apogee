@@ -18,6 +18,10 @@ namespace Coal {
   class Container;
 }
 
+namespace Mercator {
+  class Segment;
+}
+
 class Isometric : public Renderer {
   private:
     TileMap * tilemap;
@@ -26,11 +30,17 @@ class Isometric : public Renderer {
     int frameCount;
     float time;
     float lastCount;
+    int m_numLineIndeces;
+    unsigned int * const m_lineIndeces;
+    float * const m_texCoords;
+
+    static const int segSize = 64;
 
     void init();
     void shapeView();
     void draw3dsNode(Lib3dsNode * node);
     void draw3dsFile(Lib3dsFile * node);
+    void drawRegion(Mercator::Segment *);
 
     void Isometric::buildTileMap(Coal::Container &);
   public:
@@ -49,6 +59,7 @@ class Isometric : public Renderer {
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
     void drawMap(Coal::Container &, HeightMap &);
+    void drawMap(Mercator::Terrain &);
     void drawGui();
     void resize(int,int);
     void clear();
