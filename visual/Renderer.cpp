@@ -151,6 +151,10 @@ void Renderer::shapeView()
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
+    GLint maxTextureSize;
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    std::cout << "Max texture size " << maxTextureSize << std::endl;
+
     if (glIsTexture(17)) {
         std::cout << "17 is a texture" << std::endl << std::flush;
     } else {

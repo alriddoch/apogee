@@ -1,8 +1,6 @@
 toParentCoords and toLocalCoords do not operate on itself, it returns the
 transformed value.
 
-Unmatched calls to glEnableClientState in 3dsRenderer.cpp
-
 Make Texture class instancable, and use it to store enough state with
 each texture necessary to reload that texture. Use instances of this
 class in the texture db, and implement iterating over it to reload
