@@ -65,7 +65,7 @@ void DemeterScene::drawSky()
                      t_left = -1,
                      t_right = -1,
                      t_up = -1;
-        static float vertices[] = { -1, -1, -1,
+        static const float vertices[] = { -1, -1, -1,
                                      1, -1, -1,
                                      1,  1, -1,
                                     -1,  1, -1,
@@ -73,7 +73,7 @@ void DemeterScene::drawSky()
                                      1, -1,  1,
                                      1,  1,  1,
                                     -1,  1,  1 };
-        static float fb_tcoords[] = { 1, 0,
+        static const float fb_tcoords[] = { 1, 0,
                                       0, 0,
                                       1, 0,
                                       0, 0,
@@ -81,7 +81,7 @@ void DemeterScene::drawSky()
                                       0, 1,
                                       1, 1,
                                       0, 1 };
-        static float lr_tcoords[] = { 0, 0,
+        static const float lr_tcoords[] = { 0, 0,
                                       1, 0,
                                       0, 0,
                                       1, 0,
@@ -89,7 +89,7 @@ void DemeterScene::drawSky()
                                       1, 1,
                                       0, 1,
                                       1, 1 };
-        static float ud_tcoords[] = { 0, 0,
+        static const float ud_tcoords[] = { 0, 0,
                                       1, 0,
                                       1, 1,
                                       0, 1,
@@ -97,11 +97,11 @@ void DemeterScene::drawSky()
                                       1, 1,
                                       1, 0,
                                       0, 0 };
-        static GLubyte front[] = { 3, 2, 6, 7 };
-        static GLubyte back[] = { 1, 0, 4, 5 };
-        static GLubyte left[] = { 0, 3, 7, 4 };
-        static GLubyte right[] = { 2, 1, 5, 6 };
-        static GLubyte up[] = { 7, 6, 5, 4 };
+        static const GLubyte front[] = { 3, 2, 6, 7 };
+        static const GLubyte back[] = { 1, 0, 4, 5 };
+        static const GLubyte left[] = { 0, 3, 7, 4 };
+        static const GLubyte right[] = { 2, 1, 5, 6 };
+        static const GLubyte up[] = { 7, 6, 5, 4 };
         // static GLubyte down[] = { 0, 1, 2, 3 };
         if (t_front == -1) {
             t_front = Texture::get(getMediaPath() + "/media/media-3d/collection-gfire/textures/envs/sunsky01/skybox_256_front.png", false);

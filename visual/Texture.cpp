@@ -45,7 +45,7 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
     Uint8 *tmpbuf;
     int i;
 
-    /* GL surfaces are upsidedown and RGB, not BGR :-) */
+    // GL surfaces are upsidedown
     tmpbuf = (Uint8 *)malloc(image->pitch);
     if ( tmpbuf == NULL ) {
         fprintf(stderr, "Out of memory\n");
@@ -55,16 +55,7 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
     rowhi = (Uint8 *)image->pixels;
     rowlo = rowhi + (image->h * image->pitch) - image->pitch;
     for ( i=0; i<image->h/2; ++i ) {
-#if 0
-        for ( j=0; j<image->w; ++j ) {
-            tmpch = rowhi[j*3];
-            rowhi[j*3] = rowhi[j*3+2];
-            rowhi[j*3+2] = tmpch;
-            tmpch = rowlo[j*3];
-            rowlo[j*3] = rowlo[j*3+2];
-            rowlo[j*3+2] = tmpch;
-        }
-#endif
+        // Code to convert reverse order of colour triples removed.
         memcpy(tmpbuf, rowhi, image->pitch);
         memcpy(rowhi, rowlo, image->pitch);
         memcpy(rowlo, tmpbuf, image->pitch);

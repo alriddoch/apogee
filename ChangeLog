@@ -1,5 +1,11 @@
 2004-01-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Texture.cpp: Remove obsolete commented out code.
+
+	* visual/DemeterScene.cpp: Make skybox coords const.
+
+2004-01-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/apogee.cpp, app/perigee.cpp: Tweak required headers
 	  due to changes in eris.
 
