@@ -167,6 +167,17 @@ bool Editor::event(SDL_Event & event)
                 return false;
             }
             break;
+        case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+                case SDLK_0:
+                    renderer->setElevation(30);
+                    renderer->setRotation(45);
+                    return true;
+                    break;
+                default:
+                    break;
+            }
+            break;
     }
     return false;
 }

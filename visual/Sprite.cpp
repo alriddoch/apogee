@@ -6,6 +6,7 @@
 #include <SDL_image.h>
 
 #include <math.h>
+#include <unistd.h>
 
 unsigned int Sprite::twoN(unsigned int size)
 {
@@ -27,9 +28,12 @@ bool Sprite::load(const string & filename)
         return false;
     }
 
-    unsigned int w = twoN(image->w);
-    unsigned int h = twoN(image->h);
-    SDL_Surface * texImage = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32,
+    const unsigned int textur_w = twoN(image->w);
+    const unsigned int textur_h = twoN(image->h);
+    const unsigned int sprite_w = image->w;
+    const unsigned int sprite_h = image->h;
+    SDL_Surface * texImage = SDL_CreateRGBSurface(SDL_SWSURFACE, textur_w,
+                                                  textur_h, 32,
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
                     0x000000FF, 
                     0x0000FF00, 
@@ -43,8 +47,8 @@ bool Sprite::load(const string & filename)
 #endif
                     );
 
-    SDL_SetAlpha(image, SDL_SRCALPHA, 0);
-    SDL_Rect dest = { 0, h - image->h, image->w, image->h };
+    SDL_SetAlpha(image, 0, 0);
+    SDL_Rect dest = { 0, textur_h - sprite_h, sprite_w, sprite_h };
     SDL_BlitSurface(image, NULL, texImage, &dest);
     SDL_FreeSurface(image);
     image = Texture::imageTransform(texImage);
@@ -52,13 +56,13 @@ bool Sprite::load(const string & filename)
         SDL_FreeSurface(texImage);
         return false;
     }
-    tex_id = Texture::loadTexture(texImage);
-    SDL_FreeSurface(texImage);
+    tex_id = Texture::loadTexture(image);
+    m_w = (double)sprite_w / Renderer::meterSize;
+    m_h = (double)sprite_h / Renderer::meterSize;
+    m_pw = (double)sprite_w / textur_w;
+    m_ph = (double)sprite_h / textur_h;
+    SDL_FreeSurface(image);
     if (tex_id == -1) { return false; }
-    m_w = (double)image->w / Renderer::meterSize;
-    m_h = (double)image->h / Renderer::meterSize;
-    m_pw = (double)image->w / w;
-    m_ph = (double)image->h / h;
     return true;
 }
 

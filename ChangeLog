@@ -1,0 +1,5 @@
+2001-01-13  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* Fixed alpha blending in sprite code.
+
+	* Added reset isometric projection key 0.

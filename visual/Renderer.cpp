@@ -115,7 +115,6 @@ void Renderer::draw3Dtest()
 
     glBindTexture(GL_TEXTURE_2D, Texture::get("texture.png"));
     glEnable(GL_TEXTURE_2D);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBegin(GL_QUADS);
     glTexCoord2f(1.0, 1.0); glVertex3f(0.5, 0.5, 0.5);
     glTexCoord2f(1.0, 0.0); glVertex3f(0.5, -0.5, 0.5);
@@ -202,7 +201,6 @@ void Renderer::drawMapRegion(CoalRegion & map_region)
         } else {
             glBindTexture(GL_TEXTURE_2D, tex_id);
             glEnable(GL_TEXTURE_2D);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glBegin(GL_POLYGON);                // start drawing a polygon
             glColor3f(1.0, 0.0, 1.0);
         }
