@@ -83,6 +83,7 @@ void Sprite::draw()
     if (!loadedp) { return; }
     glBindTexture(GL_TEXTURE_2D, tex_id);
     glEnable(GL_TEXTURE_2D);
+    glColor3f(1.f,1.f,1.f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     float texcoords[] = { 0, 0,
                           m_pw, 0,

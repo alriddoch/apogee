@@ -11,8 +11,8 @@
 #include <wfmath/quaternion.h>
 #include <wfmath/point.h>
 
-int xoffset[] = {0, 80, -80, 160, -160, 240, -240 };
-int yoffset[] = {0, -15, -15, -35, -35, -60, -60 };
+static int xoffset[] = {0, 80, -80, 160, -160, 240, -240 };
+static int yoffset[] = {0, -15, -15, -35, -35, -60, -60 };
 
 CharSelector::~CharSelector()
 {

@@ -1,3 +1,17 @@
+2004-03-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/ServerSelector.h, gui/ServerSelector.cpp: Add a new
+	  widget to browse servers from the metaserver.
+
+	* gui/CharSelector.cpp: Make array of positions static to avoid
+	  a collision.
+
+	* visual/Sprite.cpp, visual/Renderer.cpp: Make sure color is set
+	  before drawing sprites, so texture replace isn't required.
+
+	* app/GameClient.h, app/GameClient.cpp: Add the server selector
+	  widget.
+
 2004-02-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* common/system.cpp: Default to "." as the media path for windows

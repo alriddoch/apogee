@@ -22,6 +22,7 @@ namespace Eris {
   class Entity;
   class Coord;
   class Connection;
+  class ServerInfo;
 }
 
 namespace Atlas {
@@ -61,6 +62,9 @@ class GameClient : public Application {
 
     bool setup();
     bool update(float);
+
+    void connectHost(const std::string &);
+    void specifyHost();
 
     void netConnected();
     void netFailure(const std::string & msg);

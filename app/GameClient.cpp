@@ -10,6 +10,7 @@
 #include <gui/Dialogue.h>
 #include <gui/Option.h>
 #include <gui/CharSelector.h>
+#include <gui/ServerSelector.h>
 #include <gui/Alert.h>
 #include <gui/Compass.h>
 #include <gui/Pie.h>
@@ -20,6 +21,7 @@
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
+#include <Eris/ServerInfo.h>
 
 #include <wfmath/atlasconv.h>
 
@@ -53,12 +55,27 @@ bool GameClient::setup()
     // bag = new Sprite();
     // bag->load("bag.png");
 
+#if 0
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,
                                      renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
     d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
     gui->addWidget(d);
+#else
+    ServerSelector * ss = new ServerSelector(*gui, renderer.getWidth()/2,
+                                                   renderer.getHeight()/2);
+    ss->connectSignal.connect(SigC::slot(*this, &GameClient::connectHost));
+    // ss->refreshSignal.connect(SigC::slot(*this, &GameClient::refreshServers));
+    ss->specifySignal.connect(SigC::slot(*this, &GameClient::specifyHost));
+    // ss->filterSignal.connect(SigC::slot(*this, &GameClient::filterServers));
+
+    // std::set<std::pair<std::string, std::string> > serverList;
+    // serverList.insert(std::make_pair(std::string("localhost"), std::string("localhost")));
+    // ss->addServers(serverList);
+
+    gui->addWidget(ss);
+#endif
 
     compassWidget = new Compass(*gui, -42, 10);
     gui->addWidget(compassWidget);
@@ -68,6 +85,21 @@ bool GameClient::setup()
     // gui->addWidget(new Console(*gui, 4, 4));
 
     return true;
+}
+
+void GameClient::connectHost(const std::string & hostName)
+{
+    connect(hostName, "6767");
+}
+
+void GameClient::specifyHost()
+{
+    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,
+                                     renderer.getHeight()/2);
+    d->addField("host", "localhost");
+    d->addField("port", "6767");
+    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
+    gui->addWidget(d);
 }
 
 void GameClient::doWorld()

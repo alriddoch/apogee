@@ -13,4 +13,5 @@ libgui_a_SOURCES = Gui.cpp Gui.h font.h \
 		   Dialogue.cpp Dialogue.h \
 		   Option.cpp Option.h \
 		   Pie.cpp Pie.h \
+		   ServerSelector.cpp ServerSelector.h \
 		   CharSelector.cpp CharSelector.h
