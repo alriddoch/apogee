@@ -9,7 +9,7 @@
 
 #include <common/Vector3D.h>
 
-#include <Eris/Connection.h>
+#include <Eris/Log.h>
 
 class WorldEntity;
 
@@ -20,6 +20,7 @@ namespace Eris {
   class Room;
   class Entity;
   class Coord;
+  class Connection;
 }
 
 namespace Atlas {

@@ -37,9 +37,9 @@ int main(int argc, char ** argv)
     con.Failure.connect(SigC::slot(app, &IsoClient::netFailure));
     con.Connected.connect(SigC::slot(app, &IsoClient::netConnected));
     con.Disconnected.connect(SigC::slot(app, &IsoClient::netDisconnected));
-    con.Log.connect(SigC::slot(app, &IsoClient::connectionLog));
+    Eris::Logged.connect(SigC::slot(app, &IsoClient::connectionLog));
 
-    con.setLogLevel(Eris::LOG_DEBUG);
+    Eris::setLogLevel(Eris::LOG_DEBUG);
 
     app->setup();
     app->update(0);
