@@ -2,6 +2,14 @@
 
 	* visual/Renderer.h, visual/Renderer.cpp, visual/Isometric.h,
 	  visual/Isometric.cpp, visual/DemeterScene.h, visual/DemeterScene.cpp,
+	  app/perigee.cpp, app/apogee.cpp, app/IxClient.h, app/IxClient.cpp,
+	  app/IsoClient.h, app/IsoClient.cpp: Clean up old code, and make
+	  everything presentable.
+
+2003-02-20  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/Renderer.h, visual/Renderer.cpp, visual/Isometric.h,
+	  visual/Isometric.cpp, visual/DemeterScene.h, visual/DemeterScene.cpp,
 	  app/IxClient.h, app/IxClient.cpp, app/IsoClient.h, app/IsoClient.cpp,
 	  app/GameClient.h, app/GameClient.cpp: Move common functionality
 	  into common files, reducing duplication, and making maintenance

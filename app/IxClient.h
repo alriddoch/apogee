@@ -7,16 +7,6 @@
 
 #include "GameClient.h"
 
-#include <visual/HeightMap.h>
-
-#include <coal/container.h>
-
-#include <string>
-
-class Sprite;
-class Model;
-class Compass;
-
 class IxClient : public GameClient {
   private:
     bool m_use_mouse;

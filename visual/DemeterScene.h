@@ -7,13 +7,6 @@
 
 #include "Renderer.h"
 
-namespace Eris {
-  class TypeInfo;
-}
-
-class TileMap;
-class Model;
-
 class DemeterScene : public Renderer {
   private:
     virtual void shapeView();
@@ -24,8 +17,6 @@ class DemeterScene : public Renderer {
     void reorient();
     void orient();
     void translate();
-
-    void update(float);
 
     const float meterSize() const { return 40.2492f; }
 };

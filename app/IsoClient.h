@@ -7,15 +7,10 @@
 
 #include "GameClient.h"
 
-#include <visual/Isometric.h>
-
-#include <string>
-
 class IsoClient : public GameClient {
   public:
-    IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
-                                                       { }
-    virtual ~IsoClient() { }
+    IsoClient(Eris::Connection & con);
+    virtual ~IsoClient();
 
     bool event(SDL_Event &);
     void mouse(int,int) { }

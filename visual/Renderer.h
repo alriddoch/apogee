@@ -58,6 +58,9 @@ class Renderer {
     unsigned long treemodel_list;
     Eris::TypeInfo * charType;
     float worldTime;
+    int frameCount;
+    float time;
+    float lastCount;
 
   public:
     Application & application;
@@ -112,7 +115,7 @@ class Renderer {
     virtual void origin();
     void lightOn();
     void lightOff();
-    virtual void update(float) = 0;
+    void update(float);
 
     virtual const float meterSize() const = 0;
 };

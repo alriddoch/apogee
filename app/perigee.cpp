@@ -2,12 +2,9 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
-#include <iostream>
-
-#include <unistd.h>
-
-#include <visual/DemeterScene.h>
 #include "IxClient.h"
+
+#include <visual/Renderer.h>
 
 #include <Eris/Connection.h>
 #include <Eris/PollDefault.h>
@@ -15,6 +12,8 @@
 #include <sigc++/object_slot.h>
 
 #include <iostream>
+
+#include <unistd.h>
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100

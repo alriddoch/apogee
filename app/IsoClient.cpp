@@ -4,7 +4,7 @@
 
 #include "IsoClient.h"
 
-#include <visual/Renderer.h>
+#include <visual/Isometric.h>
 #include <visual/Sprite.h>
 
 #include <gui/Gui.h>
@@ -32,83 +32,13 @@ using Atlas::Objects::Entity::GameEntity;
 
 using Atlas::Message::Object;
 
-#if 0
-
-bool IsoClient::setup()
+IsoClient::IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
 {
-    map_height.load("moraf_hm.png");
-    mterrain.setBasePoint(-1, -1, -8.f);
-    mterrain.setBasePoint(-1, 0, -6.f);
-    mterrain.setBasePoint(0, -1, -10.f);
-    mterrain.setBasePoint(0, 0, 0.f);
-    mterrain.setBasePoint(0, 1, 8.f);
-    mterrain.setBasePoint(1, 0, 4.f);
-    mterrain.setBasePoint(1, 1, 14.f);
-    mterrain.setBasePoint(1, -1, -4.f);
-    mterrain.setBasePoint(-1, 1, -4.f);
-    mterrain.refresh(0, 0);
-    mterrain.refresh(0, 1);
-    mterrain.refresh(1, 0);
-    mterrain.refresh(1, 1);
-
-    gui = new Gui(renderer);
-    gui->setup();
-    // bag = new Sprite();
-    // bag->load("bag.png");
-
-    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,
-                                     renderer.getHeight()/2);
-    d->addField("host", "localhost");
-    d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
-    gui->addWidget(d);
-
-    compassWidget = new Compass(*gui, 42, 10);
-    gui->addWidget(compassWidget);
-
-    return 0;
 }
 
-void IsoClient::doWorld()
+IsoClient::~IsoClient()
 {
-    if ((world == NULL) || !inGame) {
-        // std::cout << "No world" << std::endl << std::flush;
-        return;
-    }
-    Eris::Entity * root = world->getRootEntity();
-    if (root == NULL) {
-        std::cout << "No root" << std::endl << std::flush;
-        return;
-    }
-    renderer.drawWorld(root);
 }
-
-bool IsoClient::update(float secs)
-{
-    renderer.update(secs);
-    if (inGame) {
-        Point3D offset = getAbsCharPos();
-        renderer.setXoffset(offset.x());
-        renderer.setYoffset(offset.y());
-        renderer.setZoffset(offset.z());
-    }
-    renderer.clear();
-    renderer.lightOff();
-    // renderer.drawMap(map_database, map_height);
-    renderer.drawMap(mterrain);
-    renderer.origin();
-
-    doWorld();
-
-    compassWidget->setAngle(-renderer.getRotation());
-    renderer.lightOff();
-    renderer.drawGui();
-    gui->draw();
-    renderer.flip();
-    return false;
-}
-
-#endif
 
 bool IsoClient::event(SDL_Event & event)
 {

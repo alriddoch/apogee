@@ -30,69 +30,6 @@ IxClient::~IxClient()
 {
 }
 
-#if 0
-
-bool IxClient::setup()
-{
-    Coal::IsoLoader loader;
-    loader.loadMap("moraf.map", &map_database);
-
-    map_height.load("moraf_hm.png");
-
-    gui = new Gui(renderer);
-    gui->setup();
-
-    Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
-    d->addField("host", "localhost");
-    d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
-    gui->addWidget(d);
-
-    compassWidget = new Compass(*gui, 42, 10);
-    gui->addWidget(compassWidget);
-    
-    return 0;
-}
-
-void IxClient::doWorld()
-{
-    if ((world == NULL) || (!inGame)) {
-        std::cout << "No world" << std::endl << std::flush;
-        return;
-    }
-    Eris::Entity * root = world->getRootEntity();
-    if (root == NULL) {
-        return;
-    }
-    renderer.drawWorld(root);
-}
-
-bool IxClient::update(float secs)
-{
-    renderer.update(secs);
-    if (inGame) {
-        Point3D offset = getAbsCharPos();
-        renderer.setXoffset(offset.x());
-        renderer.setYoffset(offset.y());
-        renderer.setZoffset(offset.z());
-    }
-    renderer.clear();
-    // renderer.lightOn();
-    renderer.drawMap(map_database, map_height);
-    renderer.origin();
-
-    doWorld();
-
-    compassWidget->setAngle(-renderer.getRotation());
-    renderer.lightOff();
-    renderer.drawGui();
-    gui->draw();
-    renderer.flip();
-    return false;
-}
-
-#endif
-
 bool IxClient::event(SDL_Event & event)
 {
     static int oldy = 0;

@@ -50,6 +50,7 @@ Renderer::Renderer(Application & app, int wdth, int hght) :
                        m_lineIndeces(new unsigned int[(segSize + 1) * (segSize + 1) * 2]),
                        m_texCoords(new float[(segSize + 1) * (segSize + 1) * 3]),
                                          treemodel(0), treemodel_list(0), charType(0),
+                                         frameCount(0), time(0), lastCount(0),
                                          application(app)
 
 
@@ -284,6 +285,20 @@ void Renderer::draw3dsFile(Lib3dsFile * node)
       /*glutSolidSphere(50.0, 20,20);*/
       glPopMatrix();
     }
+}
+
+void Renderer::update(float secs)
+{
+    ++frameCount;
+    time += secs;
+    // std::cout << "SECS " << secs << ":" << lastCount << std::endl << std::flush;
+    if ((time - lastCount) > 1.f) {
+        std::cout << frameCount << " frames per second" << std::endl << std::flush;
+        lastCount = time;
+        frameCount = 0;
+    }
+
+    model->onUpdate(secs);
 }
 
 void Renderer::origin()
