@@ -445,7 +445,6 @@ void Model::renderMesh(bool bWireframe, bool bLight)
   }
 
   // we will use vertex arrays, so enable them
-  glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_NORMAL_ARRAY);
 
   // get the number of meshes
@@ -571,7 +570,6 @@ glEnd();
 
   // clear vertex array state
   glDisableClientState(GL_NORMAL_ARRAY);
-  glDisableClientState(GL_VERTEX_ARRAY);
 
   // reset the lighting mode
   if(bLight)
@@ -603,7 +601,6 @@ void Model::selectMesh()
   if(!pCalRenderer->beginRendering()) return;
 
   // we will use vertex arrays, so enable them
-  glEnableClientState(GL_VERTEX_ARRAY);
 
   // get the number of meshes
   int meshCount;
@@ -651,7 +648,6 @@ void Model::selectMesh()
   }
 
   // clear vertex array state
-  glDisableClientState(GL_VERTEX_ARRAY);
 
   // end the rendering
   pCalRenderer->endRendering();

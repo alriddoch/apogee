@@ -95,12 +95,10 @@ void Sprite::draw()
                           m_w/2.f, 0.f, 0.f,
                           m_w/2.f, m_h, 0.f,
                          -m_w/2.f, m_h, 0.f };
-    glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
     glDrawArrays(GL_QUADS, 0, 4);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
     glDisable(GL_TEXTURE_2D);
 }

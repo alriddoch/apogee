@@ -125,13 +125,11 @@ void Tile::draw()
                          tileSize, tileSize, 0.f,
                          0.f, tileSize, 0.f };
                         
-    glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
     glDrawArrays(GL_QUADS, 0, 4);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
 
     glDisable(GL_TEXTURE_2D);
 }
@@ -171,12 +169,10 @@ void Tile::draw(const Mercator::Terrain & h, int x, int y)
             indices[++iindex] = j * tile_size + i;
         }
     }
-    glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glTexCoordPointer(2, GL_FLOAT, 0, texcoord);
     glDrawElements(GL_TRIANGLE_STRIP, ++iindex, GL_UNSIGNED_INT, indices);
-    glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisable(GL_TEXTURE_2D);
 }
@@ -188,8 +184,6 @@ void Tile::select()
                            tileSize, 0.f, 0.f, 
                            tileSize, tileSize, 0.f,
                            0.f, tileSize, 0.f };
-    glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_QUADS, 0, 4);
-    glDisableClientState(GL_VERTEX_ARRAY);
 }

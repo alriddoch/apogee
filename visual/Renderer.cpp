@@ -393,7 +393,6 @@ void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bb
                                       3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
     glPushMatrix();
     glTranslatef(coords.x(), coords.y(), coords.z());
-    glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     if (have_GL_EXT_compiled_vertex_array) {
         glLockArraysEXT(0, 8);
@@ -402,7 +401,6 @@ void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bb
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
-    glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
 }
@@ -425,7 +423,6 @@ void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox
     glTranslatef(coords.x(), coords.y(), coords.z());
 
     glColor3f(0.0f, 1.0f, 0.0f);
-    glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     if (have_GL_EXT_compiled_vertex_array) {
         glLockArraysEXT(0, 8);
@@ -434,7 +431,6 @@ void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
-    glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
 }
@@ -501,7 +497,6 @@ void Renderer::drawRegion(Mercator::Segment * map)
             harray[++idx] = h;
         }
     }
-    glEnableClientState(GL_VERTEX_ARRAY);
     if (texture != -1) {
         glEnable(GL_TEXTURE_2D);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -521,7 +516,6 @@ void Renderer::drawRegion(Mercator::Segment * map)
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisable(GL_TEXTURE_2D);
     }
-    glDisableClientState(GL_VERTEX_ARRAY);
     delete harray;
 }
 

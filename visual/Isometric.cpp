@@ -81,5 +81,6 @@ void Isometric::shapeView()
     glClearDepth(1.0);
     glDepthFunc(GL_LEQUAL);
     glEnable(GL_DEPTH_TEST);
+    glEnableClientState(GL_VERTEX_ARRAY);
     // glShadeModel(GL_SMOOTH);
 }

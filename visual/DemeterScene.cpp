@@ -40,6 +40,7 @@ void DemeterScene::shapeView()
     glClearDepth(1.0);
     glDepthFunc(GL_LEQUAL);
     glDisable(GL_NORMALIZE);
+    glEnableClientState(GL_VERTEX_ARRAY);
     //glShadeModel(GL_SMOOTH);
     float fogColor[4];
     fogColor[0] = FOG_RED;

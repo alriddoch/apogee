@@ -32,12 +32,10 @@ void Console::draw()
                          width, 20.f,
                          width, 20.0f + height,
                          0.f, 20.0f + height };
-    glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, cvertices);
     glDrawArrays(GL_QUADS, 0, 4);
     glVertexPointer(2, GL_FLOAT, 0, vertices);
     glDrawArrays(GL_QUADS, 0, 4);
-    glDisableClientState(GL_VERTEX_ARRAY);
     m_g.print(cmdLine.c_str());
 }
 
@@ -47,9 +45,7 @@ void Console::select()
     float height = lines * 16 + 8;
     float vertices[] = { 0.f, 0.f, width, 0.f, width, height, 0.f, height };
     glVertexPointer(2, GL_FLOAT, 0, vertices);
-    glEnableClientState(GL_VERTEX_ARRAY);
     glDrawArrays(GL_QUADS, 0, 4);
-    glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void Console::click()

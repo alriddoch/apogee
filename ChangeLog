@@ -1,5 +1,12 @@
 2003-05-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* gui/Console.cpp, visual/DemeterScene.cpp, visual/Isometric.cpp,
+	  visual/Model.cpp, visual/Renderer.cpp, visual/Sprite.cpp,
+	  visual/Tile.cpp: Enable vertex arrays globally, so they no longer
+	  have to be enabled each time they are used.
+
+2003-05-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.cpp: Don't refresh the terrain every frame, which
 	  was coincedently leaking memory.
 
