@@ -46,8 +46,8 @@ void DemeterScene::init()
 
     // These should be turned on when running in production mode, but they
     // make using a debugger really hard.
-    //SDL_WM_GrabInput(SDL_GRAB_ON);
-    //SDL_ShowCursor(0);
+    // SDL_WM_GrabInput(SDL_GRAB_ON);
+    // SDL_ShowCursor(0);
 
     settings = Demeter::Settings::GetInstance();
     settings->SetMediaPath("maps/");
@@ -60,7 +60,7 @@ void DemeterScene::init()
 
     // terrain = new Demeter::Terrain("Llano.map", maxNumVisibleTriangles, false);
     // terrain = new Demeter::Terrain("LlanoElev.jpg", "LlanoTex.jpg", "grass.png", 30, 3, maxNumVisibleTriangles);
-    terrain = new Demeter::Terrain("moraf_hm.jpg", "moraf.jpg", "grass.png", 0.78125, 1, maxNumVisibleTriangles);
+    terrain = new Demeter::Terrain("moraf_hm.jpg", "moraf.jpg", "grass.png", 0.78125, 0.03125, maxNumVisibleTriangles);
     terrain->SetMaximumVisibleBlockSize(64);
     // terrain->SetCommonTextureRepeats(50.0f);
 
@@ -167,7 +167,7 @@ inline void DemeterScene::viewPoint()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();                     // Reset The View
     glEnable(GL_DEPTH_TEST);
-    glTranslatef(0.0f, 1.0f, -5.0f);
+    glTranslatef(0.0f, -1.0f, -5.0f);
 }
 
 inline void DemeterScene::reorient()
@@ -232,83 +232,28 @@ void DemeterScene::draw3DBox(const Point3D & coords,
     glColor3f(0.0f, 1.0f, 0.0f);
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    //glVertex3f(-box.X(),box.Y(),-box.Z());
-    //glVertex3f(box.X(),box.Y(),-box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    //glVertex3f(-box.X(),box.Y(),box.Z());
-    //glVertex3f(box.X(),box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    //glVertex3f(-box.X(),-box.Y(),box.Z());
-    //glVertex3f(box.X(),-box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    //glVertex3f(-box.X(),-box.Y(),-box.Z());
-    //glVertex3f(-box.X(),-box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
-    //glVertex3f(box.X(),-box.Y(),-box.Z());
-    //glVertex3f(box.X(),-box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    //glVertex3f(-box.X(),box.Y(),-box.Z());
-    //glVertex3f(-box.X(),box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    //glVertex3f(box.X(),box.Y(),-box.Z());
-    //glVertex3f(box.X(),box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    //glVertex3f(-box.X(),-box.Y(),-box.Z());
-    //glVertex3f(-box.X(),box.Y(),-box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.lowCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.lowCorner().z());
-    //glVertex3f(box.X(),-box.Y(),-box.Z());
-    //glVertex3f(box.X(),box.Y(),-box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.lowCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     glVertex3f(bbox.lowCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    //glVertex3f(-box.X(),-box.Y(),box.Z());
-    //glVertex3f(-box.X(),box.Y(),box.Z());
-    glEnd();
-
-    glBegin(GL_LINES);
     glVertex3f(bbox.highCorner().x(),bbox.lowCorner().y(),bbox.highCorner().z());
     glVertex3f(bbox.highCorner().x(),bbox.highCorner().y(),bbox.highCorner().z());
-    //glVertex3f(box.X(),-box.Y(),box.Z());
-    //glVertex3f(box.X(),box.Y(),box.Z());
     glEnd();
 
     glPopMatrix();
@@ -329,33 +274,7 @@ void DemeterScene::drawMap(CoalDatabase & map_base, HeightMap & map_height)
     tilemap->draw(map_height, x_offset, y_offset);
 
 #if 1
-    cameraAngle.z = -rotation * PI / 180;
-    cameraAngle.x = -elevation * PI / 180;
-    cout << elevation << "}{" << cameraAngle.x << endl << flush;
-    cameraPosition.x = terrain->GetWidth() / 2.0f + x_offset;//- 400.0f;
-    cameraPosition.y = terrain->GetHeight() / 2.0f + y_offset;//- 351.0f;
-    cameraPosition.z = z_offset;
-    camera.SetPosition(cameraPosition.x,cameraPosition.y,cameraPosition.z); 
-
-
-    Matrix rotateX,rotateZ,cameraTransform;
-    rotateX.SetRotateX(cameraAngle.x);
-    rotateZ.SetRotateZ(cameraAngle.z);
-    cameraTransform = rotateX * rotateZ;
-    lookAt.x = 0.0f;
-    lookAt.y = 100000.0f;
-    lookAt.z = 0.0f;
-    lookUp.x = 0.0f;
-    lookUp.y = 0.5f;
-    lookUp.z = 1.0f;
-    lookUp.Normalize();
-    Demeter::Vector currentLookAt = cameraTransform * lookAt;
-    Demeter::Vector currentLookUp = cameraTransform * lookUp;
-    camera.SetLookAt(cameraPosition.x + currentLookAt.x,cameraPosition.y + currentLookAt.y,cameraPosition.z + currentLookAt.z);
-    camera.SetLookUp(currentLookUp.x,currentLookUp.y,currentLookUp.z);
-    float currentCameraElevation = terrain->GetElevation(cameraPosition.x,cameraPosition.y) + cameraPosition.z;
-    camera.SetPosition(cameraPosition.x,cameraPosition.y,currentCameraElevation);
-    camera.UpdateViewTransform();
+    glTranslatef(0.0f, 0.0f, -4.0f);
 
     const float threshold = 12.0f;
     terrain->SetDetailThreshold(threshold);

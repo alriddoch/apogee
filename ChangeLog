@@ -1,3 +1,11 @@
+2002-04-11  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/DemeterScene.cpp: Removed the rather weird camera code
+	  that got dropped in with the demeter example code. Cleaned up
+	  box rendering so it gets rid of unnecessary begin/end pairs.
+	  Demeter map is now rendered directly under tile version of same
+	  map.
+
 2002-04-10  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.h, app/apogee.cpp:
