@@ -5,7 +5,8 @@
 
 	* visual/Renderer.h, visual/Isometric.h, visual/Isometric.cpp:
 	  Removed some clutter from the renderer interface, and some
-	  redundant code from the implementation.
+	  redundant code from the implementation. Added z offset for
+	  view.
 
 	* visual/HeightMap.h, visual/HeightMap.cpp:
 	  Make it possible to query heightpoints from a const heightmap.
