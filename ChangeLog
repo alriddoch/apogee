@@ -1,5 +1,11 @@
 2003-09-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/TerrainRenderer.cpp: Free up everything but the height
+	  points of a segment, once we have done building the display
+	  list for that segment.
+
+2003-09-03  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Get rid of stray state
 	  change.
 

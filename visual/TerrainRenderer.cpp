@@ -229,6 +229,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                 glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
 
                 drawRegion(s);
+                s->invalidate(false);
                 glPopMatrix();
     
                 glEndList();

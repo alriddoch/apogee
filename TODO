@@ -1,3 +1,5 @@
+Might be worth normalising arrays, as it only costs something once,
+but the normalise penalty is every frame.
 Try using a single interleaved array for vectices and normals,
 and then try VBO. Then we can change the way regions are done in
 to eliminate repeating state changes between passes.
