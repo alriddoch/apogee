@@ -1,7 +1,3 @@
-2003-06-15 Damien McGinnes
-        * visual/TerrainRenderer.cpp : modified to used new Mercator
-	  BasePoints
-
 2003-06-14  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Sprite.cpp, visual/Sprite.h,

@@ -133,7 +133,7 @@ void TerrainRenderer::readTerrain()
             continue;
         }
         const Element::ListType & point = J->AsList();
-        if (point.size() < 3) {
+        if (point.size() != 3) {
             std::cout << "point without 3 nums" << std::endl << std::flush;
             continue;
         }
@@ -143,15 +143,7 @@ void TerrainRenderer::readTerrain()
         xmax = std::max(xmax, x);
         ymin = std::min(ymin, y);
         ymax = std::max(ymax, y);
-        Mercator::BasePoint bp(point[2].AsNum());
-        if (point.size() > 3) {
-            bp.roughness=point[3].AsNum();
-            if (point.size() > 4) {
-                bp.falloff=point[4].AsNum();
-            }
-        }
-
-        m_terrain.setBasePoint(x, y, bp);
+        m_terrain.setBasePoint(x, y, point[2].AsNum());
     }
     for(int i = xmin; i < xmax; ++i) {
         for(int j = ymin; j < ymax; ++j) {
