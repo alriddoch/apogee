@@ -58,6 +58,7 @@ AC_REQUIRE_CPP
 
 AC_CHECK_LIB(coal,main)
 AC_CHECK_LIB(coalblade,main)
+AC_CHECK_LIB(coaliso,main)
 
 dnl Generate files
 AC_OUTPUT([

@@ -3,7 +3,8 @@
 #include <unistd.h>
 
 #include <visual/Renderer.h>
-#include "Editor.h"
+//#include "Editor.h"
+#include "Client.h"
 
 #define MIN_WIDTH	100
 #define MIN_HEIGHT	100
@@ -11,7 +12,8 @@
 int main(int argc, char ** argv)
 {
     Renderer * renderer = Renderer::Instance();
-    Application * app = new Editor(renderer);
+    //Application * app = new Editor(renderer);
+    Application * app = new Client(renderer);
 
     app->setup();
     app->update();

@@ -3,13 +3,21 @@
 
 #include <SDL.h>
 
+#include <coal/isoloader.h>
+
 #include "Application.h"
 
+class Sprite;
+
 class Client: public Application {
+  private:
+    CoalDatabase map_database;
+    Sprite * character;
   public:
     Client(Renderer * rend) : Application(rend) { }
     //virtual ~Client() { }
 
+    bool setup();
     int update();
     bool event(SDL_Event &);
 };
