@@ -10,6 +10,7 @@
 
 #include <Eris/Connection.h>
 #include <Eris/PollDefault.h>
+#include <Eris/Exceptions.h>
 
 #include <iostream>
 

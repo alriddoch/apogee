@@ -1,5 +1,10 @@
 2004-01-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* app/apogee.cpp, app/perigee.cpp: Tweak required headers
+	  due to changes in eris.
+
+2004-01-22  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* app/GameClient.cpp: Remove use of obsolete Instantiate() method.
 
 2004-01-19  Al Riddoch  <ajr@ecs.soton.ac.uk>
