@@ -1,3 +1,9 @@
+2003-07-07  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* TerrainRenderer.h, visual/TerrainRenderer.cpp:
+	  Add some sea rendering code, based on that intially included
+	  in Renderer.cpp.
+
 2003-07-06  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Renderer.h, visual/Renderer.cpp: Remove legacy code and

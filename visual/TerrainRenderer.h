@@ -23,6 +23,7 @@ class TerrainRenderer : public EntityRenderer
 
     void drawRegion(Mercator::Segment *);
     void drawMap(Mercator::Terrain &);
+    void drawSea(Mercator::Terrain &);
     void readTerrain();
   public:
     TerrainRenderer(Renderer &, Eris::Entity & e);

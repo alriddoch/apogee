@@ -122,6 +122,35 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t)
     }
 }
 
+void TerrainRenderer::drawSea(Mercator::Terrain & t)
+{
+    const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
+
+    Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
+    glDisable(GL_FOG);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+    for (; I != segs.end(); ++I) {
+        const Mercator::Terrain::Segmentcolumn & col = I->second;
+        Mercator::Terrain::Segmentcolumn::const_iterator J = col.begin();
+        for (; J != col.end(); ++J) {
+            glPushMatrix();
+            glTranslatef(I->first * segSize, J->first * segSize, 0.0f);
+            GLfloat vertices[] = { 0.f, 0.f, 0.f,
+                                   segSize, 0, 0.f,
+                                   segSize, segSize, 0.f,
+                                   0, segSize, 0.f };
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glColor4f(0.8f, 0.8f, 1.f, 0.6f);
+            glDrawArrays(GL_QUADS, 0, 4);
+            glPopMatrix();
+        }
+    }
+    glDisable(GL_BLEND);
+    glEnable(GL_FOG);
+    glEnable(GL_LIGHTING);
+}
+
 void TerrainRenderer::readTerrain()
 {
     if (!m_ent.hasProperty("terrain")) {
@@ -206,6 +235,7 @@ void TerrainRenderer::render(Renderer &)
         m_haveTerrain = true;
     }
     drawMap(m_terrain);
+    drawSea(m_terrain);
 }
 
 void TerrainRenderer::select(Renderer &)
