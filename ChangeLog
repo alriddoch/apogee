@@ -1,3 +1,7 @@
+2004-02-04  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp: Update to latest eris API.
+
 2004-01-27  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/3dsRenderer.cpp: Restore the apropraite render state after

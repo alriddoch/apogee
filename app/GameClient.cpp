@@ -154,11 +154,14 @@ void GameClient::charSelector()
     CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
     cs->selectSignal.connect(SigC::slot(*this, &GameClient::takeCharacter));
     cs->createSignal.connect(SigC::slot(*this, &GameClient::charCreator));
-    Eris::CharacterList cl = m_player->getCharacters();
+    const Eris::CharacterMap & cm = m_player->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
-    for(Eris::CharacterList::const_iterator I = cl.begin(); I != cl.end(); ++I){
-        std::cout << "Selecting from " << I->getId() << ":" << I->getName() << std::endl << std::flush;
-        charList.insert(std::pair<std::string,std::string>(I->getId(),I->getName()));
+    for(Eris::CharacterMap::const_iterator I = cm.begin(); I != cm.end(); ++I) {
+        const std::string & id = I->first;
+        const std::string & name = I->second.getName();
+        std::cout << "Selecting from " << id << ":" << name
+                  << std::endl << std::flush;
+        charList.insert(std::pair<std::string,std::string>(id, name));
     }
     cs->addCharacters(charList);
     
