@@ -100,10 +100,8 @@ class Renderer {
     float getZ(int, int);
     const Point3D getWorldCoord(int, int, float);
 
-    void drawCal3DModel(Model *, const Point3D & coords,
-                                const WFMath::Quaternion &);
-    void draw3DBox(const Point3D & coords,
-                           const WFMath::AxisBox<3> & bbox);
+    void drawCal3DModel(Model *, const WFMath::Quaternion &);
+    void draw3DBox(const WFMath::AxisBox<3> & bbox);
     void drawEntity(Eris::Entity * ent);
     void drawWorld(Eris::Entity * wrld);
     // virtual void drawMap(Coal::Container &, HeightMap &) = 0;
@@ -112,10 +110,8 @@ class Renderer {
     void drawSea(Mercator::Terrain &);
     void drawGui();
 
-    void select3DBox(const Point3D & coords,
-                     const WFMath::AxisBox<3> & bbox);
-    void selectCal3DModel(Model *, const Point3D & coords,
-                                const WFMath::Quaternion &);
+    void select3DBox(const WFMath::AxisBox<3> & bbox);
+    void selectCal3DModel(Model *, const WFMath::Quaternion &);
     void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);
     Eris::Entity * selectWorld(Eris::Entity *, Mercator::Terrain &, int, int);
 

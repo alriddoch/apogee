@@ -312,11 +312,9 @@ void Renderer::origin()
 }
 
 
-void Renderer::selectCal3DModel(Model * m, const Point3D & coords,
-                                  const WFMath::Quaternion & orientation)
+void Renderer::selectCal3DModel(Model * m, const WFMath::Quaternion & orientation)
 {
     glPushMatrix();
-    glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
     WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
@@ -333,11 +331,9 @@ void Renderer::selectCal3DModel(Model * m, const Point3D & coords,
     glPopMatrix();
 }
 
-void Renderer::drawCal3DModel(Model * m, const Point3D & coords,
-                                  const WFMath::Quaternion & orientation)
+void Renderer::drawCal3DModel(Model * m, const WFMath::Quaternion & orientation)
 {
     glPushMatrix();
-    glTranslatef(coords.x(), coords.y(), coords.z());
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
     float orient[4][4];
     WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
@@ -377,7 +373,7 @@ void Renderer::drawCal3DModel(Model * m, const Point3D & coords,
  *                                   0
  */
 
-void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
+void Renderer::select3DBox(const WFMath::AxisBox<3> & bbox)
 {
     GLfloat vertices[] = {
         bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
@@ -391,8 +387,6 @@ void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bb
     };
     static const GLuint indices[] = { 0, 1, 5, 4, 1, 2, 6, 5, 2, 3, 7, 6,
                                       3, 0, 4, 7, 4, 5, 6, 7, 0, 3, 2, 1 };
-    glPushMatrix();
-    glTranslatef(coords.x(), coords.y(), coords.z());
     glVertexPointer(3, GL_FLOAT, 0, vertices);
     if (have_GL_EXT_compiled_vertex_array) {
         glLockArraysEXT(0, 8);
@@ -401,11 +395,9 @@ void Renderer::select3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bb
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
-
-    glPopMatrix();
 }
 
-void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox)
+void Renderer::draw3DBox(const WFMath::AxisBox<3> & bbox)
 {
     GLfloat vertices[] = {
         bbox.lowCorner().x(), bbox.lowCorner().y(), bbox.lowCorner().z(),
@@ -419,8 +411,6 @@ void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox
     };
     static const GLuint indices[] = { 0, 1, 3, 2, 7, 6, 4, 5, 0, 4, 1, 5,
                                       3, 7, 2, 6, 0, 3, 1, 2, 4, 7, 5, 6 };
-    glPushMatrix();
-    glTranslatef(coords.x(), coords.y(), coords.z());
 
     glColor3f(0.0f, 1.0f, 0.0f);
     glVertexPointer(3, GL_FLOAT, 0, vertices);
@@ -431,15 +421,10 @@ void Renderer::draw3DBox(const Point3D & coords, const WFMath::AxisBox<3> & bbox
     if (have_GL_EXT_compiled_vertex_array) {
         glUnlockArraysEXT();
     }
-
-    glPopMatrix();
 }
 
 void Renderer::drawEntity(Eris::Entity * ent)
 {
-    glPushMatrix();
-    const Point3D & pos = ent->getPosition();
-    glTranslatef(pos.x(), pos.y(), pos.z());
     int numEnts = ent->getNumMembers();
     debug(std::cout << ent->getID() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
@@ -459,16 +444,18 @@ void Renderer::drawEntity(Eris::Entity * ent)
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
         Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
+        glPushMatrix();
+        glTranslatef(pos.x(), pos.y(), pos.z());
         if (type->safeIsA(charType)) {
-            drawCal3DModel(model, pos, e->getOrientation());
+            drawCal3DModel(model, e->getOrientation());
         } else {
             if (e->hasBBox()) {
-                draw3DBox(pos, e->getBBox());
+                draw3DBox(e->getBBox());
             }
             drawEntity(e);
         }
+        glPopMatrix();
     }
-    glPopMatrix();
 }
 
 void Renderer::drawWorld(Eris::Entity * wrld)
@@ -615,9 +602,6 @@ void Renderer::drawGui()
 
 void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
 {
-    glPushMatrix();
-    const Point3D & pos = ent->getPosition();
-    glTranslatef(pos.x(), pos.y(), pos.z());
     int numEnts = ent->getNumMembers();
     debug(std::cout << ent->getID() << " " << numEnts << " emts"
                     << std::endl << std::flush;);
@@ -640,17 +624,19 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
         }
         glLoadName(++next);
         name[next] = e;
+        glPushMatrix();
+        glTranslatef(pos.x(), pos.y(), pos.z());
         // Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         // if (type->safeIsA(charType)) {
             // selectCal3DModel(model, pos, e->getOrientation());
         // } else {
             if (e->hasBBox()) {
-                select3DBox(pos, e->getBBox());
+                select3DBox(e->getBBox());
             }
             selectEntity(e, name, next);
         // }
+        glPopMatrix();
     }
-    glPopMatrix();
 }
 
 Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & ground, int x, int y)
