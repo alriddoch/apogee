@@ -1,3 +1,11 @@
+2003-04-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Gui.cpp: Add support for negative x coord for widgets, placing
+	  them relative to the right edge of the screen.
+
+	* app/GameClient.cpp, gui/Console.h, gui/Console.cpp:
+	  Add console widget for commands and chat.
+
 2003-04-29  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/GameClient.cpp: Clean up checking in game state.

@@ -100,9 +100,10 @@ void Gui::draw()
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
         if (!w.visible()) { continue; }
-        glTranslated(w.x(),w.y(),0.0f);
+        glPushMatrix();
+        glTranslatef(w.x() < 0 ? (renderer.getWidth() + w.x()) : w.x(), w.y(), 0.0f);
         w.draw();
-        glTranslated(-w.x(),-w.y(),0.1f);
+        glPopMatrix();
     }
 
 #if USE_PUI
@@ -135,10 +136,11 @@ GLint Gui::select(int x, int y)
     for (; I != widgets.end(); I++) {
         Widget & w = *I->second;
         if (!w.visible()) { continue; }
-        glTranslated(w.x(),w.y(),0);
+        glPushMatrix();
+        glTranslatef(w.x() < 0 ? (renderer.getWidth() + w.x()) : w.x(), w.y(), 0.0f);
         glLoadName(I->first);
         w.select();
-        glTranslated(-w.x(),-w.y(),0.1);
+        glPopMatrix();
     }
     glPopName();
 

@@ -13,6 +13,7 @@
 #include <gui/Alert.h>
 #include <gui/Compass.h>
 #include <gui/Pie.h>
+#include <gui/Console.h>
 
 
 #include <Eris/Player.h>
@@ -91,10 +92,12 @@ bool GameClient::setup()
     d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
     gui->addWidget(d);
 
-    compassWidget = new Compass(*gui, 42, 10);
+    compassWidget = new Compass(*gui, -42, 10);
     gui->addWidget(compassWidget);
 
-    gui->addWidget(new Pie(*gui, 50, 30));
+    gui->addWidget(new Pie(*gui, 80, 170));
+
+    gui->addWidget(new Console(*gui, 4, 4));
 
     return 0;
 }
