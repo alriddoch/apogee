@@ -123,8 +123,8 @@ bool GameClient::update(float secs)
     renderer.clear();
     renderer.lightOff();
     // renderer.drawMap(map_database, map_height);
-    renderer.drawMap(mterrain);
     renderer.origin();
+    renderer.drawMap(mterrain);
 
     doWorld();
 

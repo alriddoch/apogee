@@ -111,8 +111,10 @@ class Renderer {
     void drawMap(Mercator::Terrain &);
     void drawGui();
 
-    void selectEntity(Eris::Entity * ent, SelectMap & names, int & next);
-    Eris::Entity * selectWorld(Eris::Entity * wrld);
+    void selectCal3DModel(Model *, const Point3D & coords,
+                                const WFMath::Quaternion &);
+    void selectEntity(Eris::Entity * ent, SelectMap & names, GLuint & next);
+    Eris::Entity * selectWorld(Eris::Entity *, Mercator::Terrain &, int, int);
 
     void resize(int,int);
     void clear();

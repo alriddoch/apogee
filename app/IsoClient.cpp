@@ -95,6 +95,8 @@ bool IsoClient::event(SDL_Event & event)
                     oldScl = renderer.getScale();
                 }
                 if (event.button.button == SDL_BUTTON_LEFT) {
+                    renderer.selectWorld(world->getRootEntity(), mterrain,
+                                         event.motion.x, event.motion.y);
                     const float x = event.motion.x;
                     const float y = renderer.getHeight() - event.motion.y;
                     renderer.origin();

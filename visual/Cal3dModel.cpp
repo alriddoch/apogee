@@ -593,6 +593,69 @@ glEnd();
   pCalRenderer->endRendering();
 }
 
+void Model::selectMesh()
+{
+  // get the renderer of the model
+  CalRenderer *pCalRenderer;
+  pCalRenderer = m_calModel.getRenderer();
+
+  // begin the rendering loop
+  if(!pCalRenderer->beginRendering()) return;
+
+  // we will use vertex arrays, so enable them
+  glEnableClientState(GL_VERTEX_ARRAY);
+
+  // get the number of meshes
+  int meshCount;
+  meshCount = pCalRenderer->getMeshCount();
+
+  // render all meshes of the model
+  int meshId;
+  for(meshId = 0; meshId < meshCount; meshId++)
+  {
+    // get the number of submeshes
+    int submeshCount;
+    submeshCount = pCalRenderer->getSubmeshCount(meshId);
+
+    // render all submeshes of the mesh
+    int submeshId;
+    for(submeshId = 0; submeshId < submeshCount; submeshId++)
+    {
+      // select mesh and submesh for further data access
+      if(pCalRenderer->selectMeshSubmesh(meshId, submeshId))
+      {
+        // get the transformed vertices of the submesh
+        static float meshVertices[30000][3];
+        int vertexCount;
+        vertexCount = pCalRenderer->getVertices(&meshVertices[0][0]);
+
+        // get the faces of the submesh
+        static int meshFaces[50000][3];
+        int faceCount;
+        faceCount = pCalRenderer->getFaces(&meshFaces[0][0]);
+
+        // set the vertex and normal buffers
+        glVertexPointer(3, GL_FLOAT, 0, &meshVertices[0][0]);
+
+        // draw the submesh
+        if (have_GL_EXT_compiled_vertex_array) {
+            glLockArraysEXT(0, vertexCount);
+        }
+        glDrawElements(GL_TRIANGLES, faceCount * 3, GL_UNSIGNED_INT, &meshFaces[0][0]);
+        if (have_GL_EXT_compiled_vertex_array) {
+            glUnlockArraysEXT();
+        }
+
+      }
+    }
+  }
+
+  // clear vertex array state
+  glDisableClientState(GL_VERTEX_ARRAY);
+
+  // end the rendering
+  pCalRenderer->endRendering();
+}
 //----------------------------------------------------------------------------//
 // Render the model                                                           //
 //----------------------------------------------------------------------------//
@@ -620,6 +683,10 @@ void Model::onRender()
   // glDisable(GL_DEPTH_TEST);
 }
 
+void Model::onSelect()
+{
+    selectMesh();
+}
 //----------------------------------------------------------------------------//
 // Update the model                                                           //
 //----------------------------------------------------------------------------//

@@ -309,6 +309,27 @@ void Renderer::origin()
 }
 
 
+void Renderer::selectCal3DModel(Model * m, const Point3D & coords,
+                                  const WFMath::Quaternion & orientation)
+{
+    glPushMatrix();
+    glTranslatef(coords.x(), coords.y(), coords.z());
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    float orient[4][4];
+    WFMath::RotMatrix<3> omatrix(orientation); // .asMatrix(orient);
+    for(int i = 0; i < 3; i++) {
+        for(int j = 0; j < 3; j++) {
+            orient[i][j] = omatrix.elem(i,j);
+        }
+    }
+    orient[3][0] = orient[3][1] = orient[3][2] = orient[0][3] = orient[1][3] = orient[2][3] = 0.0f;
+    orient[3][3] = 1.0f;
+    glMultMatrixf(&orient[0][0]);
+    glScalef(0.025f, 0.025f, 0.025f);
+    m->onSelect();
+    glPopMatrix();
+}
+
 void Renderer::drawCal3DModel(Model * m, const Point3D & coords,
                                   const WFMath::Quaternion & orientation)
 {
@@ -373,6 +394,7 @@ void Renderer::drawEntity(Eris::Entity * ent)
                     << std::endl << std::flush;);
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
+        if (!e->isVisible()) { continue; }
         Point3D pos = e->getPosition();
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
@@ -385,7 +407,6 @@ void Renderer::drawEntity(Eris::Entity * ent)
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
                         // << std::endl << std::flush;);
-        if (!e->isVisible()) { continue; }
         Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {
             drawCal3DModel(model, pos, e->getOrientation());
@@ -451,8 +472,6 @@ void Renderer::drawRegion(Mercator::Segment * map)
 
 void Renderer::drawMap(Mercator::Terrain & t)
 {
-    origin();
-
     const Mercator::Terrain::Segmentstore & segs = t.getTerrain();
 
     Mercator::Terrain::Segmentstore::const_iterator I = segs.begin();
@@ -479,13 +498,48 @@ void Renderer::drawGui()
     // glDisable(GL_CULL_FACE);
 }
 
-void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, int & next)
+void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
 {
-    // FIXME Copy from drawEnttiy, but carefully consider how to render
-    // things.
+    glPushMatrix();
+    const Point3D & pos = ent->getPosition();
+    glTranslatef(pos.x(), pos.y(), pos.z());
+    int numEnts = ent->getNumMembers();
+    debug(std::cout << ent->getID() << " " << numEnts << " emts"
+                    << std::endl << std::flush;);
+    for (int i = 0; i < numEnts; i++) {
+        Eris::Entity * e = ent->getMember(i);
+        std::cout << "DOING " << e->getID() << std::endl << std::flush;
+        if (!e->isVisible()) {
+            std::cout << "SKIPPING " << e->getID() << std::endl << std::flush;
+            continue;
+        }
+        Point3D pos = e->getPosition();
+        WorldEntity * we = dynamic_cast<WorldEntity *>(e);
+        if (we != NULL) {
+            debug( std::cout << e->getVelocity() << " " << (worldTime - we->getTime())
+                             << " " << pos; );
+            pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
+            debug( std::cout << "=" << pos << std::endl << std::flush; );
+        } else {
+            std::cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity"
+                      << std::endl << std::flush;
+        }
+        glLoadName(++next);
+        name[next] = e;
+        // Eris::TypeInfo * type = application.connection.getTypeInfoEngine()->findSafe(*e->getInherits().begin());
+        // if (type->safeIsA(charType)) {
+            // selectCal3DModel(model, pos, e->getOrientation());
+        // } else {
+            if (e->hasBBox()) {
+                draw3DBox(pos, e->getBBox());
+            }
+            selectEntity(e, name, next);
+        // }
+    }
+    glPopMatrix();
 }
 
-Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld)
+Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld, Mercator::Terrain & ground, int x, int y)
 {
     GLuint selectBuf[512];
     GLuint nextName = 0;
@@ -496,16 +550,27 @@ Eris::Entity * Renderer::selectWorld(Eris::Entity * wrld)
 
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT,viewport);
-    gluPickMatrix(x, renderer.getHeight() - y, 5, 5, viewport);
+    gluPickMatrix(x, getHeight() - y, 5, 5, viewport);
 
     origin();
 
     glInitNames();
     
+    glPushName(++nextName);
+    nameMap[nextName] = wrld;
+    std::cout << "SELECTING" << std::endl << std::flush;
+
+    drawMap(ground);
+    std::cout << "DONE GROUND" << std::endl << std::flush;
+    
     selectEntity(wrld, nameMap, nextName);
+
+    std::cout << "DONE ENITTIES" << std::endl << std::flush;
+    glPopName();
 
     int hits = glRenderMode(GL_RENDER);
 
+    std::cout << "DONE POST " << hits << std::endl << std::flush;
     if (hits < 1) {
         return 0;
     }

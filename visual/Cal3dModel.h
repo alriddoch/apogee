@@ -64,6 +64,7 @@ public:
   int getState();
   bool onInit(const std::string& strFilename);
   void onRender();
+  void onSelect();
   void onShutdown();
   void onUpdate(float elapsedSeconds);
   void setLodLevel(float lodLevel);
@@ -72,6 +73,7 @@ public:
 
 protected:
   GLuint loadTexture(const std::string& strFilename);
+  void selectMesh();
   void renderMesh(bool bWireframe, bool bLight);
   void renderSkeleton();
 };

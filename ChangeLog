@@ -1,5 +1,18 @@
 2003-04-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/Model.h, visual/Model.cpp: Add select code which gets rid of
+	  of normal and textures for select mode.
+
+	* visual/Renderer.cpp, visual/Renderer.h: Implement selecting, though
+	  interpreting results is not yet there.
+
+	* app/GameClient.cpp: Clean up the way origin is used when rendering the
+	  world.
+
+	* app/IsoClient.cpp: Hook in to test the new select code.
+
+2003-04-28  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/Renderer.h, visual/Renderer.cpp: Start adding entity selection
 	  code.
 
