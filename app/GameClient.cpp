@@ -332,7 +332,7 @@ void GameClient::worldEnter(Eris::Entity * chr)
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
     chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
-    character = dynamic_cast<WorldEntity*>(chr);
+    character = dynamic_cast<CharacterEntity*>(chr);
 
 }
 

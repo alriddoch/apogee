@@ -447,13 +447,13 @@ void Renderer::drawEntity(Eris::Entity * ent)
         Eris::Entity * e = ent->getMember(i);
         if (!e->isVisible()) { continue; }
         Point3D pos = e->getPosition();
-        WorldEntity * we = dynamic_cast<WorldEntity *>(e);
-        if (we != NULL) {
-            debug( std::cout << e->getVelocity() << " " << (worldTime - we->getTime()) << " " << pos; );
-            pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
+        MovableEntity * me = dynamic_cast<MovableEntity *>(e);
+        if (me != NULL) {
+            debug( std::cout << e->getVelocity() << " " << (worldTime - me->getTime()) << " " << pos; );
+            pos = pos + e->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
             debug( std::cout << "=" << pos << std::endl << std::flush; );
         } else {
-            std::cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << std::endl << std::flush;
+            debug(std::cout << "Eris::Entity \"" << e->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
         }
         // debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         // << e->getBBox().u << e->getBBox().v
@@ -526,7 +526,7 @@ void Renderer::drawRegion(Mercator::Segment * map)
             idx += 2;
             harray[++idx] = h;
             cdx += 3;
-            carray[++cdx] = h;
+            carray[++cdx] = (h > 0.4f) ? 1.f : 0.f;
         }
     }
     if (texture != -1) {
@@ -629,15 +629,14 @@ void Renderer::selectEntity(Eris::Entity * ent, SelectMap & name, GLuint & next)
             continue;
         }
         Point3D pos = e->getPosition();
-        WorldEntity * we = dynamic_cast<WorldEntity *>(e);
-        if (we != NULL) {
-            debug( std::cout << e->getVelocity() << " " << (worldTime - we->getTime())
+        MovableEntity * me = dynamic_cast<MovableEntity *>(e);
+        if (me != NULL) {
+            debug( std::cout << e->getVelocity() << " " << (worldTime - me->getTime())
                              << " " << pos; );
-            pos = pos + e->getVelocity() * (double)((worldTime - we->getTime())/1000.0f);
+            pos = pos + e->getVelocity() * (double)((worldTime - me->getTime())/1000.0f);
             debug( std::cout << "=" << pos << std::endl << std::flush; );
         } else {
-            std::cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity"
-                      << std::endl << std::flush;
+            debug(std::cout << "Eris::Entity \"" << e->getID() << "\" is not a MovableEntity" << std::endl << std::flush;);
         }
         glLoadName(++next);
         name[next] = e;

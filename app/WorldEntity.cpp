@@ -4,29 +4,83 @@
 
 #include "WorldEntity.h"
 
+#include <Eris/World.h>
+#include <Eris/Connection.h>
+#include <Eris/TypeInfo.h>
+
 #include <sigc++/object_slot.h>
 
 #include <SDL.h>
 
-WorldEntity::WorldEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World * w)
-              : Eris::Entity(ge, w), visEntity(*new VisualEntity())
+using Atlas::Objects::Entity::GameEntity;
+
+RenderableEntity::RenderableEntity(const GameEntity &ge,
+                             Eris::World * w) : Eris::Entity(ge, w)
 {
-    Moved.connect(SigC::slot(*this, &WorldEntity::movedSignal));
+}
+
+MovableEntity::MovableEntity(const GameEntity &ge,
+                             Eris::World * w) : RenderableEntity(ge, w)
+{
+    Moved.connect(SigC::slot(*this, &MovableEntity::movedSignal));
     updateTime = SDL_GetTicks();
 }
 
-void WorldEntity::movedSignal(const Point3D &)
+void MovableEntity::movedSignal(const Point3D &)
 {
     updateTime = SDL_GetTicks();
 }
 
-bool WEFactory::accept(const Atlas::Objects::Entity::GameEntity&, Eris::World *)
+CharacterEntity::CharacterEntity(const GameEntity &ge,
+                             Eris::World * w) : MovableEntity(ge, w)
 {
+}
+
+TerrainEntity::TerrainEntity(const GameEntity &ge,
+                             Eris::World * w) : RenderableEntity(ge, w)
+{
+}
+
+TreeEntity::TreeEntity(const GameEntity &ge,
+                             Eris::World * w) : RenderableEntity(ge, w)
+{
+}
+
+WEFactory::WEFactory()
+{
+}
+
+Eris::TypeInfo * WEFactory::characterType = 0;
+Eris::TypeInfo * WEFactory::terrainType = 0;
+Eris::TypeInfo * WEFactory::treeType = 0;
+
+bool WEFactory::accept(const GameEntity&, Eris::World * w)
+{
+    if (characterType == 0) {
+        characterType = w->getConnection()->getTypeInfoEngine()->findSafe("character");
+    }
+    if (terrainType == 0) {
+        terrainType = w->getConnection()->getTypeInfoEngine()->findSafe("terrain");
+    }
+    if (treeType == 0) {
+        treeType = w->getConnection()->getTypeInfoEngine()->findSafe("tree");
+    }
+
     return true;
 }
 
-Eris::EntityPtr WEFactory::instantiate(const Atlas::Objects::Entity::GameEntity & ge,
+Eris::EntityPtr WEFactory::instantiate(const GameEntity & ge,
                                        Eris::World * w)
 {
-    return new WorldEntity(ge, w);
+    Eris::TypeInfoPtr type = w->getConnection()->getTypeInfoEngine()->getSafe(ge);
+    if (type->safeIsA(characterType)) {
+        return new CharacterEntity(ge,w);
+    }
+    if (type->safeIsA(terrainType)) {
+        return new TerrainEntity(ge,w);
+    }
+    if (type->safeIsA(treeType)) {
+        return new TreeEntity(ge,w);
+    }
+    return new RenderableEntity(ge, w);
 }

@@ -8,6 +8,7 @@ libvisual_a_SOURCES = \
                       Sprite.cpp Sprite.h \
                       Tile.cpp Tile.h \
                       TileMap.cpp TileMap.h \
+                      EntityRenderer.cpp EntityRenderer.h \
                       Renderer.cpp Renderer.h \
                       Isometric.cpp Isometric.h \
                       DemeterScene.cpp DemeterScene.h \

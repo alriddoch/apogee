@@ -10,24 +10,63 @@
 
 #include <visual/VisualEntity.h>
 
-class WorldEntity : public Eris::Entity
+namespace Eris {
+  class TypeInfo;
+}
+
+class EntityRenderer;
+
+class RenderableEntity : public Eris::Entity
+{
+  public:
+    EntityRenderer * m_drawer;
+
+    RenderableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+};
+
+class MovableEntity : public RenderableEntity
 {
     float updateTime;
   public:
-    VisualEntity & visEntity;
-
     void movedSignal(const Point3D &);
 
-    WorldEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+    MovableEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
 
     const float getTime() {
         return updateTime;
     }
 };
 
-class WEFactory : public Eris::Factory
+class CharacterEntity : public MovableEntity
 {
   public:
+    CharacterEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+
+};
+
+class TerrainEntity : public RenderableEntity
+{
+  public:
+    TerrainEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+
+};
+
+class TreeEntity : public RenderableEntity
+{
+  public:
+    TreeEntity(const Atlas::Objects::Entity::GameEntity &ge, Eris::World *);
+
+};
+
+class WEFactory : public Eris::Factory
+{
+  private:
+    static Eris::TypeInfo * characterType;
+    static Eris::TypeInfo * terrainType;
+    static Eris::TypeInfo * treeType;
+  public:
+    WEFactory();
+    
     virtual bool accept(const Atlas::Objects::Entity::GameEntity &, Eris::World *);
     virtual Eris::EntityPtr instantiate(const Atlas::Objects::Entity::GameEntity &, Eris::World *);
 };
