@@ -49,7 +49,7 @@ void DemeterScene::shapeView()
     glEnable(GL_FOG);
     glFogf(GL_FOG_MODE,GL_LINEAR);
     glFogfv(GL_FOG_COLOR,fogColor);
-    glFogf(GL_FOG_START,maxViewDistance - 30.0f);
+    glFogf(GL_FOG_START,15.0f);
     glFogf(GL_FOG_END,maxViewDistance - 15.0f);
     glHint(GL_FOG_HINT,GL_FASTEST);
 }

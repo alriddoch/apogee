@@ -1,5 +1,13 @@
 2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
+	* visual/DemeterScene.cpp: Make the fog start much closer, to give
+	  a depth to the terrain.
+
+	* visual/TerrainRenderer.cpp: Disable the alpha texture and blending
+	  for the first render pass. Document the render code a bit.
+
+2003-09-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
 	* visual/TerrainRenderer.cpp: Handle blend state slightly differently.
 
 2003-08-30  Al Riddoch  <ajr@ecs.soton.ac.uk>

@@ -1,3 +1,5 @@
+Sort out freeing up Mercator resources once we are done with them.
+
 Try replacing color based alpha code for terrain with alpha textures.
 
 Use the vertex data as the texcoord data because its basically the same,

@@ -48,7 +48,7 @@ void TerrainRenderer::enableRendererState()
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
     glActiveTexture(GL_TEXTURE1);
-    glEnable(GL_TEXTURE_2D);
+    // glEnable(GL_TEXTURE_2D);
     glEnable(GL_TEXTURE_GEN_S);
     glEnable(GL_TEXTURE_GEN_T);
     glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -82,13 +82,19 @@ void TerrainRenderer::generateAlphaTextures(Mercator::Segment * map)
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
 
     glGenTextures(surfaces.size(), m_alphaTextures);
+    // FIXME These textures we have allocated are leaked.
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
+        if ((!(*I)->m_shader.checkIntersect(**I)) || (texNo == 0)) {
+            continue;
+        }
+
         glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_ALPHA, 65, 65, GL_ALPHA,
                           GL_UNSIGNED_BYTE, (*I)->getData());
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // I wonder if this should be a mipmap?
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         GLenum er;
@@ -128,25 +134,42 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
     glEnable(GL_BLEND);
 
     for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
+        // Do a rough check to see if this pass applies to this segment
         if (!(*I)->m_shader.checkIntersect(**I)) {
             continue;
         }
 
+        // Set up the first texture unit with the ground texture
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, m_textures[texNo]);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
+        // Set up the second texture unit with the alpha texture
+        // This is not required for the first pass, as the first pass
+        // is always a fill
+        if (texNo != 0) {
+           glActiveTexture(GL_TEXTURE1);
+           glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
+        }
                      
+        // Draw this segment
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_SHORT, m_lineIndeces);
 
         if (texNo == 0) {
+            // After the first pass, which we assume is a fill, enable
+            // blending, and enable the second texture unit
+            // Disable the depth write as its redundant
             glDepthMask(GL_FALSE);
             glEnable(GL_BLEND);
+            glActiveTexture(GL_TEXTURE1);
+            glEnable(GL_TEXTURE_2D);
         }
     }
 
+    // This restores the state we want to be in for the first pass of
+    // the next segment
+    glActiveTexture(GL_TEXTURE1);
+    glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);
 
