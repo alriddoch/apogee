@@ -346,8 +346,8 @@ void Isometric::drawEntity(Eris::Entity * ent)
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * e = ent->getMember(i);
         std::cout << ":" << e->getID() << e->getPosition() << ":"
-                  << e->getBBox() << std::endl << std::flush;
-        draw3DBox(e->getPosition(), e->getBBox());
+                  << e->getBBox().u << std::endl << std::flush;
+        draw3DBox(e->getPosition(), e->getBBox().u);
         //draw3DBox(e->getPosition(), Vector3D(1,1,1));
         drawEntity(e);
     }

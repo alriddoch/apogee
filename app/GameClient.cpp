@@ -90,9 +90,9 @@ void GameClient::netConnected()
 void GameClient::login(const std::string & name, const std::string & password)
 {
     player = new Eris::Player(&connection);
+    player->login(name, password);
     lobby = Eris::Lobby::instance();
     lobby->LoggedIn.connect(SigC::slot(this, &GameClient::loginComplete));
-    player->login(name, password);
 }
 
 void GameClient::netDisconnected()

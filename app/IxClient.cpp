@@ -52,8 +52,8 @@ void IxClient::doWorld()
     for (int i = 0; i < numEnts; i++) {
         Eris::Entity * ent = root->getMember(i);
         std::cout << ":" << ent->getID() << ent->getPosition() << ":"
-                  << ent->getBBox() << std::endl << std::flush;
-        renderer.draw3DBox(ent->getPosition(), ent->getBBox());
+                  << ent->getBBox().u << std::endl << std::flush;
+        renderer.draw3DBox(ent->getPosition(), ent->getBBox().u);
     }
 #if 0
     const World::edict & ents = world.getWorld();
