@@ -99,7 +99,10 @@ void Button::select()
 
 void Button::click()
 {
-    
+}
+
+void Button::release()
+{
 }
 
 void Button::key(int)

@@ -1,19 +1,15 @@
+// This file may be redistributed and modified only under the terms of
+// the GNU General Public License (See COPYING for details).
+// Copyright (C) 2000-2001 Alistair Riddoch
+
 #include <iostream>
 
 #include <unistd.h>
 
 #include <visual/DemeterScene.h>
-// #include <net/Connection.h>
 #include "IxClient.h"
-//#include "Client.h"
-
-// #include <world/World.h>
-
-#include <Atlas/Objects/Entity/GameEntity.h>
 
 #include <Eris/Connection.h>
-#include <Eris/Player.h>
-#include <Eris/Lobby.h>
 
 #include <sigc++/object_slot.h>
 
@@ -21,7 +17,6 @@
 #define MIN_HEIGHT	100
 
 using Atlas::Message::Object;
-using Atlas::Objects::Entity::GameEntity;
 
 int main(int argc, char ** argv)
 {

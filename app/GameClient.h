@@ -2,6 +2,9 @@
 // the GNU General Public License (See COPYING for details).
 // Copyright (C) 2000-2001 Alistair Riddoch
 
+#ifndef APOGEE_GAMECLIENT_H
+#define APOGEE_GAMECLIENT_H
+
 #include "Application.h"
 
 namespace Eris {
@@ -46,3 +49,5 @@ class GameClient : public Application {
     void worldEntityCreate(Eris::Entity *r);
     void worldEnter(Eris::Entity *r);
 };
+
+#endif // APOGEE_GAMECLIENT_H

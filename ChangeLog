@@ -1,3 +1,18 @@
+2001-10-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* gui/Compass.h, gui/Compass.cpp: Added compass gui widget.
+
+	* gui/Button.h, gui/Button.cpp: Fixed accidentally overloaded
+	  release() method.
+
+	* app/IsoClient.h, app/IsoClient.cpp: Added compass widget to
+	  IsoClient gui.
+
+	* app/GameClient.cpp: Added alert boxes for connection error
+	  conditions.
+
+	* Added copyright messages to all files.
+
 2001-09-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/Isometric.cpp, visual/DemeterScene.cpp: Switched depth

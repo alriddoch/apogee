@@ -7,6 +7,7 @@
 #include <visual/Renderer.h>
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
+#include <gui/Alert.h>
 
 #include <Eris/Player.h>
 #include <Eris/Lobby.h>
@@ -62,6 +63,9 @@ void GameClient::roomEnter(Eris::Room *r)
 void GameClient::netFailure(std::string msg)
 {
     std::cout << "Got connection failure: " << msg << std::endl << std::flush;
+    gui->addWidget(new Alert(*gui,renderer.getWidth()/2,
+                                  renderer.getHeight()/2,
+                                  msg));
 }
 
 void GameClient::netConnected()
@@ -87,6 +91,9 @@ void GameClient::login(const std::string & name, const std::string & password)
 void GameClient::netDisconnected()
 {
     std::cout << "Disconnected from the server" << std::endl << std::flush;
+    gui->addWidget(new Alert(*gui,renderer.getWidth()/2,
+                                  renderer.getHeight()/2,
+                                  "Disconnected from server"));
 }
 
 void GameClient::worldEntityCreate(Eris::Entity *r)

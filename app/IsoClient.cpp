@@ -11,6 +11,7 @@
 
 #include <gui/Gui.h>
 #include <gui/Dialogue.h>
+#include <gui/Compass.h>
 
 #include <Atlas/Objects/Entity/GameEntity.h>
 
@@ -68,6 +69,9 @@ bool IsoClient::setup()
     d->oButtonSignal.connect(SigC::slot(this, &Application::connect));
     gui->addWidget(d);
 
+    compassWidget = new Compass(*gui, 42, 10);
+    gui->addWidget(compassWidget);
+
     model = new Model();
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
@@ -121,6 +125,8 @@ bool IsoClient::update()
     doWorld();
     compass();
     axis();
+
+    compassWidget->setAngle(-renderer.getRotation());
     renderer.lightOff();
     renderer.drawGui();
     gui->draw();

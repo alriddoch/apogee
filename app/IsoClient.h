@@ -13,6 +13,7 @@
 
 class Sprite;
 class Model;
+class Compass;
 
 class IsoClient : public GameClient {
   private:
@@ -24,6 +25,7 @@ class IsoClient : public GameClient {
     CoalDatabase map_database;
     Sprite * character;
     Model * model;
+    Compass * compassWidget;
   public:
     IsoClient(Renderer & rend, Eris::Connection & con) : GameClient(rend, con),
                                                       character(NULL) { }

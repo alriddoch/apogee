@@ -12,6 +12,7 @@
 #include "Alert.h"
 #include "Dialogue.h"
 #include "Item.h"
+#include "Compass.h"
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1)
 {

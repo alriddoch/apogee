@@ -31,10 +31,11 @@ class Button : public Widget {
     virtual void draw();
     virtual void select();
     virtual void click();
+    virtual void release();
     virtual void key(int);
 
     void press() { pressed = true; }
-    void release() { pressed = false; }
+    void unpress() { pressed = false; }
     int width();
 };
 
