@@ -48,7 +48,7 @@ void Isometric::init()
     if (!model->onInit(Datapath() + "paladin.cfg")) {
         std::cerr << "Loading paladin model failed" << std::endl << std::flush;
     }
-    model->setLodLevel(0.2f);
+    model->setLodLevel(1.0f);
 }
 
 inline void Isometric::viewScale(float scale_factor)
@@ -257,14 +257,18 @@ void Isometric::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void Isometric::drawCal3DModel(Model * m, const Vector3D & coords)
+void Isometric::drawCal3DModel(Model * m, const Vector3D & coords,
+                               const Eris::Quaternion & orientation)
 {
     glPushMatrix();
     glTranslatef(coords.X(), coords.Y(), coords.Z());
+    float orient[4][4];
+    orientation.asMatrix(orient);
+    float omatrix[16];
+    glMultMatrixf(&orient[0][0]);
     viewScale(0.025f);
     m->onRender();
     glPopMatrix();
-    //viewScale(1);
 }
 
 void Isometric::draw3DBox(const Vector3D & coords, const Eris::BBox & bbox)
@@ -379,11 +383,11 @@ void Isometric::drawEntity(Eris::Entity * ent)
         Vector3D pos = e->getPosition();
         WorldEntity * we = dynamic_cast<WorldEntity *>(e);
         if (we != NULL) {
-            cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos;
+            debug( cout << Vector3D(e->getVelocity()) << " " << (worldTime - we->getTime()) << " " << pos; );
             pos = pos + Vector3D(e->getVelocity()) * ((worldTime - we->getTime())/1000.0f);
-            cout << "=" << pos << endl << flush;
+            debug( cout << "=" << pos << endl << flush; );
         } else {
-            cout << "Eris::Entity is not a WorldEntity" << endl << flush;
+            cout << "Eris::Entity \"" << e->getID() << "\" is not a WorldEntity" << endl << flush;
         }
         debug(std::cout << ":" << e->getID() << e->getPosition() << ":"
                         << e->getBBox().u << e->getBBox().v
@@ -391,7 +395,7 @@ void Isometric::drawEntity(Eris::Entity * ent)
         if (!e->isVisible()) { continue; }
         Eris::TypeInfo * type = Eris::TypeInfo::findSafe(*e->getInherits().begin());
         if (type->safeIsA(charType)) {
-            drawCal3DModel(model, pos);
+            drawCal3DModel(model, pos, e->getOrientation());
         } else {
             draw3DBox(pos, e->getBBox());
             drawEntity(e);

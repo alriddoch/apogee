@@ -1,3 +1,18 @@
+2001-12-15  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* app/GameClient.cpp: Slow down character movement to walking pace.
+
+	* app/IxClient.cpp, visual/DemeterScene.cpp, visual/DemeterScene.h,
+	  visual/Isometric.cpp, visual/Isometric.h, visual/Renderer.h:
+	  Add support for rotation quaternion to model drawing function.
+
+	* visual/Isometric.cpp: Remove deugging output.
+
+	* common/Vector3D.h: Fixed error in cross product calculation.
+
+	* visual/Model.cpp: Disable linear texture for speed on software
+	  rendering.
+
 2001-12-11  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* app/WorldEntity.h, visual/Isometric.cpp, visual/Isometric.h:

@@ -25,6 +25,7 @@ class RendererSDLinit : public RendererException { };
 namespace Eris {
   class Entity;
   class BBox;
+  class Quaternion;
 }
 
 class Renderer {
@@ -87,7 +88,8 @@ class Renderer {
     //virtual void draw3Dtest() = 0;
     //virtual void draw2Dtest() = 0;
     virtual void draw3Dentity() = 0;
-    virtual void drawCal3DModel(Model *, const Vector3D & coords) = 0;
+    virtual void drawCal3DModel(Model *, const Vector3D & coords,
+                                const Eris::Quaternion &) = 0;
     virtual void draw3DBox(const Vector3D & coords,
                            const Eris::BBox & bbox) = 0;
     virtual void draw3DArea(const Vector3D & coords,

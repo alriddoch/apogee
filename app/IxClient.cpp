@@ -77,7 +77,7 @@ bool IxClient::update()
     renderer.drawMap(map_database);
     renderer.origin();
     model->onUpdate(0.1);
-    renderer.drawCal3DModel(model, Vector3D(0,0,0));
+    renderer.drawCal3DModel(model, Vector3D(0,0,0), Eris::Quaternion());
     doWorld();
     renderer.lightOff();
     renderer.drawGui();

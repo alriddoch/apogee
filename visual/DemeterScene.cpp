@@ -252,7 +252,8 @@ void DemeterScene::draw3Dentity()
     glDisable(GL_TEXTURE_2D);
 }
 
-void DemeterScene::drawCal3DModel(Model * m, const Vector3D & coords)
+void DemeterScene::drawCal3DModel(Model * m, const Vector3D & coords,
+                                  const Eris::Quaternion & orientation)
 {
     origin();
     float characterElevation = terrain->GetElevation(terrain->GetWidth() / 2.0f + coords.X(), terrain->GetHeight() / 2.0f + coords.Y()) - terrain->GetElevation(cameraPosition.x,cameraPosition.y);

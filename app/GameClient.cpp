@@ -138,6 +138,7 @@ void GameClient::moveCharacter(const Vector3D & pos)
     marg["id"] = character->getID();
     marg["loc"] = character->getContainer()->getID();
     marg["pos"] = pos.asObject();
+    marg["velocity"] = Vector3D(1,0,0).asObject();
     m.SetArgs(Atlas::Message::Object::ListType(1, marg));
     m.SetFrom(character->getID());
 
