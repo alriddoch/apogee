@@ -13,17 +13,17 @@ class Sprite {
   private:
     static unsigned int twoN(unsigned int);
 
-    int tex_id;
+    unsigned int tex_id;
     float m_w, m_h;
     float m_pw, m_ph;
+    bool loadedp;
   public:
-    Sprite() : tex_id(-1), m_w(0), m_h(0), m_pw(0), m_ph(0) { }
+    Sprite() : m_w(0), m_h(0), m_pw(0), m_ph(0), loadedp(false) { }
 
     bool load(const std::string & filename);
-    bool load(const std::string & filename, const Renderer & renderer);
     void draw();
 
-    bool loaded() const { return (tex_id != -1); }
+    bool loaded() const { return loadedp; }
     float w() { return m_w; }
     float h() { return m_h; }
     float pw() { return m_pw; }

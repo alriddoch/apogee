@@ -14,19 +14,27 @@ class Texture {
   private:
     Texture() { }
 
-    static std::map<std::string, int> & textures() {
+    static std::map<std::string, unsigned int> & textures() {
         if (texturedb == NULL) {
-            texturedb = new std::map<std::string, int>;
+            texturedb = new std::map<std::string, unsigned int>;
         }
         return *texturedb;
     }
     static struct SDL_Surface * imageLoad(const std::string & filename);
 
-    static std::map<std::string, int> * texturedb;
+    static std::map<std::string, unsigned int> * texturedb;
+    static unsigned int defaultTexture;
+    static bool defaultTextureLoaded;
+    static unsigned int defaultTextureWidth;
+    static unsigned int defaultTextureHeight;
   public:
-    static int loadTexture(struct SDL_Surface * image, bool wrap = true);
+    static unsigned int loadTexture(struct SDL_Surface * image, bool wrap = true);
     static struct SDL_Surface * imageTransform(struct SDL_Surface * image);
-    static int get(const std::string & filename, bool wrap = true);
+    static unsigned int get(const std::string & filename, bool wrap = true);
+    static unsigned int getDefault();
+
+    static unsigned int getDefaultWidth() { return defaultTextureWidth; }
+    static unsigned int getDefaultHeight() { return defaultTextureHeight; }
 };
 
 #endif // APOGEE_VISUAL_TEXTURE_H

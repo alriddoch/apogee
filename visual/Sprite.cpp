@@ -3,6 +3,7 @@
 // Copyright (C) 2000-2001 Alistair Riddoch
 
 #include "Sprite.h"
+
 #include "Renderer.h"
 
 #include <GL/gl.h>
@@ -22,7 +23,7 @@ unsigned int Sprite::twoN(unsigned int size)
             return num;
         }
     }
-    return pow(2,12);
+    return (unsigned int)pow(2,12);
 }
 
 bool Sprite::load(const std::string & filename)
@@ -30,7 +31,13 @@ bool Sprite::load(const std::string & filename)
     std::cout << "Sprite " << filename << std::endl << std::flush;
     SDL_Surface * image = IMG_Load(filename.c_str());
     if (image == NULL) {
-        return false;
+        tex_id = Texture::getDefault();
+        m_w = Texture::getDefaultWidth();
+        m_h = Texture::getDefaultHeight();
+        m_pw = m_w / twoN(m_w);
+        m_ph = m_h / twoN(m_h);
+        loadedp = true;
+        return true;
     }
 
     const unsigned int textur_w = twoN(image->w);
@@ -67,23 +74,13 @@ bool Sprite::load(const std::string & filename)
     m_pw = (float)sprite_w / textur_w;
     m_ph = (float)sprite_h / textur_h;
     SDL_FreeSurface(image);
-    if (tex_id == -1) { return false; }
+    loadedp = true;
     return true;
-}
-
-bool Sprite::load(const std::string & filename, const Renderer & renderer)
-{
-    bool ret = load(filename);
-    if (ret) {
-        m_w = m_w / renderer.meterSize();
-        m_h = m_w / renderer.meterSize();
-    }
-    return ret;
 }
 
 void Sprite::draw()
 {
-    if (tex_id == -1) { return; }
+    if (!loadedp) { return; }
     glBindTexture(GL_TEXTURE_2D, tex_id);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

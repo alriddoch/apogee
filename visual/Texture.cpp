@@ -4,12 +4,18 @@
 
 #include "Texture.h"
 
+#include "GL.h"
+#include "default_texture.h"
+
 #include <SDL_image.h>
-#include <GL/gl.h>
 
 #include <iostream>
 
-std::map<std::string, int> * Texture::texturedb = NULL;
+std::map<std::string, unsigned int> * Texture::texturedb = NULL;
+unsigned int Texture::defaultTexture;
+bool Texture::defaultTextureLoaded;
+unsigned int Texture::defaultTextureWidth;
+unsigned int Texture::defaultTextureHeight;
 
 SDL_Surface * Texture::imageLoad(const std::string & filename)
 // This code was created by Jeff Molofee '99
@@ -64,10 +70,11 @@ SDL_Surface * Texture::imageTransform(SDL_Surface * image)
 }
 
 
-int Texture::get(const std::string & filename, bool wrap)
+unsigned int Texture::get(const std::string & filename, bool wrap)
 {
-    if (textures().find(filename) != textures().end()) {
-        return textures()[filename];
+    std::map<std::string, unsigned int>::const_iterator I = textures().find(filename);
+    if (I != textures().end()) {
+        return I->second;
     }
     std::cout << "Loading new texture " << filename << std::endl << std::flush;
     SDL_Surface * image = imageLoad(filename);
@@ -75,17 +82,40 @@ int Texture::get(const std::string & filename, bool wrap)
     if (image == NULL) {
         std::cerr << "Failed to load texture " << filename
                   << std::endl << std::flush;
-        return -1;
+        return getDefault();
     }
 
-    int tex_id = loadTexture(image, wrap);
-    if (tex_id != -1) { textures()[filename] = tex_id; }
+    unsigned int tex_id = loadTexture(image, wrap);
+    textures()[filename] = tex_id;
     return tex_id;
 }
-    
-int Texture::loadTexture(SDL_Surface * image, bool wrap)
+
+unsigned int Texture::getDefault()
 {
-    int tex_id;
+    if (defaultTextureLoaded) {
+        return defaultTexture;
+    }
+    glGenTextures(1, &defaultTexture);
+    glBindTexture(GL_TEXTURE_2D, defaultTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, texture_default_texture_internalFormat,
+                 texture_default_texture_width, texture_default_texture_height, 0,
+                 texture_default_texture_format, GL_UNSIGNED_BYTE,
+                 texture_default_texture_pixels);
+    if (glGetError() != 0) {
+        std::cerr << "ERROR: Failed to load font texture" << std::endl << std::flush;
+    }
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    defaultTextureLoaded = true;
+    defaultTextureWidth = texture_default_texture_width;
+    defaultTextureHeight = texture_default_texture_height;
+    return defaultTexture;
+}
+    
+unsigned int Texture::loadTexture(SDL_Surface * image, bool wrap)
+{
+    unsigned int tex_id;
     int format, fmt;
     int x, y;
     int bpp = image->format->BitsPerPixel;
@@ -94,7 +124,7 @@ int Texture::loadTexture(SDL_Surface * image, bool wrap)
         SDL_FreeSurface(image);
         std::cerr << "Failed to load texture: wrong format "
                   << std::endl << std::flush;
-        return -1;
+        return getDefault();
     }
 
     if (image->format->Rshift > image->format->Bshift) {
@@ -105,7 +135,7 @@ int Texture::loadTexture(SDL_Surface * image, bool wrap)
     fmt = (bpp == 24) ? 3 : 4;
 
     /* load the texture into OGL */
-    glGenTextures(1, (unsigned int *)&tex_id);
+    glGenTextures(1, &tex_id);
     glBindTexture(GL_TEXTURE_2D, tex_id);
     //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, fmt, image->w, image->h, 0,
