@@ -1,3 +1,8 @@
+2003-08-01  Al Riddoch  <ajr@ecs.soton.ac.uk>
+
+	* visual/TerrainRenderer.cpp: Turn off depth write in subsequent
+	  passes of multi-pass rendering.
+
 2003-07-30  Al Riddoch  <ajr@ecs.soton.ac.uk>
 
 	* visual/TerrainRenderer.cpp: Make iterators integers unsigned.

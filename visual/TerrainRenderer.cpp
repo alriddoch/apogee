@@ -84,11 +84,15 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
         glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        GL_UNSIGNED_INT, m_lineIndeces);
 
+        if (texNo == 0) {
+            glDepthMask(GL_FALSE);
+        }
         // glBindTexture(GL_TEXTURE_2D, m_textures[2]);
         // glDrawElements(GL_TRIANGLE_STRIP, m_numLineIndeces,
                        // GL_UNSIGNED_INT, m_lineIndeces);
     }
 
+    glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 
     // if (have_GL_EXT_compiled_vertex_array) {
