@@ -253,6 +253,7 @@ void Gui::print(const char * str)
     glListBase(textBase-32);
     glCallLists(strlen(str),GL_BYTE,str);
     glDisable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     glPopMatrix();
 }
 
