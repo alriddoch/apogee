@@ -1,3 +1,6 @@
+Add decal shadows to the terrain - extra pass after terrain drawing. Depth
+write off.
+
 Add support for scaling factor specified in the .cfg file.
 
 Fix up cal3d loader so it looks in the same dir as the material file for 
