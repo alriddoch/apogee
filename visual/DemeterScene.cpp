@@ -359,7 +359,6 @@ void DemeterScene::drawMap(Coal::Container & map_base, HeightMap & map_height)
 
 void DemeterScene::drawGui()
 {
-    cout << "Draw GUI" << endl << flush;
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, width, 0, height, -20.0f, 20.0f);

@@ -25,6 +25,7 @@ class IxClient : public GameClient {
     HeightMap map_height;
     Compass * compassWidget;
 
+    bool m_use_mouse;
     bool terrain_detail;
     bool terrain_over;
   public:

@@ -22,6 +22,7 @@ using Atlas::Message::Object;
 
 IxClient::IxClient(Renderer & rend, Eris::Connection & con)
                    : GameClient(rend, con),
+                     m_use_mouse(false),
                      terrain_detail(true), terrain_over(false)
 {
 }
@@ -60,7 +61,6 @@ void IxClient::doWorld()
     }
     Eris::Entity * root = world->getRootEntity();
     if (root == NULL) {
-        std::cout << "No root" << std::endl << std::flush;
         return;
     }
     renderer.drawWorld(root);
@@ -153,7 +153,7 @@ bool IxClient::event(SDL_Event & event)
                     return true;
                     break;
                 case SDLK_q:
-                    terrain_detail = terrain_detail ? false : true;
+                    m_use_mouse = m_use_mouse ? false : true;
                     return true;
                     break;
                 case SDLK_w:
@@ -170,6 +170,7 @@ bool IxClient::event(SDL_Event & event)
 
 void IxClient::mouse(int dx, int dy)
 {
+    if (m_use_mouse) { return; }
     float newRot = renderer.getRotation() + dx;
     while (newRot >= 360) { newRot -= 360; };
     renderer.setRotation(newRot);
