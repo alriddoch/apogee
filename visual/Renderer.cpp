@@ -30,6 +30,8 @@ static const float FOG_GREEN = 0.5f;
 static const float FOG_BLUE = 0.5f;
 static const float FOG_ALPHA = 0.0f;
 
+const float Renderer::maxViewDistance = 1000.f;
+
 Renderer::Renderer(int wdth, int hght) : screen(NULL),
                                          width(wdth), height(hght),
                                          fullscreen(false),

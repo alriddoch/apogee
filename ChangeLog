@@ -1,3 +1,8 @@
+2005-03-03  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Renderer.h, visual/Renderer.cpp: Define maxViewDistance
+	  in the .cpp file to work with more compilers.
+
 2005-02-18  Al Riddoch  <alriddoch@zepler.org>
 
 	* configure.ac, visual/Model.cpp, visual/Model.h: Update for

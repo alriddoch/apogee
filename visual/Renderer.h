@@ -31,7 +31,7 @@ class Renderer {
   protected:
     Renderer(int wdth, int hght);
 
-    static const float maxViewDistance = 1000.0f;
+    static const float maxViewDistance;
 
     void shapeView();
 
