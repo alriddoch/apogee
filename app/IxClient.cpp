@@ -15,9 +15,8 @@
 
 static const Uint32 maxClickTime = 300; // milliseconds
 
-IxClient::IxClient(Eris::Connection & con)
-                   : GameClient(* new DemeterScene(*this), con),
-                     m_use_mouse(true)
+IxClient::IxClient() : GameClient(* new DemeterScene(*this), "perigee"),
+                       m_use_mouse(true)
 {
 }
 

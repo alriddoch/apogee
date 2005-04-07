@@ -44,16 +44,11 @@ using Atlas::Objects::Entity::GameEntity;
 
 bool GameClient::setup()
 {
-    connection.Failure.connect(SigC::slot(*this, &GameClient::netFailure));
-    connection.Connected.connect(SigC::slot(*this, &GameClient::netConnected));
-    connection.Disconnected.connect(SigC::slot(*this, &GameClient::netDisconnected));
     Eris::Logged.connect(SigC::slot(*this, &GameClient::connectionLog));
 
     if (!renderer.init()) {
         return false;
     }
-
-    m_account = new Eris::Account(&connection);
 
     gui = new Gui(renderer);
     gui->setup();
@@ -93,6 +88,20 @@ bool GameClient::setup()
     return true;
 }
 
+void GameClient::connect(const std::string & host, const std::string & port)
+{
+    // FIXME Implement getting the port number from port
+    connection = new Eris::Connection(appName, host, 6767, true);
+
+    connection->Failure.connect(SigC::slot(*this, &GameClient::netFailure));
+    connection->Connected.connect(SigC::slot(*this, &GameClient::netConnected));
+    connection->Disconnected.connect(SigC::slot(*this, &GameClient::netDisconnected));
+
+    connection->connect();
+
+    m_account = new Eris::Account(connection);
+}
+
 void GameClient::connectHost(const std::string & hostName)
 {
     connect(hostName, "6767");
@@ -104,7 +113,7 @@ void GameClient::specifyHost()
                                      renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
+    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::connect));
     gui->addWidget(d);
 }
 
@@ -217,7 +226,7 @@ void GameClient::connectWorldSignals()
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
     m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::gotAvatar));
-    Eris::Factory::registerFactory(new WEFactory(*connection.getTypeService(),
+    Eris::Factory::registerFactory(new WEFactory(*connection->getTypeService(),
                                            renderer));
 }
 
@@ -382,7 +391,7 @@ void GameClient::moveCharacter(const PosType & pos, bool run)
     m->setArgsAsList(Atlas::Message::ListType(1, marg));
     m->setFrom(m_character->getId());
 
-    connection.send(m);
+    connection->send(m);
     
 }
 

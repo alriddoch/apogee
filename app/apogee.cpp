@@ -21,9 +21,7 @@ int main(int argc, char ** argv)
 {
     loadConfig(argc, argv);
 
-    Eris::Connection & con = * new Eris::Connection("apogee", true);
-
-    IsoClient * app = new IsoClient(con);
+    IsoClient * app = new IsoClient();
 
     Eris::setLogLevel(Eris::LOG_DEBUG);
 

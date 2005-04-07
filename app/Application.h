@@ -21,19 +21,18 @@ class Application : public SigC::Object {
   protected:
     Gui * gui;
 
-    Application(Renderer & rend, Eris::Connection & con) :
-                gui(0), renderer(rend), connection(con) { }
+    Application(Renderer & rend, const std::string & name) :
+                gui(0), renderer(rend), connection(0) { }
     virtual ~Application();
   public:
     Renderer & renderer;
-    Eris::Connection & connection;
+    Eris::Connection * connection;
+    std::string appName;
 
     virtual bool setup() = 0;
     virtual bool update(float) = 0;
     virtual bool event(SDL_Event &) = 0;
     virtual void mouse(int, int, Uint8) = 0;
-
-    void connect(const std::string & host, const std::string & port);
 };
 
 #endif // APOGEE_APPLICATION_H

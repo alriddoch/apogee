@@ -11,7 +11,7 @@ class IxClient : public GameClient {
   private:
     bool m_use_mouse;
   public:
-    IxClient(Eris::Connection & con);
+    IxClient();
     virtual ~IxClient();
 
     bool event(SDL_Event &);

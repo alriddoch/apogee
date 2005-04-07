@@ -9,7 +9,7 @@
 
 class IsoClient : public GameClient {
   public:
-    IsoClient(Eris::Connection & con);
+    IsoClient();
     virtual ~IsoClient();
 
     bool event(SDL_Event &);

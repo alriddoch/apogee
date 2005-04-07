@@ -12,8 +12,3 @@ Application::~Application()
 {
     renderer.cleanUp();
 }
-
-void Application::connect(const std::string & host, const std::string & port)
-{
-    connection.connect(host,6767);
-}

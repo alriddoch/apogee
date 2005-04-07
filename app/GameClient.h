@@ -23,7 +23,6 @@ namespace Eris {
   class Room;
   class Entity;
   class Coord;
-  class Connection;
   class ServerInfo;
 }
 
@@ -48,8 +47,8 @@ class GameClient : public Application {
     void worldEnter(Eris::Entity *);
     void gotAvatar(Eris::Avatar *);
   public:
-    GameClient(Renderer & rend, Eris::Connection & con) :
-               Application(rend, con), inGame(false),
+    GameClient(Renderer & rend, const std::string & name) :
+               Application(rend, name), inGame(false),
                compassWidget(NULL), clickDown(false),
                clickDownTime(0), clickDownX(0), clickDownY(0),
                m_account(NULL), m_avatar(NULL), m_lobby(NULL), m_view(NULL),
@@ -61,6 +60,7 @@ class GameClient : public Application {
     AutonomousEntity * m_character;
 
     bool setup();
+    void connect(const std::string & host, const std::string & port);
     bool update(float);
 
     void connectHost(const std::string &);

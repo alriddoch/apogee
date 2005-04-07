@@ -21,9 +21,7 @@ int main(int argc, char ** argv)
 {
     loadConfig(argc, argv);
 
-    Eris::Connection & con = * new Eris::Connection("perigee", true);
-
-    IxClient * app = new IxClient(con);
+    IxClient * app = new IxClient();
 
     Eris::setLogLevel(Eris::LOG_DEBUG);
 

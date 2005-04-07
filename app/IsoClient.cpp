@@ -12,7 +12,7 @@
 #include <Eris/Entity.h>
 #include <Eris/Avatar.h>
 
-IsoClient::IsoClient(Eris::Connection & con) : GameClient(*new Isometric(*this), con)
+IsoClient::IsoClient() : GameClient(*new Isometric(*this), "apogee")
 {
 }
 

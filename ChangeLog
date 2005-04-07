@@ -1,3 +1,11 @@
+2005-04-07  Al Riddoch  <alriddoch@zepler.org>
+
+	* app/Application.cpp, app/Application.h, app/GameClient.cpp,
+	  app/GameClient.h, app/IsoClient.cpp, app/IsoClient.h,
+	  app/IxClient.cpp, app/IxClient.h, app/apogee.cpp,
+	  app/perigee.cpp: Re-structure code slightly to take account of
+	  changes in the Eris Connection API.
+
 2005-03-03  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/Renderer.h, visual/Renderer.cpp: Define maxViewDistance
