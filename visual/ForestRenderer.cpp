@@ -11,6 +11,7 @@
 #include "app/WorldEntity.h"
 
 #include <Mercator/Plant.h>
+#include <Mercator/Area.h>
 
 #include <Eris/Entity.h>
 
@@ -47,9 +48,16 @@ void ForestRenderer::render(Renderer & r, const PosType & camPos)
         return;
     }
 
-    const WFMath::Polygon<2> & area = m_forest.getArea();
-    if (!area.isValid() || area.numCorners() == 0) {
-        m_forest.setVolume(m_ent.getBBox());
+    Mercator::Area * area = m_forest.getArea();
+    if (area == 0) {
+        // FIXME
+        // m_forest.setVolume(m_ent.getBBox());
+    } else {
+        const WFMath::Polygon<2> & shape = area->shape();
+        if (!shape.isValid() || shape.numCorners() == 0) {
+            // FIXME
+            // m_forest.setVolume(m_ent.getBBox());
+        }
     }
 
     // FIXME Assumes direct parent is terrain

@@ -1,3 +1,11 @@
+2005-04-10  Al Riddoch  <alriddoch@zepler.org>
+
+	* configure.ac: Update to news autoconf conventions. Require specific
+	  versions of Mercator and Eris to get the right development API.
+
+	* visual/ForestRenderer.cpp: Deal with sudden lack of functions in
+	  the Forest API.
+
 2005-04-07  Al Riddoch  <alriddoch@zepler.org>
 
 	* app/Application.cpp, app/Application.h, app/GameClient.cpp,

@@ -1,7 +1,7 @@
 dnl Initialise autoconf
 
-AC_INIT()
-AM_CONFIG_HEADER(config.h)
+AC_INIT(apogee, 0.0.1)
+AC_CONFIG_SRCDIR([app/perigee.cpp])
 
 dnl Detect the canonical host and target environment
 
@@ -9,9 +9,8 @@ AC_CANONICAL_SYSTEM
 
 dnl Initialise automake
 
-VERSION=0.0.1
-
-AM_INIT_AUTOMAKE(apogee, $VERSION)
+AM_INIT_AUTOMAKE([dist-bzip2])
+AM_CONFIG_HEADER(config.h)
 
 dnl Need libtool
 
@@ -47,7 +46,7 @@ WF_CHECK_SDL_IMAGE($SDL_VERSION)
 
 WF_CHECK_GL_LIBS
 
-PKG_CHECK_MODULES(WF, eris-1.3 mercator-0.2 varconf-1.0 sage ,
+PKG_CHECK_MODULES(WF, eris-1.3 = 1.3.4 mercator-0.2 = 0.2.2 varconf-1.0 sage ,
     [
         CPPFLAGS="$CPPFLAGS $WF_CFLAGS"
         LIBS="$LIBS $WF_LIBS"
