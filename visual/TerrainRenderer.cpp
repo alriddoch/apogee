@@ -97,17 +97,18 @@ void TerrainRenderer::generateAlphaTextures(Mercator::Segment * map)
 {
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
+    Mercator::Segment::Surfacestore::const_iterator Iend = surfaces.end();
 
     glGenTextures(surfaces.size(), m_alphaTextures);
     // FIXME These textures we have allocated are leaked.
-    for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
-        if ((!(*I)->m_shader.checkIntersect(**I)) || (texNo == 0)) {
+    for (int texNo = 0; I != Iend; ++I, ++texNo) {
+        if (texNo == 0) {
             continue;
         }
 
         glBindTexture(GL_TEXTURE_2D, m_alphaTextures[texNo]);
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_ALPHA4, 65, 65, GL_ALPHA,
-                          GL_UNSIGNED_BYTE, (*I)->getData());
+                          GL_UNSIGNED_BYTE, I->second->getData());
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -147,16 +148,12 @@ void TerrainRenderer::drawRegion(Mercator::Segment * map)
 
     const Mercator::Segment::Surfacestore & surfaces = map->getSurfaces();
     Mercator::Segment::Surfacestore::const_iterator I = surfaces.begin();
+    Mercator::Segment::Surfacestore::const_iterator Iend = surfaces.end();
 
-    for (int texNo = 0; I != surfaces.end(); ++I, ++texNo) {
-        // Do a rough check to see if this pass applies to this segment
-        if (!(*I)->m_shader.checkIntersect(**I)) {
-            continue;
-        }
-
+    for (int texNo = 0; I != Iend; ++I, ++texNo) {
         // Set up the first texture unit with the ground texture
         glActiveTexture(GL_TEXTURE0);
-        GLuint tex = Texture::get(m_textures[texNo], true,
+        GLuint tex = Texture::get(m_textures[I->first], true,
                                   GL_LINEAR_MIPMAP_NEAREST);
         glBindTexture(GL_TEXTURE_2D, tex);
 
@@ -256,7 +253,7 @@ void TerrainRenderer::drawMap(Mercator::Terrain & t,
                     s->populate();
                 }
                 Mercator::Segment::Surfacestore & surfaces = s->getSurfaces();
-                if (!surfaces.empty() && !surfaces.front()->isValid()) {
+                if (!surfaces.empty() && !surfaces.begin()->second->isValid()) {
                     s->populateSurfaces();
                 }
 
@@ -539,11 +536,11 @@ TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
     }
     m_numHalfIndeces = ++idx;
 
-    m_terrain.addShader(new Mercator::FillShader());
-    m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f)); // Sandy beach
-    m_terrain.addShader(new Mercator::GrassShader(1.f, 80.f, .5f, 1.f)); //Grass
-    m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f)); // Underwater
-    m_terrain.addShader(new Mercator::HighShader(110.f)); // Snow
+    m_terrain.addShader(new Mercator::FillShader(), 0);
+    m_terrain.addShader(new Mercator::BandShader(-2.f, 1.5f), 1); // Sandy beach
+    m_terrain.addShader(new Mercator::GrassShader(1.f, 80.f, .5f, 1.f), 2); //Grass
+    m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f), 3); // Underwater
+    m_terrain.addShader(new Mercator::HighShader(110.f), 4); // Snow
 
     r.Restart.connect(SigC::slot(*this, &TerrainRenderer::flush));
 }

@@ -1,5 +1,10 @@
 2005-04-10  Al Riddoch  <alriddoch@zepler.org>
 
+	* visual/TerrainRenderer.cpp: update to work with the modified
+	  Surfacestore API in Mercator.
+
+2005-04-10  Al Riddoch  <alriddoch@zepler.org>
+
 	* configure.ac: Update to news autoconf conventions. Require specific
 	  versions of Mercator and Eris to get the right development API.
 
