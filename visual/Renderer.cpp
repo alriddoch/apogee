@@ -209,7 +209,8 @@ const PosType Renderer::getWorldCoord(int x, int y, float z)
 
     gluUnProject (x, y, z, mvmatrix, projmatrix, viewport, &wx, &wy, &wz);
 
-    std::cout << "{" << wx << ";" << wy << ";" << wz << std::endl << std::flush;
+    std::cout << "SCREEN {" << x << ";" << y << ";" << z << std::endl << std::flush;
+    std::cout << "WORLD {" << wx << ";" << wy << ";" << wz << std::endl << std::flush;
     return PosType(wx, wy, wz);
 }
 

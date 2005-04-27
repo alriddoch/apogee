@@ -226,8 +226,6 @@ void GameClient::connectWorldSignals()
     // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
 
     m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::gotAvatar));
-    Eris::Factory::registerFactory(new WEFactory(*connection->getTypeService(),
-                                           renderer));
 }
 
 void GameClient::createCharacter(const std::string & name,
@@ -337,6 +335,8 @@ void GameClient::gotAvatar(Eris::Avatar * a)
 {
     m_avatar = a;
     m_view = m_avatar->getView();
+    m_view->registerFactory(new WEFactory(*connection->getTypeService(),
+                                           renderer));
     m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
     m_avatar->GotCharacterEntity.connect(SigC::slot(*this,&GameClient::worldEnter));
 }
