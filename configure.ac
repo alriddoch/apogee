@@ -2,19 +2,18 @@ dnl Initialise autoconf
 
 AC_INIT(apogee, 0.0.1)
 AC_CONFIG_SRCDIR([app/perigee.cpp])
+AC_CONFIG_HEADERS([config.h])
 
-dnl Detect the canonical host and target environment
+dnl Detect the canonical host environment
 
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 
 dnl Initialise automake
 
 AM_INIT_AUTOMAKE([dist-bzip2])
-AM_CONFIG_HEADER(config.h)
 
 dnl Need libtool
 
-AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 
 dnl Test for C++ compiler
@@ -36,8 +35,7 @@ AC_ARG_ENABLE(debug,
     ]
 )
 
-AC_LANG_CPLUSPLUS
-AC_REQUIRE_CPP
+AC_LANG(C++)
 
 dnl Test for libraries
 
@@ -78,10 +76,11 @@ CXXFLAGS="$CXXFLAGS $WF_SDL_IMAGE_CFLAGS"
 LIBS="$LIBS $WF_SDL_IMAGE_LIBS"
 
 dnl Generate files
-AC_OUTPUT([
+AC_CONFIG_FILES([
 	Makefile
 	common/Makefile
 	visual/Makefile
 	gui/Makefile
 	app/Makefile
 ])
+AC_OUTPUT
