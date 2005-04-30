@@ -7,6 +7,7 @@ AC_CONFIG_HEADERS([config.h])
 dnl Detect the canonical host environment
 
 AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 
 dnl Initialise automake
 
@@ -20,22 +21,42 @@ dnl Test for C++ compiler
 
 AC_PROG_CXX
 
-CXXFLAGS="$CXXFLAGS -Wall -DATLAS_ELEMENT_TYPEDEF_PRIVATE"
-
 AC_ARG_ENABLE(debug,
     [  --enable-debug          enable debug information [default=no]],
     [
         if test "$enableval" = "yes"; then
-            CXXFLAGS="$CXXFLAGS -DDEBUG"
+            CXXFLAGS="$CXXFLAGS -Wall -DDEBUG"
         else
-            CXXFLAGS="$CXXFLAGS -DNDEBUG"
+            CXXFLAGS="$CXXFLAGS -Wall -DNDEBUG"
         fi
     ],[
-        CXXFLAGS="$CXXFLAGS -DNDEBUG"
+        CXXFLAGS="$CXXFLAGS -Wall -DNDEBUG"
     ]
 )
 
+STATIC_LIBSTDCPP=
+STATIC_LIBGCC=
+
+AC_ARG_ENABLE(static_link,
+  [  --enable-static-link    enable static link of some libs [default=no]],
+  [
+    if test "$enableval" = "yes"; then
+      link_static="true"
+      STATIC_LIBSTDCPP=`$CXX -print-file-name=libstdc++.a`
+      STATIC_LIBGCC=`$CXX -print-file-name=libgcc.a`
+    else
+      link_static="false"
+    fi
+  ],[
+    link_static="false"
+  ]
+)
+AM_CONDITIONAL(BUILD_STATIC, test x"$link_static" = xtrue)
+
 AC_LANG(C++)
+
+AC_CHECK_FUNC(rint,,[AC_CHECK_LIB(m,rint)])
+AC_CHECK_FUNCS([rintf lrintf lrint])
 
 dnl Test for libraries
 
@@ -80,7 +101,7 @@ AC_CONFIG_FILES([
 	Makefile
 	common/Makefile
 	visual/Makefile
-	gui/Makefile
 	app/Makefile
+	gui/Makefile
 ])
 AC_OUTPUT
