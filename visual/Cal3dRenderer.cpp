@@ -42,6 +42,9 @@ void Cal3dRenderer::selectCal3dModel(Cal3dModel * m)
 
 void Cal3dRenderer::update(float secs)
 {
+    if (m_model == 0) {
+        return;
+    }
     m_model->onUpdate(secs);
 }
 
@@ -52,10 +55,13 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, RenderableEntity & e) :
     if (m_default == 0) {
         m_default = new Cal3dModel();
         if (!m_default->onInit(getMediaPath() + "/media/media_new/3d_skeletons/cally/cally.cfg")) {
-            std::cerr << "Loading paladin model failed" << std::endl << std::flush;
+            std::cerr << "Loading default model failed" << std::endl << std::flush;
+            delete m_default;
+            m_default = 0;
+        } else {
+            m_default->setLodLevel(1.0f);
+            m_default->onUpdate(0);
         }
-        m_default->setLodLevel(1.0f);
-        m_default->onUpdate(0);
     }
     m_model = m_default;
     r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
@@ -87,10 +93,16 @@ void Cal3dRenderer::load(const std::string & file)
 
 void Cal3dRenderer::render(Renderer &, const PosType & camPos)
 {
+    if (m_model == 0) {
+        return;
+    }
     drawCal3dModel(m_model);
 }
 
 void Cal3dRenderer::select(Renderer &, const PosType & camPos)
 {
+    if (m_model == 0) {
+        return;
+    }
     selectCal3dModel(m_model);
 }

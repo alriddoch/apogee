@@ -1,3 +1,9 @@
+2005-05-16  Al Riddoch  <alriddoch@zepler.org>
+
+	* configure.ac: Require the correct version of eris.
+
+	* visual/Cal3dRenderer.cpp: Handle failure to load cal3d models better.
+
 2005-04-30  Al Riddoch  <alriddoch@zepler.org>
 
 	* configure.ac: Harmonise with apogee.
