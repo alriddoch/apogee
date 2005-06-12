@@ -6,6 +6,8 @@
 
 #include <varconf/Config.h>
 
+bool map_mode = false;
+
 varconf::Config * global_conf;
 
 std::string etc_directory = ETCDIR;
@@ -63,6 +65,14 @@ bool loadConfig(int argc, char ** argv)
         global_conf->readFromFile(std::string(home) + "/.apogee.vconf");
     }
     global_conf->getCmdline(argc, argv);
+
+    if (global_conf->findItem("apogee", "map")) {
+        map_mode = global_conf->getItem("apogee", "map");
+        std::cout << "Set Map Mode" << std::endl << std::flush;
+    } else {
+        std::cout << "Not Map Mode" << std::endl << std::flush;
+    }
+
 
     // Config is now loaded. Now set the values of some globals.
 

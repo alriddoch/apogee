@@ -9,6 +9,8 @@ namespace varconf {
   class Config;
 }
 
+extern bool map_mode;
+
 extern varconf::Config * global_conf;
 
 bool loadConfig(int argc, char ** argv);

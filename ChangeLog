@@ -1,3 +1,20 @@
+2005-06-12  Al Riddoch  <alriddoch@zepler.org>
+
+	* apogee.vconf: Disable sty as it seems to cause minor problems.
+
+	* configure.ac: Relax mercator requirement a little.
+
+	* common/configuration.cpp, common/configuration.h: Add a config
+	  option for map mode.
+
+	* visual/Cal3dRenderer.cpp, visual/Cal3dRenderer.h: Add some disabled
+	  experimental code used to work out object attachment.
+
+	* visual/Isometric.cpp: Handle the projection a little differently
+	  in map mode.
+
+	* visual/Renderer.cpp: Make the window square in map mode.
+
 2005-05-16  Al Riddoch  <alriddoch@zepler.org>
 
 	* configure.ac: Require the correct version of eris.

@@ -10,12 +10,16 @@
 #include <string>
 
 class Cal3dModel;
+class CalBone;
+class CalCoreBone;
 
 class Cal3dRenderer : public EntityRenderer
 {
   protected:
     static Cal3dModel * m_default;
     Cal3dModel * m_model;
+    CalBone * cb1;
+    CalCoreBone * ccb1;
 
     void drawCal3dModel(Cal3dModel * m);
     void selectCal3dModel(Cal3dModel * m);

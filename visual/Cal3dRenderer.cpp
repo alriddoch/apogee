@@ -9,6 +9,8 @@
 
 #include "common/system.h"
 
+#include <wfmath/quaternion.h>
+
 #include <sigc++/object_slot.h>
 
 #include <sys/types.h>
@@ -89,14 +91,68 @@ void Cal3dRenderer::load(const std::string & file)
     model->setLodLevel(1.0f);
     model->onUpdate(0);
     m_model = model;
+#if 0
+
+    model->getCalModel().getMixer()->blendCycle(0, 1, 0);
+    cb1 = 0;
+
+    CalSkeleton * cs = model->getCalModel().getSkeleton();
+    if (cs == 0) {
+        return;
+    }
+    std::cout << "Got skeleton" << std::endl << std::flush;
+    CalCoreSkeleton * ccs = cs->getCoreSkeleton();
+    if (ccs == 0) {
+        return;
+    }
+    int boneId = ccs->getCoreBoneId("Bip01 R Hand");
+    if (boneId == -1) {
+        return;
+    }
+    cb1 = cs->getBone(boneId);
+    if (cb1 == 0) {
+        return;
+    }
+#endif
 }
 
-void Cal3dRenderer::render(Renderer &, const PosType & camPos)
+void Cal3dRenderer::render(Renderer & r, const PosType & camPos)
 {
     if (m_model == 0) {
         return;
     }
     drawCal3dModel(m_model);
+#if 0
+
+    if (cb1 == 0) {
+        return;
+    }
+    const CalQuaternion & cq2 = cb1->getRotationAbsolute();
+    const CalVector & cv1 = cb1->getTranslationAbsolute();
+    std::cout << "[" << cq2.x << "," << cq2.y << "," << cq2.z << "," << cq2.w << "]" << std::endl << std::flush;
+    std::cout << "[" << cv1.x << "," << cv1.y << "," << cv1.z << "]" << std::endl << std::flush;
+
+    
+    static float v[] = { 0,0,0, 50,0,0, 0,0,0, 0,50,0, 0,0,0, 0,0,50  };
+    static float c[] = { 1,1,1, 1,0,0, 1,1,1, 0,1,0, 1,1,1, 0,0,1 };
+    glVertexPointer(3, GL_FLOAT, 0, v);
+    glColorPointer(3, GL_FLOAT, 0, c);
+    float scale = 0.08f / m_model->getRenderScale();
+
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glPushMatrix();
+    glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+    glScalef(scale, scale, scale);
+    glTranslatef(cv1.x, cv1.y, cv1.z);
+    r.orient(WFMath::Quaternion(cq2.w, -cq2.x, -cq2.y, -cq2.z));
+    glDrawArrays(GL_LINES, 0, 6);
+
+    glDisable(GL_COLOR_MATERIAL);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glPopMatrix();
+#endif
 }
 
 void Cal3dRenderer::select(Renderer &, const PosType & camPos)

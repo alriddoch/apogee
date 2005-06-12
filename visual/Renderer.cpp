@@ -14,6 +14,7 @@
 
 #include <common/debug.h>
 #include <common/system.h>
+#include <common/configuration.h>
 
 #include <Eris/Entity.h>
 #include <Eris/TypeInfo.h>
@@ -44,6 +45,10 @@ Renderer::Renderer(int wdth, int hght) : screen(NULL),
                                          m_windowName("<default>"),
                                          m_iconName("<default>")
 {
+    if (map_mode) {
+        window_width = width = 512;
+        window_height = height = 512;
+    }
 }
 
 Renderer::~Renderer()

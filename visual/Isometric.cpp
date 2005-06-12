@@ -6,21 +6,32 @@
 
 #include "Isometric.h"
 
+#include "common/configuration.h"
+
 Isometric::Isometric(Application & app, int wdth, int hght) :
                                            Renderer(wdth, hght)
 {
+    if (map_mode) {
+        elevation = 90;
+        rotation = 0;
+        scale = 30;
+    }
+
     m_windowName = "apogee";
     m_iconName = "isometric";
-}
 
-static const float maxViewDistance = 250.0f;
+}
 
 void Isometric::projection()
 {
-    // this puts us into orthographic projection
-    float xscale = width * scale / meterSize();
-    float yscale = height * scale / meterSize();
-    glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -200.0, 200.0 );
+    if (map_mode) {
+        glOrtho(0,64,0,64,-300,300);
+    } else {
+        // this puts us into orthographic projection
+        float xscale = width * scale / meterSize();
+        float yscale = height * scale / meterSize();
+        glOrtho(-xscale/2, xscale/2, -yscale/2, yscale/2, -200.0, 200.0 );
+    }
 }
 
 void Isometric::viewPoint()

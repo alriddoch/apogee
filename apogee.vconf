@@ -2,6 +2,7 @@
 [apogee]
 
 skin = "mason_skin"
+map = false
 
 [mason_skin]
 
@@ -16,6 +17,7 @@ button_down = "button_down.png"
 
 # paladin = "media/media_new/3d_skeletons/paladin/paladin.cfg"
 settler = "media/media_new/3d_skeletons/gen_humanoid/malebuilder/character_01.cfg"
+frog = "cal3d_attach_test/character_01.cfg"
 pig = "media/media_new/3d_skeletons/pig/fat_pig/Pig01_entityforge.cfg"
 skeleton = "media/media_new/3d_skeletons//.cfg"
 
@@ -24,7 +26,7 @@ skeleton = "media/media_new/3d_skeletons//.cfg"
 tree = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
 willow = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
 hickory = "media/media_new/3d_objects/plants/fir/models/fir/fir.3ds"
-sty = "media/media_new/3d_objects/items/building_element/models/wooden_fence/pig-sty.3ds"
+# sty = "media/media_new/3d_objects/items/building_element/models/wooden_fence/pig-sty.3ds"
 boat = "media/media_new/3d_objects/goatboat.3ds"
 
 [forest]
