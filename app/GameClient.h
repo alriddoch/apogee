@@ -90,7 +90,7 @@ class GameClient : public Application {
     // void roomLeave(Eris::Room *r, std::string id);
 
     void charMoved();
-    void entitySay(const std::string &, Eris::Entity * e);
+    void entitySay(const Atlas::Objects::Root &, Eris::Entity *);
 
     void moveCharacter(const PosType & pos, bool run = false);
     const PosType getAbsCharPos();

@@ -346,9 +346,14 @@ void GameClient::charMoved()
     std::cout << "Char moved" << std::endl << std::flush;
 }
 
-void GameClient::entitySay(const std::string & s, Eris::Entity * e)
+void GameClient::entitySay(const Atlas::Objects::Root & arg, Eris::Entity * e)
 {
     std::cout << "Sound Talk" << std::endl << std::flush;
+    Element say;
+    if (arg->copyAttr("say", say) != 0 || !say.isString()) {
+        std::cerr << "Say without a \"say\" attribute" << std::endl << std::flush;
+        return;
+    }
     std::string out(e->getName());
     if (out.empty()) {
         out += "[";
@@ -356,7 +361,7 @@ void GameClient::entitySay(const std::string & s, Eris::Entity * e)
         out += "]";
     }
     out += ": ";
-    out += s;
+    out += say.String();
     consoleWidget->pushLine(out);
 }
 

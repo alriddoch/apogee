@@ -1,3 +1,8 @@
+2005-09-06  Al Riddoch  <alriddoch@zepler.org>
+
+	* app/GameClient.h, app/GameClient.cpp: Fix function fingerprint
+	  to match that of Eris::Entity::Say.
+
 2005-06-12  Al Riddoch  <alriddoch@zepler.org>
 
 	* apogee.vconf: Disable sty as it seems to cause minor problems.
