@@ -1,3 +1,8 @@
+2005-12-02  Al Riddoch  <alriddoch@zepler.org>
+
+	* app/WorldEntity.cpp, app/WorldEntity.h: Update for changes in the
+	  Eris API.
+
 2005-09-06  Al Riddoch  <alriddoch@zepler.org>
 
 	* app/GameClient.h, app/GameClient.cpp: Fix function fingerprint
