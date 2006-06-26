@@ -7,12 +7,12 @@
 
 #include "common/Vector3D.h"
 
-#include <sigc++/object.h>
+#include <sigc++/trackable.h>
 
 class Renderer;
 class RenderableEntity;
 
-class EntityRenderer : virtual public SigC::Object
+class EntityRenderer : virtual public sigc::trackable
 {
   public:
     RenderableEntity & m_ent;

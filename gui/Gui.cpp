@@ -19,7 +19,7 @@
 
 #include <varconf/Config.h>
 
-#include <sigc++/object_slot.h>
+#include <sigc++/functors/mem_fun.h>
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {
@@ -71,7 +71,7 @@ bool Gui::setup()
 
     initFont();
 
-    renderer.Restart.connect(SigC::slot(*this, &Gui::initFont));
+    renderer.Restart.connect(sigc::mem_fun(*this, &Gui::initFont));
 
     return true;
 }

@@ -18,7 +18,7 @@ class Console : public Widget {
     unsigned int numLines;
     std::deque<std::string> lineContents;
   public:
-    SigC::Signal1<void, const std::string &> lineEntered;
+    sigc::signal<void, const std::string &> lineEntered;
 
     Console(Gui & g, int x, int y);
     virtual ~Console();

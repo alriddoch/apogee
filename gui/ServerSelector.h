@@ -32,10 +32,10 @@ class ServerSelector : public Widget {
     Button filter;
 
   public:
-    SigC::Signal1<void, const std::string &> connectSignal;
-    SigC::Signal0<void> refreshSignal;
-    SigC::Signal0<void> specifySignal;
-    SigC::Signal0<void> filterSignal;
+    sigc::signal<void, const std::string &> connectSignal;
+    sigc::signal<void> refreshSignal;
+    sigc::signal<void> specifySignal;
+    sigc::signal<void> filterSignal;
 
     ServerSelector(Gui & g, int x, int y);
     virtual ~ServerSelector();

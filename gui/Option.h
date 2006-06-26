@@ -20,8 +20,8 @@ class Option : public Widget {
     static Sprite background;
 
   public:
-    SigC::Signal0<void> buttonOneSignal;
-    SigC::Signal0<void> buttonTwoSignal;
+    sigc::signal<void> buttonOneSignal;
+    sigc::signal<void> buttonTwoSignal;
 
     Option(Gui & g, int x, int y,
            const std::string & b1,

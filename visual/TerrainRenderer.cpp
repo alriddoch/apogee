@@ -19,7 +19,7 @@
 #include <Mercator/GrassShader.h>
 #include <Mercator/Surface.h>
 
-#include <sigc++/object_slot.h>
+#include <sigc++/functors/mem_fun.h>
 
 #include <iostream>
 
@@ -542,7 +542,7 @@ TerrainRenderer::TerrainRenderer(Renderer & r, RenderableEntity & e) :
     m_terrain.addShader(new Mercator::DepthShader(0.f, -10.f), 3); // Underwater
     m_terrain.addShader(new Mercator::HighShader(110.f), 4); // Snow
 
-    r.Restart.connect(SigC::slot(*this, &TerrainRenderer::flush));
+    r.Restart.connect(sigc::mem_fun(*this, &TerrainRenderer::flush));
 }
 
 TerrainRenderer::~TerrainRenderer()
@@ -558,7 +558,7 @@ void TerrainRenderer::render(Renderer & r, const PosType & camPos)
 {
     if (!m_haveTerrain) {
         if (readTerrain()) {
-            m_ent.observe("terrain", SigC::slot(*this, &TerrainRenderer::readTerrainFrom));
+            m_ent.observe("terrain", sigc::mem_fun(*this, &TerrainRenderer::readTerrainFrom));
         }
         m_haveTerrain = true;
     }

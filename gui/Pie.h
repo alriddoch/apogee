@@ -55,7 +55,7 @@ class Pie : public Widget {
     static Sprite m_slicePressedGraphic;
 
   public:
-    SigC::Signal1<void, const std::string &> SliceSelected;
+    sigc::signal<void, const std::string &> SliceSelected;
 
     Pie(Gui & g, int x, int y) : Widget(g, x, y) { }
 

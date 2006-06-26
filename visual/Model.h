@@ -89,11 +89,11 @@ public:
     return m_enabledMeshes;
   }
 
-  SigC::Signal1<void, const std::string &> skeletonLoaded;
-  SigC::Signal2<void, const std::string &, int> animationLoaded;
-  SigC::Signal2<void, const std::string &, int> actionLoaded;
-  SigC::Signal2<void, const std::string &, int> meshLoaded;
-  SigC::Signal2<void, const std::string &, int> materialLoaded;
+  sigc::signal<void, const std::string &> skeletonLoaded;
+  sigc::signal<void, const std::string &, int> animationLoaded;
+  sigc::signal<void, const std::string &, int> actionLoaded;
+  sigc::signal<void, const std::string &, int> meshLoaded;
+  sigc::signal<void, const std::string &, int> materialLoaded;
 protected:
   GLuint loadTexture(const std::string& strFilename);
   void selectMesh();

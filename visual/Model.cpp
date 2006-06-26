@@ -194,7 +194,7 @@ bool Cal3dModel::onInit(const std::string& strFilename)
 
   // initialize the data path
   std::string strPath;
-  unsigned int pos = strFilename.find_last_of("/");
+  std::string::size_type pos = strFilename.find_last_of("/");
   if (pos != std::string::npos) {
     strPath = strFilename.substr(0, pos + 1);
   }
@@ -318,7 +318,7 @@ bool Cal3dModel::onInit(const std::string& strFilename)
       materialLoaded.emit(strData, materialId);
       CalCoreMaterial *pCoreMaterial = m_calCoreModel.getCoreMaterial(materialId);
       std::string strMatPath;
-      unsigned int pos = strFullPath.find_last_of("/");
+      std::string::size_type pos = strFullPath.find_last_of("/");
       if (pos != std::string::npos) {
         strMatPath = strFullPath.substr(0, pos + 1);
       }
@@ -331,11 +331,11 @@ bool Cal3dModel::onInit(const std::string& strFilename)
         strFilename = pCoreMaterial->getMapFilename(mapId);
   
         // load the texture from the file
-        GLuint textureId;
-        textureId = loadTexture(strMatPath + strFilename);
+        GLuint * textureId = new GLuint;
+        *textureId = loadTexture(strMatPath + strFilename);
   
         // store the opengl texture id in the user data of the map
-        pCoreMaterial->setMapUserData(mapId, (Cal::UserData)textureId);
+        pCoreMaterial->setMapUserData(mapId, (Cal::UserData)&textureId);
       }
     }
     else
@@ -648,7 +648,7 @@ void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
           glEnable(GL_COLOR_MATERIAL);
 
           // set the texture id we stored in the map user data
-          glBindTexture(GL_TEXTURE_2D, (GLuint)pCalRenderer->getMapUserData(0));
+          glBindTexture(GL_TEXTURE_2D, *(GLuint*)pCalRenderer->getMapUserData(0));
 
           // set the texture coordinate buffer
           glTexCoordPointer(2, GL_FLOAT, 0, &meshTextureCoordinates[0][0]);

@@ -30,8 +30,8 @@
 #include <Atlas/Objects/Entity.h>
 #include <Atlas/Objects/Operation.h>
 
-#include <sigc++/object_slot.h>
-#include <sigc++/bind.h>
+#include <sigc++/functors/mem_fun.h>
+#include <sigc++/adaptors/bind.h>
 
 #include <cassert>
 
@@ -44,7 +44,7 @@ using Atlas::Objects::Entity::GameEntity;
 
 bool GameClient::setup()
 {
-    Eris::Logged.connect(SigC::slot(*this, &GameClient::connectionLog));
+    Eris::Logged.connect(sigc::mem_fun(*this, &GameClient::connectionLog));
 
     if (!renderer.init()) {
         return false;
@@ -60,15 +60,15 @@ bool GameClient::setup()
                                      renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(*this, &Application::connect));
+    d->oButtonSignal.connect(sigc::mem_fun(*this, &Application::connect));
     gui->addWidget(d);
 #else
     ServerSelector * ss = new ServerSelector(*gui, renderer.getWidth()/2,
                                                    renderer.getHeight()/2);
-    ss->connectSignal.connect(SigC::slot(*this, &GameClient::connectHost));
-    // ss->refreshSignal.connect(SigC::slot(*this, &GameClient::refreshServers));
-    ss->specifySignal.connect(SigC::slot(*this, &GameClient::specifyHost));
-    // ss->filterSignal.connect(SigC::slot(*this, &GameClient::filterServers));
+    ss->connectSignal.connect(sigc::mem_fun(*this, &GameClient::connectHost));
+    // ss->refreshSignal.connect(sigc::mem_fun(*this, &GameClient::refreshServers));
+    ss->specifySignal.connect(sigc::mem_fun(*this, &GameClient::specifyHost));
+    // ss->filterSignal.connect(sigc::mem_fun(*this, &GameClient::filterServers));
 
     // std::set<std::pair<std::string, std::string> > serverList;
     // serverList.insert(std::make_pair(std::string("localhost"), std::string("localhost")));
@@ -93,9 +93,9 @@ void GameClient::connect(const std::string & host, const std::string & port)
     // FIXME Implement getting the port number from port
     connection = new Eris::Connection(appName, host, 6767, true);
 
-    connection->Failure.connect(SigC::slot(*this, &GameClient::netFailure));
-    connection->Connected.connect(SigC::slot(*this, &GameClient::netConnected));
-    connection->Disconnected.connect(SigC::slot(*this, &GameClient::netDisconnected));
+    connection->Failure.connect(sigc::mem_fun(*this, &GameClient::netFailure));
+    connection->Connected.connect(sigc::mem_fun(*this, &GameClient::netConnected));
+    connection->Disconnected.connect(sigc::mem_fun(*this, &GameClient::netDisconnected));
 
     connection->connect();
 
@@ -113,7 +113,7 @@ void GameClient::specifyHost()
                                      renderer.getHeight()/2);
     d->addField("host", "localhost");
     d->addField("port", "6767");
-    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::connect));
+    d->oButtonSignal.connect(sigc::mem_fun(*this, &GameClient::connect));
     gui->addWidget(d);
 }
 
@@ -174,8 +174,8 @@ void GameClient::loginComplete()
     Option * o = new Option(*gui, renderer.getWidth() / 2,
                                   renderer.getHeight() / 2,
                                   "Select", "Create");
-    o->buttonOneSignal.connect(SigC::slot(*this, &GameClient::charListSync));
-    o->buttonTwoSignal.connect(SigC::slot(*this, &GameClient::charCreator));
+    o->buttonOneSignal.connect(sigc::mem_fun(*this, &GameClient::charListSync));
+    o->buttonTwoSignal.connect(sigc::mem_fun(*this, &GameClient::charCreator));
     gui->addWidget(o);
 #endif
     charListSync();
@@ -186,7 +186,7 @@ void GameClient::charCreator()
     Dialogue * d = new Dialogue(*gui,renderer.getWidth()/2,renderer.getHeight()/2);
     d->addField("name", "Apogee Bomble");
     d->addField("type", "settler");
-    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::createCharacter));
+    d->oButtonSignal.connect(sigc::mem_fun(*this, &GameClient::createCharacter));
     gui->addWidget(d);
 }
 
@@ -194,7 +194,7 @@ void GameClient::charListSync()
 {
     std::cout << "charListSync" << std::endl << std::flush;
     assert(m_account != NULL);
-    m_account->GotAllCharacters.connect(SigC::slot(*this, &GameClient::charSelector));
+    m_account->GotAllCharacters.connect(sigc::mem_fun(*this, &GameClient::charSelector));
     m_account->refreshCharacterInfo();
 }
 
@@ -202,8 +202,8 @@ void GameClient::charSelector()
 {
     std::cout << "charSelector" << std::endl << std::flush;
     CharSelector * cs = new CharSelector(*gui, renderer.getWidth()/2, renderer.getHeight()/2);
-    cs->selectSignal.connect(SigC::slot(*this, &GameClient::takeCharacter));
-    cs->createSignal.connect(SigC::slot(*this, &GameClient::charCreator));
+    cs->selectSignal.connect(sigc::mem_fun(*this, &GameClient::takeCharacter));
+    cs->createSignal.connect(sigc::mem_fun(*this, &GameClient::charCreator));
     const Eris::CharacterMap & cm = m_account->getCharacters();
     std::set<std::pair<std::string, std::string> > charList;
     for(Eris::CharacterMap::const_iterator I = cm.begin(); I != cm.end(); ++I) {
@@ -222,10 +222,10 @@ void GameClient::charSelector()
 void GameClient::connectWorldSignals()
 {
 #warning FIXME No lobby talk yet
-    // m_lobby->Talk.connect(SigC::slot(*this,&GameClient::lobbyTalk));
-    // m_lobby->Entered.connect(SigC::slot(*this,&GameClient::roomEnter));
+    // m_lobby->Talk.connect(sigc::mem_fun(*this,&GameClient::lobbyTalk));
+    // m_lobby->Entered.connect(sigc::mem_fun(*this,&GameClient::roomEnter));
 
-    m_account->AvatarSuccess.connect(SigC::slot(*this,&GameClient::gotAvatar));
+    m_account->AvatarSuccess.connect(sigc::mem_fun(*this,&GameClient::gotAvatar));
 }
 
 void GameClient::createCharacter(const std::string & name,
@@ -276,8 +276,8 @@ void GameClient::netConnected()
 2);
     d->addField("login", "ajr");
     d->addField("password", "hel");
-    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::login));
-    d->cButtonSignal.connect(SigC::slot(*this, &GameClient::loginCancel));
+    d->oButtonSignal.connect(sigc::mem_fun(*this, &GameClient::login));
+    d->cButtonSignal.connect(sigc::mem_fun(*this, &GameClient::loginCancel));
     gui->addWidget(d);
 
 }
@@ -288,21 +288,21 @@ void GameClient::loginCancel()
 2);
     d->addField("new login", "ajr");
     d->addField("password", "hel");
-    d->oButtonSignal.connect(SigC::slot(*this, &GameClient::create));
+    d->oButtonSignal.connect(sigc::mem_fun(*this, &GameClient::create));
     gui->addWidget(d);
 }
 
 void GameClient::login(const std::string & name, const std::string & password)
 {
     m_account->login(name, password);
-    m_account->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_account->LoginSuccess.connect(sigc::mem_fun(*this, &GameClient::loginComplete));
     // m_lobby = Eris::Lobby::instance();
 }
 
 void GameClient::create(const std::string & name, const std::string & password)
 {
     m_account->createAccount(name, "", password);
-    m_account->LoginSuccess.connect(SigC::slot(*this, &GameClient::loginComplete));
+    m_account->LoginSuccess.connect(sigc::mem_fun(*this, &GameClient::loginComplete));
     // m_lobby = Eris::Lobby::instance();
 }
 
@@ -317,17 +317,17 @@ void GameClient::netDisconnected()
 void GameClient::worldEntityCreate(Eris::Entity *e)
 {
     // std::cout << "Created character" << std::endl << std::flush;
-    e->Say.connect(SigC::bind<Eris::Entity*>(SigC::slot(*this, &GameClient::entitySay), e));
+    e->Say.connect(sigc::bind<Eris::Entity*>(sigc::mem_fun(*this, &GameClient::entitySay), e));
 }
 
 void GameClient::worldEnter(Eris::Entity * chr)
 {
     std::cout << "Enter world" << std::endl << std::flush;
     inGame = true;
-    chr->Moved.connect(SigC::slot(*this, &GameClient::charMoved));
+    chr->Moved.connect(sigc::mem_fun(*this, &GameClient::charMoved));
     m_character = dynamic_cast<AutonomousEntity*>(chr);
 
-    consoleWidget->lineEntered.connect(SigC::slot(*m_avatar,&Eris::Avatar::say));
+    consoleWidget->lineEntered.connect(sigc::mem_fun(*m_avatar,&Eris::Avatar::say));
 
 }
 
@@ -337,8 +337,8 @@ void GameClient::gotAvatar(Eris::Avatar * a)
     m_view = m_avatar->getView();
     m_view->registerFactory(new WEFactory(*connection->getTypeService(),
                                            renderer));
-    m_view->EntityCreated.connect(SigC::slot(*this,&GameClient::worldEntityCreate));
-    m_avatar->GotCharacterEntity.connect(SigC::slot(*this,&GameClient::worldEnter));
+    m_view->EntityCreated.connect(sigc::mem_fun(*this,&GameClient::worldEntityCreate));
+    m_avatar->GotCharacterEntity.connect(sigc::mem_fun(*this,&GameClient::worldEnter));
 }
 
 void GameClient::charMoved()

@@ -22,8 +22,8 @@ class CharSelector : public Widget {
     Button create;
 
   public:
-    SigC::Signal1<void, const std::string &> selectSignal;
-    SigC::Signal0<void> createSignal;
+    sigc::signal<void, const std::string &> selectSignal;
+    sigc::signal<void> createSignal;
 
     CharSelector(Gui & g, int x, int y) : Widget(g, x, y),
                                           selectb(g, x, y, "select"),

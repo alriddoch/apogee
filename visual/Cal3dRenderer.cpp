@@ -11,7 +11,7 @@
 
 #include <wfmath/quaternion.h>
 
-#include <sigc++/object_slot.h>
+#include <sigc++/functors/mem_fun.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -66,7 +66,7 @@ Cal3dRenderer::Cal3dRenderer(Renderer & r, RenderableEntity & e) :
         }
     }
     m_model = m_default;
-    r.Update.connect(SigC::slot(*this, &Cal3dRenderer::update));
+    r.Update.connect(sigc::mem_fun(*this, &Cal3dRenderer::update));
 }
 
 Cal3dRenderer::~Cal3dRenderer()

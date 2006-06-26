@@ -5,7 +5,7 @@
 #include "Console.h"
 #include "Gui.h"
 
-#include <sigc++/object_slot.h>
+#include <sigc++/functors/mem_fun.h>
 
 static const int lines = 10;
 static const int columns = 40;

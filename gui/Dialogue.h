@@ -27,8 +27,8 @@ class Dialogue : public Widget {
     static Sprite background;
 
   public:
-    SigC::Signal2<void, const std::string &, const std::string &> oButtonSignal;
-    SigC::Signal0<void> cButtonSignal;
+    sigc::signal<void, const std::string &, const std::string &> oButtonSignal;
+    sigc::signal<void> cButtonSignal;
 
     Dialogue(Gui & g, int x, int y) : Widget(g, x, y),
                                       oButton(g, x, y, "OK"),

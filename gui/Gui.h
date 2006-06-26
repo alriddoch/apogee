@@ -7,7 +7,7 @@
 
 #include "visual/GL.h"
 
-#include <sigc++/object.h>
+#include <sigc++/trackable.h>
 
 #include <SDL/SDL.h>
 
@@ -22,7 +22,7 @@ class Widget;
 typedef std::map<int, Widget *> widgmap;
 typedef std::list<GLuint> hitlist;
 
-class Gui : public SigC::Object {
+class Gui : public sigc::trackable {
   public:
     typedef enum { SELECT_MISS, SELECT_CLICK, SELECT_DRAG } select_t;
 

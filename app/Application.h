@@ -5,7 +5,7 @@
 #ifndef APOGEE_APPLICATION_H
 #define APOGEE_APPLICATION_H
 
-#include <sigc++/object.h>
+#include <sigc++/trackable.h>
 #include <SDL/SDL.h>
 #include <string>
 
@@ -17,7 +17,7 @@ namespace Eris {
  class Connection;
 }
 
-class Application : public SigC::Object {
+class Application : public sigc::trackable {
   protected:
     Gui * gui;
 

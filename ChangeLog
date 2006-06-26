@@ -1,3 +1,14 @@
+2006-06-26  Al Riddoch  <alriddoch@zepler.org>
+
+	* app/Application.h, app/Editor.cpp, app/GameClient.cpp,
+	  app/WorldEntity.cpp, app/WorldEntity.h, gui/CharSelector.h,
+	  gui/Console.cpp, gui/Console.h, gui/Dialogue.h, gui/Gui.cpp,
+	  gui/Gui.h, gui/Option.h, gui/Pie.h, gui/ServerSelector.h,
+	  visual/Cal3dRenderer.cpp, visual/EntityRenderer.h, visual/Model.cpp,
+	  visual/Model.h, visual/Renderer.h, visual/TerrainRenderer.cpp:
+	  Update usage of sigc++ to the native 2.0 API rather than the
+	  deprecated compatability API.
+
 2005-12-02  Al Riddoch  <alriddoch@zepler.org>
 
 	* app/WorldEntity.cpp, app/WorldEntity.h: Update for changes in the

@@ -18,7 +18,7 @@
 #include <Eris/World.h>
 #include <Eris/Entity.h>
 
-#include <sigc++/object_slot.h>
+#include <sigc++/functors/mem_fun.h>
 
 #include <iostream>
 
@@ -219,11 +219,11 @@ void Editor::loginComplete(const Atlas::Objects::Entity::Player &p)
     chrcter.setAttr("sex", "female");
     world = player->createCharacter(chrcter);
 
-    lobby->Talk.connect(SigC::slot(this, &Editor::lobbyTalk));
-    lobby->Entered.connect(SigC::slot(this, &Editor::roomEnter));
+    lobby->Talk.connect(sigc::mem_fun(this, &Editor::lobbyTalk));
+    lobby->Entered.connect(sigc::mem_fun(this, &Editor::roomEnter));
 
-    world->EntityCreate.connect(SigC::slot(this, &Editor::worldEntityCreate));
-    world->Entered.connect(SigC::slot(this, &Editor::worldEnter));
+    world->EntityCreate.connect(sigc::mem_fun(this, &Editor::worldEntityCreate));
+    world->Entered.connect(sigc::mem_fun(this, &Editor::worldEnter));
 }
 
 void Editor::roomEnter(Eris::Room *r)
@@ -242,7 +242,7 @@ void Editor::netConnected()
 
     player = new Eris::Player();
     lobby = player->login(&connection, "ajr", "hel");
-    lobby->LoggedIn.connect(SigC::slot(this, &Editor::loginComplete));
+    lobby->LoggedIn.connect(sigc::mem_fun(this, &Editor::loginComplete));
 }
 
 void Editor::netDisconnected()
