@@ -1,3 +1,21 @@
+2006-06-27  Al Riddoch  <alriddoch@zepler.org>
+
+	* app/Application.cpp, app/Application.h, app/Client.cpp,
+	  app/Editor.cpp, app/GameClient.cpp, app/GameClient.h,
+	  app/IsoClient.cpp, app/IsoClient.h, app/IxClient.cpp,
+	  app/IxClient.h, app/WorldEntity.cpp, app/WorldEntity.h,
+	  app/apogee.cpp, app/perigee.cpp, common/Vector3D.h,
+	  common/configuration.cpp, common/configuration.h, common/debug.h,
+	  common/system.cpp, common/system.h, gui/Alert.cpp, gui/Alert.h,
+	  gui/Button.cpp, gui/Button.h, gui/CharSelector.cpp,
+	  gui/CharSelector.h, gui/Compass.cpp, gui/Compass.h,
+	  gui/Console.cpp, gui/Console.h, gui/Dialogue.cpp, gui/Dialogue.h,
+	  gui/Gui.cpp, gui/Gui.h, gui/Item.cpp, gui/Item.h, gui/Option.cpp,
+	  gui/Option.h, gui/Pie.cpp, gui/Pie.h, gui/ServerSelector.cpp,
+	  gui/ServerSelector.h, gui/TextField.cpp, gui/TextField.h,
+	  gui/Widget.cpp, gui/Widget.h: Replace older brief copyright message
+	  with fuller text as recommended by the GPL.
+
 2006-06-26  Al Riddoch  <alriddoch@zepler.org>
 
 	* app/Application.h, app/Editor.cpp, app/GameClient.cpp,
@@ -1405,7 +1423,7 @@
 	  a more sane way, and draws world using terrain renderer
 	  class. Comment out out terrain code.
 
-	* app/WorldEntity.h, app/WorldEntity.cpp, app/GameClient.h
+	* app/WorldEntity.h, app/WorldEntity.cpp, app/GameClient.h,
 	  app/GameClient.cpp: Ground for changes in the way server handles
 	  characters. Add in terrain renderer to factory.
 
