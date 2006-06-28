@@ -1,3 +1,8 @@
+2006-06-28  Al Riddoch  <alriddoch@zepler.org>
+
+	* visual/Model.cpp: Prevent a crash if a model is rendered when
+	  no data has been loaded.
+
 2006-06-27  Al Riddoch  <alriddoch@zepler.org>
 
 	* app/Application.cpp, app/Application.h, app/Client.cpp,

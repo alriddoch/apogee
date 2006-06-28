@@ -14,6 +14,7 @@
 //----------------------------------------------------------------------------//
 
 #include "GL.h"
+#include "GLU.h"
 
 #include "Model.h"
 
@@ -33,7 +34,7 @@ const int Cal3dModel::STATE_MOTION = 2;
 // Constructors                                                               //
 //----------------------------------------------------------------------------//
 
-Cal3dModel::Cal3dModel() : m_calCoreModel("dummy")
+Cal3dModel::Cal3dModel() : m_calCoreModel("dummy"), m_calModel(0)
 {
   m_state = STATE_IDLE;
   m_motionBlend[0] = 0.6f;
@@ -170,6 +171,12 @@ GLuint Cal3dModel::loadTexture(const std::string& strFilename)
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexImage2D(GL_TEXTURE_2D, 0, (depth == 3) ? GL_RGB : GL_RGBA, width, height, 0, (depth == 3) ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, &pBuffer[width * height * depth]);
+
+  GLenum er;
+  if ((er = glGetError()) != 0) {
+      std::cerr << "Reporting OpenGL texture error: " << gluErrorString(er)
+                << std::endl << std::flush;
+  }
 
   // free the allocated memory
   delete [] pBuffer;
@@ -534,6 +541,7 @@ void Cal3dModel::renderBoundingBox()
 
 void Cal3dModel::renderMesh(bool bWireframe, bool bLight)
 {
+  if (m_calModel == 0) return;
   // get the renderer of the model
   CalRenderer *pCalRenderer;
   pCalRenderer = m_calModel->getRenderer();
