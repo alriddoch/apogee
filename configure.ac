@@ -1,6 +1,6 @@
 dnl Initialise autoconf
 
-AC_INIT(apogee, 0.0.1)
+AC_INIT([apogee], [0.0.1], [alriddoch@googlemail.com])
 AC_CONFIG_SRCDIR([app/perigee.cpp])
 AC_CONFIG_HEADERS([config.h])
 
@@ -11,15 +11,13 @@ AC_CANONICAL_TARGET
 
 dnl Initialise automake
 
-AM_INIT_AUTOMAKE([dist-bzip2])
-
-dnl Need libtool
-
-AC_PROG_LIBTOOL
+AM_INIT_AUTOMAKE([dist-bzip2 check-news])
 
 dnl Test for C++ compiler
 
 AC_PROG_CXX
+AC_PROG_CPP
+AC_PROG_RANLIB
 
 AC_ARG_ENABLE(debug,
     [  --enable-debug          enable debug information [default=no]],
