@@ -1,3 +1,9 @@
+2007-11-05  Al Riddoch  <alriddoch@googlemail.com>
+
+	* AUTHORS: Update email addresses.
+
+	* acinclude.m4, configure.ac: Update to latest pkgconfig macros.
+
 2007-11-05  Al Riddoch  <alriddoch@zepler.org>
 
 	* visual/TerrainRenderer.cpp, visual/TerrainRenderer.h: Update to
