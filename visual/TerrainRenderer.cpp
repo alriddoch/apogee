@@ -410,8 +410,7 @@ void TerrainRenderer::removeDisplayList(int x, int y)
     }
 }
 
-void TerrainRenderer::readTerrainFrom(const std::string &,
-                                      const Element & terrain)
+void TerrainRenderer::readTerrainFrom(const Element & terrain)
 {
     if (!terrain.isMap()) {
         std::cerr << "Terrain is not a map" << std::endl << std::flush;
@@ -494,7 +493,7 @@ bool TerrainRenderer::readTerrain()
     }
 #warning Wastefull return by value
     const Element terrain = m_ent.valueOfAttr("terrain");
-    readTerrainFrom("terrain", terrain);
+    readTerrainFrom(terrain);
     return true;
 }
 
