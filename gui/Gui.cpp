@@ -30,9 +30,11 @@
 
 #include "common/configuration.h"
 
-#include <varconf/Config.h>
+#include <varconf/config.h>
 
 #include <sigc++/functors/mem_fun.h>
+
+#include <climits>
 
 Gui::Gui(Renderer & r) : renderer(r), nameCount(0), inMotion(-1), focus(-1)
 {

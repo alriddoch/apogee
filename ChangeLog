@@ -1,3 +1,10 @@
+2008-11-07  Al Riddoch  <alriddoch@googlemail.com>
+
+	* app/WorldEntity.cpp, common/configuration.cpp, gui/Compass.cpp,
+	  gui/Gui.cpp, visual/Model.cpp, visual/Renderer.cpp,
+	  visual/Renderer.h: Add C includes needed by more recent compilers.
+	  Use lower case header for varconf.
+
 2007-11-05  Al Riddoch  <alriddoch@googlemail.com>
 
 	* AUTHORS: Update email addresses.

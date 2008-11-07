@@ -34,6 +34,7 @@
 #include <Eris/Connection.h>
 
 #include <iostream>
+#include <climits>
 #include <cassert>
 
 static const bool debug_flag = false;

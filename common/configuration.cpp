@@ -17,7 +17,9 @@
 
 #include "configuration.h"
 
-#include <varconf/Config.h>
+#include <varconf/config.h>
+
+#include <cstdlib>
 
 bool map_mode = false;
 

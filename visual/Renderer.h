@@ -60,8 +60,8 @@ class Renderer {
     int frameCount;
     float time;
     float lastCount;
-    char * m_windowName;
-    char * m_iconName;
+    const char * m_windowName;
+    const char * m_iconName;
 
   public:
     Cal3dModel * model;

@@ -21,7 +21,7 @@
 #include "common/system.h"
 #include "common/configuration.h"
 
-#include <varconf/Config.h>
+#include <varconf/config.h>
 
 Sprite Compass::compass_case;
 Sprite Compass::compass_needle;
