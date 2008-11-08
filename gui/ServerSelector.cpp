@@ -95,7 +95,7 @@ void ServerSelector::draw()
 
     if (++rot > 359) { rot = 0; }
 
-#warning FIXME Waiting on sane API to implement metaserver
+    // FIXME Waiting on sane API to implement metaserver
 #if 0
     std::map<GLuint, const Eris::ServerInfo*>::const_iterator I;
     for(unsigned i = 0; i < metaServer.getGameServerCount(); ++i) {
@@ -145,7 +145,7 @@ void ServerSelector::select()
     filter.draw();
     glPopMatrix();
 
-#warning FIXME Waiting on sane API to implement metaserver
+    // FIXME Waiting on sane API to implement metaserver
 #if 0
     names.clear();
     for(unsigned i = 0; i < metaServer.numServers(); ++i) {

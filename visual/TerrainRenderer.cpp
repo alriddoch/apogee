@@ -491,7 +491,7 @@ bool TerrainRenderer::readTerrain()
                   << std::flush;
         return false;
     }
-#warning Wastefull return by value
+    // Wastefull return by value
     const Element terrain = m_ent.valueOfAttr("terrain");
     readTerrainFrom(terrain);
     return true;

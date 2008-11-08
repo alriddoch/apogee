@@ -1,5 +1,14 @@
 2008-11-07  Al Riddoch  <alriddoch@googlemail.com>
 
+	* gui/Gui.cpp: Re-arrange the paranthesis to be clearer, and not
+	  generate a compiler warning.
+
+	* app/GameClient.cpp, gui/ServerSelector.cpp,
+	  visual/TerrainRenderer.cpp: Remove #warnings and replace with
+	  conventional FIXMEs.
+
+2008-11-07  Al Riddoch  <alriddoch@googlemail.com>
+
 	* app/WorldEntity.cpp, common/configuration.cpp, gui/Compass.cpp,
 	  gui/Gui.cpp, visual/Model.cpp, visual/Renderer.cpp,
 	  visual/Renderer.h: Add C includes needed by more recent compilers.

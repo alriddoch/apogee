@@ -294,8 +294,8 @@ int Gui::keyToAscii(int key, int mod)
     }
     int val = -1;
     bool cap = (mod & (KMOD_LSHIFT | KMOD_RSHIFT | KMOD_CAPS)) ? true : false;
-    if ((key >= SDLK_SPACE) && (key <= SDLK_AT) ||
-        (key >= SDLK_LEFTBRACKET) && (key <= SDLK_z)) {
+    if ((key >= SDLK_SPACE && key <= SDLK_AT) ||
+        (key >= SDLK_LEFTBRACKET && key <= SDLK_z)) {
         val = key;
     }
     if (cap && (val > SDLK_BACKQUOTE) && (val < SDLK_DELETE)) {

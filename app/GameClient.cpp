@@ -234,7 +234,7 @@ void GameClient::charSelector()
 
 void GameClient::connectWorldSignals()
 {
-#warning FIXME No lobby talk yet
+    // FIXME No lobby talk yet
     // m_lobby->Talk.connect(sigc::mem_fun(*this,&GameClient::lobbyTalk));
     // m_lobby->Entered.connect(sigc::mem_fun(*this,&GameClient::roomEnter));
 
