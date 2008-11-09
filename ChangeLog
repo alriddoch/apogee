@@ -1,3 +1,7 @@
+2008-11-09  Al Riddoch  <alriddoch@googlemail.com>
+
+	* visual/3dsRenderer.cpp: Add C include required by some compilers.
+
 2008-11-07  Al Riddoch  <alriddoch@googlemail.com>
 
 	* gui/Gui.cpp: Re-arrange the paranthesis to be clearer, and not

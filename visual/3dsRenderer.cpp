@@ -34,6 +34,7 @@
 #include <lib3ds/light.h>
 
 #include <iostream>
+#include <cstring>
 #include <cassert>
 
 static const bool debug_flag = false;
