@@ -32,6 +32,8 @@
 #include <Mercator/GrassShader.h>
 #include <Mercator/Surface.h>
 
+#include <Atlas/Message/Element.h>
+
 #include <sigc++/functors/mem_fun.h>
 
 #include <iostream>

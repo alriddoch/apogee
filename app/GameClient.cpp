@@ -38,13 +38,15 @@
 #include <Eris/ServerInfo.h>
 #include <Eris/TypeInfo.h>
 
-#include <wfmath/atlasconv.h>
-
 #include <Atlas/Objects/Entity.h>
 #include <Atlas/Objects/Operation.h>
 
+#include <wfmath/atlasconv.h>
+
 #include <sigc++/functors/mem_fun.h>
 #include <sigc++/adaptors/bind.h>
+
+#include <iostream>
 
 #include <cassert>
 
